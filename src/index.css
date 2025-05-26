@@ -136,3 +136,7 @@
 .auth_layout {
   @apply grid grid-cols-1 lg:grid-cols-[1fr_455px] min-h-screen;
 }
+
+.dashboard_layout {
+  @apply flex h-screen overflow-hidden;
+}
