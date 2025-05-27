@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -95,14 +96,8 @@ function RouteComponent() {
       )}
 
       {/* Main Content */}
-      <main className="flex-auto flex flex-col bg-white z-10 relative">
-        <header className="h-[60px] border-b px-4 flex items-center justify-between">
-          <h1 className="text-xl">Dashboard</h1>
-          {/* Mobile toggle button */}
-          <button className="lg:hidden" onClick={() => setMobileOpen(true)}>
-            menu
-          </button>
-        </header>
+      <main className="flex-auto flex flex-col z-10 relative p-6">
+        <Header />
 
         <div className="flex-1 overflow-y-auto p-4">
           <Outlet />
