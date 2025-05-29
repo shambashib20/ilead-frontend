@@ -2,7 +2,9 @@ import Header from "@/components/Header";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import Logo from "../../assets/logo.png";
+import Logo_dark from "../../assets/logo_dark.png";
 import Logo_small from "../../assets/logo_small.png";
+import Logo_small_dark from "../../assets/logo-dark-sm.png";
 import {
   Bell,
   Calendar,
@@ -21,6 +23,7 @@ import {
   UserX,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async ({ context }) => {
@@ -52,46 +55,61 @@ const navItems = [
 ];
 
 function RouteComponent() {
+  const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const effectiveCollapsed = isCollapsed && !isHovered;
 
   return (
     <div className="dashboard_layout">
       {/* Desktop Sidebar */}
       <aside
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className={`
           hidden lg:flex
           flex-col
            transition-[width] duration-300 ease-in-out
-          ${isCollapsed ? "w-[80px]" : "w-[260px]"}
-          bg-white dark:bg-[#283046]  text-gray-600 dark:text-gray-300 shadow 
+           ${effectiveCollapsed ? "w-[80px]" : "w-[270px]"}
+          bg-primary  text-gray-600 dark:text-gray-300 shadow 
         `}
       >
         <div
-          className={`logo flex ${isCollapsed ? "px-1 pt-4 pb-0" : "px-6 pt-6 pb-1"} relative`}
+          className={`logo flex ${effectiveCollapsed ? "px-1 pt-4 pb-0" : "px-6 pt-6 pb-1"} relative`}
         >
-          {isCollapsed ?
-            <img src={Logo_small} alt="" className="w-11 h-11 block mx-auto" />
-          : <img src={Logo} alt="" className="w-38 h-13" />}
-
-          <button
-            className={`my-4 self-center absolute top-2 right-2 `}
-            onClick={() => setIsCollapsed((prev) => !prev)}
-          >
-            {isCollapsed ?
-              <Circle />
-            : <CircleDot />}
-          </button>
+          {effectiveCollapsed ?
+            <img
+              src={theme === "light" ? Logo_small : Logo_small_dark}
+              alt=""
+              className="w-11 h-11 block mx-auto"
+            />
+          : <img
+              src={theme !== "light" ? Logo_dark : Logo}
+              alt=""
+              className="w-38 h-13"
+            />
+          }
+          {!effectiveCollapsed && (
+            <button
+              className={`my-4 self-center absolute top-2 right-2 `}
+              onClick={() => setIsCollapsed((prev) => !prev)}
+            >
+              {isCollapsed ?
+                <Circle />
+              : <CircleDot />}
+            </button>
+          )}
         </div>
 
         <nav
           className="flex-1 overflow-y-auto  [&::-webkit-scrollbar]:w-1.5  [&::-webkit-scrollbar-track]:rounded-full
   [&::-webkit-scrollbar-track]:transparent
   [&::-webkit-scrollbar-thumb]:rounded-full
-  [&::-webkit-scrollbar-thumb]:bg-gray-300"
+  [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
         >
-          {isCollapsed ?
-            <div className="flex flex-col items-center  py-6">
+          {effectiveCollapsed ?
+            <div className="flex flex-col items-center  py-6 ps-1">
               {navItems.map((item, idx) => {
                 const isActive = location.pathname === item.path;
                 return (
@@ -109,14 +127,14 @@ function RouteComponent() {
                 );
               })}
             </div>
-          : <ul className="ps-4 pe-1 pt-4">
+          : <ul className="ps-4 pe-2 pt-4">
               {navItems.map((item, idx) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <li key={idx}>
                     <Link
                       to={item.path}
-                      className={`flex items-center gap-4 text-[15px] h-11 p-4 w-full rounded-md hover:bg-gray-100 ${
+                      className={`flex items-center gap-4 text-[15px] h-11 p-4 w-full rounded-md  ${
                         isActive ?
                           "primary-gradient sidebar-active text-white"
                         : ""

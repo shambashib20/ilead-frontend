@@ -4,7 +4,7 @@ import UserProfileBox from "./ui/UserProfile";
 
 function Header() {
   return (
-    <header className="bg-white dark:bg-[#283046] p-3 flex items-center justify-between shadow rounded-sm">
+    <header className="bg-primary p-3 flex items-center justify-between shadow rounded-sm">
       <HeaderBtnLists />
       <HeaderOptionsBox />
       <UserProfileBox />
