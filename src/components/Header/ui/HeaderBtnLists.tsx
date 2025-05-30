@@ -9,7 +9,6 @@ import {
   Presentation,
   SquareCheckBig,
 } from "lucide-react";
-import { useSidebarStore } from "@/store/useSidebarStore";
 
 const headerButtons = [
   { label: "Lead", icon: Plus, afterIcon: Funnel },

@@ -2,9 +2,8 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { useState } from "react";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
     if (!context.isAuthenticated) {
       throw redirect({
@@ -62,7 +61,7 @@ function RouteComponent() {
       <main className="flex-auto flex flex-col z-10 relative py-4 px-8 ">
         <Header />
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto mt-8">
           <Outlet />
         </div>
 
