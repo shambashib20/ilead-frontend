@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button';
-import HeaderActionButton from './HeaderBtn';
+import { Button } from "@/components/ui/button";
+import HeaderActionButton from "./HeaderBtn";
 import {
   Bell,
   Calendar,
@@ -9,6 +9,7 @@ import {
   Presentation,
   SquareCheckBig,
 } from "lucide-react";
+import { useSidebarStore } from "@/store/useSidebarStore";
 
 const headerButtons = [
   { label: "Lead", icon: Plus, afterIcon: Funnel },
@@ -19,6 +20,7 @@ const headerButtons = [
 ];
 
 function HeaderBtnLists() {
+  // const { mobileOpen } = useSidebarStore();
   return (
     <ul className="flex gap-2 items-center">
       {headerButtons.map((btn, index) => (

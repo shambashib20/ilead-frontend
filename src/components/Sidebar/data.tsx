@@ -1,0 +1,33 @@
+import {
+  Bell,
+  Calendar,
+  FileText,
+  Funnel,
+  House,
+  LayoutGrid,
+  ListChecks,
+  ListTodo,
+  PartyPopper,
+  Presentation,
+  SquareCheckBig,
+  Users,
+  UserX,
+} from "lucide-react";
+
+export const navItems = [
+  { name: "Dashboard", icon: <House size={20} />, path: "/dashboard" },
+  { name: "Lead", icon: <Funnel size={20} />, path: "/lead" },
+  { name: "Task", icon: <Calendar size={20} />, path: "/task" },
+  { name: "Reminder", icon: <Bell size={20} />, path: "/reminder" },
+  { name: "Meeting", icon: <Presentation size={20} />, path: "/meeting" },
+  { name: "Todo", icon: <ListTodo size={20} />, path: "/todo" },
+  { name: "Notes", icon: <SquareCheckBig size={20} />, path: "/notes" },
+  { name: "Calendar", icon: <Calendar size={20} />, path: "/calendar" },
+  { name: "Customer", icon: <Users size={20} />, path: "/customer" },
+  { name: "Invoice", icon: <FileText size={20} />, path: "/invoice" },
+  { name: "Leave", icon: <UserX size={20} />, path: "/leave" },
+  { name: "Holidays", icon: <Calendar size={20} />, path: "/holidays" },
+  { name: "SOP", icon: <ListChecks size={20} />, path: "/sop" },
+  { name: "Greetings", icon: <PartyPopper size={20} />, path: "/greetings" },
+  { name: "Reports", icon: <LayoutGrid size={20} />, path: "/reports" },
+];

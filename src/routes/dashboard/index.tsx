@@ -29,5 +29,15 @@ function RouteComponent() {
 
   // const data = useL();
   // console.log("Data loaded:", data);
-  return <div>Hello "/dashboard/"! </div>;
+  return (
+    <section className="dashboard-sec">
+      <div className="stats">
+        <div className="grid grid-cols-3">
+          <div className="col">card</div>
+          <div className="col">card</div>
+          <div className="col">card</div>
+        </div>
+      </div>
+    </section>
+  );
 }
