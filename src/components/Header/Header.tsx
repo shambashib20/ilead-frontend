@@ -5,8 +5,9 @@ import UserProfileBox from "./ui/UserProfile";
 
 function Header() {
   const { setMobileOpen } = useSidebarStore();
+
   return (
-    <header className="bg-primary p-3 flex items-center justify-between shadow rounded-sm">
+    <header className="bg-primary p-3 flex items-center justify-between shadow-lead rounded-sm">
       <HeaderBtnLists />
       <div className="ms-auto flex gap-2">
         <HeaderOptionsBox />

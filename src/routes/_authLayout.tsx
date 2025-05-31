@@ -20,7 +20,7 @@ function AuthLayout() {
       <div className=" items-center justify-center hidden lg:flex">
         <img src="/public/login-v2.svg" alt="" className="w-[685px]" />
       </div>
-      <div className="px-10  pt-13 lg:pt-8 bg-white">
+      <div className="px-10 pt-13 lg:pt-8 bg-white">
         <img src={Logo} alt="" className="w-[160px] h-[55px]  block mx-auto" />
         <Outlet />
       </div>

@@ -64,8 +64,8 @@
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: oklch(0.3769 0.1339 282.21);
+  --input: oklch(0.3769 0.1339 282.21);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -101,8 +101,8 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(0.3769 0.1339 282.21);
+  --input: oklch(0.3769 0.1339 282.21);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -115,7 +115,7 @@
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-border: oklch(0.3769 0.1339 282.21);
   --sidebar-ring: oklch(0.556 0 0);
   --btn-bg-clr: oklch(0.3769 0.1339 282.21);
   --btn-bg-shadow-clr: oklch(0.8015 0.0666 282.21);
@@ -155,6 +155,10 @@
   color: #fff;
   font-weight: 400;
   border-radius: 4px;
+}
+
+.shadow-lead {
+  box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1);
 }
 
 /* Hide scrollbar by default */

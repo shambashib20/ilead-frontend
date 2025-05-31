@@ -1,90 +1,108 @@
+import LeadCard from "@/features/dashboard/components/LeadCard";
+import LeadTab from "@/features/dashboard/components/LeadTab";
+import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+  currentLeadsQueryOptions,
+  useGetCurrentLeads,
+} from "@/features/leads/hooks/useGetCurrentLeads";
+
+import { createFileRoute } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
-  // loader: ({ context }) => {
-  //   context.queryClient.ensureQueryData({
-  //     queryKey: ["dashboardData"],
-  //     queryFn: async () => {
-  //       // Simulate fetching data
-  //       return new Promise((resolve) => {
-  //         setTimeout(() => resolve({ message: "Dashboard data loaded" }), 1000);
-  //       });
-  //     },
-  //   });
-  // },
+
+  loader: async ({ context }) => {
+    return context.queryClient.ensureQueryData(currentLeadsQueryOptions());
+  },
 });
 
-function RouteComponent() {
-  // const { data, isLoading } = useSuspenseQuery({
-  //   queryKey: ["dashboardData"],
-  //   queryFn: async () => {
-  //     // Simulate fetching data
-  //     return new Promise((resolve) => {
-  //       setTimeout(() => resolve({ message: "Dashboard data loaded" }), 1000);
-  //     });
-  //   },
-  // });
+type DashboardCardType = {
+  title: string;
+  tabData: LeadTabType;
+};
 
-  // const data = useL();
-  // console.log("Data loaded:", data);
+function RouteComponent() {
+  const { data } = useGetCurrentLeads();
+
+  console.log(data);
+  // const currentLeads;
+  const cardsData: DashboardCardType[] = [
+    {
+      title: "Today's Lead",
+      tabData: {
+        content: [
+          { label: "New", description: "Leads that are new." },
+          { label: "Processing", description: "Leads currently in process." },
+          {
+            label: "Close-By",
+            description: "Leads that are close to conversion.",
+          },
+        ],
+      },
+    },
+    {
+      title: "Today's Task",
+      tabData: {
+        content: [
+          { label: "Today", description: "Tasks not yet started." },
+          { label: "Tommorow", description: "Tasks currently happening." },
+        ],
+      },
+    },
+    {
+      title: "Today's Reminders",
+      tabData: {
+        content: [
+          { label: "Reminders", description: "Today's reminders." },
+          { label: "Meetings", description: "Reminders coming soon." },
+          { label: "Events", description: "You missed these." },
+        ],
+      },
+    },
+  ];
   return (
     <section className="dashboard-sec">
-      <div className="stats">
-        <div className="grid grid-cols-3 gap-8">
+      <div className="stats  ">
+        <div className="grid grid-cols-3 gap-7">
+          {cardsData.map((card, idx) => (
+            <LeadCard key={idx} title={card.title}>
+              <LeadTab data={card.tabData} />
+            </LeadCard>
+          ))}
+        </div>
+      </div>
+      <div className="sticky-notes mt-5">
+        <h3 className="text-lg font-medium pb-0 ">Sticky Notes</h3>
+        <Card className="mt-2">
+          <CardContent className="text-center space-y-3 py-3">
+            <Button>
+              {" "}
+              <Plus /> Add Notes
+            </Button>
+            <p className="text-sm">There are No Records to display</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="status mt-5">
+        <div className="grid grid-cols-2 gap-7">
           <div className="col">
-            <Card className="py-2">
-              <CardHeader className="border-b pt-1 [.border-b]:pb-1 text-center">
-                <CardTitle className="font-medium pb-1">
-                  Today's Leads
-                </CardTitle>
+            <Card>
+              <CardHeader>
+                <CardTitle>Lead Status</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
-              </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
+              <CardContent></CardContent>
             </Card>
           </div>
           <div className="col">
             <Card>
               <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card Description</CardDescription>
-                <CardAction>Card Action</CardAction>
+                <CardTitle>Lead Source</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
-              </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
-            </Card>
-          </div>
-          <div className="col">
-            <Card>
-              <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card Description</CardDescription>
-                <CardAction>Card Action</CardAction>
-              </CardHeader>
-              <CardContent>
-                <p>Card Content</p>
-              </CardContent>
-              <CardFooter>
-                <p>Card Footer</p>
-              </CardFooter>
+              <CardContent></CardContent>
             </Card>
           </div>
         </div>

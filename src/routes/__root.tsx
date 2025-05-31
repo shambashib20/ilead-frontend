@@ -11,6 +11,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   notFoundComponent: () => {
     return <p>Global Notfound page</p>;
   },
+
   component: RootComponent,
 });
 

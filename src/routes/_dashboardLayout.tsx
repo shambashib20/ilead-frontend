@@ -61,11 +61,13 @@ function RouteComponent() {
       <main className="flex-auto flex flex-col z-10 relative py-4 px-8 ">
         <Header />
 
-        <div className="flex-1 overflow-y-auto mt-8">
+        <div className="flex-1 overflow-y-visible mt-0">
           <Outlet />
         </div>
 
-        <footer className="footer border-t p-4">Footer Content</footer>
+        <footer className="footer text-sm">
+          COPYRIGHT © 2025 Trueline Solution, All rights Reserved
+        </footer>
       </main>
     </div>
   );

@@ -10,7 +10,7 @@ const router = createRouter({
   routeTree,
   defaultPendingComponent: () => (
     <div className={`p-2 text-2xl`}>
-      <h3>Loading...</h3>
+      <h3>Loadings...</h3>
     </div>
   ),
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
