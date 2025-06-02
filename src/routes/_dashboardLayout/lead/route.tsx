@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import {
+  ArrowDownUp,
+  ChartColumnBig,
+  CloudUpload,
+  List,
+  Plus,
+  Settings,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_dashboardLayout/lead")({
   component: RouteComponent,
@@ -14,7 +21,20 @@ function RouteComponent() {
         <CardHeader>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="views">views</div>{" "}
+              <div className="views">
+                <ul className="flex items-center">
+                  <li>
+                    <button>
+                      <List />
+                    </button>
+                  </li>
+                  <li>
+                    <button>
+                      <ChartColumnBig />
+                    </button>
+                  </li>
+                </ul>
+              </div>{" "}
               <CardTitle className="text-2xl">Leads</CardTitle>
             </div>
             <div>
@@ -26,17 +46,17 @@ function RouteComponent() {
                 </li>
                 <li>
                   <Button size={"icon"}>
-                    <Plus />
+                    <CloudUpload />
                   </Button>
                 </li>
                 <li>
                   <Button size={"icon"}>
-                    <Plus />
+                    <Settings />
                   </Button>
                 </li>
                 <li>
                   <Button size={"icon"}>
-                    <Plus />
+                    <ArrowDownUp />
                   </Button>
                 </li>
               </ul>
