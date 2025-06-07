@@ -5,5 +5,5 @@ export const Route = createFileRoute("/_dashboardLayout/lead/")({
 });
 
 function RouteComponent() {
-  return <div>Hello Lead</div>;
+  return <div>Hello Leads</div>;
 }
