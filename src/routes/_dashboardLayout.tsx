@@ -58,10 +58,10 @@ function RouteComponent() {
       )}
 
       {/* Main Content */}
-      <main className="flex-auto flex flex-col z-10 relative py-4 px-8 ">
+      <main className="flex-auto flex flex-col z-10 relative py-4 px-8 overflow-x-hidden">
         <Header />
 
-        <div className="flex-1 overflow-y-visible mt-0">
+        <div className="flex-1 overflow-y-visible mt-0 ">
           <Outlet />
         </div>
 

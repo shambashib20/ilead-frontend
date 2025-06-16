@@ -1,73 +1,47 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import LeadOptions from "@/features/leads/components/LeadOptions";
+import LeadSearch from "@/features/leads/components/LeadSearch";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import {
-  ArrowDownUp,
-  ChartColumnBig,
-  CloudUpload,
-  List,
-  Plus,
-  Settings,
-} from "lucide-react";
+import { ChevronsDown } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_dashboardLayout/lead")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const [expanded, setExpanded] = useState(true);
+
   return (
-    <section className="leads-sec mt-7">
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="views">
-                <ul className="flex items-center">
-                  <li>
-                    <button>
-                      <List />
-                    </button>
-                  </li>
-                  <li>
-                    <button>
-                      <ChartColumnBig />
-                    </button>
-                  </li>
-                </ul>
-              </div>{" "}
-              <CardTitle className="text-2xl">Leads</CardTitle>
-            </div>
-            <div>
-              <ul className="flex items-center gap-3">
-                <li>
-                  <Button size={"icon"}>
-                    <Plus />
-                  </Button>
-                </li>
-                <li>
-                  <Button size={"icon"}>
-                    <CloudUpload />
-                  </Button>
-                </li>
-                <li>
-                  <Button size={"icon"}>
-                    <Settings />
-                  </Button>
-                </li>
-                <li>
-                  <Button size={"icon"}>
-                    <ArrowDownUp />
-                  </Button>
-                </li>
-              </ul>
-            </div>
+    <div>
+      <section className="leads-sec mt-7">
+        <Card className="relative">
+          <div
+            className={`space-y-2 relative overflow-hidden transition-all duration-500 ${expanded ? "h-auto" : "h-12"}`}
+          >
+            <CardHeader className="px-5">
+              <LeadOptions />
+            </CardHeader>
+            <CardContent>
+              <LeadSearch />
+            </CardContent>
           </div>
-        </CardHeader>
-        <CardContent>
-          <form action=""></form>
-        </CardContent>
-      </Card>
-      <Outlet />
-    </section>
+          <Button
+            onClick={() => setExpanded((prev) => !prev)}
+            className="rounded-full absolute left-2/4 -translate-x-2/4 -bottom-5 z-30"
+            size="icon"
+          >
+            <ChevronsDown
+              className={`transition-transform duration-300 ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
+          </Button>
+        </Card>
+
+        <Outlet />
+      </section>
+    </div>
   );
 }

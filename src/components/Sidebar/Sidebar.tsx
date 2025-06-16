@@ -23,33 +23,32 @@ function Sidebar() {
           hidden lg:flex
           flex-col
            transition-[width] duration-300 ease-in-out
-           ${effectiveCollapsed ? "w-[80px]" : "w-[270px]"}
+           ${effectiveCollapsed ? "w-[80px]" : "w-[270px] "}
           bg-primary  text-gray-600 dark:text-gray-300 shadow 
         `}
     >
       <div
         className={`logo flex ${effectiveCollapsed ? "px-1 pt-4 pb-3" : "px-6 pt-6 pb-1"} relative`}
       >
-        {effectiveCollapsed ?
+        {effectiveCollapsed ? (
           <img
             src={theme === "light" ? Logo_small : Logo_small_dark}
             alt=""
             className="w-11 h-11 block mx-auto"
           />
-        : <img
+        ) : (
+          <img
             src={theme !== "light" ? Logo_dark : Logo}
             alt=""
             className="w-38 h-13"
           />
-        }
+        )}
         {!effectiveCollapsed && (
           <button
             className={`my-4 self-center absolute top-2 right-2 `}
             onClick={() => setIsCollapsed((prev) => !prev)}
           >
-            {isCollapsed ?
-              <Circle />
-            : <CircleDot />}
+            {isCollapsed ? <Circle /> : <CircleDot />}
           </button>
         )}
       </div>
