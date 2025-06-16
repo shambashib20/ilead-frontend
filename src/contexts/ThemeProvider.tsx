@@ -27,16 +27,16 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(
     getData(storageKey) ?? defaultTheme
   );
-  const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  // const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
   useEffect(() => {
     const root = document.documentElement;
 
     root.classList.remove("dark", "light");
 
     if (theme === "system") {
-      const systemTheme =
-        window.matchMedia("(prefers-color-scheme: dark)").matches ?
-          "dark"
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
         : "light";
       root.classList.add(systemTheme);
       setData(storageKey, systemTheme);

@@ -11,16 +11,16 @@ import productByImg from "@/assets/product_by_img.png";
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
-      {field.state.meta.isTouched && !field.state.meta.isValid ?
+      {field.state.meta.isTouched && !field.state.meta.isValid ? (
         <em>{field.state.meta.errors.join(",")}</em>
-      : null}
+      ) : null}
       {field.state.meta.isValidating ? "Validating..." : null}
     </>
   );
 }
 
 function LoginForm() {
-  const { login, isLoading, isError, data, error } = useLogin();
+  const { login, isLoading, data } = useLogin();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -40,9 +40,11 @@ function LoginForm() {
         Welcome to 365 Lead Management System! 👋
       </h3>
       {isLoading && <p>Loading...</p>}
-      {!data?.success ?
+      {!data?.success ? (
         <p className="error">{data?.message}</p>
-      : <p className="error">{data?.message}</p>}
+      ) : (
+        <p className="error">{data?.message}</p>
+      )}
       <form
         onSubmit={(e) => {
           e.preventDefault();
