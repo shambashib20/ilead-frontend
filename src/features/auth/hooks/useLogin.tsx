@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
-import { loginService } from "../services/login.service";
+// import { loginService } from "../services/login.service";
 import { queryClient } from "@/utils/client";
+import { authService } from "@/features/auth/services/Auth.service";
 
 export function useLogin() {
   const router = useRouter();
@@ -13,24 +14,26 @@ export function useLogin() {
       email: string;
       password: string;
     }) => {
-      return loginService({ email, password });
+      return authService.login({ email, password });
     },
     onSuccess: (data) => {
-      if (data.success) {
-        console.log("Login successful:", data.message, data.user);
-        localStorage.setItem("user", JSON.stringify(data));
+      console.log(data);
+
+      if (data.status === "SUCCESS") {
+        console.log("Login successful:", data.message, data.data.user);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
         queryClient.setQueryData(["user"], data);
         setTimeout(() => {
           router.history.push("/dashboard");
         }, 2000); // Simulate a delay for the user experience
         // Redirect to dashboard or another pages
       }
-      if (!data.success) {
-        console.log("Login successful:", data.message, data.user);
+      if (!data.status || data.status !== "SUCCESS") {
+        console.log("Login successful:", data.message, data.data.user);
       }
     },
     onError: (error) => {
-      console.error("Login failed:", error.message);
+      console.error("Login failed:", error.name, error.message);
     },
   });
 

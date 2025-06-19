@@ -20,7 +20,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function LoginForm() {
-  const { login, isLoading, data } = useLogin();
+  const { login, isLoading, data, error } = useLogin();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -33,14 +33,14 @@ function LoginForm() {
     },
   });
 
-  console.log(data);
+  console.log(error);
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
       <h3 className="heading mt-3 mb-6">
         Welcome to 365 Lead Management System! 👋
       </h3>
       {isLoading && <p>Loading...</p>}
-      {!data?.success ? (
+      {!data?.status ? (
         <p className="error">{data?.message}</p>
       ) : (
         <p className="error">{data?.message}</p>
