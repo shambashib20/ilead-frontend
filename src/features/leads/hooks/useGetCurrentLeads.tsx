@@ -1,13 +1,13 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { getCurrentLeads } from "../__mock_api__/getCurrentLeads";
+import { leadService } from "../services/Lable.service";
 
-export const currentLeadsQueryOptions = () =>
+export const currentLabelsQueryOptions = () =>
   queryOptions({
-    queryKey: ["current-lead"],
-    queryFn: () => getCurrentLeads(),
+    queryKey: ["label"],
+    queryFn: () => leadService.labels(),
   });
 
 export function useGetCurrentLeads() {
-  const { data } = useSuspenseQuery(currentLeadsQueryOptions());
-  return { data };
+  const { data, isLoading } = useSuspenseQuery(currentLabelsQueryOptions());
+  return { lables: data.data, isLoading };
 }

@@ -1,65 +1,58 @@
 // src/api/ApiClient.ts
 
-import { createAlova, } from 'alova';
-import adapterFetch from 'alova/fetch';
-import ReactHook from 'alova/react';
+import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
 /**
- * Base API Client Class
+ * Base API Client Class using Axios
  */
 export class ApiClient {
-    private static readonly BASE_URL = 'http://localhost:8000/api';
-    protected alova;
-    private readonly modulePath: string;
+  private static readonly BASE_URL = "http://localhost:8000/api";
+  protected axiosInstance: AxiosInstance;
+  private readonly modulePath: string;
 
+  protected constructor(modulePath: string) {
+    this.modulePath = "/" + modulePath.replace(/^\/|\/$/g, ""); // remove leading/trailing slashes
 
-    protected constructor(modulePath: string) {
-        this.modulePath = '/' + modulePath.replace(/^\/|\/$/g, '');
-        this.alova = createAlova({
-            baseURL: ApiClient.BASE_URL,
-            timeout: 5000, // 5 sec timeout
-            requestAdapter: adapterFetch(),
-            statesHook: ReactHook, // for React integration (e.g., useRequest)
+    this.axiosInstance = axios.create({
+      baseURL: ApiClient.BASE_URL,
+      timeout: 5000,
+      withCredentials: true, // 🧁 allow cookies to be sent
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
 
+    // Optional: interceptors for logging or auth token
+    this.axiosInstance.interceptors.response.use(
+      (response) => response, // automatic unwrap of data
+      (error) => {
+        console.error("API error:", error.response || error.message);
+        return Promise.reject(error);
+      }
+    );
+  }
 
-            responded: {
-                /** Every 2xx lands here → JSON parse & return */
-                onSuccess: async (res /* Response */) => {
-                    const json = await res.json();
-                    return json;                 // ← THIS hits your React-Query `data`
-                },
+  /** Join modulePath + endpoint (handles slashes) */
+  private url(endpoint: string) {
+    const ep = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+    return `${this.modulePath}${ep}`; // e.g. "/auth/login"
+  }
 
-                /** Handle non-2xx quickly */
-                onError: async (err, _method) => {
-                    console.error('API error:', err);
-                    throw err;                   // propagate
-                }
-            }
-        });
+  /* ---------- Thin HTTP methods wrappers ---------- */
+  protected get<T>(endpoint: string, config?: AxiosRequestConfig) {
+    return this.axiosInstance.get<T>(this.url(endpoint), config);
+  }
 
+  protected post<T>(endpoint: string, data: any, config?: AxiosRequestConfig) {
+    return this.axiosInstance.post<T>(this.url(endpoint), data, config);
+  }
 
-    }
+  protected put<T>(endpoint: string, data: any, config?: AxiosRequestConfig) {
+    return this.axiosInstance.put<T>(this.url(endpoint), data, config);
+  }
 
-    /** Join modulePath + endpoint (handles slashes) */
-    private url(endpoint: string) {
-        const ep = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-        return `${this.modulePath}${ep}`;       // e.g. "/auth/login"
-    }
-
-    /* ---------- thin wrappers ---------- */
-    protected get<T>(endpoint: string, config?: any) {
-        return this.alova.Get<T>(this.url(endpoint), config);
-    }
-
-    protected post<T>(endpoint: string, data: any, config?: any) {
-        return this.alova.Post<T>(this.url(endpoint), data, config);
-    }
-
-    protected put<T>(endpoint: string, data: any, config?: any) {
-        return this.alova.Put<T>(this.url(endpoint), data, config);
-    }
-
-    protected delete<T>(endpoint: string, config?: any) {
-        return this.alova.Delete<T>(this.url(endpoint), config);
-    }
+  protected delete<T>(endpoint: string, config?: AxiosRequestConfig) {
+    return this.axiosInstance.delete<T>(this.url(endpoint), config);
+  }
 }

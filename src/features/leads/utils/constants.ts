@@ -1,0 +1,18 @@
+export const statusColorMap = new Map<string, string>([
+  ["New", "#056681"],
+  ["Processing", "#3a3285"],
+  ["Agent", "#fac940"],
+  ["Confirm", "#486e03"],
+  ["H.S 2025", "#659b03"],
+  ["Switch Off/ Out of Service", "#c62f2f"],
+  ["RNR", "#fb8f13"],
+  ["Fees Issue", "#dfb9b9"],
+  ["Distance Issue", "#1f34d1"],
+  ["Close-By", "#659b03"],
+  ["Campus Visit", "#fac940"],
+  ["Seat booking", "#a05a5a"],
+  ["Others Course", "#486e03"],
+  ["JOB Enquiry", "#056681"],
+  ["Male Nursing", "#959a44"],
+  ["Cancel", "#e60023"],
+]);

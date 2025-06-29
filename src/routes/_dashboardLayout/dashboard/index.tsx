@@ -3,20 +3,12 @@ import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  currentLeadsQueryOptions,
-  useGetCurrentLeads,
-} from "@/features/leads/hooks/useGetCurrentLeads";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
-
-  loader: async ({ context }) => {
-    return context.queryClient.ensureQueryData(currentLeadsQueryOptions());
-  },
 });
 
 type DashboardCardType = {
@@ -25,9 +17,6 @@ type DashboardCardType = {
 };
 
 function RouteComponent() {
-  const { data } = useGetCurrentLeads();
-
-  console.log(data);
   // const currentLeads;
   const cardsData: DashboardCardType[] = [
     {
