@@ -29,10 +29,10 @@ interface AuthResponse {
 }
 
 /* ---------- /me Response Type ---------- */
-interface MeResponse {
-  id: string;
-  email: string;
-}
+// interface MeResponse {
+//   id: string;
+//   email: string;
+// }
 
 /**
  * 🔐 Auth API Service (auto-prefixes with `/auth`)

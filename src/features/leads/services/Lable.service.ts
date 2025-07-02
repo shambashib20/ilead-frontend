@@ -13,19 +13,19 @@ interface LableResponse {
   data: Lables[];
 }
 
-interface Status {
-  _id: string;
-  description: string;
-  title: string;
-  property_id: string;
-  meta: { is_active: boolean };
-}
+// interface Status {
+//   _id: string;
+//   description: string;
+//   title: string;
+//   property_id: string;
+//   meta: { is_active: boolean };
+// }
 
-interface StatusResponse {
-  message: string;
-  status: string;
-  data: Status[];
-}
+// interface StatusResponse {
+//   message: string;
+//   status: string;
+//   data: Status[];
+// }
 
 /**
  * Service for auth routes (auto-prefixes with /auth)
