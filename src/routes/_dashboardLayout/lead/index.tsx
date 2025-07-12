@@ -12,7 +12,6 @@ import {
   User,
   UserPlus,
 } from "lucide-react";
-import { useEffect } from "react";
 
 export const Route = createFileRoute("/_dashboardLayout/lead/")({
   component: RouteComponent,

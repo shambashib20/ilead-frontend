@@ -8,7 +8,6 @@ import Select, { type StylesConfig } from "react-select";
 import { useLabels } from "../../hooks/useLabels";
 import { useSource } from "../../hooks/useSource";
 import { useChatAgents } from "../../hooks/useChatAgents";
-import { useLeads } from "../../hooks/useLeads";
 import type { FilterPayload } from "../../services/Leads.service";
 import { useFilteredLeads } from "../../hooks/useFilterLeads";
 
@@ -118,11 +117,11 @@ function LeadSearch() {
     },
   });
 
-  const handleSearch = (formData: FormData) => {
-    // Implement your search logic here
-    console.log("Searching with:", formData);
-    // Example: call API, filter data, etc.
-  };
+  //   const handleSearch = (formData: FormData) => {
+  //     // Implement your search logic here
+  //     console.log("Searching with:", formData);
+  //     // Example: call API, filter data, etc.
+  //   };
 
   const handleReset = () => {
     form.reset();
