@@ -7,12 +7,11 @@ function Header() {
   const { setMobileOpen } = useSidebarStore();
 
   return (
-    <header className="bg-primary p-3 flex items-center justify-between shadow-lead rounded-sm">
+    <header className="bg-primary p-3 flex items-center justify-between shadow-lead rounded-sm sticky top-0 z-10">
       <HeaderBtnLists />
       <div className="ms-auto flex gap-2">
         <HeaderOptionsBox />
         <UserProfileBox />
-
         <button
           className="lg:hidden"
           onClick={() => {

@@ -6,7 +6,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
  * Base API Client Class using Axios
  */
 export class ApiClient {
-  private static readonly BASE_URL = "http://localhost:8000/api";
+  private static readonly BASE_URL = "https://crm-server-tsnj.onrender.com/api";
   protected axiosInstance: AxiosInstance;
   private readonly modulePath: string;
 
@@ -15,7 +15,7 @@ export class ApiClient {
 
     this.axiosInstance = axios.create({
       baseURL: ApiClient.BASE_URL,
-      timeout: 5000,
+      // timeout: 10000,
       withCredentials: true, // 🧁 allow cookies to be sent
       headers: {
         "Content-Type": "application/json",

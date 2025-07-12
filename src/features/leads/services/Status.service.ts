@@ -1,19 +1,6 @@
 import { ApiClient } from "@/services/ApiClient.service";
 
-// interface Lables {
-//   _id: string;
-//   description: string;
-//   title: string;
-//   meta: { is_active: boolean };
-// }
-
-// interface LableResponse {
-//   message: string;
-//   status: string;
-//   data: Lables[];
-// }
-
-interface Status {
+export interface Status {
   _id: string;
   description: string;
   title: string;
