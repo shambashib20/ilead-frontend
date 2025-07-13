@@ -1,4 +1,3 @@
-// hooks/useAllLeads.ts
 import { useQuery } from "@tanstack/react-query";
 import {
   leadsService,
@@ -6,7 +5,7 @@ import {
   type LeadsResponse,
 } from "../services/Leads.service";
 
-const EMPTY_FILTERS: FilterPayload = {
+const DEFAULT_FILTERS: FilterPayload = {
   labelIds: [],
   assignedTo: [],
   sourceNames: [],
@@ -15,11 +14,11 @@ const EMPTY_FILTERS: FilterPayload = {
   sortBy: "",
 };
 
-export function useLeads() {
+export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
   const query = useQuery<LeadsResponse, Error>({
-    queryKey: ["leads", "all"], // static key for bootstrap data
-    queryFn: () => leadsService.searchLeads(EMPTY_FILTERS),
-    staleTime: 5 * 60 * 1000, // cache 5 min
+    queryKey: ["leads", { ...filters }],
+    queryFn: () => leadsService.searchLeads(filters),
+    staleTime: 5 * 60 * 1000,
   });
 
   return {

@@ -1,6 +1,7 @@
 import { useLeads } from "@/features/leads/hooks/useLeads";
+import type { FilterPayload } from "@/features/leads/services/Leads.service";
 import { statusColorMap } from "@/features/leads/utils/constants";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import {
   EllipsisVertical,
   Phone,
@@ -18,9 +19,35 @@ export const Route = createFileRoute("/_dashboardLayout/lead/")({
 });
 
 function RouteComponent() {
-  const { leads, isLoading, statuses } = useLeads();
+  const searchParams = useSearch({ from: "/_dashboardLayout/lead" }) as {
+    labelIds?: string;
+    assignedTo?: string;
+    sourceNames?: string;
+    createdByIds?: string;
+    search?: string;
+    sortBy?: string;
+  }; // Adjust route as needed
 
-  console.log(leads);
+  // Parse filters from URL search params
+  const getFiltersFromSearch = (): FilterPayload => {
+    return {
+      labelIds: searchParams?.labelIds ? searchParams.labelIds.split(",") : [],
+      assignedTo: searchParams?.assignedTo
+        ? searchParams.assignedTo.split(",")
+        : [],
+      sourceNames: searchParams?.sourceNames
+        ? searchParams.sourceNames.split(",")
+        : [],
+      createdByIds: searchParams?.createdByIds
+        ? searchParams.createdByIds.split(",")
+        : [],
+      search: searchParams?.search || "",
+      sortBy: searchParams?.sortBy || "",
+    };
+  };
+
+  const filters = getFiltersFromSearch();
+  const { leads, isLoading, statuses } = useLeads(filters);
 
   if (isLoading || !leads) {
     return <h3>Pending....</h3>;

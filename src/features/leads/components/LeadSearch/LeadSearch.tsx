@@ -1,53 +1,72 @@
+"use client";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { X, Calendar, Search } from "lucide-react";
+import Select from "react-select";
+import type { FilterPayload } from "../../services/Leads.service";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useForm } from "@tanstack/react-form";
-import { Calendar, Search, X } from "lucide-react";
-import Select, { type StylesConfig } from "react-select";
 import { useLabels } from "../../hooks/useLabels";
 import { useSource } from "../../hooks/useSource";
 import { useChatAgents } from "../../hooks/useChatAgents";
-import type { FilterPayload } from "../../services/Leads.service";
-import { useFilteredLeads } from "../../hooks/useFilterLeads";
 
-type LablesOptions = {
-  label: string;
-  value: string;
-};
+// Your existing default options
+const defaultLabelOption = { value: "", label: "All Labels" };
+const defaultSourcesOption = { value: "", label: "All Sources" };
+const defaultAgentsOption = { value: "", label: "All Agents" };
+const defaultAssigneesOption = { value: "", label: "All Assignees" };
 
-type AgentOption = { value: string; label: string };
-type LabelOption = { value: string; label: string };
-type SourceOption = { value: string; label: string };
+type OptionType = { value: string; label: string };
 
 type FormData = {
-  createdBy: AgentOption[];
-  assignTo: AgentOption[];
-  labels: LabelOption[];
-  source: SourceOption[];
-  searchByDate: { value: string; label: string }[];
+  labels: OptionType[];
+  createdBy: OptionType[];
+  assignTo: OptionType[];
+  source: OptionType[];
+  searchByDate: OptionType[];
   searchQuery: string;
 };
-
-const defaultLabelOption: LablesOptions = {
-  value: "",
-  label: "All Labels",
-};
-const defaultAgentsOption: LablesOptions = {
-  value: "",
-  label: "All Agents",
-};
-const defaultSourcesOption: LablesOptions = {
-  value: "",
-  label: "All Status",
-};
-const defaultAssigneesOption: LablesOptions = {
-  value: "",
-  label: "All Assigns",
+type LeadSearchParams = {
+  labelIds?: string;
+  assignedTo?: string;
+  sourceNames?: string;
+  createdByIds?: string;
+  search?: string;
+  sortBy?: string;
 };
 
 function LeadSearch() {
-  const filtered = useFilteredLeads();
+  const navigate = useNavigate();
+  const searchParams = useSearch({ from: "/_dashboardLayout/lead" }) as {
+    labelIds?: string;
+    assignedTo?: string;
+    sourceNames?: string;
+    createdByIds?: string;
+    search?: string;
+    sortBy?: string;
+  }; // Adjust route as needed
+
+  // Parse filters from URL search params
+  const getFiltersFromSearch = (): FilterPayload => {
+    return {
+      labelIds: searchParams?.labelIds ? searchParams.labelIds.split(",") : [],
+      assignedTo: searchParams?.assignedTo
+        ? searchParams.assignedTo.split(",")
+        : [],
+      sourceNames: searchParams?.sourceNames
+        ? searchParams.sourceNames.split(",")
+        : [],
+      createdByIds: searchParams?.createdByIds
+        ? searchParams.createdByIds.split(",")
+        : [],
+      search: searchParams?.search || "",
+      sortBy: searchParams?.sortBy || "",
+    };
+  };
+
+  const currentFilters = getFiltersFromSearch();
   const { theme } = useTheme();
   const { lables } = useLabels();
   const { sources } = useSource();
@@ -71,9 +90,9 @@ function LeadSearch() {
 
   const agentsOptions = [
     defaultAgentsOption,
-    ...(agents?.data?.map((agents) => ({
-      value: agents._id,
-      label: agents.name,
+    ...(agents?.data?.map((agent) => ({
+      value: agent._id,
+      label: agent.name,
     })) || []),
   ];
 
@@ -92,54 +111,103 @@ function LeadSearch() {
     { value: "next_week", label: "Next Week" },
   ];
 
-  const form = useForm({
-    defaultValues: {
-      labels: [defaultLabelOption],
-      createdBy: [defaultAgentsOption],
-      assignTo: [defaultAssigneesOption],
-      source: [defaultSourcesOption],
-      searchByDate: [],
-      searchQuery: "",
-    } as FormData,
+  // Convert current filters to form values
+  const getFormValuesFromFilters = (filters: FilterPayload): FormData => {
+    return {
+      labels:
+        (filters.labelIds ?? []).length > 0
+          ? (filters.labelIds ?? []).map(
+              (id) =>
+                labelOptions.find((opt) => opt.value === id) ||
+                defaultLabelOption
+            )
+          : [defaultLabelOption],
+      createdBy:
+        (filters.createdByIds ?? []).length > 0
+          ? (filters.createdByIds ?? []).map(
+              (id) =>
+                agentsOptions.find((opt) => opt.value === id) ||
+                defaultAgentsOption
+            )
+          : [defaultAgentsOption],
+      assignTo:
+        (filters.assignedTo ?? []).length > 0
+          ? (filters.assignedTo ?? []).map(
+              (id) =>
+                AssigneesOptions.find((opt) => opt.value === id) ||
+                defaultAssigneesOption
+            )
+          : [defaultAssigneesOption],
+      source:
+        (filters.sourceNames ?? []).length > 0
+          ? (filters.sourceNames ?? []).map(
+              (id) =>
+                sourceOptions.find((opt) => opt.value === id) ||
+                defaultSourcesOption
+            )
+          : [defaultSourcesOption],
+      searchByDate: filters.sortBy
+        ? [
+            followUpOptions.find((opt) => opt.value === filters.sortBy) ||
+              followUpOptions[0],
+          ]
+        : [],
+      searchQuery: filters.search,
+    };
+  };
 
+  const form = useForm({
+    defaultValues: getFormValuesFromFilters(currentFilters),
     onSubmit: async ({ value }: { value: FormData }) => {
       const filters: FilterPayload = {
-        labelIds: value.labels.map((l) => l.value),
-        assignedTo: value.assignTo.map((a) => a.value),
-        sourceNames: value.source.map((s) => s.value),
-        createdByIds: value.createdBy.map((a) => a.value),
+        labelIds: value.labels.map((l) => l.value).filter((v) => v !== ""),
+        assignedTo: value.assignTo.map((a) => a.value).filter((v) => v !== ""),
+        sourceNames: value.source.map((s) => s.value).filter((v) => v !== ""),
+        createdByIds: value.createdBy
+          .map((a) => a.value)
+          .filter((v) => v !== ""),
         search: value.searchQuery,
         sortBy: value.searchByDate[0]?.value ?? "",
       };
-      filtered.mutate(filters);
 
-      //   console.log(value);
+      // Update URL search params
+      const searchParams: LeadSearchParams = {};
+      if ((filters.labelIds ?? []).length > 0)
+        searchParams.labelIds = (filters.labelIds ?? []).join(",");
+      if ((filters.assignedTo ?? []).length > 0)
+        searchParams.assignedTo = (filters.assignedTo ?? []).join(",");
+      if ((filters.sourceNames ?? []).length > 0)
+        searchParams.sourceNames = (filters.sourceNames ?? []).join(",");
+      if ((filters.createdByIds ?? []).length > 0)
+        searchParams.createdByIds = (filters.createdByIds ?? []).join(",");
+      if (filters.search) searchParams.search = filters.search;
+      if (filters.sortBy) searchParams.sortBy = filters.sortBy;
+
+      navigate({
+        // @ts-ignore: Unreachable code error
+        search: searchParams,
+      });
     },
   });
 
-  //   const handleSearch = (formData: FormData) => {
-  //     // Implement your search logic here
-  //     console.log("Searching with:", formData);
-  //     // Example: call API, filter data, etc.
-  //   };
-
   const handleReset = () => {
     form.reset();
-    console.log("Form reset");
+    navigate({
+      search: true,
+    });
   };
 
   const handleCalendarAction = () => {
-    // Implement calendar functionality
     console.log("Calendar action triggered");
   };
 
-  const colourStyles: StylesConfig<LablesOptions, true> = {
-    control: (styles) => ({
+  const colourStyles = {
+    control: (styles: any) => ({
       ...styles,
       backgroundColor: theme === "dark" ? "#283046" : "white",
       borderColor: theme === "dark" ? "#555" : "#e6e6e6",
     }),
-    option: (styles, { isDisabled, isFocused, isSelected }) => ({
+    option: (styles: any, { isDisabled, isFocused, isSelected }: any) => ({
       ...styles,
       fontSize: "14px",
       backgroundColor: isDisabled
@@ -150,36 +218,29 @@ function LeadSearch() {
             ? "#f0f0f0"
             : undefined,
       color: isFocused || isSelected ? "#3a3285" : "#333",
-
       cursor: isDisabled ? "not-allowed" : "default",
-
       ":active": {
         ...styles[":active"],
         backgroundColor: isSelected ? "#3a3285" : "#e8e8e8",
       },
     }),
-    multiValue: (styles) => {
-      return {
-        ...styles,
-        backgroundColor: theme === "dark" ? "rgba(58,50,133,.12)" : "#e6e6e6",
-
-        // backgroundColor: "#e6e6e6",
-      };
-    },
-    multiValueLabel: (styles) => ({
+    multiValue: (styles: any) => ({
       ...styles,
-
+      backgroundColor: theme === "dark" ? "rgba(58,50,133,.12)" : "#e6e6e6",
+    }),
+    multiValueLabel: (styles: any) => ({
+      ...styles,
       color: theme === "dark" ? "#9089d5" : "#333",
       fontSize: "12px",
     }),
-    multiValueRemove: (styles) => ({
+    multiValueRemove: (styles: any) => ({
       ...styles,
       color: theme === "dark" ? "#9089d5" : "#333",
     }),
   };
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -194,9 +255,7 @@ function LeadSearch() {
             name="createdBy"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="createdBy" className="">
-                  Created By
-                </Label>
+                <Label htmlFor="createdBy">Created By</Label>
                 <Select
                   id="createdBy"
                   value={field.state.value}
@@ -220,9 +279,7 @@ function LeadSearch() {
             name="assignTo"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="assignTo" className="">
-                  Assign To
-                </Label>
+                <Label htmlFor="assignTo">Assign To</Label>
                 <Select
                   id="assignTo"
                   value={field.state.value}
@@ -246,9 +303,7 @@ function LeadSearch() {
             name="labels"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="labels" className="">
-                  Labels
-                </Label>
+                <Label htmlFor="labels">Labels</Label>
                 <Select
                   id="labels"
                   value={field.state.value}
@@ -272,9 +327,7 @@ function LeadSearch() {
             name="source"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="source" className="">
-                  Source
-                </Label>
+                <Label htmlFor="source">Source</Label>
                 <Select
                   id="source"
                   value={field.state.value}
@@ -298,9 +351,7 @@ function LeadSearch() {
             name="searchByDate"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="searchByDate" className="">
-                  Search By Date
-                </Label>
+                <Label htmlFor="searchByDate">Search By Date</Label>
                 <Select
                   id="searchByDate"
                   value={field.state.value}
@@ -324,9 +375,7 @@ function LeadSearch() {
             name="searchQuery"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="searchQuery" className="">
-                  Search Query
-                </Label>
+                <Label htmlFor="searchQuery">Search Query</Label>
                 <div className="flex items-center gap-2">
                   <Input
                     id="searchQuery"
@@ -348,23 +397,21 @@ function LeadSearch() {
             variant="outline"
             size="sm"
             onClick={handleReset}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-transparent"
           >
             <X className="h-4 w-4" />
             Reset
           </Button>
-
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={handleCalendarAction}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-transparent"
           >
             <Calendar className="h-4 w-4" />
             Calendar
           </Button>
-
           <Button
             type="submit"
             size="sm"
