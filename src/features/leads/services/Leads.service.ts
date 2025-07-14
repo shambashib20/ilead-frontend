@@ -17,6 +17,7 @@ export interface Leads {
     status: { _id: string };
     comment: string;
     assigned_by: string;
+    labels: [{ _id: string; title: string }];
   }[];
 }
 export type FilterPayload = {
@@ -45,8 +46,8 @@ class LeadsService extends ApiClient {
       labelIds: filters.labelIds,
       assignedTo: filters.assignedTo,
       sourceNames: filters.sourceNames,
-      search: "",
-      sortBy: "by_next_followup_date",
+      search: filters.search,
+      sortBy: filters.sortBy,
     });
     return response.data;
   }

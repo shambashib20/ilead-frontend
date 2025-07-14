@@ -95,7 +95,7 @@ function RouteComponent() {
                         >
                           <div className="pt-5 px-6">
                             <h5 className="bg-red-600 text-white text-[12px] px-3 py-1 rounded inline-block mb-3 ">
-                              {leads.reference}
+                              {leads?.labels[0]?.title || "No Label"}
                             </h5>
                             <h4 className="text-white text-[12px] font-medium flex items-center gap-2 mb-2">
                               <User color="blue" size={18} />

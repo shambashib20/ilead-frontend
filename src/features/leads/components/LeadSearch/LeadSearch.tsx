@@ -183,6 +183,8 @@ function LeadSearch() {
       if (filters.search) searchParams.search = filters.search;
       if (filters.sortBy) searchParams.sortBy = filters.sortBy;
 
+      console.log(filters);
+
       navigate({
         // @ts-ignore: Unreachable code error
         search: searchParams,
