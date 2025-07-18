@@ -18,6 +18,7 @@ interface DeleteConfirmationModalProps {
   onClose: () => void;
   onConfirm: (reason: string) => void;
   leadName: string;
+  isLoading: boolean;
 }
 
 export const DeleteConfirmationModal = ({
@@ -25,6 +26,7 @@ export const DeleteConfirmationModal = ({
   onClose,
   onConfirm,
   leadName,
+  isLoading,
 }: DeleteConfirmationModalProps) => {
   const [reason, setReason] = useState("");
 
@@ -72,7 +74,7 @@ export const DeleteConfirmationModal = ({
             onClick={handleSubmit}
             disabled={!reason.trim()}
           >
-            Delete
+            {isLoading ? "Deleting..." : "Confirm Delete"}
           </Button>
         </DialogFooter>
       </DialogContent>

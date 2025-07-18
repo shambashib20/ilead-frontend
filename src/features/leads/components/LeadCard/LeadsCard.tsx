@@ -111,6 +111,7 @@ export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDelete}
         leadName={leadName}
+        isLoading={isDeleting}
       />
     </div>
   );
