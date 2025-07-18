@@ -1,15 +1,15 @@
 import LeadCard from "@/features/dashboard/components/LeadCard";
 import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+// import { Plus } from "lucide-react";
 import type { Lead } from "@/features/leads/types";
 import { dashboardLeads } from "@/features/leads/services/HomePage.service";
-
+import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
 });
@@ -67,7 +67,7 @@ function RouteComponent() {
             leads: leadData.leads_in_new,
           },
           {
-            label: `Processing(${leadData.leads_in_processing})`,
+            label: `Processing (${leadData.leads_in_processing.length})`,
             description: "Leads currently in process.",
             leads: leadData.leads_in_processing,
           },
@@ -111,7 +111,7 @@ function RouteComponent() {
           ))}
         </div>
       </div>
-      <div className="sticky-notes mt-5">
+      {/* <div className="sticky-notes mt-5">
         <h3 className="text-lg font-medium pb-0 ">Sticky Notes</h3>
         <Card className="mt-2">
           <CardContent className="text-center space-y-3 py-3">
@@ -122,7 +122,7 @@ function RouteComponent() {
             <p className="text-sm">There are No Records to display</p>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
 
       <div className="status mt-5">
         <div className="grid grid-cols-2 gap-7">
@@ -131,7 +131,9 @@ function RouteComponent() {
               <CardHeader>
                 <CardTitle>Lead Status</CardTitle>
               </CardHeader>
-              <CardContent></CardContent>
+              <CardContent>
+                <LeadStatusChart />
+              </CardContent>
             </Card>
           </div>
           <div className="col">
