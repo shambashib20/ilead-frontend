@@ -28,7 +28,7 @@ const LeadStatusChart: React.FC<Props> = ({
   const [labels, setLabels] = useState<string[]>([]);
   const [series, setSeries] = useState<number[]>([]);
   const [agents, setAgents] = useState<any[]>([]);
-
+  const [hasFetched, setHasFetched] = useState<boolean>(false);
   const fetchChartData = async () => {
     if (!selectedAgent) return;
 
@@ -45,8 +45,10 @@ const LeadStatusChart: React.FC<Props> = ({
           : []
       );
       setSeries(Array.isArray(response.data) ? response.data : []);
+      setHasFetched(true);
     } catch (err) {
       console.error("Failed to fetch chart data:", err);
+      setHasFetched(true);
     }
   };
 
@@ -104,52 +106,57 @@ const LeadStatusChart: React.FC<Props> = ({
         </div>
       )}
 
-      <Chart
-        options={{
-          chart: {
-            type: "donut",
-          },
-          labels,
-          legend: {
-            position: "bottom",
-          },
-          tooltip: {
-            y: {
-              formatter: (val: number, {}: any) => {
-                return `${val} leads`;
+      {hasFetched && series.length === 0 ? (
+        <p className="text-center text-gray-500 mt-4">No leads found</p>
+      ) : (
+        series.length > 0 && (
+          <Chart
+            options={{
+              chart: {
+                type: "donut",
               },
-            },
-          },
-          plotOptions: {
-            pie: {
-              donut: {
-                labels: {
-                  show: true,
-                  total: {
-                    show: true,
-                    label: "Leads Status",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    color: "#ffffff",
-                    formatter: () => {
-                      const total = series.reduce((sum, val) => sum + val, 0);
-                      return `${total}`;
+              labels,
+              legend: {
+                position: "bottom",
+              },
+              tooltip: {
+                y: {
+                  formatter: (val: number) => `${val} leads`,
+                },
+              },
+              plotOptions: {
+                pie: {
+                  donut: {
+                    labels: {
+                      show: true,
+                      total: {
+                        show: true,
+                        label: "Leads Status",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        color: "#ffffff",
+                        formatter: () => {
+                          const total = series.reduce(
+                            (sum, val) => sum + val,
+                            0
+                          );
+                          return `${total}`;
+                        },
+                      },
                     },
                   },
                 },
               },
-            },
-          },
-          dataLabels: {
-            formatter: function (val: number) {
-              return `${Math.round(val)}%`;
-            },
-          },
-        }}
-        series={series}
-        type="donut"
-        width="100%"
-      />
+              dataLabels: {
+                formatter: (val: number) => `${Math.round(val)}%`,
+              },
+            }}
+            series={series}
+            type="donut"
+            width="100%"
+          />
+        )
+      )}
     </>
   );
 };
