@@ -1,6 +1,5 @@
 // src/api/ApiClient.ts
 
-import type { DeleteLeadPayload } from "@/features/leads/services/LeadsModule.service";
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
 /**

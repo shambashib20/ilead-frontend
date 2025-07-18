@@ -45,7 +45,7 @@ export const DeleteConfirmationModal = ({
           </div>
           <DialogDescription>
             Are you sure you want to delete{" "}
-            <span className="font-semibold light: text-white dark: text-gray-700">
+            <span className="font-semibold light:  dark: text-gray-700">
               {leadName}
             </span>
             ? This action cannot be undone.
