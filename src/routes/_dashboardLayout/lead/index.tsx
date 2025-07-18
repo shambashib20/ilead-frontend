@@ -37,5 +37,13 @@ function RouteComponent() {
     );
   }
 
-  return <LeadsBoard leads={leads} statuses={statuses} />;
+  // Ensure all required Lead properties are present
+  const normalizedLeads = leads.map((lead) => ({
+    ...lead,
+    address: lead.address ?? "",
+    email: lead.email ?? "",
+    company_name: lead.company_name ?? "",
+  }));
+
+  return <LeadsBoard leads={normalizedLeads} statuses={statuses} />;
 }

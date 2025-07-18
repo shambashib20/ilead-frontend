@@ -7,6 +7,9 @@ export interface Leads {
   logs: [];
   statuses: { _id: string; title: string }[];
   leads: {
+    email: string;
+    company_name: string;
+    address: string;
     _id: string;
     title: string;
     reference: string;
