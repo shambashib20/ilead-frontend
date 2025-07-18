@@ -16,11 +16,25 @@ export type Status = {
   _id: string;
   title: string;
 };
+
+export type Source = {
+  _id: string;
+  title: string;
+};
 interface LeadsPerStatusResponse {
   message: string;
   status: string;
   data: {
     labels: Status[];
+    data: number[];
+  };
+}
+
+interface LeadsPerSourceResponse {
+  message: string;
+  status: string;
+  data: {
+    sources: Source[];
     data: number[];
   };
 }
@@ -37,6 +51,14 @@ class LeadsModule extends ApiClient {
   }) {
     return this.get<LeadsPerStatusResponse>("/leads-per-status", { params });
   }
+  async getLeadsAccordingToSource(params: {
+    startDate?: string;
+    endDate?: string;
+    agentId: string;
+  }) {
+    return this.get<LeadsPerSourceResponse>("/leads-per-source", { params });
+  }
 }
 
 export const statsService = new LeadsModule();
+export const sourceStatsService = new LeadsModule();

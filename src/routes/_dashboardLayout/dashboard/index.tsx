@@ -11,6 +11,8 @@ import type { Lead } from "@/features/leads/types";
 import { dashboardLeads } from "@/features/leads/services/HomePage.service";
 import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
 import { Menu } from "lucide-react";
+import LeadSourceChart from "@/features/dashboard/components/LeadSourceChart/LeadSourceChart";
+
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
 });
@@ -31,6 +33,11 @@ function RouteComponent() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedAgent, setSelectedAgent] = useState("");
+
+  const [showSourceMenu, setShowSourceMenu] = useState(false);
+  const [sourceStartDate, sourceSetStartDate] = useState("");
+  const [sourceEndDate, sourceSetEndDate] = useState("");
+  const [sourceSelectedAgent, sourceSetSelectedAgent] = useState("");
 
   useEffect(() => {
     dashboardLeads
@@ -158,10 +165,26 @@ function RouteComponent() {
           </div>
           <div className="col">
             <Card>
-              <CardHeader>
+              <div className="flex justify-between items-center px-6">
                 <CardTitle>Lead Source</CardTitle>
-              </CardHeader>
-              <CardContent></CardContent>
+                <button
+                  className="p-2 rounded-md hover:bg-gray-100 transition"
+                  onClick={() => setShowSourceMenu((prev) => !prev)}
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
+              <CardContent>
+                <LeadSourceChart
+                  showMenu={showSourceMenu}
+                  startDate={sourceStartDate}
+                  endDate={sourceEndDate}
+                  selectedAgent={sourceSelectedAgent}
+                  onStartDateChange={sourceSetStartDate}
+                  onEndDateChange={sourceSetEndDate}
+                  onAgentChange={sourceSetSelectedAgent}
+                />
+              </CardContent>
             </Card>
           </div>
         </div>
