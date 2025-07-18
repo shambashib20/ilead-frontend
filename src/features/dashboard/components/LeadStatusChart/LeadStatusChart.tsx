@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import { Card, CardContent } from "@/components/ui/card";
+
 import Select from "react-select";
 import { Input } from "@/components/ui/input";
 
 import { chatAgentService } from "@/features/leads/services/ChatAgents.service";
 import { statsService } from "@/features/leads/services/LeadsModule.service";
 
-const LeadStatusChart = () => {
+interface Props {
+  showMenu: boolean;
+  startDate: string;
+  endDate: string;
+  selectedAgent: string;
+  onStartDateChange: (value: string) => void;
+  onEndDateChange: (value: string) => void;
+  onAgentChange: (value: string) => void;
+}
+const LeadStatusChart: React.FC<Props> = ({
+  showMenu,
+  startDate,
+  endDate,
+  selectedAgent,
+  onStartDateChange,
+  onEndDateChange,
+  onAgentChange,
+}) => {
   const [labels, setLabels] = useState<string[]>([]);
   const [series, setSeries] = useState<number[]>([]);
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
   const [agents, setAgents] = useState<any[]>([]);
-  const [selectedAgent, setSelectedAgent] = useState<string>("");
 
   const fetchChartData = async () => {
     if (!selectedAgent) return;
@@ -38,7 +52,7 @@ const LeadStatusChart = () => {
 
   const fetchAgents = async () => {
     try {
-      const res = await chatAgentService.chatAgents(); // Adjust this based on your actual API
+      const res = await chatAgentService.chatAgents();
       setAgents(res.data.data);
     } catch (err) {
       console.error("Failed to fetch agents:", err);
@@ -47,61 +61,74 @@ const LeadStatusChart = () => {
 
   useEffect(() => {
     fetchAgents();
-    fetchChartData();
-  }, [startDate, endDate, selectedAgent]);
+  }, []);
 
   return (
-    <Card>
-      <CardContent>
-        <div className="flex gap-4 mb-4">
+    <>
+      {showMenu && (
+        <div className="flex flex-col gap-4 mt-4 mb-6 p-4 border rounded-lg bg-gray-50 max-w-md mx-auto">
+          <label className="text-sm font-medium text-gray-700">
+            Start Date
+          </label>
           <Input
             type="date"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            placeholder="Start Date"
+            onChange={(e) => onStartDateChange(e.target.value)}
           />
+
+          <label className="text-sm font-medium text-gray-700">End Date</label>
           <Input
             type="date"
             value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            placeholder="End Date"
+            onChange={(e) => onEndDateChange(e.target.value)}
           />
+
+          <label className="text-sm font-medium text-gray-700">
+            Select Agent
+          </label>
           <Select
             options={agents.map((agent) => ({
               value: agent._id,
               label: agent.name,
             }))}
-            onChange={(option) => setSelectedAgent(option?.value || "")}
+            onChange={(option) => onAgentChange(option?.value || "")}
             placeholder="Select Agent"
           />
-        </div>
 
-        <Chart
-          options={{
-            chart: {
-              type: "donut",
+          <button
+            onClick={fetchChartData}
+            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          >
+            Submit
+          </button>
+        </div>
+      )}
+
+      <Chart
+        options={{
+          chart: {
+            type: "donut",
+          },
+          labels,
+          legend: {
+            position: "bottom",
+          },
+          tooltip: {
+            y: {
+              formatter: (val: number) => `${Math.round(val)}`,
             },
-            labels,
-            legend: {
-              position: "bottom",
+          },
+          dataLabels: {
+            formatter: function (val: number) {
+              return `${Math.round(val)}%`;
             },
-            tooltip: {
-              y: {
-                formatter: (val: number) => `${Math.round(val)}`,
-              },
-            },
-            dataLabels: {
-              formatter: function (val: number) {
-                return `${Math.round(val)}%`;
-              },
-            },
-          }}
-          series={series}
-          type="donut"
-          width="100%"
-        />
-      </CardContent>
-    </Card>
+          },
+        }}
+        series={series}
+        type="donut"
+        width="100%"
+      />
+    </>
   );
 };
 

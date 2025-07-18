@@ -10,6 +10,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type { Lead } from "@/features/leads/types";
 import { dashboardLeads } from "@/features/leads/services/HomePage.service";
 import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
+import { Menu } from "lucide-react";
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
 });
@@ -25,6 +26,11 @@ function RouteComponent() {
     leads_in_new: Lead[];
     leads_in_processing: Lead[];
   } | null>(null);
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState("");
 
   useEffect(() => {
     dashboardLeads
@@ -128,11 +134,25 @@ function RouteComponent() {
         <div className="grid grid-cols-2 gap-7">
           <div className="col">
             <Card>
-              <CardHeader>
+              <div className="flex justify-between items-center px-6">
                 <CardTitle>Lead Status</CardTitle>
-              </CardHeader>
+                <button
+                  className="p-2 rounded-md hover:bg-gray-100 transition"
+                  onClick={() => setShowMenu((prev) => !prev)}
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
               <CardContent>
-                <LeadStatusChart />
+                <LeadStatusChart
+                  showMenu={showMenu}
+                  startDate={startDate}
+                  endDate={endDate}
+                  selectedAgent={selectedAgent}
+                  onStartDateChange={setStartDate}
+                  onEndDateChange={setEndDate}
+                  onAgentChange={setSelectedAgent}
+                />
               </CardContent>
             </Card>
           </div>
