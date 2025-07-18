@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import {
   EllipsisVertical,
   Phone,
@@ -12,8 +12,12 @@ import {
 } from "lucide-react";
 import type { Lead } from "@/features/leads/types";
 
+import { DeleteConfirmationModal } from "../DeleteLeadModal/DeleteModal";
+import { deleteLeadsService } from "../../services/LeadsModule.service";
+
 interface LeadCardProps {
   lead: Lead;
+  onDeleted?: () => void;
 }
 
 const CARD_ACTIONS = [
@@ -25,14 +29,30 @@ const CARD_ACTIONS = [
   { icon: Send, color: "white", label: "Send" },
 ] as const;
 
-export const LeadCard = memo(({ lead }: LeadCardProps) => {
+export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   // Convert String objects to primitive strings to avoid React rendering issues
   const assignedToName = lead.assigned_to.name;
   const leadName = String(lead.name);
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt);
   const assignedBy = String(lead.assigned_by || "Test User");
-
+  const handleDelete = async (deleteReason: string) => {
+    try {
+      setIsDeleting(true);
+      await deleteLeadsService.deleteLeads({
+        rayId: lead.meta.ray_id,
+        deleteReason,
+      });
+      setIsDeleteModalOpen(false);
+      if (onDeleted) onDeleted();
+    } catch (error) {
+      console.error("Failed to delete lead:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   return (
     <div className="bg-primary rounded-lg shadow hover:shadow-lg transition-all">
       <div className="pt-5 px-6">
@@ -72,6 +92,11 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             key={label}
             className="p-1 hover:bg-gray-700 rounded transition-colors"
             title={label}
+            onClick={() => {
+              if (label === "Delete") {
+                setIsDeleteModalOpen(true);
+              }
+            }}
           >
             <Icon size={16} color={color} />
           </button>
@@ -80,6 +105,13 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
           <EllipsisVertical size={16} />
         </button>
       </div>
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        leadName={leadName}
+      />
     </div>
   );
 });

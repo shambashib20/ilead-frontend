@@ -1,5 +1,6 @@
 // src/api/ApiClient.ts
 
+import type { DeleteLeadPayload } from "@/features/leads/services/LeadsModule.service";
 import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
 /**
@@ -54,5 +55,9 @@ export class ApiClient {
 
   protected delete<T>(endpoint: string, config?: AxiosRequestConfig) {
     return this.axiosInstance.delete<T>(this.url(endpoint), config);
+  }
+
+  protected patch<T>(endpoint: string, data: any, config?: AxiosRequestConfig) {
+    return this.axiosInstance.patch<T>(this.url(endpoint), data, config);
   }
 }

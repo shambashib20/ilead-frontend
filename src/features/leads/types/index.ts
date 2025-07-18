@@ -1,4 +1,5 @@
 export interface Lead {
+  meta: any;
   address: string;
   email: string;
   company_name: string;
@@ -14,6 +15,7 @@ export interface Lead {
   status: {
     _id: string;
   };
+
   comment: string;
   assigned_by: string;
   labels: Label[];

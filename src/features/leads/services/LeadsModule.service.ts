@@ -21,6 +21,11 @@ export type Source = {
   _id: string;
   title: string;
 };
+
+export type DeleteLeadPayload = {
+  rayId: string;
+  deleteReason: string;
+};
 interface LeadsPerStatusResponse {
   message: string;
   status: string;
@@ -37,6 +42,11 @@ interface LeadsPerSourceResponse {
     sources: Source[];
     data: number[];
   };
+}
+
+interface DeleteLeadsResponse {
+  message: string;
+  status: string;
 }
 
 class LeadsModule extends ApiClient {
@@ -58,7 +68,16 @@ class LeadsModule extends ApiClient {
   }) {
     return this.get<LeadsPerSourceResponse>("/leads-per-source", { params });
   }
+
+  async deleteLeads(payload: DeleteLeadPayload) {
+    const response = await this.patch<DeleteLeadsResponse>(
+      "/delete-lead",
+      payload
+    );
+    return response.data;
+  }
 }
 
 export const statsService = new LeadsModule();
 export const sourceStatsService = new LeadsModule();
+export const deleteLeadsService = new LeadsModule();

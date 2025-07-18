@@ -37,12 +37,13 @@ function RouteComponent() {
     );
   }
 
-  // Ensure all required Lead properties are present
+  // Ensure all required Lead properties are present, including 'meta'
   const normalizedLeads = leads.map((lead) => ({
     ...lead,
     address: lead.address ?? "",
     email: lead.email ?? "",
     company_name: lead.company_name ?? "",
+    meta: lead.meta ?? {}, // Provide a default empty object or adjust as per your Lead type definition
   }));
 
   return <LeadsBoard leads={normalizedLeads} statuses={statuses} />;
