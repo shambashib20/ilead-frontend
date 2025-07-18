@@ -127,7 +127,7 @@ const LeadSourceChart: React.FC<Props> = ({
                   show: true,
                   total: {
                     show: true,
-                    label: "Leads Status",
+                    label: "Leads Source",
                     fontSize: "16px",
                     fontWeight: 600,
                     color: "#ffffff",
