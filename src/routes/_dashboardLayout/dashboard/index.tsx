@@ -2,7 +2,7 @@ import LeadCard from "@/features/dashboard/components/LeadCard";
 import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
 // import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
