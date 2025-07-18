@@ -1,4 +1,7 @@
 export interface Lead {
+  address: string;
+  email: string;
+  company_name: string;
   _id: string;
   title: string;
   reference: string;

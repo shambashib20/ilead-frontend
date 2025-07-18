@@ -3,9 +3,12 @@ import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
+import type { Lead } from "@/features/leads/types";
+import { dashboardLeads } from "@/features/leads/services/HomePage.service";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
@@ -18,20 +21,65 @@ type DashboardCardType = {
 
 function RouteComponent() {
   // const currentLeads;
+  const [leadData, setLeadData] = useState<{
+    leads_in_new: Lead[];
+    leads_in_processing: Lead[];
+  } | null>(null);
+
+  useEffect(() => {
+    dashboardLeads
+      .getTodayLeads()
+      .then((res) =>
+        setLeadData({
+          leads_in_new: res.data.data.leads_in_new.map((lead: any) => ({
+            ...lead,
+            title: lead.title ?? "",
+            assigned_to: lead.assigned_to ?? "",
+            status: lead.status ?? "",
+            assigned_by: lead.assigned_by ?? "",
+            labels: lead.labels ?? [],
+          })),
+          leads_in_processing: res.data.data.leads_in_processing.map(
+            (lead: any) => ({
+              ...lead,
+              title: lead.title ?? "",
+              assigned_to: lead.assigned_to ?? "",
+              status: lead.status ?? "",
+              assigned_by: lead.assigned_by ?? "",
+              labels: lead.labels ?? [],
+            })
+          ),
+        })
+      )
+      .catch((err) => console.error("Lead API Error:", err));
+  }, []);
+
+  if (!leadData) return <div>Loading...</div>;
+
   const cardsData: DashboardCardType[] = [
     {
       title: "Today's Lead",
       tabData: {
         content: [
-          { label: "New", description: "Leads that are new." },
-          { label: "Processing", description: "Leads currently in process." },
+          {
+            label: `New (${leadData.leads_in_new.length})`,
+            description: "Leads that are new.",
+            leads: leadData.leads_in_new,
+          },
+          {
+            label: `Processing(${leadData.leads_in_processing})`,
+            description: "Leads currently in process.",
+            leads: leadData.leads_in_processing,
+          },
           {
             label: "Close-By",
             description: "Leads that are close to conversion.",
+            leads: [], // You can add later if API supports it
           },
         ],
       },
     },
+    // You can populate tasks and reminders similarly later
     {
       title: "Today's Task",
       tabData: {
