@@ -115,7 +115,29 @@ const LeadStatusChart: React.FC<Props> = ({
           },
           tooltip: {
             y: {
-              formatter: (val: number) => `${Math.round(val)}`,
+              formatter: (val: number, {}: any) => {
+                return `${val} leads`;
+              },
+            },
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                labels: {
+                  show: true,
+                  total: {
+                    show: true,
+                    label: "Leads Status",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    color: "#ffffff",
+                    formatter: () => {
+                      const total = series.reduce((sum, val) => sum + val, 0);
+                      return `${total}`;
+                    },
+                  },
+                },
+              },
             },
           },
           dataLabels: {
