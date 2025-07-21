@@ -2,9 +2,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useModalStore } from "@/store/useModalStore";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDeleteLead } from "../../hooks/useDeleteLeads";
-import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -173,7 +173,7 @@ export function LeadLabels() {
 }
 
 export function LeadAssign() {
-  const [user, setUser] = useState("");
+  // const [setUser] = useState("");
   const { agents } = useChatAgents();
 
   console.log(agents);
@@ -184,7 +184,7 @@ export function LeadAssign() {
       <Select
         onValueChange={(value) => {
           console.log("Selected user:", value);
-          setUser(value);
+          // setUser(value);
         }}
       >
         <SelectTrigger className="w-full">
@@ -226,9 +226,9 @@ export function LeadCreateCustomer() {
   );
 }
 
-function LeadStatus() {}
+// function LeadStatus() {}
 
-function LeadFollowUp() {}
+// function LeadFollowUp() {}
 
 export function LeadDetail() {
   return (

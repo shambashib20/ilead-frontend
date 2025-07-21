@@ -35,7 +35,15 @@ function HeaderBtnLists() {
   return (
     <ul className="flex gap-2 items-center">
       {headerButtons.map((btn, index) => (
-        <li key={index} onClick={() => openModal(btn.modalEl)}>
+        <li
+          key={index}
+          onClick={() =>
+            openModal({
+              type: "info",
+              content: btn.modalEl,
+            })
+          }
+        >
           <HeaderActionButton
             icon={btn.icon}
             label={btn.label}
