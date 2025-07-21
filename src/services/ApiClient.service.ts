@@ -52,6 +52,10 @@ export class ApiClient {
     return this.axiosInstance.put<T>(this.url(endpoint), data, config);
   }
 
+  protected patch<T>(endpoint: string, data: any, config?: AxiosRequestConfig) {
+    return this.axiosInstance.patch<T>(this.url(endpoint), data, config);
+  }
+
   protected delete<T>(endpoint: string, config?: AxiosRequestConfig) {
     return this.axiosInstance.delete<T>(this.url(endpoint), config);
   }

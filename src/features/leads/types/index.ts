@@ -5,6 +5,9 @@ export interface Lead {
   name: string;
   phone_number: string;
   createdAt: string;
+  meta: {
+    ray_id: string; // Assuming ray_id is a string, adjust if necessary
+  };
   assigned_to: {
     name: String; // Keep as String (capital S) to match your API
   };
