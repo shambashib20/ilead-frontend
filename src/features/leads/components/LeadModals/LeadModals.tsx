@@ -29,8 +29,19 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { LeadsModule } from "../../services/LeadsModule.service";
-
+import { LabelService } from "../../services/Lable.service";
+import type { AxiosResponse } from "axios";
 const leadsApi = new LeadsModule();
+const labelApi = new LabelService();
+
+export interface LabelItem {
+  _id: string;
+  title: string;
+}
+
+export interface LabelResponse {
+  data: LabelItem[]; // This must be an array
+}
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -155,23 +166,97 @@ export function LeadDelete() {
 }
 
 export function LeadLabels() {
+  const { data, closeModal } = useModalStore();
+  const leadId = data?._id;
+  const [search, setSearch] = useState("");
+
+  const [labels, setLabels] = useState<LabelItem[]>([]);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchLabels() {
+      try {
+        const res = (await labelApi.labels()) as AxiosResponse<LabelResponse>;
+        const cleanedLabels = res.data.data.map((label) => ({
+          _id: label._id,
+          title: label.title,
+        }));
+        setLabels(cleanedLabels);
+      } catch (err) {
+        setError("Failed to load labels");
+      }
+    }
+
+    fetchLabels();
+  }, []);
+
+  const toggleLabel = (id: string) => {
+    setSelected((prev) => {
+      const newSet = new Set(prev);
+      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+      return newSet;
+    });
+  };
+
+  const assignLabels = async () => {
+    if (!leadId || selected.size === 0) return;
+
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      await leadsApi.assignLabelToLead({
+        leadId,
+        labelIds: Array.from(selected),
+      });
+      closeModal(); // close on success
+    } catch (err) {
+      setError("Failed to assign labels. Try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div>
-      <Input placeholder="Search" className="" name="search" id="search" />
-      <ul className="min-h-[200px] max-h-[100px] overflow-y-auto mt-3">
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
-        <li>aaaa</li>
+    <div className="space-y-4">
+      <Input
+        placeholder="Search labels..."
+        disabled={isSubmitting}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full"
+      />
+      <ul className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
+        {labels
+          .filter((label) =>
+            label.title.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((label) => (
+            <li key={label._id} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id={label._id}
+                checked={selected.has(label._id)}
+                onChange={() => toggleLabel(label._id)}
+                disabled={isSubmitting}
+              />
+              <label htmlFor={label._id} className="text-sm">
+                {label.title}
+              </label>
+            </li>
+          ))}
       </ul>
+
+      {error && <div className="text-red-500 text-sm">{error}</div>}
+
+      <Button
+        className="bg-green-600 hover:bg-green-700 w-full"
+        disabled={isSubmitting || selected.size === 0}
+        onClick={assignLabels}
+      >
+        {isSubmitting ? "Assigning..." : "Assign Labels"}
+      </Button>
     </div>
   );
 }

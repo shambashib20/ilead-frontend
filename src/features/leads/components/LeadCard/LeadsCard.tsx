@@ -114,9 +114,22 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         }}
       >
         <div className="pt-5 px-6">
-          <span className="bg-red-600 text-white text-xs px-3 py-1 rounded inline-block mb-3">
-            {lead?.labels[0]?.title || "No Label"}
-          </span>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {lead.labels?.length > 0 ? (
+              lead.labels.map((label) => (
+                <span
+                  key={label._id || label.title}
+                  className="bg-red-600 text-white text-xs px-3 py-1 rounded"
+                >
+                  {label.title}
+                </span>
+              ))
+            ) : (
+              <span className="bg-gray-600 text-white text-xs px-3 py-1 rounded">
+                No Label
+              </span>
+            )}
+          </div>
 
           <div className="text-white text-xs font-medium flex items-center gap-2 mb-2">
             <User color="blue" size={18} />

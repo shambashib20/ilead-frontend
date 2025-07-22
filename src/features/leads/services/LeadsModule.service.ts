@@ -55,6 +55,16 @@ interface DeleteLeadsResponse {
   status: string;
 }
 
+interface AssignLabelResponse {
+  message: string;
+  status: string;
+}
+
+export type AssignLabelPayload = {
+  leadId: string;
+  labelIds: string[];
+};
+
 export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
@@ -85,6 +95,11 @@ export class LeadsModule extends ApiClient {
 
   async getLeadInfo(params: { leadId: string }) {
     return this.get<LeadDetailsResponse>("/info", { params });
+  }
+
+  async assignLabelToLead(payload: AssignLabelPayload) {
+    const response = await this.patch<AssignLabelResponse>("/update", payload);
+    return response.data;
   }
 }
 
