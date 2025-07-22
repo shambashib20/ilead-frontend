@@ -14,6 +14,15 @@ import type { Lead } from "@/features/leads/types";
 
 import { DeleteConfirmationModal } from "../DeleteLeadModal/DeleteModal";
 import { deleteLeadsService } from "../../services/LeadsModule.service";
+import { Button } from "@/components/ui/button";
+import {
+  LeadAssign,
+  LeadCreateCustomer,
+  LeadDelete,
+  LeadDetail,
+  LeadLabels,
+} from "../LeadModals";
+import type { JSX } from "react/jsx-runtime";
 
 interface LeadCardProps {
   lead: Lead;
@@ -106,6 +115,18 @@ export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
       setIsDeleting(false);
     }
   };
+  function setModalTitle(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
+
+  function setModalSize(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
+
+  function openModal(arg0: { content: JSX.Element; type: "action" }) {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div className="bg-primary rounded-lg shadow hover:shadow-lg transition-all">
       <div
