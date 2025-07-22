@@ -9,15 +9,11 @@ export interface Lead {
   name: string;
   phone_number: string;
   createdAt: string;
-  assigned_to: {
-    name: String; // Keep as String (capital S) to match your API
-  };
-  status: {
-    _id: string;
-  };
-
+  assigned_to: { name: string };
+  status: { _id: string };
   comment: string;
   assigned_by: string;
+  meta: { ray_id: string };
   labels: Label[];
 }
 

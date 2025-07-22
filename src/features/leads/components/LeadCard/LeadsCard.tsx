@@ -21,12 +21,65 @@ interface LeadCardProps {
 }
 
 const CARD_ACTIONS = [
-  { icon: Trash, color: "red", label: "Delete" },
-  { icon: Tag, color: "green", label: "Tag" },
-  { icon: TrendingUp, color: "black", label: "Trend" },
-  { icon: UserPlus, color: "blue", label: "Add User" },
-  { icon: RefreshCw, color: "blue", label: "Refresh" },
-  { icon: Send, color: "white", label: "Send" },
+  {
+    icon: Trash,
+    color: "red",
+    label: "Delete",
+    title: "Delete Lead",
+    el: <LeadDelete />,
+    type: "form" as const,
+    customActions: undefined,
+  },
+  {
+    icon: Tag,
+    color: "green",
+    label: "Tag",
+    title: "Lead Label Assign",
+    el: <LeadLabels />,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: TrendingUp,
+    color: "black",
+    label: "Trend",
+    title: "change Lead Assign To",
+    el: <LeadAssign />,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: UserPlus,
+    color: "blue",
+    label: "Add User",
+    title: null,
+    el: <LeadCreateCustomer />,
+    type: "info" as const,
+    customActions: undefined,
+  },
+  {
+    icon: RefreshCw,
+    color: "blue",
+    label: "Refresh",
+    title: "Change Lead Status",
+    el: <div>Data refreshed successfully!</div>,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: Send,
+    color: "white",
+    label: "Send",
+    title: "Add Lead Follow Up",
+    el: <div>Send email to lead...</div>,
+    type: "form" as const,
+    customActions: (
+      <>
+        <Button className="bg-blue-600 hover:bg-blue-700">Submit</Button>
+        <Button variant="outline">Cancel</Button>
+      </>
+    ),
+  },
 ] as const;
 
 export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
@@ -55,34 +108,49 @@ export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
   };
   return (
     <div className="bg-primary rounded-lg shadow hover:shadow-lg transition-all">
-      <div className="pt-5 px-6">
-        <span className="bg-red-600 text-white text-xs px-3 py-1 rounded inline-block mb-3">
-          {lead?.labels[0]?.title || "No Label"}
-        </span>
+      <div
+        className=" cursor-pointer"
+        onClick={() => {
+          console.log("Lead clicked:", lead._id);
+          setModalTitle?.("Lead Details");
+          // setData?.(lead.meta.ray_id);
 
-        <div className="text-white text-xs font-medium flex items-center gap-2 mb-2">
-          <User color="blue" size={18} />
-          <span>{leadName}</span>
+          setModalSize?.("lg");
+          openModal({
+            content: <LeadDetail />,
+            type: "action" as const,
+          });
+        }}
+      >
+        <div className="pt-5 px-6">
+          <span className="bg-red-600 text-white text-xs px-3 py-1 rounded inline-block mb-3">
+            {lead?.labels[0]?.title || "No Label"}
+          </span>
+
+          <div className="text-white text-xs font-medium flex items-center gap-2 mb-2">
+            <User color="blue" size={18} />
+            <span>{leadName}</span>
+          </div>
+
+          <div className="text-white text-xs font-medium flex items-center gap-2 mb-4">
+            <Phone color="green" size={18} />
+            <span>{phoneNumber}</span>
+          </div>
         </div>
 
-        <div className="text-white text-xs font-medium flex items-center gap-2 mb-4">
-          <Phone color="green" size={18} />
-          <span>{phoneNumber}</span>
-        </div>
-      </div>
-
-      <div className="space-y-1 px-6">
-        <div className="text-white text-xs flex items-center gap-1">
-          <span className="font-medium">CD:</span>
-          <span>{createdAt}</span>
-        </div>
-        <div className="text-white text-xs flex items-center gap-1">
-          <span className="font-medium">BY:</span>
-          <span>{assignedBy}</span>
-        </div>
-        <div className="text-white text-xs flex items-center gap-1">
-          <span className="font-medium">TO:</span>
-          <span>{assignedToName}</span>
+        <div className="space-y-1 px-6">
+          <div className="text-white text-xs flex items-center gap-1">
+            <span className="font-medium">CD:</span>
+            <span>{createdAt}</span>
+          </div>
+          <div className="text-white text-xs flex items-center gap-1">
+            <span className="font-medium">BY:</span>
+            <span>{assignedBy}</span>
+          </div>
+          <div className="text-white text-xs flex items-center gap-1">
+            <span className="font-medium">TO:</span>
+            <span>{assignedToName}</span>
+          </div>
         </div>
       </div>
 
