@@ -1,5 +1,5 @@
 export interface Lead {
-  meta: any;
+  meta?: Record<string, any>;
   address: string;
   email: string;
   company_name: string;
@@ -13,7 +13,6 @@ export interface Lead {
   status: { _id: string };
   comment: string;
   assigned_by: string;
-  meta: { ray_id: string };
   labels: Label[];
 }
 
