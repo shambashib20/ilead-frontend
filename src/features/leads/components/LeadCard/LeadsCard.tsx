@@ -104,7 +104,7 @@ export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
     try {
       setIsDeleting(true);
       await deleteLeadsService.deleteLeads({
-        rayId: lead.meta.ray_id,
+        rayId: lead?.meta?.ray_id,
         deleteReason,
       });
       setIsDeleteModalOpen(false);

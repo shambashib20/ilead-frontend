@@ -44,7 +44,17 @@ function RouteComponent() {
     address: lead.address ?? "",
     email: lead.email ?? "",
     company_name: lead.company_name ?? "",
-    meta: lead.meta ?? {}, // Provide a default empty object or adjust as per your Lead type definition
+    meta: lead.meta ?? {},
+    assigned_to: {
+      ...lead.assigned_to,
+      // Always convert to primitive string
+      name:
+        typeof lead.assigned_to?.name === "string"
+          ? lead.assigned_to.name
+          : lead.assigned_to?.name !== undefined
+            ? String(lead.assigned_to.name)
+            : "",
+    },
   }));
 
   return <LeadsBoard leads={normalizedLeads} statuses={statuses} />;
