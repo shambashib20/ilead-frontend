@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 import {
   EllipsisVertical,
   Phone,
@@ -11,10 +11,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import type { Lead } from "@/features/leads/types";
-
-import { DeleteConfirmationModal } from "../DeleteLeadModal/DeleteModal";
-import { deleteLeadsService } from "../../services/LeadsModule.service";
-import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/store/useModalStore";
 import {
   LeadAssign,
   LeadCreateCustomer,
@@ -22,11 +19,10 @@ import {
   LeadDetail,
   LeadLabels,
 } from "../LeadModals";
-import type { JSX } from "react/jsx-runtime";
+import { Button } from "@/components/ui/button";
 
 interface LeadCardProps {
   lead: Lead;
-  onDeleted?: () => void;
 }
 
 const CARD_ACTIONS = [
@@ -90,42 +86,16 @@ const CARD_ACTIONS = [
     ),
   },
 ] as const;
-
-export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+export const LeadCard = memo(({ lead }: LeadCardProps) => {
   // Convert String objects to primitive strings to avoid React rendering issues
   const assignedToName = lead.assigned_to.name;
   const leadName = String(lead.name);
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt);
   const assignedBy = String(lead.assigned_by || "Test User");
-  const handleDelete = async (deleteReason: string) => {
-    try {
-      setIsDeleting(true);
-      await deleteLeadsService.deleteLeads({
-        rayId: lead?.meta?.ray_id,
-        deleteReason,
-      });
-      setIsDeleteModalOpen(false);
-      if (onDeleted) onDeleted();
-    } catch (error) {
-      console.error("Failed to delete lead:", error);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-  function setModalTitle(arg0: string) {
-    throw new Error("Function not implemented.");
-  }
 
-  function setModalSize(arg0: string) {
-    throw new Error("Function not implemented.");
-  }
-
-  function openModal(arg0: { content: JSX.Element; type: "action" }) {
-    throw new Error("Function not implemented.");
-  }
+  // const { openModal, setModalTitle } = useModalStore();
+  const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
 
   return (
     <div className="bg-primary rounded-lg shadow hover:shadow-lg transition-all">
@@ -134,7 +104,7 @@ export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
         onClick={() => {
           console.log("Lead clicked:", lead._id);
           setModalTitle?.("Lead Details");
-          // setData?.(lead.meta.ray_id);
+          setData?.({ _id: lead._id, rayId: lead?.meta?.ray_id });
 
           setModalSize?.("lg");
           openModal({
@@ -176,32 +146,35 @@ export const LeadCard = memo(({ lead, onDeleted }: LeadCardProps) => {
       </div>
 
       <div className="mt-3 items-center py-3 px-2 border-t border-gray-600 flex gap-1.5">
-        {CARD_ACTIONS.map(({ icon: Icon, color, label }) => (
-          <button
-            key={label}
-            className="p-1 hover:bg-gray-700 rounded transition-colors"
-            title={label}
-            onClick={() => {
-              if (label === "Delete") {
-                setIsDeleteModalOpen(true);
-              }
-            }}
-          >
-            <Icon size={16} color={color} />
-          </button>
-        ))}
+        {CARD_ACTIONS.map(
+          ({ icon: Icon, color, label, el, type, customActions, title }) => (
+            <button
+              key={label}
+              className="p-1 hover:bg-gray-700 rounded transition-colors"
+              title={label}
+              onClick={() => {
+                console.log("action clicked", label);
+                setModalTitle?.(title);
+                setModalSize?.("sm");
+                setData?.({
+                  _id: lead._id,
+                  rayId: lead.meta?.ray_id,
+                });
+                openModal({
+                  content: el,
+                  type,
+                  customActions,
+                });
+              }}
+            >
+              <Icon size={16} color={color} />
+            </button>
+          )
+        )}
         <button className="ms-auto p-1 hover:bg-gray-700 rounded transition-colors">
           <EllipsisVertical size={16} />
         </button>
       </div>
-
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDelete}
-        leadName={leadName}
-        isLoading={isDeleting}
-      />
     </div>
   );
 });

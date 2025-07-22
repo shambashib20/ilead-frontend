@@ -3,7 +3,6 @@ import { useLeads } from "@/features/leads/hooks/useLeads";
 import { useLeadFilters } from "@/features/leads/hooks/useLeadFilters";
 import LeadsBoard from "@/features/leads/components/LeadsBoard";
 import LoadingState from "@/features/leads/components/LeadsLoading";
-import type { Lead } from "@/features/leads/types";
 
 export const Route = createFileRoute("/_dashboardLayout/lead/")({
   component: RouteComponent,

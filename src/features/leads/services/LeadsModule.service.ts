@@ -44,12 +44,18 @@ interface LeadsPerSourceResponse {
   };
 }
 
+interface LeadDetailsResponse {
+  message: string;
+  status: string;
+  data: Lead;
+}
+
 interface DeleteLeadsResponse {
   message: string;
   status: string;
 }
 
-class LeadsModule extends ApiClient {
+export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
   }
@@ -76,8 +82,13 @@ class LeadsModule extends ApiClient {
     );
     return response.data;
   }
+
+  async getLeadInfo(params: { leadId: string }) {
+    return this.get<LeadDetailsResponse>("/info", { params });
+  }
 }
 
 export const statsService = new LeadsModule();
 export const sourceStatsService = new LeadsModule();
 export const deleteLeadsService = new LeadsModule();
+export const leadDetailsService = new LeadsModule();

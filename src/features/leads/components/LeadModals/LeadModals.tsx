@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useModalStore } from "@/store/useModalStore";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDeleteLead } from "../../hooks/useDeleteLeads";
 // import { useMutation } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,6 +28,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { LeadsModule } from "../../services/LeadsModule.service";
+
+const leadsApi = new LeadsModule();
+
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
@@ -46,14 +50,14 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 export function LeadDelete() {
   const { setFormActions, data, closeModal } = useModalStore();
   const { deleteLead, isDeleting, isSuccess, error } = useDeleteLead();
-
+  const rayId = data?.rayId;
   const form = useForm({
     defaultValues: {
       reason: "",
     },
     onSubmit: async ({ value }) => {
       deleteLead({
-        rayId: data,
+        rayId,
         deleteReason: value.reason,
       });
       console.log("Deleting lead with reason:", {
@@ -231,8 +235,43 @@ export function LeadCreateCustomer() {
 // function LeadFollowUp() {}
 
 export function LeadDetail() {
+  const { data } = useModalStore();
+  const leadId = data?._id;
+  const [lead, setLead] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!leadId) return;
+
+    const fetchLeadInfo = async () => {
+      try {
+        const response = await leadsApi.getLeadInfo({ leadId });
+        setLead(response.data);
+      } catch (error) {
+        console.error("Failed to fetch lead info", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeadInfo();
+  }, [leadId]);
+
+  if (loading) {
+    return (
+      <div className="p-4 text-center text-white">Loading lead details...</div>
+    );
+  }
+
+  if (!lead) {
+    return <div className="p-4 text-center text-red-500">Lead not found.</div>;
+  }
+
+  // Extract fields
+
   return (
     <div className="min-h-[400px] max-h-[450px] overflow-y-auto">
+      {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
         <li className="cursor-pointer">
           <SquarePen size={26} strokeWidth={1.4} />
@@ -259,47 +298,48 @@ export function LeadDetail() {
           <EllipsisVertical size={26} strokeWidth={1.4} />
         </li>
       </ul>
-      <Tabs defaultValue="details" className="mt-4 ">
+
+      {/* Tabs */}
+      <Tabs defaultValue="details" className="mt-4">
         <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="followup">Follow Up</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
-          <TabsTrigger value="task">Task</TabsTrigger>
+          {/* <TabsTrigger value="task">Task</TabsTrigger>
           <TabsTrigger value="reminder">Reminder</TabsTrigger>
           <TabsTrigger value="meeting">Meeting</TabsTrigger>
           <TabsTrigger value="quotation">Quotation</TabsTrigger>
-          <TabsTrigger value="invoice">Invoice</TabsTrigger>
+          <TabsTrigger value="invoice">Invoice</TabsTrigger> */}
         </TabsList>
 
-        {/* Tabs Content */}
-        <TabsContent value="details" className="">
+        <TabsContent value="details">
           <div className="grid grid-cols-2 gap-4">
             {/* Left Column */}
             <div className="border border-gray-700 rounded">
               <h3 className="font-semibold text-white mb-2 bg-[#3a3285] p-4 text-center">
                 Lead Information
               </h3>
-              <div className="p-4 ">
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Name:</b> Rupesh Dutta
+              <div className="p-4">
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Name:</b> {lead.data.name}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Company:</b> -
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Company:</b> {lead.data.company_name || "-"}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Phone:</b> 918276979903
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Phone:</b> {lead.data.phone_number}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Email:</b> datta.rupesh@gmail.com
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Email:</b> {lead.data.email || "-"}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Address:</b> -
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Address:</b> {lead.data.address || "-"}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Comment:</b> -
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Comment:</b> {lead.data.comment || "-"}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Reference:</b> -
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Reference:</b> {lead.data.reference || "-"}
                 </p>
               </div>
             </div>
@@ -309,62 +349,86 @@ export function LeadDetail() {
               <h3 className="font-semibold text-white mb-2 bg-[#3a3285] p-4 text-center">
                 General Information
               </h3>
-              <div className="p-4 ">
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Date:</b> 19-07-2025 11:35
+              <div className="p-4">
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Date:</b> {new Date(lead.data.createdAt).toLocaleString()}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Status:</b> New
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Status:</b> {lead.data.status.title || "N/A"}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Source:</b> Facebook
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Source:</b> {lead.data.meta.source.title || "N/A"}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
+                <p className="text-sm text-gray-300 mb-2">
                   <b>Labels:</b>{" "}
-                  <div>
-                    <span className="bg-purple-700 px-2 py-1 rounded text-xs">
-                      Associate
-                    </span>{" "}
-                    <span className="bg-pink-600 px-2 py-1 rounded text-xs">
-                      Website
-                    </span>
+                  <div className="flex gap-2 flex-wrap mt-1">
+                    {lead.data.labels.length > 0
+                      ? lead.data.labels.map((lbl: any) => (
+                          <span
+                            key={lbl._id}
+                            className="bg-purple-700 px-2 py-1 rounded text-xs"
+                          >
+                            {lbl.title}
+                          </span>
+                        ))
+                      : "-"}
                   </div>
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Created By:</b> M.R Group of Colleges
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Created By:</b> {lead.data.assigned_by?.name || ""}
                 </p>
-                <p className="flex flex-col gap-1 text-sm text-gray-300 mb-2">
-                  <b>Assign To:</b> Ankita Khan
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Assign To:</b> {lead.data.assigned_to?.name || "N/A"}
                 </p>
               </div>
             </div>
+
+            {/* <div className="border border-gray-700 rounded">
+              <h3 className="font-semibold text-white mb-2 bg-[#3a3285] p-4 text-center">
+                Lead Meta Data
+              </h3>
+              <div className="p-4">
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Enriched Location (City):</b>{" "}
+                  {lead.data.meta.location.city}
+                </p>
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Enriched Location (Country):</b>{" "}
+                  {lead.data.meta.location.country}
+                </p>
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Enriched Location (Detailed Address):</b>{" "}
+                  {lead.data.meta.location.detailed_lead_address}
+                </p>
+
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Enriched Location (Region of Origin):</b>{" "}
+                  {lead.data.meta.location.region}
+                </p>
+              </div>
+            </div> */}
           </div>
         </TabsContent>
 
+        {/* Other tabs placeholder */}
         <TabsContent value="followup" className="mt-4">
           <p>No follow ups yet.</p>
         </TabsContent>
-
         <TabsContent value="history" className="mt-4">
           <p>No history available.</p>
         </TabsContent>
-
         <TabsContent value="task" className="mt-4">
           <p>No tasks assigned.</p>
         </TabsContent>
-
         <TabsContent value="reminder" className="mt-4">
           <p>No reminders set.</p>
         </TabsContent>
-
         <TabsContent value="meeting" className="mt-4">
           <p>No meetings scheduled.</p>
         </TabsContent>
-
         <TabsContent value="quotation" className="mt-4">
           <p>No quotations generated.</p>
         </TabsContent>
-
         <TabsContent value="invoice" className="mt-4">
           <p>No invoices available.</p>
         </TabsContent>
