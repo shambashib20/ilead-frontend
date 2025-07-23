@@ -56,7 +56,7 @@ const CARD_ACTIONS = [
   {
     icon: UserPlus,
     color: "blue",
-    label: "Add User",
+    label: "Convert Lead to Customer",
     title: null,
     el: <LeadCreateCustomer />,
     type: "info" as const,

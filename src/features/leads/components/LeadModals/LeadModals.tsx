@@ -30,10 +30,15 @@ import { Button } from "@/components/ui/button";
 
 import { LeadsModule } from "../../services/LeadsModule.service";
 import { LabelService } from "../../services/Lable.service";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { CustomerModule } from "../../services/Customer.service";
 import type { AxiosResponse } from "axios";
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
 
+const MySwal = withReactContent(Swal);
+const customerModule = new CustomerModule();
 export interface LabelItem {
   _id: string;
   title: string;
@@ -292,21 +297,61 @@ export function LeadAssign() {
 }
 
 export function LeadCreateCustomer() {
-  const { closeModal } = useModalStore();
+  const { closeModal, data } = useModalStore();
+  const [loading, setLoading] = useState(false);
+
+  const handleConvert = async () => {
+    if (!data?._id) {
+      await MySwal.fire({
+        icon: "error",
+        title: "Missing Lead ID",
+        text: "Unable to convert. Lead ID is required.",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await customerModule.convertToCustomer({ leadId: data._id });
+
+      await MySwal.fire({
+        icon: "success",
+        title: "Conversion Successful",
+        text: "Lead converted to customer successfully!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      closeModal();
+      // Optional: trigger refetch
+    } catch (error) {
+      console.error("Conversion error:", error);
+      await MySwal.fire({
+        icon: "error",
+        title: "Conversion Failed",
+        text: "Could not convert the lead to a customer.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4 p-4">
-      <div className="flex items-center justify-center ">
+      <div className="flex items-center justify-center">
         <Info className="text-orange-300" size={90} strokeWidth={1} />
       </div>
       <h3 className="text-2xl text-center px-3 font-semibold text-gray-50 mx-auto">
-        Are You Sure You Want To Convert This Lead To Customer ?
+        Are You Sure You Want To Convert This Lead To Customer?
       </h3>
       <ul className="flex items-center justify-center gap-4">
         <li>
-          <Button>Yes Convert</Button>
+          <Button onClick={handleConvert} disabled={loading}>
+            {loading ? "Converting..." : "Yes Convert"}
+          </Button>
         </li>
         <li>
-          <Button variant={"destructive"} onClick={closeModal}>
+          <Button variant="destructive" onClick={closeModal}>
             Cancel
           </Button>
         </li>
