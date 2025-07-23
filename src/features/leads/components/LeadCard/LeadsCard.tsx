@@ -145,7 +145,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         <div className="space-y-1 px-6">
           <div className="text-white text-xs flex items-center gap-1">
             <span className="font-medium">CD:</span>
-            <span>{createdAt}</span>
+            <span>{new Date(createdAt).toLocaleString()}</span>
           </div>
           <div className="text-white text-xs flex items-center gap-1">
             <span className="font-medium">BY:</span>

@@ -415,11 +415,15 @@ export function LeadDetail() {
                   <b>Phone:</b> {lead.data.phone_number}
                 </p>
                 <p className="text-sm text-gray-300 mb-2">
+                  <b>Whatsapp:</b> {lead.data.meta.whatsapp || "-"}
+                </p>
+                <p className="text-sm text-gray-300 mb-2">
                   <b>Email:</b> {lead.data.email || "-"}
                 </p>
                 <p className="text-sm text-gray-300 mb-2">
                   <b>Address:</b> {lead.data.address || "-"}
                 </p>
+
                 <p className="text-sm text-gray-300 mb-2">
                   <b>Comment:</b> {lead.data.comment || "-"}
                 </p>
