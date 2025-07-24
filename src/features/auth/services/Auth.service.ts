@@ -42,14 +42,19 @@ class AuthService extends ApiClient {
     super("auth"); // this.modulePath becomes /auth
   }
 
-  login(payload: LoginPayload): Promise<AuthResponse> {
-    return this.post<AuthResponse>("/login", payload).then((res) => res.data);
+  async login(payload: LoginPayload): Promise<AuthResponse> {
+    const res = await this.post<AuthResponse>("/login", payload);
+    return res.data;
   }
 
-  register(payload: RegisterPayload): Promise<AuthResponse> {
-    return this.post<AuthResponse>("/register", payload).then(
-      (res) => res.data
-    );
+  async register(payload: RegisterPayload): Promise<AuthResponse> {
+    const res = await this.post<AuthResponse>("/register", payload);
+    return res.data;
+  }
+
+  async loginForAll(payload: LoginPayload): Promise<AuthResponse> {
+    const res = await this.post<AuthResponse>("/login/all", payload);
+    return res.data;
   }
 
   //   me(): Promise<MeResponse> {
