@@ -54,7 +54,7 @@ function WorkspaceDetailsCard() {
   };
 
   return (
-    <Card className="w-full mx-auto mt-6 bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+    <Card className="max-w-2xl mx-auto mt-6 bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
       <CardHeader>
         <CardTitle className="text-xl font-bold">{workspace.name}</CardTitle>
       </CardHeader>

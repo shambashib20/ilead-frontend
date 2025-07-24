@@ -34,7 +34,9 @@ export default function UserProfileBox() {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuItem className="flex items-center gap-2">
           <User className="h-4 w-4" />
-          <span>Profile</span>
+          <Link to="/user-profile">
+            <span>Profile</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center gap-2">
           <Building2 className="h-4 w-4" />
