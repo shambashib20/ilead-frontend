@@ -5,6 +5,7 @@ import {
   Funnel,
   House,
   LayoutGrid,
+  Tags,
   // ListChecks,
   // ListTodo,
   // PartyPopper,
@@ -17,6 +18,7 @@ import {
 export const navItems = [
   { name: "Dashboard", icon: <House size={20} />, path: "/dashboard" },
   { name: "Lead", icon: <Funnel size={20} />, path: "/lead" },
+  { name: "Label", icon: <Tags size={20} />, path: "/label" },
   // { name: "Task", icon: <Calendar size={20} />, path: "/task" },
   // { name: "Reminder", icon: <Bell size={20} />, path: "/reminder" },
   // { name: "Meeting", icon: <Presentation size={20} />, path: "/meeting" },

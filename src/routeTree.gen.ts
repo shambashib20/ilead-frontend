@@ -23,6 +23,7 @@ import { Route as DashboardLayoutWorkspacelogsIndexImport } from './routes/_dash
 import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
 import { Route as DashboardLayoutUserProfileIndexImport } from './routes/_dashboardLayout/user-profile/index'
 import { Route as DashboardLayoutLeadIndexImport } from './routes/_dashboardLayout/lead/index'
+import { Route as DashboardLayoutLabelIndexImport } from './routes/_dashboardLayout/label/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboardLayout/dashboard/index'
 import { Route as DashboardLayoutCustomerIndexImport } from './routes/_dashboardLayout/customer/index'
 
@@ -98,6 +99,12 @@ const DashboardLayoutLeadIndexRoute = DashboardLayoutLeadIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardLayoutLeadRouteRoute,
+} as any)
+
+const DashboardLayoutLabelIndexRoute = DashboardLayoutLabelIndexImport.update({
+  id: '/label/',
+  path: '/label/',
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
 const DashboardLayoutDashboardIndexRoute =
@@ -188,6 +195,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboardLayout/label/': {
+      id: '/_dashboardLayout/label/'
+      path: '/label'
+      fullPath: '/label'
+      preLoaderRoute: typeof DashboardLayoutLabelIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboardLayout/lead/': {
       id: '/_dashboardLayout/lead/'
       path: '/'
@@ -267,6 +281,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutLeadRouteRoute: typeof DashboardLayoutLeadRouteRouteWithChildren
   DashboardLayoutCustomerIndexRoute: typeof DashboardLayoutCustomerIndexRoute
   DashboardLayoutDashboardIndexRoute: typeof DashboardLayoutDashboardIndexRoute
+  DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute
   DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute
   DashboardLayoutWorkspaceDetailsIndexRoute: typeof DashboardLayoutWorkspaceDetailsIndexRoute
   DashboardLayoutWorkspacelogsIndexRoute: typeof DashboardLayoutWorkspacelogsIndexRoute
@@ -276,6 +291,7 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutLeadRouteRoute: DashboardLayoutLeadRouteRouteWithChildren,
   DashboardLayoutCustomerIndexRoute: DashboardLayoutCustomerIndexRoute,
   DashboardLayoutDashboardIndexRoute: DashboardLayoutDashboardIndexRoute,
+  DashboardLayoutLabelIndexRoute: DashboardLayoutLabelIndexRoute,
   DashboardLayoutUserProfileIndexRoute: DashboardLayoutUserProfileIndexRoute,
   DashboardLayoutWorkspaceDetailsIndexRoute:
     DashboardLayoutWorkspaceDetailsIndexRoute,
@@ -296,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppLayoutIndexRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
   '/dashboard': typeof DashboardLayoutDashboardIndexRoute
+  '/label': typeof DashboardLayoutLabelIndexRoute
   '/lead/': typeof DashboardLayoutLeadIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -310,6 +327,7 @@ export interface FileRoutesByTo {
   '/': typeof AppLayoutIndexRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
   '/dashboard': typeof DashboardLayoutDashboardIndexRoute
+  '/label': typeof DashboardLayoutLabelIndexRoute
   '/lead': typeof DashboardLayoutLeadIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -328,6 +346,7 @@ export interface FileRoutesById {
   '/_appLayout/': typeof AppLayoutIndexRoute
   '/_dashboardLayout/customer/': typeof DashboardLayoutCustomerIndexRoute
   '/_dashboardLayout/dashboard/': typeof DashboardLayoutDashboardIndexRoute
+  '/_dashboardLayout/label/': typeof DashboardLayoutLabelIndexRoute
   '/_dashboardLayout/lead/': typeof DashboardLayoutLeadIndexRoute
   '/_dashboardLayout/user-profile/': typeof DashboardLayoutUserProfileIndexRoute
   '/_dashboardLayout/workspace-details/': typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -345,6 +364,7 @@ export interface FileRouteTypes {
     | '/'
     | '/customer'
     | '/dashboard'
+    | '/label'
     | '/lead/'
     | '/user-profile'
     | '/workspace-details'
@@ -358,6 +378,7 @@ export interface FileRouteTypes {
     | '/'
     | '/customer'
     | '/dashboard'
+    | '/label'
     | '/lead'
     | '/user-profile'
     | '/workspace-details'
@@ -374,6 +395,7 @@ export interface FileRouteTypes {
     | '/_appLayout/'
     | '/_dashboardLayout/customer/'
     | '/_dashboardLayout/dashboard/'
+    | '/_dashboardLayout/label/'
     | '/_dashboardLayout/lead/'
     | '/_dashboardLayout/user-profile/'
     | '/_dashboardLayout/workspace-details/'
@@ -428,6 +450,7 @@ export const routeTree = rootRoute
         "/_dashboardLayout/lead",
         "/_dashboardLayout/customer/",
         "/_dashboardLayout/dashboard/",
+        "/_dashboardLayout/label/",
         "/_dashboardLayout/user-profile/",
         "/_dashboardLayout/workspace-details/",
         "/_dashboardLayout/workspace_logs/"
@@ -462,6 +485,10 @@ export const routeTree = rootRoute
     },
     "/_dashboardLayout/dashboard/": {
       "filePath": "_dashboardLayout/dashboard/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/label/": {
+      "filePath": "_dashboardLayout/label/index.tsx",
       "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/lead/": {
