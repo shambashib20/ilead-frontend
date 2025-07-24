@@ -317,7 +317,7 @@ export function LeadCreateCustomer() {
       await MySwal.fire({
         icon: "success",
         title: "Conversion Successful",
-        text: "Lead converted to customer successfully!",
+        text: res.message,
         timer: 2000,
         showConfirmButton: false,
       });
