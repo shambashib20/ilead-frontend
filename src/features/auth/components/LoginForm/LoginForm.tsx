@@ -119,10 +119,10 @@ function LoginForm() {
                 {isSubmitting ? "..." : "Join Our Channel"}
               </Button>
 
-              <h3 className="small-primary text-sm text-center my-5">
+              {/* <h3 className="small-primary text-sm text-center my-5">
                 Product by
               </h3>
-              <img className="mx-auto" src={productByImg} alt="" />
+              <img className="mx-auto" src={productByImg} alt="" /> */}
             </div>
           )}
         />
