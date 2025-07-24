@@ -113,6 +113,11 @@ function RouteComponent() {
       },
     },
   ];
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const allowedRoles = ["Admin", "Superadmin"];
+  const hasAccess = allowedRoles.includes(user?.role);
+
   return (
     <section className="dashboard-sec">
       <div className="stats  ">
@@ -137,58 +142,61 @@ function RouteComponent() {
         </Card>
       </div> */}
 
-      <div className="status mt-5">
-        <div className="grid grid-cols-2 gap-7">
-          <div className="col">
-            <Card>
-              <div className="flex justify-between items-center px-6">
-                <CardTitle>Lead Status</CardTitle>
-                <button
-                  className="p-2 rounded-md hover:bg-gray-100 transition"
-                  onClick={() => setShowMenu((prev) => !prev)}
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
-              </div>
-              <CardContent>
-                <LeadStatusChart
-                  showMenu={showMenu}
-                  startDate={startDate}
-                  endDate={endDate}
-                  selectedAgent={selectedAgent}
-                  onStartDateChange={setStartDate}
-                  onEndDateChange={setEndDate}
-                  onAgentChange={setSelectedAgent}
-                />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="col">
-            <Card>
-              <div className="flex justify-between items-center px-6">
-                <CardTitle>Lead Source</CardTitle>
-                <button
-                  className="p-2 rounded-md hover:bg-gray-100 transition"
-                  onClick={() => setShowSourceMenu((prev) => !prev)}
-                >
-                  <Menu className="w-6 h-6" />
-                </button>
-              </div>
-              <CardContent>
-                <LeadSourceChart
-                  showMenu={showSourceMenu}
-                  startDate={sourceStartDate}
-                  endDate={sourceEndDate}
-                  selectedAgent={sourceSelectedAgent}
-                  onStartDateChange={sourceSetStartDate}
-                  onEndDateChange={sourceSetEndDate}
-                  onAgentChange={sourceSetSelectedAgent}
-                />
-              </CardContent>
-            </Card>
+      {hasAccess && (
+        <div className="status mt-5">
+          <div className="grid grid-cols-2 gap-7">
+            <div className="col">
+              <Card>
+                <div className="flex justify-between items-center px-6">
+                  <CardTitle>Lead Status</CardTitle>
+                  <button
+                    className="p-2 rounded-md hover:bg-gray-100 transition"
+                    onClick={() => setShowMenu((prev) => !prev)}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </button>
+                </div>
+                <CardContent>
+                  <LeadStatusChart
+                    showMenu={showMenu}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectedAgent={selectedAgent}
+                    onStartDateChange={setStartDate}
+                    onEndDateChange={setEndDate}
+                    onAgentChange={setSelectedAgent}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="col">
+              <Card>
+                <div className="flex justify-between items-center px-6">
+                  <CardTitle>Lead Source</CardTitle>
+                  <button
+                    className="p-2 rounded-md hover:bg-gray-100 transition"
+                    onClick={() => setShowSourceMenu((prev) => !prev)}
+                  >
+                    <Menu className="w-6 h-6" />
+                  </button>
+                </div>
+                <CardContent>
+                  <LeadSourceChart
+                    showMenu={showSourceMenu}
+                    startDate={sourceStartDate}
+                    endDate={sourceEndDate}
+                    selectedAgent={sourceSelectedAgent}
+                    onStartDateChange={sourceSetStartDate}
+                    onEndDateChange={sourceSetEndDate}
+                    onAgentChange={sourceSetSelectedAgent}
+                  />
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
