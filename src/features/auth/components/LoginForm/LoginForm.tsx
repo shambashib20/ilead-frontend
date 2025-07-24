@@ -118,6 +118,7 @@ function LoginForm() {
               <Button type="submit" disabled={!canSubmit} className="w-full">
                 {isSubmitting ? "..." : "Join Our Channel"}
               </Button>
+
               <h3 className="small-primary text-sm text-center my-5">
                 Product by
               </h3>
@@ -125,6 +126,12 @@ function LoginForm() {
             </div>
           )}
         />
+
+        <Link to="/user-login">
+          <Button type="button" className="w-full mt-5">
+            All Users Login
+          </Button>
+        </Link>
       </form>
     </div>
   );
