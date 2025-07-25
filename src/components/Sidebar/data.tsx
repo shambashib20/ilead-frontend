@@ -12,7 +12,14 @@ const navItems = [
     name: "Label",
     icon: <Tags size={20} />,
     path: "/label",
-    roles: ["Admin", "Superadmin"], // Only visible to Admin & Superadmin
+    roles: ["Admin", "Superadmin"],
+  },
+
+  {
+    name: "Status",
+    icon: <Tags size={20} />,
+    path: "/status",
+    roles: ["Admin", "Superadmin"],
   },
   { name: "Reports", icon: <LayoutGrid size={20} />, path: "/reports" },
 ];

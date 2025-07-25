@@ -13,6 +13,7 @@ export type Lead = {
 };
 
 export type Status = {
+  meta: any;
   _id: string;
   title: string;
 };

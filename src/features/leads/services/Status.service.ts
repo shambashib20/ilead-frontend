@@ -14,6 +14,19 @@ interface StatusResponse {
   data: Status[];
 }
 
+interface PaginatedStatusResponse {
+  message: string;
+  status: string;
+  data: {
+    statuses: Status[];
+    pagination: {
+      total: number;
+      currentPage: number;
+      limit: number;
+      totalPage: number;
+    };
+  };
+}
 /**
  * Service for auth routes (auto-prefixes with /auth)
  */
@@ -26,13 +39,11 @@ export class StatusService extends ApiClient {
     return this.get<StatusResponse>("all");
   }
 
-  //   async register(payload: RegisterPayload): Promise<AuthResponse> {
-  //     return this.post<AuthResponse>("/register", payload);
-  //   }
-
-  //   async me(): Promise<{ id: string; email: string }> {
-  //     return this.get("/me");
-  //   }
+  async getPaginatedStatuses(page = 1, limit = 10) {
+    return this.get<PaginatedStatusResponse>(`/paginated-statuses`, {
+      params: { page, limit },
+    });
+  }
 }
 
 export const statusService = new StatusService(); // singleton
