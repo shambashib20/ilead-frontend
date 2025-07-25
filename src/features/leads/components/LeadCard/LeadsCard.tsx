@@ -20,6 +20,7 @@ import {
   LeadLabels,
 } from "../LeadModals";
 import { Button } from "@/components/ui/button";
+import { LeadStatus } from "../LeadModals/LeadModals";
 
 interface LeadCardProps {
   lead: Lead;
@@ -29,7 +30,7 @@ const CARD_ACTIONS = [
   {
     icon: Trash,
     color: "red",
-    label: "Delete",
+    label: "Delete Lead",
     title: "Delete Lead",
     el: <LeadDelete />,
     type: "form" as const,
@@ -38,7 +39,7 @@ const CARD_ACTIONS = [
   {
     icon: Tag,
     color: "green",
-    label: "Tag",
+    label: "Lead Label Assign",
     title: "Lead Label Assign",
     el: <LeadLabels />,
     type: "action" as const,
@@ -48,7 +49,7 @@ const CARD_ACTIONS = [
     icon: TrendingUp,
     color: "black",
     label: "Trend",
-    title: "change Lead Assign To",
+    title: "Change Lead Assign To",
     el: <LeadAssign />,
     type: "action" as const,
     customActions: undefined,
@@ -67,7 +68,7 @@ const CARD_ACTIONS = [
     color: "blue",
     label: "Refresh",
     title: "Change Lead Status",
-    el: <div>Data refreshed successfully!</div>,
+    el: <LeadStatus />,
     type: "action" as const,
     customActions: undefined,
   },

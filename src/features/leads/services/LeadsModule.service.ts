@@ -26,6 +26,11 @@ export type DeleteLeadPayload = {
   rayId: string;
   deleteReason: string;
 };
+
+export type ChangeLeadStatusPayload = {
+  leadId: string;
+  statusId: string;
+};
 interface LeadsPerStatusResponse {
   message: string;
   status: string;
@@ -65,6 +70,11 @@ export type AssignLabelPayload = {
   labelIds: string[];
 };
 
+interface ChangeLeadStatusResponse {
+  message: string;
+  status: string;
+}
+
 export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
@@ -99,6 +109,14 @@ export class LeadsModule extends ApiClient {
 
   async assignLabelToLead(payload: AssignLabelPayload) {
     const response = await this.patch<AssignLabelResponse>("/update", payload);
+    return response.data;
+  }
+
+  async updateLeadStatus(payload: ChangeLeadStatusPayload) {
+    const response = await this.patch<ChangeLeadStatusResponse>(
+      "/update-status",
+      payload
+    );
     return response.data;
   }
 }

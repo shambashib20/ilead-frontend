@@ -15,7 +15,7 @@ interface SourceResponse {
   };
 }
 
-class SourceService extends ApiClient {
+export class SourceService extends ApiClient {
   constructor() {
     super("source");
   }

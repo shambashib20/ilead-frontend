@@ -34,8 +34,12 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { CustomerModule } from "../../services/Customer.service";
 import type { AxiosResponse } from "axios";
+import { StatusService } from "../../services/Status.service";
+
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
+
+const statusApi = new StatusService();
 
 const MySwal = withReactContent(Swal);
 const customerModule = new CustomerModule();
@@ -44,8 +48,17 @@ export interface LabelItem {
   title: string;
 }
 
+export interface StatusItem {
+  _id: string;
+  title: string;
+}
+
 export interface LabelResponse {
   data: LabelItem[]; // This must be an array
+}
+
+export interface StatusResponse {
+  data: StatusItem[]; // This must be an array
 }
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
@@ -364,6 +377,93 @@ export function LeadCreateCustomer() {
 
 // function LeadFollowUp() {}
 
+export function LeadStatus() {
+  const { data, closeModal } = useModalStore();
+  const leadId = data?._id;
+  const [search, setSearch] = useState("");
+
+  const [statuses, setStatuses] = useState<StatusItem[]>([]);
+  const [selectedStatusId, setSelectedStatusId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchStatuses() {
+      try {
+        const res =
+          (await statusApi.status()) as unknown as AxiosResponse<StatusResponse>;
+        setStatuses(res.data.data); // Already StatusItem[]
+      } catch (err) {
+        setError("Failed to load statuses");
+      }
+    }
+
+    fetchStatuses();
+  }, []);
+
+  const assignStatus = async () => {
+    if (!leadId || !selectedStatusId) return;
+
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      await leadsApi.updateLeadStatus({
+        leadId,
+        statusId: selectedStatusId,
+      });
+      closeModal(); // close on success
+    } catch (err) {
+      setError("Failed to update status. Try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <Input
+        placeholder="Search status..."
+        disabled={isSubmitting}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full"
+      />
+
+      <ul className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
+        {statuses
+          .filter((status) =>
+            status.title.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((status) => (
+            <li key={status._id} className="flex items-center gap-2">
+              <input
+                type="radio"
+                id={status._id}
+                name="status"
+                checked={selectedStatusId === status._id}
+                onChange={() => setSelectedStatusId(status._id)}
+                disabled={isSubmitting}
+              />
+              <label htmlFor={status._id} className="text-sm">
+                {status.title}
+              </label>
+            </li>
+          ))}
+      </ul>
+
+      {error && <div className="text-red-500 text-sm">{error}</div>}
+
+      <Button
+        className="bg-green-600 hover:bg-green-700 w-full"
+        disabled={isSubmitting || !selectedStatusId}
+        onClick={assignStatus}
+      >
+        {isSubmitting ? "Updating..." : "Update Status"}
+      </Button>
+    </div>
+  );
+}
+
 export function LeadDetail() {
   const { data } = useModalStore();
   const leadId = data?._id;
@@ -549,9 +649,35 @@ export function LeadDetail() {
           <p>No follow ups yet.</p>
         </TabsContent>
         <TabsContent value="history" className="mt-4">
-          <p>No history available.</p>
+          {lead.data.logs && lead.data.logs.length > 0 ? (
+            <ul className="space-y-4">
+              {[...lead.data.logs]
+                .sort(
+                  (a: any, b: any) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )
+                .map((log: any, index: number) => (
+                  <li
+                    key={log._id || index}
+                    className="border border-gray-700 rounded p-4 bg-[#1f1f2f] text-white"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="font-semibold text-base">{log.title}</h4>
+                      <span className="text-xs text-gray-400">
+                        {new Date(log.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-300">{log.description}</p>
+                  </li>
+                ))}
+            </ul>
+          ) : (
+            <p className="text-white text-center">No history available.</p>
+          )}
         </TabsContent>
-        <TabsContent value="task" className="mt-4">
+
+        {/* <TabsContent value="task" className="mt-4">
           <p>No tasks assigned.</p>
         </TabsContent>
         <TabsContent value="reminder" className="mt-4">
@@ -565,7 +691,7 @@ export function LeadDetail() {
         </TabsContent>
         <TabsContent value="invoice" className="mt-4">
           <p>No invoices available.</p>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );

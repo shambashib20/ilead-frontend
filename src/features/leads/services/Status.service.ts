@@ -17,7 +17,7 @@ interface StatusResponse {
 /**
  * Service for auth routes (auto-prefixes with /auth)
  */
-class StatusService extends ApiClient {
+export class StatusService extends ApiClient {
   constructor() {
     super("status");
   }
