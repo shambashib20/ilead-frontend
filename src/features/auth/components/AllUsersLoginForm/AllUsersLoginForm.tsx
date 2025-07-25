@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-import productByImg from "@/assets/product_by_img.png";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
