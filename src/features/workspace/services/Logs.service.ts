@@ -41,12 +41,6 @@ export type Property = {
   keys: KeyAccess[];
 };
 
-// interface WorkSpaceResponse {
-//   message: string;
-//   status: string;
-//   data: Property;
-// }
-
 export class WorkspaceModule extends ApiClient {
   constructor() {
     super("property");
