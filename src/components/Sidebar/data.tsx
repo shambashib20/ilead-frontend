@@ -21,6 +21,12 @@ const navItems = [
     path: "/status",
     roles: ["Admin", "Superadmin"],
   },
+  {
+    name: "Workspace Logs",
+    icon: <Tags size={20} />,
+    path: "/workspace-logs",
+    roles: ["Admin", "Superadmin"],
+  },
   { name: "Reports", icon: <LayoutGrid size={20} />, path: "/reports" },
 ];
 

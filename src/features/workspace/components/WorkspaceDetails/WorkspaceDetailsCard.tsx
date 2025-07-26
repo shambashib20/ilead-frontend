@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { workspaceService } from "@/features/leads/services/Property.service";
 import type { Property } from "@/features/leads/services/Property.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import clsx from "clsx";
 
 function WorkspaceDetailsCard() {
