@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { PropertyModule } from "@/features/leads/services/Property.service";
 import { Badge } from "@/components/ui/badge";
@@ -21,14 +19,24 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function WorkspaceLogs() {
   const [logs, setLogs] = useState<any[]>([]);
+  const [propertyName, setPropertyName] = useState<string>(""); // 🆕 Add state for name
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const response = await new PropertyModule().getProperty();
-        console.warn("response", response);
-        setLogs(response.data.data.logs || []);
+        const logsData = response.data.data.logs || [];
+        const name = response.data.data.name || "Workspace";
+
+        // Sort logs by createdAt descending
+        const sortedLogs = [...logsData].sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
+        setLogs(sortedLogs);
+        setPropertyName(name);
       } catch (error) {
         console.error("Failed to fetch logs:", error);
       } finally {
@@ -43,7 +51,7 @@ export default function WorkspaceLogs() {
     <Card className="shadow-md max-w-full mx-auto mt-8 bg-background text-foreground">
       <CardHeader>
         <CardTitle className="text-2xl font-semibold">
-          Workspace Activity Logs
+          {propertyName}'s logs
         </CardTitle>
       </CardHeader>
       <CardContent>
