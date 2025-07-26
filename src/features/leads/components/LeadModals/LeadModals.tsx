@@ -646,8 +646,74 @@ export function LeadDetail() {
 
         {/* Other tabs placeholder */}
         <TabsContent value="followup" className="mt-4">
-          <p>No follow ups yet.</p>
+          {lead.data.follow_ups && lead.data.follow_ups.length > 0 ? (
+            <div className="space-y-4">
+              {lead.data.follow_ups
+                .sort(
+                  (a: any, b: any) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime()
+                )
+                .map((followup: any, index: number) => (
+                  <details
+                    key={followup._id || index}
+                    className="border border-gray-700 rounded bg-[#1f1f2f] text-white"
+                  >
+                    <summary className="cursor-pointer px-4 py-2 hover:bg-gray-800 transition-all font-medium flex justify-between items-center">
+                      <span>{lead.data.assigned_to.name}</span>
+                      <span className="text-xs text-gray-400">
+                        {new Date(followup.createdAt).toLocaleString()}
+                      </span>
+                    </summary>
+                    <div className="px-4 py-3 space-y-2">
+                      <div>
+                        <b className="text-gray-300">Next Follow-Up:</b>{" "}
+                        <span className="text-sm text-gray-400">
+                          {new Date(
+                            followup.next_followup_date
+                          ).toLocaleString()}
+                        </span>
+                      </div>
+                      <div>
+                        <b className="text-gray-300">Comment:</b>{" "}
+                        <p className="text-sm text-gray-200">
+                          {followup.comment}
+                        </p>
+                      </div>
+
+                      {followup.meta?.attachment_url && (
+                        <div>
+                          <b className="text-gray-300">Attachment:</b>{" "}
+                          <a
+                            href={followup.meta.attachment_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 underline text-sm"
+                          >
+                            View File
+                          </a>
+                        </div>
+                      )}
+
+                      {followup.meta?.audio_attachment_url && (
+                        <div>
+                          <b className="text-gray-300">Audio:</b>
+                          <audio
+                            controls
+                            src={followup.meta.audio_attachment_url}
+                            className="mt-1 w-full"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </details>
+                ))}
+            </div>
+          ) : (
+            <p className="text-white text-center">No follow-ups available.</p>
+          )}
         </TabsContent>
+
         <TabsContent value="history" className="mt-4">
           {lead.data.logs && lead.data.logs.length > 0 ? (
             <ul className="space-y-4">
