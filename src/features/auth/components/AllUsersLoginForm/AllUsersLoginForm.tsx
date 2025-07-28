@@ -94,7 +94,7 @@ function AllUsersLoginForm() {
           />
         </div>
         <Link
-          to="/"
+          to="/forget-password"
           className={`justify-end w-full my-1 ${buttonVariants({ variant: "link", size: "sm" })}`}
         >
           Forgot Password?

@@ -16,8 +16,10 @@ import { Route as AuthLayoutImport } from './routes/_authLayout'
 import { Route as AppLayoutImport } from './routes/_appLayout'
 import { Route as AppLayoutIndexImport } from './routes/_appLayout/index'
 import { Route as AuthLayoutUserLoginImport } from './routes/_authLayout/user-login'
+import { Route as AuthLayoutResetPasswordImport } from './routes/_authLayout/reset-password'
 import { Route as AuthLayoutRegisterImport } from './routes/_authLayout/register'
 import { Route as AuthLayoutLoginImport } from './routes/_authLayout/login'
+import { Route as AuthLayoutForgetPasswordImport } from './routes/_authLayout/forget-password'
 import { Route as DashboardLayoutLeadRouteImport } from './routes/_dashboardLayout/lead/route'
 import { Route as DashboardLayoutWorkspaceLogsIndexImport } from './routes/_dashboardLayout/workspace-logs/index'
 import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
@@ -58,6 +60,12 @@ const AuthLayoutUserLoginRoute = AuthLayoutUserLoginImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
+const AuthLayoutResetPasswordRoute = AuthLayoutResetPasswordImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
 const AuthLayoutRegisterRoute = AuthLayoutRegisterImport.update({
   id: '/register',
   path: '/register',
@@ -67,6 +75,12 @@ const AuthLayoutRegisterRoute = AuthLayoutRegisterImport.update({
 const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutForgetPasswordRoute = AuthLayoutForgetPasswordImport.update({
+  id: '/forget-password',
+  path: '/forget-password',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
@@ -169,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutLeadRouteImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_authLayout/forget-password': {
+      id: '/_authLayout/forget-password'
+      path: '/forget-password'
+      fullPath: '/forget-password'
+      preLoaderRoute: typeof AuthLayoutForgetPasswordImport
+      parentRoute: typeof AuthLayoutImport
+    }
     '/_authLayout/login': {
       id: '/_authLayout/login'
       path: '/login'
@@ -181,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof AuthLayoutRegisterImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/reset-password': {
+      id: '/_authLayout/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthLayoutResetPasswordImport
       parentRoute: typeof AuthLayoutImport
     }
     '/_authLayout/user-login': {
@@ -278,14 +306,18 @@ const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
 )
 
 interface AuthLayoutRouteChildren {
+  AuthLayoutForgetPasswordRoute: typeof AuthLayoutForgetPasswordRoute
   AuthLayoutLoginRoute: typeof AuthLayoutLoginRoute
   AuthLayoutRegisterRoute: typeof AuthLayoutRegisterRoute
+  AuthLayoutResetPasswordRoute: typeof AuthLayoutResetPasswordRoute
   AuthLayoutUserLoginRoute: typeof AuthLayoutUserLoginRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutForgetPasswordRoute: AuthLayoutForgetPasswordRoute,
   AuthLayoutLoginRoute: AuthLayoutLoginRoute,
   AuthLayoutRegisterRoute: AuthLayoutRegisterRoute,
+  AuthLayoutResetPasswordRoute: AuthLayoutResetPasswordRoute,
   AuthLayoutUserLoginRoute: AuthLayoutUserLoginRoute,
 }
 
@@ -340,8 +372,10 @@ const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '': typeof DashboardLayoutRouteWithChildren
   '/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
+  '/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/login': typeof AuthLayoutLoginRoute
   '/register': typeof AuthLayoutRegisterRoute
+  '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
@@ -357,8 +391,10 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof DashboardLayoutRouteWithChildren
+  '/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/login': typeof AuthLayoutLoginRoute
   '/register': typeof AuthLayoutRegisterRoute
+  '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
@@ -378,8 +414,10 @@ export interface FileRoutesById {
   '/_authLayout': typeof AuthLayoutRouteWithChildren
   '/_dashboardLayout': typeof DashboardLayoutRouteWithChildren
   '/_dashboardLayout/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
+  '/_authLayout/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/_authLayout/login': typeof AuthLayoutLoginRoute
   '/_authLayout/register': typeof AuthLayoutRegisterRoute
+  '/_authLayout/reset-password': typeof AuthLayoutResetPasswordRoute
   '/_authLayout/user-login': typeof AuthLayoutUserLoginRoute
   '/_appLayout/': typeof AppLayoutIndexRoute
   '/_dashboardLayout/customer/': typeof DashboardLayoutCustomerIndexRoute
@@ -398,8 +436,10 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/lead'
+    | '/forget-password'
     | '/login'
     | '/register'
+    | '/reset-password'
     | '/user-login'
     | '/'
     | '/customer'
@@ -414,8 +454,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
+    | '/forget-password'
     | '/login'
     | '/register'
+    | '/reset-password'
     | '/user-login'
     | '/'
     | '/customer'
@@ -433,8 +475,10 @@ export interface FileRouteTypes {
     | '/_authLayout'
     | '/_dashboardLayout'
     | '/_dashboardLayout/lead'
+    | '/_authLayout/forget-password'
     | '/_authLayout/login'
     | '/_authLayout/register'
+    | '/_authLayout/reset-password'
     | '/_authLayout/user-login'
     | '/_appLayout/'
     | '/_dashboardLayout/customer/'
@@ -485,8 +529,10 @@ export const routeTree = rootRoute
     "/_authLayout": {
       "filePath": "_authLayout.tsx",
       "children": [
+        "/_authLayout/forget-password",
         "/_authLayout/login",
         "/_authLayout/register",
+        "/_authLayout/reset-password",
         "/_authLayout/user-login"
       ]
     },
@@ -511,12 +557,20 @@ export const routeTree = rootRoute
         "/_dashboardLayout/lead/"
       ]
     },
+    "/_authLayout/forget-password": {
+      "filePath": "_authLayout/forget-password.tsx",
+      "parent": "/_authLayout"
+    },
     "/_authLayout/login": {
       "filePath": "_authLayout/login.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/register": {
       "filePath": "_authLayout/register.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/reset-password": {
+      "filePath": "_authLayout/reset-password.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/user-login": {

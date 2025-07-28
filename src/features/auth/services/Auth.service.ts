@@ -6,6 +6,23 @@ interface LoginPayload {
   password: string;
 }
 
+interface ForgetPasswordPayload {
+  emailOrPhone: string;
+}
+
+interface ResetPasswordPayload {
+  otp: string;
+  newPassword: string;
+}
+
+interface ResetPasswordResponse {
+  message: string;
+  status: string;
+}
+interface ForgetPasswordResponse {
+  message: string;
+  status: string;
+}
 interface RegisterPayload {
   email: string;
   password: string;
@@ -54,6 +71,26 @@ class AuthService extends ApiClient {
 
   async loginForAll(payload: LoginPayload): Promise<AuthResponse> {
     const res = await this.post<AuthResponse>("/login/all", payload);
+    return res.data;
+  }
+
+  async forgetPasswordForAll(
+    payload: ForgetPasswordPayload
+  ): Promise<ForgetPasswordResponse> {
+    const res = await this.post<ForgetPasswordResponse>(
+      "/forget-password",
+      payload
+    );
+    return res.data;
+  }
+
+  async resetPasswordForAll(
+    payload: ResetPasswordPayload
+  ): Promise<ResetPasswordResponse> {
+    const res = await this.post<ResetPasswordResponse>(
+      "/reset-password",
+      payload
+    );
     return res.data;
   }
 
