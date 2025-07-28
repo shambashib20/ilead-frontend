@@ -35,9 +35,7 @@ function LoginForm() {
   console.log(error);
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
-      <h3 className="heading mt-3 mb-6">
-        Welcome to 365 Lead Management System! 👋
-      </h3>
+      <h3 className="heading mt-3 mb-6">Welcome to ETC CRM! 👋</h3>
       {isLoading && <p>Loading...</p>}
       {!data?.status ? (
         <p className="error">{data?.message}</p>
