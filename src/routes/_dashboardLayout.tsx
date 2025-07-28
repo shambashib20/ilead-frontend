@@ -1,7 +1,11 @@
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useSidebarStore } from "@/store/useSidebarStore";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,  
+  Outlet,
+  redirect,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
@@ -66,7 +70,14 @@ function RouteComponent() {
         </div>
 
         <footer className="footer text-sm">
-          COPYRIGHT © 2025 Trueline Solution, All rights Reserved
+          Made with ❤ by{" "}
+          <a
+            href="https://www.shambashib.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Shambashib Majumdar
+          </a>
         </footer>
       </main>
     </div>

@@ -150,7 +150,7 @@ function RouteComponent() {
                 <div className="flex justify-between items-center px-6">
                   <CardTitle>Lead Status</CardTitle>
                   <button
-                    className="p-2 rounded-md hover:bg-gray-100 transition"
+                    className="p-2 rounded-md hover:bg-primary transition"
                     onClick={() => setShowMenu((prev) => !prev)}
                   >
                     <Menu className="w-6 h-6" />

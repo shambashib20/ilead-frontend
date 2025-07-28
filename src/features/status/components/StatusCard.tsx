@@ -9,6 +9,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useModalStore } from "@/store/useModalStore";
+
+import CreateStatusForm from "./CreateStatusForm";
 
 import { statusService } from "@/features/leads/services/Status.service";
 import type { Status } from "@/features/leads/services/Status.service";
@@ -40,11 +43,26 @@ function StatusCard() {
     fetchData();
   }, [page]);
 
+  const openModal = useModalStore((state) => state.openModal);
+
+  const handleOpenCreateModal = () => {
+    openModal({
+      content: (
+        <>
+          <h2 className="text-lg font-semibold mb-4">Create New Status</h2>
+          <CreateStatusForm refreshStatuses={fetchData} />
+        </>
+      ),
+      type: "form",
+      customActions: <>{/* You can add custom actions here if needed */}</>,
+    });
+  };
+
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold dark:text-white">Status List</h2>
-        <Button>Add New Status</Button>
+        <Button onClick={handleOpenCreateModal}>Add New Status</Button>
       </div>
 
       <div className="rounded-md border dark:border-gray-700">

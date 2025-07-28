@@ -14,6 +14,16 @@ interface StatusResponse {
   data: Status[];
 }
 
+interface CreateStatusResponse {
+  message: string;
+  status: string;
+  data: Status;
+}
+
+interface CreateStatusPayload {
+  title: string;
+  description: string;
+}
 interface PaginatedStatusResponse {
   message: string;
   status: string;
@@ -43,6 +53,13 @@ export class StatusService extends ApiClient {
     return this.get<PaginatedStatusResponse>(`/paginated-statuses`, {
       params: { page, limit },
     });
+  }
+
+  async createStatus(
+    payload: CreateStatusPayload
+  ): Promise<CreateStatusResponse> {
+    const res = await this.post<CreateStatusResponse>("/create", payload);
+    return res.data;
   }
 }
 
