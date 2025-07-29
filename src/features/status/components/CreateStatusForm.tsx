@@ -6,6 +6,7 @@ import { statusService } from "@/features/leads/services/Status.service";
 import type { Status } from "@/features/leads/services/Status.service";
 import Swal from "sweetalert2";
 import { useModalStore } from "@/store/useModalStore";
+import { Switch } from "@/components/ui/switch";
 
 type Props = {
   refreshStatuses: () => void;
@@ -21,6 +22,10 @@ export default function CreateStatusForm({
     statusToEdit?.description || ""
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [isActive, setIsActive] = useState(
+    statusToEdit?.meta?.is_active ?? true
+  );
 
   const isEditing = !!statusToEdit;
 
@@ -38,6 +43,7 @@ export default function CreateStatusForm({
           statusId: statusToEdit._id,
           title,
           description,
+          meta: { is_active: isActive },
         };
         const res = await statusService.editStatus(payload);
         if (res.status === "SUCCESS") {
@@ -91,6 +97,21 @@ export default function CreateStatusForm({
           placeholder="Optional description"
         />
       </div>
+      {isEditing && (
+        <div className="flex items-center space-x-4">
+          <Label htmlFor="active-toggle" className="text-sm font-medium">
+            Active
+          </Label>
+          <Switch
+            id="active-toggle"
+            checked={isActive}
+            onCheckedChange={setIsActive}
+          />
+          <span className="text-sm text-muted-foreground">
+            {isActive ? "Status is active" : "Status is inactive"}
+          </span>
+        </div>
+      )}
 
       <div className="submit">
         <Button onClick={handleSubmit} disabled={isSubmitting}>

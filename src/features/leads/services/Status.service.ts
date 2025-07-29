@@ -46,6 +46,9 @@ interface EditStatusPayload {
   statusId: string;
   title: string;
   description: string;
+  meta?: {
+    is_active: boolean;
+  };
 }
 
 interface EditStatusResponse {

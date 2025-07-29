@@ -50,9 +50,13 @@ export default function WorkspaceLogs() {
   return (
     <Card className="shadow-md max-w-full mx-auto mt-8 bg-background text-foreground">
       <CardHeader>
-        <CardTitle className="text-2xl font-semibold">
-          {propertyName}'s logs
-        </CardTitle>
+        {loading ? (
+          <Skeleton className="h-6 w-1/2 mb-2" />
+        ) : (
+          <CardTitle className="text-2xl font-semibold">
+            {propertyName}'s logs
+          </CardTitle>
+        )}
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[500px] pr-2">
