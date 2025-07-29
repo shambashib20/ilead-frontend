@@ -3,19 +3,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { statusService } from "@/features/leads/services/Status.service";
+import type { Status } from "@/features/leads/services/Status.service";
 import Swal from "sweetalert2";
 import { useModalStore } from "@/store/useModalStore";
 
 type Props = {
   refreshStatuses: () => void;
+  statusToEdit?: Status;
 };
-export default function CreateStatusForm({ refreshStatuses }: Props) {
+export default function CreateStatusForm({
+  refreshStatuses,
+  statusToEdit,
+}: Props) {
   const closeModal = useModalStore((state) => state.closeModal);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(statusToEdit?.title || "");
+  const [description, setDescription] = useState(
+    statusToEdit?.description || ""
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleCreate = async () => {
+  const isEditing = !!statusToEdit;
+
+  const handleSubmit = async () => {
     if (!title.trim()) {
       Swal.fire("Error", "Title is required", "error");
       return;
@@ -23,15 +32,32 @@ export default function CreateStatusForm({ refreshStatuses }: Props) {
 
     setIsSubmitting(true);
     try {
-      const payload = { title, description };
-      const res = await statusService.createStatus(payload);
-      if (res.status === "CREATED") {
-        Swal.fire("Success", res.message, "success");
-        refreshStatuses();
-        closeModal();
+      if (isEditing) {
+        // Edit logic
+        const payload = {
+          statusId: statusToEdit._id,
+          title,
+          description,
+        };
+        const res = await statusService.editStatus(payload);
+        if (res.status === "SUCCESS") {
+          Swal.fire("Updated", res.message, "success");
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
       } else {
-        Swal.fire("Error", res.message, "error");
+        // Create logic
+        const payload = { title, description };
+        const res = await statusService.createStatus(payload);
+        if (res.status === "CREATED") {
+          Swal.fire("Success", res.message, "success");
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
       }
+
+      refreshStatuses();
+      closeModal();
     } catch (err: any) {
       Swal.fire("Error", err.message || "Something went wrong", "error");
     } finally {
@@ -66,11 +92,15 @@ export default function CreateStatusForm({ refreshStatuses }: Props) {
         />
       </div>
 
-      {/* You can omit this if using formActions from modal */}
       <div className="submit">
-        <Button onClick={handleCreate} disabled={isSubmitting}>
-          {" "}
-          {isSubmitting ? "Creating..." : "Create"}
+        <Button onClick={handleSubmit} disabled={isSubmitting}>
+          {isSubmitting
+            ? isEditing
+              ? "Updating..."
+              : "Creating..."
+            : isEditing
+              ? "Update"
+              : "Create"}
         </Button>
       </div>
     </div>

@@ -37,9 +37,22 @@ interface PaginatedStatusResponse {
     };
   };
 }
-/**
- * Service for auth routes (auto-prefixes with /auth)
- */
+
+interface DeleteStatusParams {
+  id: string;
+}
+
+interface EditStatusPayload {
+  statusId: string;
+  title: string;
+  description: string;
+}
+
+interface EditStatusResponse {
+  message: string;
+  status: string;
+  data: Status;
+}
 export class StatusService extends ApiClient {
   constructor() {
     super("status");
@@ -59,6 +72,18 @@ export class StatusService extends ApiClient {
     payload: CreateStatusPayload
   ): Promise<CreateStatusResponse> {
     const res = await this.post<CreateStatusResponse>("/create", payload);
+    return res.data;
+  }
+
+  async deleteStatus({ id }: DeleteStatusParams) {
+    const res = await this.delete<{ message: string; status: string }>(
+      `/delete/${id}`
+    );
+    return res.data;
+  }
+
+  async editStatus(payload: EditStatusPayload): Promise<EditStatusResponse> {
+    const res = await this.patch<EditStatusResponse>(`/update`, payload);
     return res.data;
   }
 }

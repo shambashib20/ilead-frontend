@@ -10,11 +10,13 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useModalStore } from "@/store/useModalStore";
+import { Pencil, Trash } from "lucide-react";
 
 import CreateStatusForm from "./CreateStatusForm";
 
 import { statusService } from "@/features/leads/services/Status.service";
 import type { Status } from "@/features/leads/services/Status.service";
+import Swal from "sweetalert2";
 
 function StatusCard() {
   const [statuses, setStatuses] = useState<Status[]>([]);
@@ -54,7 +56,43 @@ function StatusCard() {
         </>
       ),
       type: "form",
-      customActions: <>{/* You can add custom actions here if needed */}</>,
+      customActions: <></>,
+    });
+  };
+
+  const handleDelete = async (id: string) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will deactivate the status (soft delete).",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await statusService.deleteStatus({ id });
+        await fetchData();
+        Swal.fire("Deleted!", "The status has been deactivated.", "success");
+      } catch (error) {
+        console.error("Delete failed:", error);
+        Swal.fire("Error!", "Failed to delete the status.", "error");
+      }
+    }
+  };
+
+  const handleEdit = (status: Status) => {
+    openModal({
+      content: (
+        <>
+          <h2 className="text-lg font-semibold mb-4">Edit Status</h2>
+          <CreateStatusForm refreshStatuses={fetchData} statusToEdit={status} />
+        </>
+      ),
+      type: "form",
+      customActions: <></>,
     });
   };
 
@@ -72,6 +110,7 @@ function StatusCard() {
               <TableHead className="dark:text-gray-200">Title</TableHead>
               <TableHead className="dark:text-gray-200">Description</TableHead>
               <TableHead className="dark:text-gray-200">Status</TableHead>
+              <TableHead className="dark:text-gray-200">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -104,6 +143,19 @@ function StatusCard() {
                     >
                       {status.meta.is_active ? "Active" : "Inactive"}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="flex gap-2 items-center">
+                    <Pencil
+                      size={18}
+                      className="cursor-pointer text-blue-600 hover:text-blue-800"
+                      onClick={() => handleEdit(status)}
+                    />
+
+                    <Trash
+                      size={18}
+                      className="cursor-pointer text-red-600 hover:text-red-800"
+                      onClick={() => handleDelete(status._id)}
+                    />
                   </TableCell>
                 </TableRow>
               ))
