@@ -50,6 +50,18 @@ export interface PropertyResponse {
   data: Property;
 }
 
+interface UpdateProperty {
+  propId: string;
+  name: string;
+  description: string;
+}
+
+export interface UpdatePropertyResponse {
+  message: string;
+  status: string;
+  data: Property;
+}
+
 export class PropertyModule extends ApiClient {
   constructor() {
     super("property");
@@ -57,6 +69,10 @@ export class PropertyModule extends ApiClient {
 
   async getProperty() {
     return this.get<PropertyResponse>("/workspace-details");
+  }
+
+  async updateProperty(payload: UpdateProperty) {
+    return this.patch<UpdatePropertyResponse>("/update", payload);
   }
 }
 

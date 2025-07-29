@@ -43,6 +43,21 @@ export interface UserResponse {
   data: UserDto;
 }
 
+interface CreateUserResponsePayload {
+  roleName: string;
+  name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  property_id: string;
+}
+
+interface CreateUserResponse {
+  message: string;
+  status: string;
+  data?: UserDto;
+}
+
 export class UserModule extends ApiClient {
   constructor() {
     super("user");
@@ -50,6 +65,13 @@ export class UserModule extends ApiClient {
 
   async getUserDetails() {
     return this.get<UserResponse>("/profile-info");
+  }
+
+  async createUser(
+    payload: CreateUserResponsePayload
+  ): Promise<CreateUserResponse> {
+    const res = await this.post<CreateUserResponse>("/create-user", payload);
+    return res.data;
   }
 }
 

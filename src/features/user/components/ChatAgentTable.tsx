@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import {
   chatAgentService,
@@ -15,6 +13,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+
+import { useModalStore } from "@/store/useModalStore";
+
+import CreateUserModal from "./CreateUserModal";
 
 function ChatAgentTable() {
   const [chatAgents, setChatAgents] = useState<Agent[]>([]);
@@ -49,6 +51,20 @@ function ChatAgentTable() {
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Chat Agents</h2>
+        <Button
+          onClick={() => {
+            const { openModal, setModalTitle, setModalSize } =
+              useModalStore.getState();
+            openModal({
+              content: <CreateUserModal />,
+              type: "form",
+            });
+            setModalTitle?.("Create User");
+            setModalSize?.("md");
+          }}
+        >
+          Create New Agent
+        </Button>
       </div>
 
       <div className="rounded-md border dark:border-gray-700">
