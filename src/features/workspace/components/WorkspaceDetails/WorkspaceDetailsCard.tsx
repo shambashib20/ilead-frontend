@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { workspaceService } from "@/features/leads/services/Property.service";
 import type { Property } from "@/features/leads/services/Property.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useModalStore } from "@/store/useModalStore";
 
 import clsx from "clsx";
+import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
 
 function WorkspaceDetailsCard() {
   const [workspace, setWorkspace] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { openModal, setModalTitle } = useModalStore();
 
   useEffect(() => {
     const fetchWorkspace = async () => {
@@ -55,7 +58,20 @@ function WorkspaceDetailsCard() {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto mt-6 bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+    <Card className="max-w-2xl mx-auto mt-6 bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200 relative">
+      <button
+        onClick={() => {
+          setModalTitle?.("Edit Workspace Details!"); // <-- set the title
+          openModal({
+            content: <EditWorkspaceModal initialData={workspace} />,
+            type: "form",
+          });
+        }}
+        className="absolute top-4 right-4 px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Edit
+      </button>
+
       <CardHeader>
         <CardTitle className="text-xl font-bold">{workspace.name}</CardTitle>
       </CardHeader>

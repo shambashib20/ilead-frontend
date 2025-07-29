@@ -42,7 +42,9 @@ export default function CreateStatusForm({ refreshStatuses }: Props) {
   return (
     <div className="space-y-4 p-2">
       <div>
-        <Label htmlFor="title">Status Title</Label>
+        <Label htmlFor="title" className="mb-2">
+          Status Title
+        </Label>
         <Input
           id="title"
           value={title}
@@ -53,7 +55,9 @@ export default function CreateStatusForm({ refreshStatuses }: Props) {
       </div>
 
       <div>
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description" className="mb-2">
+          Description
+        </Label>
         <Input
           id="description"
           value={description}

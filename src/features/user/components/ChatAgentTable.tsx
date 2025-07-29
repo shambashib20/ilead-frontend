@@ -63,7 +63,7 @@ function ChatAgentTable() {
             setModalSize?.("md");
           }}
         >
-          Create New Agent
+          Create User
         </Button>
       </div>
 
