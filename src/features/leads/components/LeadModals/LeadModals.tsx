@@ -280,31 +280,62 @@ export function LeadLabels() {
 }
 
 export function LeadAssign() {
-  // const [setUser] = useState("");
   const { agents } = useChatAgents();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const { data, closeModal, setFormActions, setSubmitLabel } = useModalStore();
 
-  console.log(agents);
+  const handleAssign = async () => {
+    if (!selectedAgentId) {
+      Swal.fire("Error", "Please select an agent.", "error");
+      return;
+    }
+
+    try {
+      const payload = {
+        leadId: data._id,
+        chatAgentId: selectedAgentId,
+      };
+
+      await leadsApi.assignLeadTo(payload);
+
+      Swal.fire("Success", "Lead assigned successfully.", "success");
+      closeModal?.();
+    } catch (error: any) {
+      Swal.fire("Error", error?.message || "Something went wrong", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Setup modal form actions
+  useEffect(() => {
+    setSubmitLabel?.("Assign");
+    setFormActions?.({
+      onSubmit: handleAssign,
+      onCancel: () => closeModal?.(),
+      canSubmit: !!selectedAgentId,
+      isSubmitting,
+    });
+  }, [selectedAgentId, isSubmitting]);
 
   return (
-    <div className="space-y-2">
-      <Label htmlFor="user">User:</Label>
-      <Select
-        onValueChange={(value) => {
-          console.log("Selected user:", value);
-          // setUser(value);
-        }}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Choose User" />
-        </SelectTrigger>
-        <SelectContent>
-          {agents.data.map((agent) => (
-            <SelectItem key={agent._id} value={agent._id}>
-              {agent.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="space-y-4">
+      <div>
+        <Label htmlFor="user">User:</Label>
+        <Select onValueChange={(value) => setSelectedAgentId(value)}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Choose Agent to assign" />
+          </SelectTrigger>
+          <SelectContent>
+            {agents.data.map((agent) => (
+              <SelectItem key={agent._id} value={agent._id}>
+                {agent.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 }
@@ -336,7 +367,6 @@ export function LeadCreateCustomer() {
       });
 
       closeModal();
-      // Optional: trigger refetch
     } catch (error) {
       console.error("Conversion error:", error);
       await MySwal.fire({

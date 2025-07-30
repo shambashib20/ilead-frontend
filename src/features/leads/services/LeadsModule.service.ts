@@ -16,7 +16,7 @@ export type Status = {
   meta: any;
   _id: string;
   title: string;
-  description: string
+  description: string;
 };
 
 export type Source = {
@@ -33,6 +33,11 @@ export type ChangeLeadStatusPayload = {
   leadId: string;
   statusId: string;
 };
+
+export interface AssignLeadToPayload {
+  leadId: string;
+  chatAgentId: string;
+}
 interface LeadsPerStatusResponse {
   message: string;
   status: string;
@@ -73,6 +78,11 @@ export type AssignLabelPayload = {
 };
 
 interface ChangeLeadStatusResponse {
+  message: string;
+  status: string;
+}
+
+export interface AssignLeadToResponse {
   message: string;
   status: string;
 }
@@ -121,9 +131,20 @@ export class LeadsModule extends ApiClient {
     );
     return response.data;
   }
+
+  async assignLeadTo(
+    payload: AssignLeadToPayload
+  ): Promise<AssignLeadToResponse> {
+    const response = await this.patch<AssignLeadToResponse>(
+      "/update-chat-agent",
+      payload
+    );
+    return response.data;
+  }
 }
 
 export const statsService = new LeadsModule();
 export const sourceStatsService = new LeadsModule();
 export const deleteLeadsService = new LeadsModule();
 export const leadDetailsService = new LeadsModule();
+export const assignLeadTo = new LeadsModule();

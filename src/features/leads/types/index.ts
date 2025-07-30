@@ -12,7 +12,7 @@ export interface Lead {
   assigned_to: { name: string };
   status: { _id: string };
   comment: string;
-  assigned_by: string;
+  assigned_by: { name: string };
   labels: Label[];
 }
 

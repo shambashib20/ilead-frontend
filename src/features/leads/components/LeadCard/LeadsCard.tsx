@@ -48,10 +48,10 @@ const CARD_ACTIONS = [
   {
     icon: TrendingUp,
     color: "black",
-    label: "Trend",
+    label: "Lead Assignment",
     title: "Change Lead Assign To",
     el: <LeadAssign />,
-    type: "action" as const,
+    type: "form",
     customActions: undefined,
   },
   {
@@ -93,7 +93,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const leadName = String(lead.name);
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt);
-  const assignedBy = String(lead.assigned_by || "Test User");
+  const assignedBy = String(lead?.assigned_by?.name || "Test User");
 
   // const { openModal, setModalTitle } = useModalStore();
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
