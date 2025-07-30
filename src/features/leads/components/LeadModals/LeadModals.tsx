@@ -4,6 +4,7 @@ import { useModalStore } from "@/store/useModalStore";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { useEffect, useState } from "react";
 import { useDeleteLead } from "../../hooks/useDeleteLeads";
+
 // import { useMutation } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -25,9 +26,17 @@ import {
   Trash,
   TrendingUp,
   UserPlus,
+  CalendarIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { LeadsModule } from "../../services/LeadsModule.service";
 import { LabelService } from "../../services/Lable.service";
 import Swal from "sweetalert2";
@@ -407,21 +416,26 @@ export function LeadFollowUp() {
   const leadId = data?._id;
 
   const [comment, setComment] = useState("");
-  const [nextFollowUp, setNextFollowUp] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [selectedTime, setSelectedTime] = useState("12:00");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!comment || !nextFollowUp) {
+    if (!comment || !selectedDate || !selectedTime) {
       Swal.fire("Error", "All fields are required", "error");
       return;
     }
+
+    const [hours, minutes] = selectedTime.split(":");
+    const followUpDate = new Date(selectedDate);
+    followUpDate.setHours(Number(hours), Number(minutes));
 
     setIsSubmitting(true);
     try {
       await leadsApi.createNewFollowup({
         leadId,
         comment,
-        nextFollowUp,
+        nextFollowUp: followUpDate.toISOString(),
       });
 
       Swal.fire("Success", "Follow-up added successfully", "success");
@@ -433,16 +447,15 @@ export function LeadFollowUp() {
     }
   };
 
-  // Register modal form actions
   useEffect(() => {
     setSubmitLabel?.("Add Follow Up");
     setFormActions?.({
       onSubmit: handleSubmit,
       onCancel: () => closeModal(),
-      canSubmit: !!comment && !!nextFollowUp,
+      canSubmit: !!comment && !!selectedDate && !!selectedTime,
       isSubmitting,
     });
-  }, [comment, nextFollowUp, isSubmitting]);
+  }, [comment, selectedDate, selectedTime, isSubmitting]);
 
   return (
     <div className="space-y-4">
@@ -450,12 +463,35 @@ export function LeadFollowUp() {
         <label className="text-sm text-gray-300 block mb-1">
           Next Follow-Up Date:
         </label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !selectedDate && "text-muted-foreground"
+              )}
+              disabled={isSubmitting}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={setSelectedDate}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
         <Input
-          type="datetime-local"
-          value={nextFollowUp}
-          onChange={(e) => setNextFollowUp(e.target.value)}
+          type="time"
+          value={selectedTime}
+          onChange={(e) => setSelectedTime(e.target.value)}
           disabled={isSubmitting}
-          className="w-full"
+          className="mt-2 w-full"
         />
       </div>
       <div>
