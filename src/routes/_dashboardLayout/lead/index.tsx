@@ -37,7 +37,7 @@ function RouteComponent() {
     );
   }
 
-  // Ensure all required Lead properties are present, including 'meta'
+  // Type-safe normalization
   const normalizedLeads = leads.map((lead) => ({
     ...lead,
     address: lead.address ?? "",
@@ -45,13 +45,26 @@ function RouteComponent() {
     company_name: lead.company_name ?? "",
     meta: lead.meta ?? {},
     assigned_to: {
-      ...lead.assigned_to,
-      // Always convert to primitive string
+      ...(typeof lead.assigned_to === "object" && lead.assigned_to !== null
+        ? {
+            ...lead.assigned_to,
+            name:
+              typeof lead.assigned_to.name === "string"
+                ? lead.assigned_to.name
+                : "",
+          }
+        : {
+            name: typeof lead.assigned_to === "string" ? lead.assigned_to : "",
+          }),
+    },
+    assigned_by: {
       name:
-        typeof lead.assigned_to?.name === "string"
-          ? lead.assigned_to.name
-          : lead.assigned_to?.name !== undefined
-            ? String(lead.assigned_to.name)
+        typeof lead.assigned_by === "object" && lead.assigned_by !== null
+          ? typeof lead.assigned_by.name === "string"
+            ? lead.assigned_by.name
+            : ""
+          : typeof lead.assigned_by === "string"
+            ? lead.assigned_by
             : "",
     },
   }));

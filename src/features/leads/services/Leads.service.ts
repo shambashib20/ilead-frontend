@@ -20,7 +20,7 @@ export interface Leads {
     assigned_to: { name: String };
     status: { _id: string };
     comment: string;
-    assigned_by: string;
+    assigned_by: { name: string };
     labels: [{ _id: string; title: string }];
   }[];
 }
