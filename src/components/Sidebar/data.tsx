@@ -1,11 +1,8 @@
 import {
   Funnel,
   House,
-  LayoutGrid,
   Tags,
-  ClipboardList,
   FileText,
-  LayoutDashboard,
   MessageSquare,
   Activity,
   UserCircle,
