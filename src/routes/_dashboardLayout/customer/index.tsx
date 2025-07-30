@@ -1,9 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import CustomerTable from "@/features/customer/components/CustomerTable";
 
-export const Route = createFileRoute('/_dashboardLayout/customer/')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/_dashboardLayout/customer/")({
+  component: CustomerPage,
+});
 
-function RouteComponent() {
-  return <div>Hello "/_dashboardLayout/customer/"!</div>
+function CustomerPage() {
+  return <CustomerTable />;
 }

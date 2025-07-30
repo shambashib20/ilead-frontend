@@ -1,4 +1,16 @@
-import { Funnel, House, LayoutGrid, Tags } from "lucide-react";
+import {
+  Funnel,
+  House,
+  LayoutGrid,
+  Tags,
+  ClipboardList,
+  FileText,
+  LayoutDashboard,
+  MessageSquare,
+  Activity,
+  UserCircle,
+  Users,
+} from "lucide-react";
 
 // Get user role safely from localStorage
 const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -17,23 +29,29 @@ const navItems = [
 
   {
     name: "Status",
-    icon: <Tags size={20} />,
+    icon: <Activity size={20} />,
     path: "/status",
     roles: ["Admin", "Superadmin"],
   },
   {
     name: "Workspace Logs",
-    icon: <Tags size={20} />,
+    icon: <MessageSquare size={20} />,
     path: "/workspace-logs",
     roles: ["Admin", "Superadmin"],
   },
   {
     name: "User Module",
-    icon: <Tags size={20} />,
+    icon: <Users size={20} />,
     path: "/users",
     roles: ["Admin", "Superadmin"],
   },
-  { name: "Reports", icon: <LayoutGrid size={20} />, path: "/reports" },
+  {
+    name: "Customers",
+    icon: <UserCircle size={20} />,
+    path: "/customer",
+    roles: ["Admin", "Superadmin"],
+  },
+  { name: "Reports", icon: <FileText size={20} />, path: "/reports" },
 ];
 
 // Filter items based on role
