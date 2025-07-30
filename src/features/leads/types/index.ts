@@ -1,4 +1,5 @@
 export interface Lead {
+  follow_ups: any;
   meta?: Record<string, any>;
   address: string;
   email: string;

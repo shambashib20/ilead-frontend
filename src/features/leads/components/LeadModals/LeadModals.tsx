@@ -402,10 +402,75 @@ export function LeadCreateCustomer() {
     </div>
   );
 }
+export function LeadFollowUp() {
+  const { data, closeModal, setFormActions, setSubmitLabel } = useModalStore();
+  const leadId = data?._id;
 
-// function LeadStatus() {}
+  const [comment, setComment] = useState("");
+  const [nextFollowUp, setNextFollowUp] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-// function LeadFollowUp() {}
+  const handleSubmit = async () => {
+    if (!comment || !nextFollowUp) {
+      Swal.fire("Error", "All fields are required", "error");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await leadsApi.createNewFollowup({
+        leadId,
+        comment,
+        nextFollowUp,
+      });
+
+      Swal.fire("Success", "Follow-up added successfully", "success");
+      closeModal();
+    } catch (error: any) {
+      Swal.fire("Error", error.message || "Failed to add follow-up", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Register modal form actions
+  useEffect(() => {
+    setSubmitLabel?.("Add Follow Up");
+    setFormActions?.({
+      onSubmit: handleSubmit,
+      onCancel: () => closeModal(),
+      canSubmit: !!comment && !!nextFollowUp,
+      isSubmitting,
+    });
+  }, [comment, nextFollowUp, isSubmitting]);
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="text-sm text-gray-300 block mb-1">
+          Next Follow-Up Date:
+        </label>
+        <Input
+          type="datetime-local"
+          value={nextFollowUp}
+          onChange={(e) => setNextFollowUp(e.target.value)}
+          disabled={isSubmitting}
+          className="w-full"
+        />
+      </div>
+      <div>
+        <label className="text-sm text-gray-300 block mb-1">Comment:</label>
+        <Textarea
+          placeholder="Enter your follow-up comment"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          disabled={isSubmitting}
+          className="w-full"
+        />
+      </div>
+    </div>
+  );
+}
 
 export function LeadStatus() {
   const { data, closeModal } = useModalStore();
@@ -604,6 +669,13 @@ export function LeadDetail() {
                 </p>
                 <p className="text-sm text-gray-300 mb-2">
                   <b>Reference:</b> {lead.data.reference || "-"}
+                </p>
+
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Course selected:</b> {lead.data.meta.course || "-"}
+                </p>
+                <p className="text-sm text-gray-300 mb-2">
+                  <b>Stream Selected:</b> {lead.data.meta.stream || "-"}
                 </p>
               </div>
             </div>

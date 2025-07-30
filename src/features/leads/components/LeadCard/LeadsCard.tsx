@@ -19,8 +19,8 @@ import {
   LeadDetail,
   LeadLabels,
 } from "../LeadModals";
-import { Button } from "@/components/ui/button";
-import { LeadStatus } from "../LeadModals/LeadModals";
+
+import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
 
 interface LeadCardProps {
   lead: Lead;
@@ -66,7 +66,7 @@ const CARD_ACTIONS = [
   {
     icon: RefreshCw,
     color: "blue",
-    label: "Refresh",
+    label: "Change Lead Status",
     title: "Change Lead Status",
     el: <LeadStatus />,
     type: "action" as const,
@@ -75,16 +75,11 @@ const CARD_ACTIONS = [
   {
     icon: Send,
     color: "white",
-    label: "Send",
+    label: "Lead Follow Up",
     title: "Add Lead Follow Up",
-    el: <div>Send email to lead...</div>,
+    el: <LeadFollowUp />,
     type: "form" as const,
-    customActions: (
-      <>
-        <Button className="bg-blue-600 hover:bg-blue-700">Submit</Button>
-        <Button variant="outline">Cancel</Button>
-      </>
-    ),
+    customActions: undefined,
   },
 ] as const;
 export const LeadCard = memo(({ lead }: LeadCardProps) => {
@@ -181,7 +176,15 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
                 });
               }}
             >
-              <Icon size={16} color={color} />
+              <div className="relative">
+                <Icon size={16} color={color} />
+                {label === "Lead Follow Up" &&
+                  (lead.follow_ups?.length || 0) > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-gray-300 text-black text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                      {lead.follow_ups?.length}
+                    </span>
+                  )}
+              </div>
             </button>
           )
         )}

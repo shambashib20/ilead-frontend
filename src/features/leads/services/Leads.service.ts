@@ -17,11 +17,16 @@ export interface Leads {
     name: string;
     phone_number: string;
     createdAt: string;
-    assigned_to: { name: String };
+    assigned_to: {
+      name: string;
+      email: string;
+    };
     status: { _id: string };
     comment: string;
     assigned_by: { name: string };
+
     labels: [{ _id: string; title: string }];
+    follow_ups: [];
   }[];
 }
 export type FilterPayload = {
