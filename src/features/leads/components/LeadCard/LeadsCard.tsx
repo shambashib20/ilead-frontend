@@ -162,7 +162,6 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
               className="p-1 hover:bg-gray-700 rounded transition-colors"
               title={label}
               onClick={() => {
-                console.log("action clicked", label);
                 setModalTitle?.(title);
                 setModalSize?.("sm");
                 setData?.({
