@@ -30,6 +30,13 @@ const navItems = [
     path: "/status",
     roles: ["Admin", "Superadmin"],
   },
+
+  {
+    name: "Source",
+    icon: <Activity size={20} />,
+    path: "/source",
+    roles: ["Admin", "Superadmin"],
+  },
   {
     name: "Workspace Logs",
     icon: <MessageSquare size={20} />,

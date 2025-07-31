@@ -1,4 +1,5 @@
 import { ApiClient } from "@/services/ApiClient.service";
+import type { RoleDto, UserDto } from "./User.service";
 
 interface Log {
   title: string;
@@ -62,6 +63,25 @@ export interface UpdatePropertyResponse {
   data: Property;
 }
 
+interface RegistrationPayload {
+  roleName: string;
+  name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  orgName: string;
+  orgDescription: string;
+}
+
+interface ResgistrationResponse {
+  message: string;
+  status: string;
+  data: {
+    user: UserDto;
+    property: Property;
+    role: RoleDto;
+  };
+}
 export class PropertyModule extends ApiClient {
   constructor() {
     super("property");
@@ -73,6 +93,11 @@ export class PropertyModule extends ApiClient {
 
   async updateProperty(payload: UpdateProperty) {
     return this.patch<UpdatePropertyResponse>("/update", payload);
+  }
+
+  async register(payload: RegistrationPayload) {
+    const res = await this.post<ResgistrationResponse>("/onboarding", payload);
+    return res.data;
   }
 }
 
