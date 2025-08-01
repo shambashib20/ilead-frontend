@@ -13,6 +13,8 @@ import type { Source } from "@/features/leads/services/Source.service";
 
 import { useEffect, useState } from "react";
 import CreateSourceForm from "./CreateSourceForm";
+import { Pencil, Trash } from "lucide-react";
+import Swal from "sweetalert2";
 
 function SourceCard() {
   const [source, setSources] = useState<Source[]>([]);
@@ -22,8 +24,7 @@ function SourceCard() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalSources, setTotalSources] = useState(0);
   const openModal = useModalStore((state) => state.openModal);
-  const closeModal = useModalStore((state) => state.closeModal);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
@@ -50,6 +51,42 @@ function SourceCard() {
     });
   };
 
+  const handleEdit = (source: Source) => {
+    openModal({
+      content: (
+        <>
+          <h2 className="text-lg font-semibold mb-4">Edit Status</h2>
+          <CreateSourceForm refreshStatuses={fetchData} sourceToEdit={source} />
+        </>
+      ),
+      type: "form",
+      customActions: <></>,
+    });
+  };
+
+  const handleDelete = async (sourceId: string) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the source (hard delete)!.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await sourceService.deleteSource({ sourceId });
+        await fetchData();
+        Swal.fire("Deleted!", "The status has been deactivated.", "success");
+      } catch (error) {
+        console.error("Delete failed:", error);
+        Swal.fire("Error!", "Failed to delete the status.", "error");
+      }
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [page, refreshKey]);
@@ -67,7 +104,7 @@ function SourceCard() {
             <TableRow>
               <TableHead className="dark:text-gray-200">Title</TableHead>
               <TableHead className="dark:text-gray-200">Description</TableHead>
-
+              <TableHead className="dark:text-gray-200">Actions</TableHead>
               {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
             </TableRow>
           </TableHeader>
@@ -91,19 +128,19 @@ function SourceCard() {
                     {source.description}
                   </TableCell>
 
-                  {/* <TableCell className="flex gap-2 items-center">
+                  <TableCell className="flex gap-2 items-center">
                     <Pencil
                       size={18}
                       className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      onClick={() => handleEdit(status)}
+                      onClick={() => handleEdit(source)}
                     />
 
                     <Trash
                       size={18}
                       className="cursor-pointer text-red-600 hover:text-red-800"
-                      onClick={() => handleDelete(status._id)}
+                      onClick={() => handleDelete(source._id)}
                     />
-                  </TableCell> */}
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
