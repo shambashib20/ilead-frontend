@@ -48,6 +48,8 @@ import { StatusService } from "../../services/Status.service";
 import { FileUploader } from "@/components/MediaUploader/FileUploader";
 import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderUploader";
 
+import "react-datepicker/dist/react-datepicker.css";
+
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
 
@@ -448,6 +450,14 @@ export function LeadFollowUp() {
         audioAttachmentUrl,
       });
 
+      console.warn("payload", {
+        leadId,
+        comment,
+        nextFollowUp: followUpDate.toISOString(),
+        attachmentUrl,
+        audioAttachmentUrl,
+      });
+
       Swal.fire("Success", "Follow-up added successfully", "success");
       closeModal();
     } catch (error: any) {
@@ -459,13 +469,23 @@ export function LeadFollowUp() {
 
   useEffect(() => {
     setSubmitLabel?.("Add Follow Up");
+  }, []);
+
+  useEffect(() => {
     setFormActions?.({
       onSubmit: handleSubmit,
       onCancel: () => closeModal(),
       canSubmit: !!comment && !!selectedDate && !!selectedTime,
       isSubmitting,
     });
-  }, [comment, selectedDate, selectedTime, isSubmitting]);
+  }, [
+    comment,
+    selectedDate,
+    selectedTime,
+    isSubmitting,
+    attachmentUrl,
+    audioAttachmentUrl,
+  ]);
 
   return (
     <div className="space-y-4">
@@ -478,16 +498,16 @@ export function LeadFollowUp() {
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal",
+                "w-full justify-start text-left font-normal border-gray-500 bg-zinc-900 text-white hover:bg-zinc-800",
                 !selectedDate && "text-muted-foreground"
               )}
               disabled={isSubmitting}
             >
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
               {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
+          <PopoverContent className="w-auto p-0 bg-zinc-900 text-white border border-gray-600">
             <Calendar
               mode="single"
               selected={selectedDate}
@@ -496,6 +516,7 @@ export function LeadFollowUp() {
             />
           </PopoverContent>
         </Popover>
+
         <Input
           type="time"
           value={selectedTime}
@@ -515,24 +536,26 @@ export function LeadFollowUp() {
         />
       </div>
 
-      <div>
-        <label className="text-sm text-gray-300 block mb-1">
-          Attachment (Optional):
-        </label>
-        <FileUploader
-          onUploadSuccess={setAttachmentUrl}
-          disabled={isSubmitting}
-        />
-      </div>
+      <div className="flex gap-4">
+        <div className="w-1/2">
+          <label className="text-sm text-gray-300 block mb-1">
+            Upload File:
+          </label>
+          <FileUploader
+            onUploadSuccess={setAttachmentUrl}
+            disabled={isSubmitting}
+          />
+        </div>
 
-      <div>
-        <label className="text-sm text-gray-300 block mb-1">
-          Record Audio (Optional):
-        </label>
-        <AudioRecorderUploader
-          onUploadSuccess={setAudioAttachmentUrl}
-          disabled={isSubmitting}
-        />
+        <div className="w-1/2">
+          <label className="text-sm text-gray-300 block mb-1">
+            Record Audio:
+          </label>
+          <AudioRecorderUploader
+            onUploadSuccess={setAudioAttachmentUrl}
+            disabled={isSubmitting}
+          />
+        </div>
       </div>
     </div>
   );
@@ -868,9 +891,15 @@ export function LeadDetail() {
                           <b className="text-gray-300">Audio:</b>
                           <audio
                             controls
-                            src={followup.meta.audio_attachment_url}
-                            className="mt-1 w-full"
-                          />
+                            preload="metadata"
+                            className="mt-1 w-full rounded"
+                          >
+                            <source
+                              src={followup.meta.audio_attachment_url}
+                              type="audio/webm"
+                            />
+                            Your browser does not support the audio element.
+                          </audio>
                         </div>
                       )}
                     </div>

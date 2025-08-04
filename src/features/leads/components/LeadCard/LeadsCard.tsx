@@ -98,7 +98,6 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
       <div
         className=" cursor-pointer"
         onClick={() => {
-          console.log("Lead clicked:", lead._id);
           setModalTitle?.("Lead Details");
           setData?.({ _id: lead._id, rayId: lead?.meta?.ray_id });
 
@@ -154,12 +153,12 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         </div>
       </div>
 
-      <div className="mt-3 items-center py-3 px-2 border-t border-gray-600 flex gap-1.5">
+      <div className="mt-3 items-center py-3 px-2 border-t border-gray-600 flex gap-1.5 ">
         {CARD_ACTIONS.map(
           ({ icon: Icon, color, label, el, type, customActions, title }) => (
             <button
               key={label}
-              className="p-1 hover:bg-gray-700 rounded transition-colors"
+              className="p-1 hover:bg-gray-700 rounded transition-colors cursor-pointer"
               title={label}
               onClick={() => {
                 setModalTitle?.(title);

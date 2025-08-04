@@ -1,6 +1,7 @@
+// AudioRecorderUploader.tsx
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Mic, MicOff, UploadCloud } from "lucide-react";
+import { Mic, MicOff, UploadCloud, CheckCircle } from "lucide-react";
 
 interface AudioUploaderProps {
   onUploadSuccess: (url: string) => void;
@@ -16,7 +17,7 @@ export function AudioRecorderUploader({
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-
+  const BASE_URL = `https://crm-server-tsnj.onrender.com/api`;
   useEffect(() => {
     if (!recording) return;
 
@@ -43,24 +44,22 @@ export function AudioRecorderUploader({
   }, [recording]);
 
   const toggleRecording = () => {
-    if (recording) {
-      mediaRecorderRef.current?.stop();
+    if (recording && mediaRecorderRef.current?.state === "recording") {
+      mediaRecorderRef.current.stop();
     }
     setRecording(!recording);
   };
 
   const uploadAudio = async () => {
     if (!audioBlob) return;
+
     const formData = new FormData();
     formData.append("file", audioBlob, "recording.webm");
 
     setUploading(true);
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_PROD_URL}/file/upload/single`,
-        formData
-      );
-      const url = response.data?.url;
+      const response = await axios.post(`${BASE_URL}/file/upload`, formData);
+      const url = response.data?.data.file_url;
       setPreviewUrl(url);
       onUploadSuccess(url);
     } catch (error) {
@@ -71,11 +70,11 @@ export function AudioRecorderUploader({
   };
 
   return (
-    <div className="border border-dashed border-gray-400 p-4 rounded-md text-center space-y-2">
+    <div className="border border-dashed border-gray-400 p-3 rounded-md text-center space-y-2">
       <button
         onClick={toggleRecording}
         disabled={disabled}
-        className={`flex items-center gap-2 justify-center mx-auto px-4 py-2 rounded ${
+        className={`flex items-center gap-2 mx-auto px-4 py-2 rounded ${
           recording ? "bg-red-600" : "bg-blue-600"
         } text-white`}
       >
@@ -84,26 +83,29 @@ export function AudioRecorderUploader({
       </button>
 
       {audioBlob && (
-        <>
+        <div className="space-y-2">
           <audio
             controls
             src={URL.createObjectURL(audioBlob)}
-            className="mx-auto"
+            className="mx-auto w-full"
           />
-          <button
-            onClick={uploadAudio}
-            disabled={uploading}
-            className="mt-2 flex items-center gap-2 mx-auto bg-green-600 text-white px-3 py-1 rounded"
-          >
-            <UploadCloud size={16} />
-            Upload Audio
-          </button>
-        </>
+          {!previewUrl && (
+            <button
+              onClick={uploadAudio}
+              disabled={uploading}
+              className="flex items-center gap-2 mx-auto bg-green-600 text-white px-3 py-1 rounded"
+            >
+              <UploadCloud size={16} />
+              {uploading ? "Uploading..." : "Upload Audio"}
+            </button>
+          )}
+        </div>
       )}
 
       {previewUrl && (
-        <div className="text-green-500 text-xs mt-1 break-words">
-          Uploaded ✔
+        <div className="flex items-center justify-center text-green-500 text-sm gap-1">
+          <CheckCircle size={16} />
+          Uploaded Successfully
         </div>
       )}
     </div>

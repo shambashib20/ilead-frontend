@@ -21,11 +21,8 @@ export function FileUploader({ onUploadSuccess, disabled }: FileUploaderProps) {
 
     setUploading(true);
     try {
-      const response = await axios.post(
-        `${BASE_URL}/file/upload`,
-        formData
-      );
-      const url = response.data?.url;
+      const response = await axios.post(`${BASE_URL}/file/upload`, formData);
+      const url = response.data?.data.file_url;
       setPreviewUrl(url);
       onUploadSuccess(url);
     } catch (error) {
