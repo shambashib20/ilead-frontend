@@ -717,8 +717,12 @@ export function LeadDetail() {
       <Tabs defaultValue="details" className="mt-4">
         <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto">
           <TabsTrigger value="details">Details</TabsTrigger>
-          <TabsTrigger value="followup">Follow Up</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="followup">
+            Follow Up ({lead.data.follow_ups?.length || 0})
+          </TabsTrigger>
+          <TabsTrigger value="history">
+            History ({lead.data.logs?.length || 0})
+          </TabsTrigger>
           {/* <TabsTrigger value="task">Task</TabsTrigger>
           <TabsTrigger value="reminder">Reminder</TabsTrigger>
           <TabsTrigger value="meeting">Meeting</TabsTrigger>
