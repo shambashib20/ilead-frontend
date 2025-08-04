@@ -45,6 +45,9 @@ import { CustomerModule } from "../../services/Customer.service";
 import type { AxiosResponse } from "axios";
 import { StatusService } from "../../services/Status.service";
 
+import { FileUploader } from "@/components/MediaUploader/FileUploader";
+import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderUploader";
+
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
 
@@ -418,6 +421,11 @@ export function LeadFollowUp() {
   const [comment, setComment] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState("12:00");
+  const [attachmentUrl, setAttachmentUrl] = useState<string | undefined>();
+  const [audioAttachmentUrl, setAudioAttachmentUrl] = useState<
+    string | undefined
+  >();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
@@ -436,6 +444,8 @@ export function LeadFollowUp() {
         leadId,
         comment,
         nextFollowUp: followUpDate.toISOString(),
+        attachmentUrl,
+        audioAttachmentUrl,
       });
 
       Swal.fire("Success", "Follow-up added successfully", "success");
@@ -502,6 +512,26 @@ export function LeadFollowUp() {
           onChange={(e) => setComment(e.target.value)}
           disabled={isSubmitting}
           className="w-full"
+        />
+      </div>
+
+      <div>
+        <label className="text-sm text-gray-300 block mb-1">
+          Attachment (Optional):
+        </label>
+        <FileUploader
+          onUploadSuccess={setAttachmentUrl}
+          disabled={isSubmitting}
+        />
+      </div>
+
+      <div>
+        <label className="text-sm text-gray-300 block mb-1">
+          Record Audio (Optional):
+        </label>
+        <AudioRecorderUploader
+          onUploadSuccess={setAudioAttachmentUrl}
+          disabled={isSubmitting}
         />
       </div>
     </div>

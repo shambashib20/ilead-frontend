@@ -92,6 +92,8 @@ export interface CreateNewFollowupPayload {
   leadId: string;
   nextFollowUp: string;
   comment: string;
+  attachmentUrl?: string;
+  audioAttachmentUrl?: string;
 }
 
 interface FolllowUpResponse {
