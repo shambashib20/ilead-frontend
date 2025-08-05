@@ -55,6 +55,13 @@ const navItems = [
     path: "/customer",
     roles: ["Admin", "Superadmin"],
   },
+
+  {
+    name: "Third Party Integrations",
+    icon: <UserCircle size={20} />,
+    path: "/third-party-integration",
+    roles: ["Admin", "Superadmin"],
+  },
   { name: "Reports", icon: <FileText size={20} />, path: "/reports" },
 ];
 

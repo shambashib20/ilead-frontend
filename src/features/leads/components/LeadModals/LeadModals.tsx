@@ -684,7 +684,7 @@ export function LeadDetail() {
   // Extract fields
 
   return (
-    <div className="min-h-[400px] max-h-[450px] overflow-y-auto">
+    <div className="min-h-[400px] max-h-[450px] overflow-y-auto ">
       {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
         <li className="cursor-pointer">
@@ -715,7 +715,7 @@ export function LeadDetail() {
 
       {/* Tabs */}
       <Tabs defaultValue="details" className="mt-4">
-        <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto">
+        <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto ">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="followup">
             Follow Up ({lead.data.follow_ups?.length || 0})
@@ -734,7 +734,7 @@ export function LeadDetail() {
           <div className="grid grid-cols-2 gap-4">
             {/* Left Column */}
             <div className="border border-gray-700 rounded">
-              <h3 className="font-semibold text-white mb-2 bg-[#3a3285] p-4 text-center">
+              <h3 className="font-semibold text-white mb-2 bg-[var(--primary)] p-4 text-center">
                 Lead Information
               </h3>
               <div className="p-4">
@@ -775,7 +775,7 @@ export function LeadDetail() {
 
             {/* Right Column */}
             <div className="border border-gray-700 rounded">
-              <h3 className="font-semibold text-white mb-2 bg-[#3a3285] p-4 text-center">
+              <h3 className="font-semibold text-white mb-2 bg-[var(--primary)] p-4 text-center">
                 General Information
               </h3>
               <div className="p-4">
@@ -786,7 +786,7 @@ export function LeadDetail() {
                   <b>Status:</b> {lead.data.status.title || "N/A"}
                 </p>
                 <p className="text-sm text-gray-300 mb-2">
-                  <b>Source:</b> {lead.data.meta.source.title || "N/A"}
+                  <b>Source:</b> {lead?.data?.meta?.source?.title || "N/A"}
                 </p>
                 <p className="text-sm text-gray-300 mb-2">
                   <b>Labels:</b>{" "}

@@ -25,6 +25,7 @@ import { Route as DashboardLayoutWorkspaceLogsIndexImport } from './routes/_dash
 import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
 import { Route as DashboardLayoutUsersIndexImport } from './routes/_dashboardLayout/users/index'
 import { Route as DashboardLayoutUserProfileIndexImport } from './routes/_dashboardLayout/user-profile/index'
+import { Route as DashboardLayoutThirdPartyIntegrationIndexImport } from './routes/_dashboardLayout/third-party-integration/index'
 import { Route as DashboardLayoutStatusIndexImport } from './routes/_dashboardLayout/status/index'
 import { Route as DashboardLayoutSourceIndexImport } from './routes/_dashboardLayout/source/index'
 import { Route as DashboardLayoutLeadIndexImport } from './routes/_dashboardLayout/lead/index'
@@ -115,6 +116,13 @@ const DashboardLayoutUserProfileIndexRoute =
   DashboardLayoutUserProfileIndexImport.update({
     id: '/user-profile/',
     path: '/user-profile/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutThirdPartyIntegrationIndexRoute =
+  DashboardLayoutThirdPartyIntegrationIndexImport.update({
+    id: '/third-party-integration/',
+    path: '/third-party-integration/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -276,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutStatusIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboardLayout/third-party-integration/': {
+      id: '/_dashboardLayout/third-party-integration/'
+      path: '/third-party-integration'
+      fullPath: '/third-party-integration'
+      preLoaderRoute: typeof DashboardLayoutThirdPartyIntegrationIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboardLayout/user-profile/': {
       id: '/_dashboardLayout/user-profile/'
       path: '/user-profile'
@@ -362,6 +377,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute
   DashboardLayoutSourceIndexRoute: typeof DashboardLayoutSourceIndexRoute
   DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute
+  DashboardLayoutThirdPartyIntegrationIndexRoute: typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute
   DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute
   DashboardLayoutWorkspaceDetailsIndexRoute: typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -375,6 +391,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutLabelIndexRoute: DashboardLayoutLabelIndexRoute,
   DashboardLayoutSourceIndexRoute: DashboardLayoutSourceIndexRoute,
   DashboardLayoutStatusIndexRoute: DashboardLayoutStatusIndexRoute,
+  DashboardLayoutThirdPartyIntegrationIndexRoute:
+    DashboardLayoutThirdPartyIntegrationIndexRoute,
   DashboardLayoutUserProfileIndexRoute: DashboardLayoutUserProfileIndexRoute,
   DashboardLayoutUsersIndexRoute: DashboardLayoutUsersIndexRoute,
   DashboardLayoutWorkspaceDetailsIndexRoute:
@@ -402,6 +420,7 @@ export interface FileRoutesByFullPath {
   '/lead/': typeof DashboardLayoutLeadIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
+  '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -422,6 +441,7 @@ export interface FileRoutesByTo {
   '/lead': typeof DashboardLayoutLeadIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
+  '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -446,6 +466,7 @@ export interface FileRoutesById {
   '/_dashboardLayout/lead/': typeof DashboardLayoutLeadIndexRoute
   '/_dashboardLayout/source/': typeof DashboardLayoutSourceIndexRoute
   '/_dashboardLayout/status/': typeof DashboardLayoutStatusIndexRoute
+  '/_dashboardLayout/third-party-integration/': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/_dashboardLayout/user-profile/': typeof DashboardLayoutUserProfileIndexRoute
   '/_dashboardLayout/users/': typeof DashboardLayoutUsersIndexRoute
   '/_dashboardLayout/workspace-details/': typeof DashboardLayoutWorkspaceDetailsIndexRoute
@@ -469,6 +490,7 @@ export interface FileRouteTypes {
     | '/lead/'
     | '/source'
     | '/status'
+    | '/third-party-integration'
     | '/user-profile'
     | '/users'
     | '/workspace-details'
@@ -488,6 +510,7 @@ export interface FileRouteTypes {
     | '/lead'
     | '/source'
     | '/status'
+    | '/third-party-integration'
     | '/user-profile'
     | '/users'
     | '/workspace-details'
@@ -510,6 +533,7 @@ export interface FileRouteTypes {
     | '/_dashboardLayout/lead/'
     | '/_dashboardLayout/source/'
     | '/_dashboardLayout/status/'
+    | '/_dashboardLayout/third-party-integration/'
     | '/_dashboardLayout/user-profile/'
     | '/_dashboardLayout/users/'
     | '/_dashboardLayout/workspace-details/'
@@ -569,6 +593,7 @@ export const routeTree = rootRoute
         "/_dashboardLayout/label/",
         "/_dashboardLayout/source/",
         "/_dashboardLayout/status/",
+        "/_dashboardLayout/third-party-integration/",
         "/_dashboardLayout/user-profile/",
         "/_dashboardLayout/users/",
         "/_dashboardLayout/workspace-details/",
@@ -628,6 +653,10 @@ export const routeTree = rootRoute
     },
     "/_dashboardLayout/status/": {
       "filePath": "_dashboardLayout/status/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/third-party-integration/": {
+      "filePath": "_dashboardLayout/third-party-integration/index.tsx",
       "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/user-profile/": {

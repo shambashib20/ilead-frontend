@@ -15,8 +15,6 @@ const DEFAULT_FILTERS: FilterPayload = {
 };
 
 export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
-  console.log(filters);
-
   const query = useQuery<LeadsResponse, Error>({
     queryKey: ["leads", { ...filters }],
     queryFn: () => leadsService.searchLeads(filters),
