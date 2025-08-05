@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import type { Label } from "@/features/leads/types";
 import { facebookIntegrationService } from "../../services/FacebookIntegration.service";
+import Swal from "sweetalert2";
 
 function FacebookIntegration() {
   const [selectedLabel, setSelectedLabel] = useState("");
@@ -19,9 +20,26 @@ function FacebookIntegration() {
 
   const handleLogin = async () => {
     try {
-      await facebookIntegrationService.connectToFacebook();
+      const loginUrl = await facebookIntegrationService.getFacebookAuthUrl();
+
+      const popup = window.open(loginUrl, "_blank", "width=600,height=700");
+
+      const pollTimer = window.setInterval(() => {
+        try {
+          const success = popup?.localStorage.getItem("fb_integration_success");
+
+          if (success) {
+            window.clearInterval(pollTimer);
+            popup?.close();
+            Swal.fire("Success", "Facebook connected!", "success");
+          }
+        } catch (e) {
+          // Swallow cross-origin frame access errors
+        }
+      }, 1000);
     } catch (error) {
-      console.error("Failed to connect to Facebook:", error);
+      console.error("Failed to initiate Facebook login:", error);
+      Swal.fire("Error", "Failed to connect to Facebook", "error");
     }
   };
 
