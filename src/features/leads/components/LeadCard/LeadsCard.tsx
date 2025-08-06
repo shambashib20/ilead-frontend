@@ -83,14 +83,11 @@ const CARD_ACTIONS = [
   },
 ] as const;
 export const LeadCard = memo(({ lead }: LeadCardProps) => {
-  // Convert String objects to primitive strings to avoid React rendering issues
   const assignedToName = lead.assigned_to.name;
   const leadName = String(lead.name);
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt);
   const assignedBy = String(lead?.assigned_by?.name || "Test User");
-
-  // const { openModal, setModalTitle } = useModalStore();
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
 
   return (
@@ -176,12 +173,11 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             >
               <div className="relative">
                 <Icon size={16} color={color} />
-                {label === "Lead Follow Up" &&
-                  (lead.follow_ups?.length || 0) > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-gray-300 text-black text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
-                      {lead.follow_ups?.length}
-                    </span>
-                  )}
+                {label === "Lead Follow Up" && (
+                  <span className="absolute -top-1 -right-1 bg-gray-300 text-black text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                    {lead.follow_ups?.length ?? 0}
+                  </span>
+                )}
               </div>
             </button>
           )

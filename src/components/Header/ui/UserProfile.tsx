@@ -32,13 +32,13 @@ export default function UserProfileBox() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuItem className="flex items-center gap-2">
-          <User className="h-4 w-4" />
-          <Link to="/user-profile">
+        <Link to="/user-profile">
+          <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+            <User className="h-4 w-4" />
             <span>Profile</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-2">
+          </DropdownMenuItem>
+        </Link>
+        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
           <Building2 className="h-4 w-4" />
           <Link to="/workspace-details">
             <span>Workspace Details</span>

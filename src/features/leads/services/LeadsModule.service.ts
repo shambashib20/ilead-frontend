@@ -172,6 +172,13 @@ export class LeadsModule extends ApiClient {
     const response = await this.post<FolllowUpResponse>("/follow-up", payload);
     return response.data;
   }
+
+  async createLeadFromPlatform(
+    payload: Omit<Lead, "_id" | "createdAt" | "follow_ups">
+  ): Promise<any> {
+    const response = await this.post<any>("/create", payload);
+    return response.data;
+  }
 }
 
 export const statsService = new LeadsModule();
@@ -180,3 +187,4 @@ export const deleteLeadsService = new LeadsModule();
 export const leadDetailsService = new LeadsModule();
 export const assignLeadTo = new LeadsModule();
 export const createNewFollowupService = new LeadsModule();
+export const createLeadFromPlatform = new LeadsModule();
