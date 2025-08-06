@@ -18,6 +18,11 @@ class FacebookIntegrationService extends ApiClient {
     const loginUrl = await this.getFacebookAuthUrl();
     window.location.href = loginUrl; // Redirects to Facebook login
   }
+
+  async connectWithFacebookPage(): Promise<any> {
+    const response = await this.get("/connect");
+    return response.data;
+  }
 }
 
 export const facebookIntegrationService = new FacebookIntegrationService();

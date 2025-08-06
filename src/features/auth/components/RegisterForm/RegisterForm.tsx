@@ -12,7 +12,7 @@ function RegisterForm() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    roleName: "Admin",
+    roleName: "Superadmin",
     name: "",
     email: "",
     phone_number: "",

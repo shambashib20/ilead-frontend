@@ -43,8 +43,19 @@ function FacebookIntegration() {
     }
   };
 
-  const handleSave = () => {
-    // Save integration settings
+  const handleSave = async () => {
+    try {
+      const response =
+        await facebookIntegrationService.connectWithFacebookPage();
+
+      // Optional: You can show response data in alert or log it
+      console.log("Facebook page connection response:", response);
+
+      Swal.fire("Success", "Facebook page connected successfully!", "success");
+    } catch (error) {
+      console.error("Failed to connect Facebook page:", error);
+      Swal.fire("Error", "Failed to connect Facebook page", "error");
+    }
   };
 
   useEffect(() => {
