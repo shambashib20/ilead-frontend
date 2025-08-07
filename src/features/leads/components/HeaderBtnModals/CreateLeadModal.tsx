@@ -13,6 +13,10 @@ import Swal from "sweetalert2";
 import { createLeadFromPlatform } from "../../services/LeadsModule.service";
 import { labelService } from "../../services/Lable.service";
 import { statusService } from "../../services/Status.service";
+import {
+  chatAgentService,
+  type Agents,
+} from "../../services/ChatAgents.service";
 
 function CreateLeadModal() {
   const [form, setForm] = useState({
@@ -25,6 +29,7 @@ function CreateLeadModal() {
     reference: "",
     labels: [] as string[],
     status: "",
+    assigned_to: "",
   });
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
@@ -33,6 +38,7 @@ function CreateLeadModal() {
     []
   );
   const [loading, setLoading] = useState(false);
+  const [chatAgents, setChatAgents] = useState<Agents[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -43,6 +49,9 @@ function CreateLeadModal() {
 
         const statusesResponse = await statusService.status();
         setStatuses(statusesResponse.data.data);
+
+        const agentsResponse = await chatAgentService.chatAgents();
+        setChatAgents(agentsResponse.data.data);
       } catch (err) {
         console.error("Error fetching dropdown data", err);
         Swal.fire("Error", "Failed to fetch labels or statuses", "error");
@@ -85,7 +94,6 @@ function CreateLeadModal() {
       const payload = {
         ...form,
         labels: Array.from(selected),
-        assigned_to: "",
         assigned_by: "",
         property_id,
       };
@@ -158,6 +166,27 @@ function CreateLeadModal() {
               {statuses.map((status) => (
                 <SelectItem key={status._id} value={status._id}>
                   {status.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="text-sm text-white block mb-1">
+            Assign Lead To
+          </label>
+          <Select
+            value={form.assigned_to}
+            onValueChange={(val) => handleSelectChange("assigned_to", val)}
+          >
+            <SelectTrigger className="w-full bg-[#2f3658] text-white border border-[#444c6b]">
+              <SelectValue placeholder="Select agent" />
+            </SelectTrigger>
+            <SelectContent>
+              {chatAgents.map((agent) => (
+                <SelectItem key={agent._id} value={agent._id}>
+                  {agent.name}
                 </SelectItem>
               ))}
             </SelectContent>

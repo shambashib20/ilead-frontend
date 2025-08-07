@@ -27,7 +27,7 @@ export default function HeaderOptionsBox({
           <li key={idx} className="relative">
             <Link to=".">
               <Icon size={22} />
-              {isBell && logCount > 0 && (
+              {isBell && (
                 <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {logCount > 99 ? "99+" : logCount}
                 </span>
