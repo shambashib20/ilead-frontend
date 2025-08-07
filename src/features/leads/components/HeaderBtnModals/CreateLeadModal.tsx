@@ -39,7 +39,7 @@ function CreateLeadModal() {
   );
   const [loading, setLoading] = useState(false);
   const [chatAgents, setChatAgents] = useState<Agents[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchOptions = async () => {
