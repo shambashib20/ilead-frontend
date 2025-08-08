@@ -54,6 +54,7 @@ export interface LeadsResponse {
   message: string;
   status: string;
   data: Leads;
+  pagination?: Pagination;
 }
 
 class LeadsService extends ApiClient {

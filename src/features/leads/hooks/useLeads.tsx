@@ -27,7 +27,7 @@ export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
   return {
     leads: query.data?.data.leads ?? [],
     statuses: query.data?.data.statuses ?? [],
-    pagination: query.data?.data?.pagination ?? {
+    pagination: query.data?.pagination ?? {
       page: 1,
       limit: 10,
       total: 0,
