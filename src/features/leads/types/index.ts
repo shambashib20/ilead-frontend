@@ -11,7 +11,9 @@ export interface Lead {
   phone_number: string;
   createdAt: string;
   assigned_to: { name: string };
-  status: { _id: string };
+  status: {
+    title: ReactNode; _id: string 
+};
   comment: string;
   assigned_by: { name: string };
   labels: Label[];
