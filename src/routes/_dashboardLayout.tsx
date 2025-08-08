@@ -23,10 +23,10 @@ function RouteComponent() {
 
   return (
     <div className="dashboard_layout">
-      {/* Desktop Sidebar */}
+      
       <Sidebar />
 
-      {/* Mobile Sidebar Drawer with Slide Animation */}
+      
       <div
         className={`
           fixed inset-0 z-40 transition-transform duration-300 ease-in-out

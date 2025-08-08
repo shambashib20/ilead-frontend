@@ -12,6 +12,9 @@ const DEFAULT_FILTERS: FilterPayload = {
   createdByIds: [],
   search: "",
   sortBy: "",
+  is_table_view: false,
+  page: 1,
+  limit: 10,
 };
 
 export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
@@ -24,6 +27,14 @@ export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
   return {
     leads: query.data?.data.leads ?? [],
     statuses: query.data?.data.statuses ?? [],
+    pagination: query.data?.data?.pagination ?? {
+      page: 1,
+      limit: 10,
+      total: 0,
+      totalPages: 0,
+      hasNextPage: false,
+      hasPrevPage: false,
+    },
     isLoading: query.isLoading,
     error: query.error,
     refetch: query.refetch,

@@ -4,13 +4,24 @@ import { useLeadFilters } from "@/features/leads/hooks/useLeadFilters";
 import LeadsBoard from "@/features/leads/components/LeadsBoard";
 import LoadingState from "@/features/leads/components/LeadsLoading";
 
+import LeadsTable from "@/features/leads/components/LeadsTable/LeadsTable";
+import { useViewContext } from "./route";
+import { useState } from "react";
+
 export const Route = createFileRoute("/_dashboardLayout/lead/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const filters = useLeadFilters();
-  const { leads, isLoading, statuses, error } = useLeads(filters);
+  const { isTableView, setIsTableView } = useViewContext();
+  const [page, setPage] = useState(1);
+  const baseFilters = useLeadFilters();
+  const filters = { ...baseFilters, is_table_view: isTableView, page };
+  const { leads, isLoading, statuses, error, pagination } = useLeads(filters);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   if (isLoading) {
     return <LoadingState />;
@@ -37,7 +48,6 @@ function RouteComponent() {
     );
   }
 
-  // Type-safe normalization
   const normalizedLeads = leads.map((lead) => ({
     ...lead,
     address: lead.address ?? "",
@@ -69,5 +79,20 @@ function RouteComponent() {
     },
   }));
 
-  return <LeadsBoard leads={normalizedLeads} statuses={statuses} />;
+  return isTableView ? (
+    <LeadsTable
+      leads={normalizedLeads}
+      pagination={pagination}
+      onPageChange={handlePageChange}
+      setIsTableView={function (): void {
+        throw new Error("Function not implemented.");
+      }}
+    />
+  ) : (
+    <LeadsBoard
+      leads={normalizedLeads}
+      statuses={statuses}
+      setIsTableView={setIsTableView}
+    />
+  );
 }

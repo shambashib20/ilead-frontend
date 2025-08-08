@@ -36,6 +36,18 @@ export type FilterPayload = {
   search: string;
   sortBy: string;
   createdByIds?: string[];
+  is_table_view?: boolean;
+  page?: number;
+  limit?: number;
+};
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
 };
 
 export interface LeadsResponse {
@@ -57,6 +69,9 @@ class LeadsService extends ApiClient {
       sourceNames: filters.sourceNames,
       search: filters.search,
       sortBy: filters.sortBy,
+      is_table_view: filters.is_table_view ?? false,
+      page: filters.page ?? 1,
+      limit: filters.limit ?? 10,
     });
     return response.data;
   }
