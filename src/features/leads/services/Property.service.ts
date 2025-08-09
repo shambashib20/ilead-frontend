@@ -82,6 +82,32 @@ interface ResgistrationResponse {
     role: RoleDto;
   };
 }
+
+
+interface UpdateLogPayload {
+  logId: string;
+}
+
+interface UpdateLogResponse {  
+    message: string,
+    status: string,
+    data: {
+        title: string,
+        description: string,
+        status: string,
+        meta: {
+            leadId: string,
+            readStatus: string,
+            readAt: string
+        },
+        _id: string,
+        createdAt: string,
+        updatedAt: string
+    }
+
+}
+
+
 export class PropertyModule extends ApiClient {
   constructor() {
     super("property");
@@ -97,6 +123,11 @@ export class PropertyModule extends ApiClient {
 
   async register(payload: RegistrationPayload) {
     const res = await this.post<ResgistrationResponse>("/onboarding", payload);
+    return res.data;
+  }
+
+  async updateLogInProperty(payload: UpdateLogPayload) {
+    const res = await this.put<UpdateLogResponse>("/read", payload);
     return res.data;
   }
 }

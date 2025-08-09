@@ -82,6 +82,7 @@ const CARD_ACTIONS = [
     customActions: undefined,
   },
 ] as const;
+
 export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const assignedToName = lead.assigned_to.name;
   const leadName = String(lead.name);
@@ -91,9 +92,9 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
 
   return (
-    <div className="bg-primary rounded-lg shadow hover:shadow-lg transition-all">
+    <div className="bg-white dark:bg-primary rounded-lg shadow hover:shadow-lg transition-all">
       <div
-        className=" cursor-pointer"
+        className="cursor-pointer"
         onClick={() => {
           setModalTitle?.("Lead Details");
           setData?.({ _id: lead._id, rayId: lead?.meta?.ray_id });
@@ -123,39 +124,39 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             )}
           </div>
 
-          <div className="text-white text-xs font-medium flex items-center gap-2 mb-2">
+          <div className="text-gray-800 dark:text-white text-xs font-medium flex items-center gap-2 mb-2">
             <User color="blue" size={18} />
             <span>{leadName}</span>
           </div>
 
-          <div className="text-white text-xs font-medium flex items-center gap-2 mb-4">
+          <div className="text-gray-800 dark:text-white text-xs font-medium flex items-center gap-2 mb-4">
             <Phone color="green" size={18} />
             <span>{phoneNumber}</span>
           </div>
         </div>
 
         <div className="space-y-1 px-6">
-          <div className="text-white text-xs flex items-center gap-1">
+          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">CD:</span>
             <span>{new Date(createdAt).toLocaleString()}</span>
           </div>
-          <div className="text-white text-xs flex items-center gap-1">
+          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">BY:</span>
             <span>{assignedBy}</span>
           </div>
-          <div className="text-white text-xs flex items-center gap-1">
+          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">TO:</span>
             <span>{assignedToName}</span>
           </div>
         </div>
       </div>
 
-      <div className="mt-3 items-center py-3 px-2 border-t border-gray-600 flex gap-1.5 ">
+      <div className="mt-3 items-center py-3 px-2 border-t border-gray-300 dark:border-gray-600 flex gap-1.5">
         {CARD_ACTIONS.map(
           ({ icon: Icon, color, label, el, type, customActions, title }) => (
             <button
               key={label}
-              className="p-1 hover:bg-gray-700 rounded transition-colors cursor-pointer"
+              className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
               title={label}
               onClick={() => {
                 setModalTitle?.(title);
@@ -174,7 +175,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
               <div className="relative">
                 <Icon size={16} color={color} />
                 {label === "Lead Follow Up" && (
-                  <span className="absolute -top-1 -right-1 bg-gray-300 text-black text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-gray-300 dark:bg-gray-800 text-black dark:text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
                     {lead.follow_ups?.length ?? 0}
                   </span>
                 )}
@@ -182,7 +183,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             </button>
           )
         )}
-        <button className="ms-auto p-1 hover:bg-gray-700 rounded transition-colors">
+        <button className="ms-auto p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors">
           <EllipsisVertical size={16} />
         </button>
       </div>

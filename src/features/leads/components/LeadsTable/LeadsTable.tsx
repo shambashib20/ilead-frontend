@@ -132,7 +132,9 @@ export default function LeadsTable({ leads, pagination, onPageChange }: Props) {
                 <TableCell className="px-4 py-3 text-zinc-700 dark:text-zinc-300">
                   <select
                     value={lead.status?._id || ""}
-                    onChange={(e) => handleStatusChange(lead._id, e.target.value)}
+                    onChange={(e) =>
+                      handleStatusChange(lead._id, e.target.value)
+                    }
                     className="bg-transparent border-none outline-none text-sm"
                   >
                     <option value="" disabled>
