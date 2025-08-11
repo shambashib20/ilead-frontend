@@ -77,6 +77,10 @@ function RouteComponent() {
             ? lead.assigned_by
             : "",
     },
+    status: {
+      _id: lead.status?._id ?? "",
+      title: statuses.find((s) => s._id === lead.status?._id)?.title ?? "",
+    },
   }));
 
   return isTableView ? (

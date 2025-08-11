@@ -12,8 +12,9 @@ export interface Lead {
   createdAt: string;
   assigned_to: { name: string };
   status: {
-    title: ReactNode; _id: string 
-};
+    _id: string;
+    title: string;
+  };
   comment: string;
   assigned_by: { name: string };
   labels: Label[];
