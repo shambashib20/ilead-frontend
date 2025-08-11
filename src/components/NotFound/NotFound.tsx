@@ -44,7 +44,6 @@ export default function NotFound() {
         </Link>
       </motion.div>
 
-      {/* Decorative floating circle */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: [0, -10, 0], opacity: 0.2 }}

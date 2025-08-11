@@ -19,7 +19,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function LoginForm() {
-  const { login, isLoading, data, error } = useLogin();
+  const { login, isLoading, data } = useLogin();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -32,7 +32,6 @@ function LoginForm() {
     },
   });
 
-  console.log(error);
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
       <h3 className="heading mt-3 mb-6">Welcome to ETC CRM! 👋</h3>
