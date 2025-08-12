@@ -1,108 +1,99 @@
-import { useForm } from "@tanstack/react-form";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import Swal from "sweetalert2";
-import { labelService } from "@/features/leads/services/Lable.service";
+import { Label } from "@/components/ui/label";
 
-function CreateLabelForm() {
-  const form = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-    onSubmit: async ({ value }) => {
+import Swal from "sweetalert2";
+import {
+  labelService,
+  type Lables,
+} from "@/features/leads/services/Lable.service";
+import { useCallback, useEffect, useState } from "react";
+import { useModalStore } from "@/store/useModalStore";
+
+interface CreateLabelFormProps {
+  labelToEdit?: Lables;
+  refreshStatuses?: () => void;
+}
+
+function CreateLabelForm({
+  labelToEdit,
+  refreshStatuses,
+}: CreateLabelFormProps) {
+  const [title, setTitle] = useState(labelToEdit?.title || "");
+  const [description, setDescription] = useState(
+    labelToEdit?.description || ""
+  );
+  const isEditing = !!labelToEdit;
+  const [submitting, setSubmitting] = useState(false);
+
+  const { closeModal, setFormActions } = useModalStore();
+  const canSubmit = title.trim() !== "";
+
+  const handleSubmit = useCallback(
+    async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
+      setSubmitting(true);
       try {
-        await labelService.createLabel(value);
-        Swal.fire("Success", "Label created successfully!", "success");
-        form.reset(); // Reset form after success
-      } catch (error) {
-        Swal.fire(
-          "Error",
-          "Failed to create label. Please try again.",
-          "error"
-        );
+        if (isEditing) {
+          await labelService.editLabel(labelToEdit!._id, {
+            title,
+            description,
+            data: labelToEdit,
+          });
+          Swal.fire("Success", "Label updated successfully", "success");
+        } else {
+          await labelService.createLabel({ title, description });
+          Swal.fire("Success", "Label created successfully", "success");
+        }
+        refreshStatuses?.();
+        closeModal();
+      } catch (err) {
+        console.error("Label form error:", err);
+        Swal.fire("Error", "Operation failed", "error");
+      } finally {
+        setSubmitting(false);
       }
     },
-  });
+    [isEditing, title, description, labelToEdit, refreshStatuses, closeModal]
+  );
+
+  useEffect(() => {
+    setFormActions?.({
+      onSubmit: handleSubmit,
+      onCancel: closeModal,
+      canSubmit,
+      isSubmitting: submitting,
+    });
+  }, [setFormActions, handleSubmit, closeModal, canSubmit, submitting]);
 
   return (
-    <Card className="max-w-2xl mx-auto mt-10 p-6 bg-background/60 dark:bg-muted/40 border border-border shadow-lg rounded-2xl backdrop-blur-sm">
-      <h2 className="text-xl font-semibold mb-6">Create a New Label</h2>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit();
-        }}
-        className="space-y-5"
-      >
-        {form.Field({
-          name: "title",
-          validators: {
-            onChange: ({ value }) =>
-              !value
-                ? "Title is required"
-                : value.length < 3
-                  ? "Min 3 characters"
-                  : undefined,
-          },
-          children: (field) => (
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Title</label>
-              <Input
-                className="bg-muted text-foreground ring-1 ring-border focus-visible:ring-2"
-                type="text"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="Enter label title"
-              />
-              {field.state.meta.errors?.[0] && (
-                <p className="text-xs text-red-500">
-                  {field.state.meta.errors[0]}
-                </p>
-              )}
-            </div>
-          ),
-        })}
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <Label htmlFor="title" className="mb-2">
+          Title
+        </Label>
+        <Input
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter label title"
+          required
+        />
+      </div>
 
-        {form.Field({
-          name: "description",
-          validators: {
-            onChange: ({ value }) =>
-              !value
-                ? "Description is required"
-                : value.length < 5
-                  ? "Min 5 characters"
-                  : undefined,
-          },
-          children: (field) => (
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Description</label>
-              <Textarea
-                className="bg-muted text-foreground ring-1 ring-border focus-visible:ring-2"
-                value={field.state.value}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="Enter label description"
-              />
-              {field.state.meta.errors?.[0] && (
-                <p className="text-xs text-red-500">
-                  {field.state.meta.errors[0]}
-                </p>
-              )}
-            </div>
-          ),
-        })}
+      <div>
+        <Label htmlFor="description" className="mb-2">
+          Description
+        </Label>
+        <Input
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Enter description"
+        />
+      </div>
 
-        <Button
-          type="submit"
-          disabled={form.state.isSubmitting}
-          className="w-full mt-4"
-        >
-          {form.state.isSubmitting ? "Creating..." : "Create Label"}
-        </Button>
-      </form>
-    </Card>
+      {/* NO internal submit button here — modal footer will handle Submit/Cancel */}
+    </form>
   );
 }
 

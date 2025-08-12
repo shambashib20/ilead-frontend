@@ -26,6 +26,37 @@ export interface LabelPayload {
   description: string;
 }
 
+interface PaginatedLabelResponse {
+  message: string;
+  status: string;
+  data: {
+    labels: Lables[];
+    pagination: {
+      totalItems: number;
+      totalPages: number;
+      currentPage: number;
+      limit: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
+  };
+}
+
+interface EditLabelPayload {
+  title: string;
+  description: string;
+  data: Lables;
+}
+
+interface EditLabelResponse {
+  message: string;
+  status: string;
+  data: Lables;
+}
+
+interface DeleteLabelParams {
+  labelId: string;
+}
 export class LabelService extends ApiClient {
   constructor() {
     super("label");
@@ -35,8 +66,32 @@ export class LabelService extends ApiClient {
     return this.get<LableResponse>("all");
   }
 
+  async getPaginatedLables(page = 1, limit = 10) {
+    return this.get<PaginatedLabelResponse>(`/fetch-paginated/all`, {
+      params: { page, limit },
+    });
+  }
+
   async createLabel(payload: LabelPayload): Promise<CreateLabelResponse> {
     const res = await this.post<CreateLabelResponse>("/create", payload);
+    return res.data;
+  }
+
+  async editLabel(
+    labelId: string,
+    payload: EditLabelPayload
+  ): Promise<EditLabelResponse> {
+    const res = await this.put<EditLabelResponse>(
+      `/update/${labelId}`,
+      payload
+    );
+    return res.data;
+  }
+
+  async deleteLabel({ labelId }: DeleteLabelParams) {
+    const res = await this.delete<{ message: string; status: string }>(
+      `/delete/${labelId}`
+    );
     return res.data;
   }
 }

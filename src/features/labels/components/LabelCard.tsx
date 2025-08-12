@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+
 import {
   Table,
   TableBody,
@@ -7,33 +8,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { sourceService } from "@/features/leads/services/Source.service";
+
+import { labelService } from "@/features/leads/services/Lable.service";
 import { useModalStore } from "@/store/useModalStore";
-import type { Source } from "@/features/leads/services/Source.service";
+import type { Lables } from "@/features/leads/services/Lable.service";
 
 import { useEffect, useState } from "react";
-import CreateSourceForm from "./CreateSourceForm";
 import { Pencil, Trash } from "lucide-react";
+import CreateLabelForm from "./CreateLabelForm";
 import Swal from "sweetalert2";
 
-function SourceCard() {
-  const [source, setSources] = useState<Source[]>([]);
+function LabelCard() {
+  const [label, setLables] = useState<Lables[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 10;
   const [totalPages, setTotalPages] = useState(1);
-  const [totalSources, setTotalSources] = useState(0);
+  const [totalLables, setTotalLables] = useState(0);
   const openModal = useModalStore((state) => state.openModal);
   const [refreshKey] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await sourceService.getPaginatedSources(page, limit);
-      setSources(res.data.data.sources);
+      const res = await labelService.getPaginatedLables(page, limit);
+      setLables(res.data.data.labels);
       const total = res.data.data.pagination.totalItems || 0;
       setTotalPages(Math.ceil(total / limit));
-      setTotalSources(total);
+      setTotalLables(total);
     } catch (err) {
       console.error("Error fetching statuses:", err);
     } finally {
@@ -44,19 +46,19 @@ function SourceCard() {
   const setModalTitle = useModalStore((state) => state.setModalTitle);
 
   const handleOpenCreateModal = () => {
-    setModalTitle?.("Create Source");
+    setModalTitle?.("Create Labelv ");
     openModal({
-      content: <CreateSourceForm />,
+      content: <CreateLabelForm />,
       type: "form",
     });
   };
 
-  const handleEdit = (source: Source) => {
+  const handleEdit = (label: Lables) => {
     openModal({
       content: (
         <>
-          <h2 className="text-lg font-semibold mb-4">Edit Source</h2>
-          <CreateSourceForm refreshStatuses={fetchData} sourceToEdit={source} />
+          <h2 className="text-lg font-semibold mb-4">Edit Label</h2>
+          <CreateLabelForm refreshStatuses={fetchData} labelToEdit={label} />
         </>
       ),
       type: "form",
@@ -64,10 +66,10 @@ function SourceCard() {
     });
   };
 
-  const handleDelete = async (sourceId: string) => {
+  const handleDelete = async (labelId: string) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "This will permanently delete the source (hard delete)!.",
+      text: "This will permanently delete the label (hard delete)!.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -77,9 +79,9 @@ function SourceCard() {
 
     if (result.isConfirmed) {
       try {
-        await sourceService.deleteSource({ sourceId });
+        await labelService.deleteLabel({ labelId });
         await fetchData();
-        Swal.fire("Deleted!", "The status has been deactivated.", "success");
+        Swal.fire("Deleted!", "The status has been deleted!", "success");
       } catch (error) {
         console.error("Delete failed:", error);
         Swal.fire("Error!", "Failed to delete the status.", "error");
@@ -94,8 +96,8 @@ function SourceCard() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold dark:text-white">Source List</h2>
-        <Button onClick={handleOpenCreateModal}>Add New Source</Button>
+        <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
+        <Button onClick={handleOpenCreateModal}>Add New Label</Button>
       </div>
 
       <div className="rounded-md border dark:border-gray-700">
@@ -118,27 +120,27 @@ function SourceCard() {
                   Loading...
                 </TableCell>
               </TableRow>
-            ) : source.length > 0 ? (
-              source.map((source) => (
-                <TableRow key={source._id}>
+            ) : label.length > 0 ? (
+              label.map((label) => (
+                <TableRow key={label._id}>
                   <TableCell className="dark:text-gray-100">
-                    {source.title}
+                    {label.title}
                   </TableCell>
                   <TableCell className="dark:text-gray-100">
-                    {source.description}
+                    {label.description}
                   </TableCell>
 
                   <TableCell className="flex gap-2 items-center">
                     <Pencil
                       size={18}
                       className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      onClick={() => handleEdit(source)}
+                      onClick={() => handleEdit(label)}
                     />
 
                     <Trash
                       size={18}
                       className="cursor-pointer text-red-600 hover:text-red-800"
-                      onClick={() => handleDelete(source._id)}
+                      onClick={() => handleDelete(label._id)}
                     />
                   </TableCell>
                 </TableRow>
@@ -159,7 +161,7 @@ function SourceCard() {
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
-          Showing {source.length} of {totalSources} total sources
+          Showing {label.length} of {totalLables} total labels
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -185,4 +187,4 @@ function SourceCard() {
   );
 }
 
-export default SourceCard;
+export default LabelCard;
