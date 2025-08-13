@@ -8,25 +8,25 @@ import { useEffect, useState } from "react";
 
 function Header() {
   const { setMobileOpen } = useSidebarStore();
-  const [logCount, setLogCount] = useState<number>(0);
+  const [logs, setLogs] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const res = await new PropertyModule().getProperty();
-        setLogCount(res?.data?.data.logs?.length || 0);
+        const logList = res?.data?.data?.logs || [];
+        setLogs(logList);
       } catch (error) {
         console.error("Failed to fetch property logs:", error);
       }
     };
-
     fetchLogs();
   }, []);
   return (
     <header className="bg-primary p-3 flex items-center justify-between shadow-lead rounded-sm sticky top-0 z-10">
       <HeaderBtnLists />
       <div className="ms-auto flex gap-2">
-        <HeaderOptionsBox logCount={logCount} />
+        <HeaderOptionsBox logs={logs} />
         <UserProfileBox />
         <button
           className="lg:hidden"
