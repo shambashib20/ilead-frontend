@@ -93,10 +93,6 @@ class AuthService extends ApiClient {
     );
     return res.data;
   }
-
-  //   me(): Promise<MeResponse> {
-  //     return this.get<MeResponse>("/me");
-  //   }
 }
 
 /** 🔄 Export singleton for reuse */

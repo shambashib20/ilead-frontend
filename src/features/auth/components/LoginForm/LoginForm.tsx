@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 
+import Swal from "sweetalert2";
+
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
     <>
@@ -26,7 +28,6 @@ function LoginForm() {
       password: "",
     },
     onSubmit: async ({ value }) => {
-      console.log("Form submitted with values:", value);
       await login({ email: value.email, password: value.password });
       form.reset();
     },

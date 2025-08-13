@@ -12,6 +12,7 @@ import { dashboardLeads } from "@/features/leads/services/HomePage.service";
 import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
 import { Menu } from "lucide-react";
 import LeadSourceChart from "@/features/dashboard/components/LeadSourceChart/LeadSourceChart";
+import Loader from "@/components/MainLoader/Loader";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
@@ -67,7 +68,7 @@ function RouteComponent() {
       .catch((err) => console.error("Lead API Error:", err));
   }, []);
 
-  if (!leadData) return <div>Loading...</div>;
+  if (!leadData) return <Loader />;
 
   const cardsData: DashboardCardType[] = [
     {
