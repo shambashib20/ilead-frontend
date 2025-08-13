@@ -2,14 +2,14 @@ import {
   Funnel,
   House,
   Tags,
-  FileText,
+  // FileText,
   MessageSquare,
   Activity,
   UserCircle,
   Users,
 } from "lucide-react";
 
-// Get user role safely from localStorage
+
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 const currentUserRole = user?.role || "";
 
@@ -62,7 +62,7 @@ const navItems = [
     path: "/third-party-integration",
     roles: ["Admin", "Superadmin"],
   },
-  { name: "Reports", icon: <FileText size={20} />, path: "/reports" },
+  // { name: "Reports", icon: <FileText size={20} />, path: "/reports" },
 ];
 
 // Filter items based on role
