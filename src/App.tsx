@@ -5,12 +5,13 @@ import { ErrorComponent } from "@tanstack/react-router";
 import { queryClient } from "./utils/client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useUser } from "./features/auth/hooks/useUser";
+import Loader from "./components/MainLoader/Loader";
 
 const router = createRouter({
   routeTree,
   defaultPendingComponent: () => (
     <div className={`p-2 text-2xl`}>
-      <h3>Loadings...</h3>
+      <Loader />
     </div>
   ),
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
