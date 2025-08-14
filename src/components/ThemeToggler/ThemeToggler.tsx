@@ -6,12 +6,10 @@ function ThemeToggler() {
 
   return (
     <button
-      className="p-0 mt-2"
+      className="p-0 mt-2 cursor-pointer"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      {theme === "dark" ?
-        <Sun size={24} />
-      : <Moon size={24} />}
+      {theme === "dark" ? <Sun size={24} /> : <Moon size={24} />}
     </button>
   );
 }

@@ -49,6 +49,7 @@ import { FileUploader } from "@/components/MediaUploader/FileUploader";
 import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderUploader";
 
 import "react-datepicker/dist/react-datepicker.css";
+import Loader from "@/components/MainLoader/Loader";
 
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
@@ -673,7 +674,9 @@ export function LeadDetail() {
 
   if (loading) {
     return (
-      <div className="p-4 text-center text-white">Loading lead details...</div>
+      <div className="p-4 text-center text-white">
+        <Loader />
+      </div>
     );
   }
 

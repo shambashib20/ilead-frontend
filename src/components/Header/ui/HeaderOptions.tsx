@@ -31,7 +31,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
             <li key={idx} className="relative flex items-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="relative flex items-center justify-center h-8 w-8">
+                  <button className="relative flex items-center justify-center h-8 w-8 cursor-pointer">
                     <Icon size={22} />
                     {logCount > 0 && (
                       <span className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
