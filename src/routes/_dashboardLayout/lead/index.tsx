@@ -15,12 +15,18 @@ export const Route = createFileRoute("/_dashboardLayout/lead/")({
 function RouteComponent() {
   const { isTableView, setIsTableView } = useViewContext();
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const baseFilters = useLeadFilters();
-  const filters = { ...baseFilters, is_table_view: isTableView, page };
+  const filters = { ...baseFilters, is_table_view: isTableView, page, limit };
   const { leads, isLoading, statuses, error, pagination } = useLeads(filters);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+    setPage(1); // reset to page 1 when limit changes
   };
 
   if (isLoading) {
@@ -88,6 +94,7 @@ function RouteComponent() {
       leads={normalizedLeads}
       pagination={pagination}
       onPageChange={handlePageChange}
+      onLimitChange={handleLimitChange}
       setIsTableView={function (): void {
         throw new Error("Function not implemented.");
       }}

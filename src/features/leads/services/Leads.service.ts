@@ -28,6 +28,7 @@ export interface Leads {
     labels: [{ _id: string; title: string }];
     follow_ups: [];
   }[];
+  pagination: Pagination;
 }
 export type FilterPayload = {
   labelIds?: string[];

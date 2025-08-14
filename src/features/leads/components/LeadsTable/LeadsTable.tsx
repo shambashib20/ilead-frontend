@@ -30,10 +30,16 @@ type Props = {
   setIsTableView: (val: boolean) => void;
   pagination: Pagination;
   onPageChange: (newPage: number) => void;
+  onLimitChange: (newLimit: number) => void;
   onStatusChange?: (leadId: string, statusId: string) => void;
 };
 
-export default function LeadsTable({ leads, pagination, onPageChange }: Props) {
+export default function LeadsTable({
+  leads,
+  pagination,
+  onPageChange,
+  onLimitChange,
+}: Props) {
   const { page, limit, totalPages, hasNextPage, hasPrevPage } = pagination;
   const [statuses, setStatuses] = useState<Status[]>([]);
 
@@ -153,32 +159,62 @@ export default function LeadsTable({ leads, pagination, onPageChange }: Props) {
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex justify-between items-center gap-4 px-6 py-4 bg-muted/30 dark:bg-zinc-800 border-t dark:border-zinc-700">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!hasPrevPage}
-          onClick={() => onPageChange(page - 1)}
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Previous
-        </Button>
+        {/* Left side: navigation buttons */}
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!hasPrevPage}
+            onClick={() => onPageChange(page - 1)}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Previous
+          </Button>
 
-        <div className="text-sm text-muted-foreground dark:text-zinc-300">
-          Page <span className="font-semibold">{page}</span> of{" "}
-          <span className="font-semibold">{totalPages}</span>
+          <div className="text-sm text-muted-foreground dark:text-zinc-300">
+            Page <span className="font-semibold">{page}</span> of{" "}
+            <span className="font-semibold">{totalPages}</span>
+          </div>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!hasNextPage}
-          onClick={() => onPageChange(page + 1)}
-        >
-          Next
-          <ChevronRight className="h-4 w-4 ml-1" />
-        </Button>
+        {/* Middle: Showing count */}
+        <div className="text-sm text-muted-foreground dark:text-zinc-300">
+          Showing <span className="font-semibold">{leads.length}</span> items
+          out of <span className="font-semibold">{pagination.total}</span>
+        </div>
+
+        {/* Right: Items per page */}
+        <div className="flex items-center gap-2">
+          <label
+            htmlFor="limit"
+            className="text-sm text-muted-foreground dark:text-zinc-300"
+          >
+            Items per page:
+          </label>
+          <select
+            id="limit"
+            value={limit}
+            onChange={(e) => onLimitChange(Number(e.target.value))}
+            className="bg-transparent border rounded px-2 py-1 text-sm"
+          >
+            {[5, 10, 20, 50, 100].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!hasNextPage}
+            onClick={() => onPageChange(page + 1)}
+          >
+            Next
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
       </div>
     </div>
   );
