@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import clsx from "clsx";
 import { userService } from "@/features/leads/services/User.service";
+import Loader from "@/components/MainLoader/Loader";
 
 export default function UserProfileDetailsCard() {
   const [user, setUser] = useState<
@@ -46,12 +47,7 @@ export default function UserProfileDetailsCard() {
     </div>
   );
 
-  if (loading)
-    return (
-      <div className="p-4 text-gray-700 dark:text-gray-200">
-        Loading user details...
-      </div>
-    );
+  if (loading) return <Loader />;
 
   if (error)
     return <div className="p-4 text-red-500 dark:text-red-400">{error}</div>;

@@ -21,6 +21,7 @@ import {
 } from "../LeadModals";
 
 import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
+import { statusColorMap } from "../../utils/constants";
 
 interface LeadCardProps {
   lead: Lead;
@@ -90,6 +91,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const createdAt = String(lead.createdAt);
   const assignedBy = String(lead?.assigned_by?.name || "Test User");
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
+  const statusColors = Array.from(statusColorMap.values());
 
   return (
     <div className="bg-white dark:bg-primary rounded-lg shadow hover:shadow-lg transition-all">
@@ -109,14 +111,18 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         <div className="pt-5 px-6">
           <div className="flex flex-wrap gap-2 mb-3">
             {lead.labels?.length > 0 ? (
-              lead.labels.map((label) => (
-                <span
-                  key={label._id || label.title}
-                  className="bg-red-600 text-white text-xs px-3 py-1 rounded"
-                >
-                  {label.title}
-                </span>
-              ))
+              lead.labels.map((label, idx) => {
+                const bgColor = statusColors[idx % statusColors.length]; // cycle colors
+                return (
+                  <span
+                    key={label._id || label.title}
+                    style={{ backgroundColor: bgColor }}
+                    className="text-white text-xs px-3 py-1 rounded"
+                  >
+                    {label.title}
+                  </span>
+                );
+              })
             ) : (
               <span className="bg-gray-600 text-white text-xs px-3 py-1 rounded">
                 No Label

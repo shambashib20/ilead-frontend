@@ -5,9 +5,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "@tanstack/react-router";
-import { Bell, Copy, ListTodo, Moon, PhoneMissed, Search } from "lucide-react";
+import { Bell, ListTodo, Moon, PhoneMissed, Search } from "lucide-react";
 
-const icons = [PhoneMissed, ListTodo, Copy, Search, Moon, Bell];
+const icons = [
+  PhoneMissed,
+  ListTodo,
+  // Copy,
+  Search,
+  Moon,
+  Bell,
+];
 
 export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
   const logCount = logs.length;
