@@ -23,10 +23,8 @@ function RouteComponent() {
 
   return (
     <div className="dashboard_layout">
-      
       <Sidebar />
 
-      
       <div
         className={`
           fixed inset-0 z-40 transition-transform duration-300 ease-in-out
@@ -77,7 +75,8 @@ function RouteComponent() {
             rel="noopener noreferrer"
           >
             Shambashib Majumdar
-          </a>
+          </a>{" "}
+          & Tushar Dutta
         </footer>
       </main>
     </div>

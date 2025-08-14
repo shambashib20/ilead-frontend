@@ -116,7 +116,7 @@ function ChatAgentTable() {
       {pagination && (
         <div className="flex justify-between items-center mt-4 px-1">
           <div className="text-sm text-muted-foreground dark:text-gray-300">
-            Showing {chatAgents.length} of {totalStatuses} total statuses
+            Showing {chatAgents.length} of {totalStatuses} total chat agents
           </div>
           <div className="flex items-center gap-2">
             <Button

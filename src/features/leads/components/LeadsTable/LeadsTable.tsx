@@ -81,10 +81,10 @@ export default function LeadsTable({
     }
   };
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border dark:border-zinc-800 overflow-hidden">
+    <div className="rounded-2xl shadow-sm border dark:border-zinc-800 overflow-hidden mt-10">
       <div className="overflow-auto max-h-[65vh]">
         <Table className="min-w-full text-sm">
-          <TableHeader className="sticky top-0 z-10 bg-muted dark:bg-zinc-800">
+          <TableHeader className="sticky top-0 z-10">
             <TableRow>
               <TableHead className="text-left px-4 py-3 text-zinc-700 dark:text-zinc-200">
                 S/N
@@ -112,11 +112,11 @@ export default function LeadsTable({
             {leads.map((lead, index) => (
               <TableRow
                 key={lead._id}
-                className={
-                  index % 2 === 0
-                    ? "bg-white dark:bg-zinc-900"
-                    : "bg-muted/50 dark:bg-zinc-800 hover:bg-muted dark:hover:bg-zinc-700"
-                }
+                // className={
+                //   index % 2 === 0
+                //     ? "bg-white dark:bg-zinc-900"
+                //     : "bg-muted/50 dark:bg-zinc-800 hover:bg-muted dark:hover:bg-zinc-700"
+                // }
               >
                 <TableCell className="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">
                   {(page - 1) * limit + index + 1}
@@ -128,14 +128,14 @@ export default function LeadsTable({
                   {formatDateTime(lead.createdAt)}
                 </TableCell>
 
-                <TableCell className="px-4 py-3 text-zinc-700 dark:text-zinc-300">
+                <TableCell className="px-4 py-3 text-zinc-900 dark:text-white">
                   {lead.phone_number}
                 </TableCell>
 
-                <TableCell className="px-4 py-3 text-zinc-700 dark:text-zinc-300">
+                <TableCell className="px-4 py-3 text-zinc-900 dark:text-white">
                   {lead.assigned_to?.name}
                 </TableCell>
-                <TableCell className="px-4 py-3 text-zinc-700 dark:text-zinc-300">
+                <TableCell className="px-4 py-3 text-zinc-900 dark:text-white">
                   <select
                     value={lead.status?._id || ""}
                     onChange={(e) =>
@@ -159,7 +159,7 @@ export default function LeadsTable({
         </Table>
       </div>
 
-      <div className="flex justify-between items-center gap-4 px-6 py-4 bg-muted/30 dark:bg-zinc-800 border-t dark:border-zinc-700">
+      <div className="flex justify-between items-center gap-4 px-6 py-4  border-t dark:border-zinc-700">
         {/* Left side: navigation buttons */}
         <div className="flex items-center gap-4">
           <Button
