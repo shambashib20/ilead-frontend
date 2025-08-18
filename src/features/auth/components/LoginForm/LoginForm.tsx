@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-
-
+import Loader from "@/components/MainLoader/Loader";
+import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -33,15 +34,26 @@ function LoginForm() {
     },
   });
 
+  useEffect(() => {
+    if (data?.status) {
+      Swal.fire({
+        title: "Login Successful 🎉",
+        text: data?.message || "You have logged in successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
+  }, [data]);
+
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
       <h3 className="heading mt-3 mb-6">Welcome to ETC CRM! 👋</h3>
-      {isLoading && <p>Loading...</p>}
-      {!data?.status ? (
+      {isLoading && <Loader />}
+      {/* {!data?.status ? (
         <p className="error">{data?.message}</p>
       ) : (
         <p className="error">{data?.message}</p>
-      )}
+      )} */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
