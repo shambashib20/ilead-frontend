@@ -14,7 +14,7 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
 const currentUserRole = user?.role || "";
 
 // All navigation items
-const navItems = [
+export const navItems = [
   { name: "Dashboard", icon: <House size={20} />, path: "/dashboard" },
   { name: "Lead", icon: <Funnel size={20} />, path: "/lead" },
   {

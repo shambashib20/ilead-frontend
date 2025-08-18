@@ -2,6 +2,7 @@ import { useSidebarStore } from "@/store/useSidebarStore";
 import HeaderBtnLists from "./ui/HeaderBtnLists";
 import HeaderOptionsBox from "./ui/HeaderOptions";
 import UserProfileBox from "./ui/UserProfile";
+import { Menu } from "lucide-react";
 
 import { PropertyModule } from "@/features/leads/services/Property.service";
 import { useEffect, useState } from "react";
@@ -25,7 +26,7 @@ function Header() {
   return (
     <header className="bg-primary p-3 flex items-center justify-between shadow-lead rounded-sm sticky top-0 z-10">
       <HeaderBtnLists />
-      <div className="ms-auto flex gap-2">
+      <div className="ms-auto flex gap-2 ">
         <HeaderOptionsBox logs={logs} />
         <UserProfileBox />
         <button
@@ -34,7 +35,7 @@ function Header() {
             setMobileOpen(true);
           }}
         >
-          menu
+          <Menu className="h-6 w-6 cursor-pointer" />
         </button>
       </div>
     </header>

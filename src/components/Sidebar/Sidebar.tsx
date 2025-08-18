@@ -68,7 +68,7 @@ function Sidebar() {
                 <Link
                   to={item.path}
                   className={`
-              flex items-center gap-4 text-[15px] h-11 w-full rounded-md p-2 transition-all duration-200 ease-in-out  group
+              flex items-center gap-4 text-[15px] h-11 w-full rounded-md p-2 transition-all duration-200 ease-in-out  group font-bold
               ${isActive ? "primary-gradient sidebar-active text-white" : ""}
             `}
                 >
@@ -81,7 +81,7 @@ function Sidebar() {
                   <span
                     title={effectiveCollapsed ? item.name : undefined}
                     className={`
-                overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out
+                overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out font-bold
                 ${effectiveCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"}
               `}
                   >
