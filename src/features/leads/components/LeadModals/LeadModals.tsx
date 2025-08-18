@@ -565,7 +565,7 @@ export function LeadFollowUp() {
           />
         </div>
 
-        <div className="w-1/2">
+        {/* <div className="w-1/2">
           <label className="text-sm text-gray-300 block mb-1">
             Record Audio:
           </label>
@@ -573,7 +573,7 @@ export function LeadFollowUp() {
             onUploadSuccess={setAudioAttachmentUrl}
             disabled={isSubmitting}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

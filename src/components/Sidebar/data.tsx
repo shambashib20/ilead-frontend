@@ -67,6 +67,6 @@ const navItems = [
 
 // Filter items based on role
 export const filteredNavItems = navItems.filter((item) => {
-  if (!item.roles) return true; // Show to all if no roles specified
+  if (!item.roles) return true; 
   return item.roles.includes(currentUserRole); // Only show if role allowed
 });
