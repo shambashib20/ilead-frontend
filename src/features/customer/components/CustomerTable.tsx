@@ -15,6 +15,7 @@ import { customerService } from "../services/Customer.service";
 import type { Customer } from "../services/Customer.service";
 
 import { Button } from "@/components/ui/button";
+import Loader from "@/components/MainLoader/Loader";
 
 function CustomerTable() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -51,99 +52,98 @@ function CustomerTable() {
         </h2>
       </div>
 
-      <div className="rounded-md border dark:border-gray-700">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="dark:text-gray-200">Name</TableHead>
-              <TableHead className="dark:text-gray-200">Email</TableHead>
-              <TableHead className="dark:text-gray-200">Phone Number</TableHead>
-              <TableHead className="dark:text-gray-200">
-                Customer Status
-              </TableHead>
-              <TableHead className="dark:text-gray-200">
-                Whatsapp Number
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+      {/* Loader replaces the table completely */}
+      {loading ? (
+        <div className="flex justify-center items-center py-10">
+          <Loader />
+        </div>
+      ) : (
+        <div className="rounded-md border dark:border-gray-700">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-center py-4 dark:text-gray-300"
-                >
-                  Loading...
-                </TableCell>
+                <TableHead className="dark:text-gray-200">Name</TableHead>
+                <TableHead className="dark:text-gray-200">Email</TableHead>
+                <TableHead className="dark:text-gray-200">
+                  Phone Number
+                </TableHead>
+                <TableHead className="dark:text-gray-200">
+                  Customer Status
+                </TableHead>
+                <TableHead className="dark:text-gray-200">
+                  Whatsapp Number
+                </TableHead>
               </TableRow>
-            ) : customers.length > 0 ? (
-              customers.map((customer) => (
-                <TableRow key={customer._id}>
-                  <TableCell className="dark:text-gray-100">
-                    {customer.name}
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    {customer.email}
-                  </TableCell>
-
-                  <TableCell className="dark:text-gray-100">
-                    {customer.phone_number}
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    <Badge
-                      variant={customer.meta?.active ? "default" : "secondary"}
-                      className={
-                        customer?.meta?.active
-                          ? "bg-green-600 hover:bg-green-700 text-white"
-                          : "bg-gray-500 hover:bg-gray-600 text-white"
-                      }
-                    >
-                      {customer.meta?.active ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    {customer.meta?.whatsapp}
+            </TableHeader>
+            <TableBody>
+              {customers.length > 0 ? (
+                customers.map((customer) => (
+                  <TableRow key={customer._id}>
+                    <TableCell className="dark:text-gray-100">
+                      {customer.name}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      {customer.email}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      {customer.phone_number}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      <Badge
+                        variant={
+                          customer.meta?.active ? "default" : "secondary"
+                        }
+                        className={
+                          customer?.meta?.active
+                            ? "bg-green-600 hover:bg-green-700 text-white"
+                            : "bg-gray-500 hover:bg-gray-600 text-white"
+                        }
+                      >
+                        {customer.meta?.active ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      {customer.meta?.whatsapp}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={5}
+                    className="text-center py-4 dark:text-gray-400"
+                  >
+                    No customers found.
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-center py-4 dark:text-gray-400"
-                >
-                  No customers found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
-      <div className="flex justify-between items-center">
-        <div className="text-sm text-muted-foreground dark:text-gray-300">
-          Showing {customers.length} of {totalCustomers} total customers
+      {/* Pagination only shows when data is loaded */}
+      {!loading && (
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-muted-foreground dark:text-gray-300">
+            Showing {customers.length} of {totalCustomers} total customers
+          </div>
+          <div className="flex items-center gap-2">
+            <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
+              Prev
+            </Button>
+            <span className="text-sm dark:text-white">
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              onClick={() => setPage(page + 1)}
+              disabled={page === totalPages}
+            >
+              Next
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
-          >
-            Prev
-          </Button>
-          <span className="text-sm dark:text-white">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            onClick={() => setPage(page + 1)}
-            disabled={page === totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

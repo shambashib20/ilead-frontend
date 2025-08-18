@@ -239,7 +239,6 @@ export default function LeadsTable({
         {/* Left side: navigation buttons */}
         <div className="flex items-center gap-4">
           <Button
-            variant="outline"
             size="sm"
             disabled={!hasPrevPage}
             onClick={() => onPageChange(page - 1)}
@@ -282,7 +281,6 @@ export default function LeadsTable({
           </select>
 
           <Button
-            variant="outline"
             size="sm"
             disabled={!hasNextPage}
             onClick={() => onPageChange(page + 1)}
