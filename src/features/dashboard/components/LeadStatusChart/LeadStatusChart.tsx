@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
-
-import Select from "react-select";
 import { Input } from "@/components/ui/input";
-
 import { chatAgentService } from "@/features/leads/services/ChatAgents.service";
 import { statsService } from "@/features/leads/services/LeadsModule.service";
+import Select from "react-select";
+import { useEffect, useState } from "react";
+import Chart from "react-apexcharts";
 
 interface Props {
   showMenu: boolean;
@@ -16,6 +14,7 @@ interface Props {
   onEndDateChange: (value: string) => void;
   onAgentChange: (value: string) => void;
 }
+
 const LeadStatusChart: React.FC<Props> = ({
   showMenu,
   startDate,
@@ -29,6 +28,7 @@ const LeadStatusChart: React.FC<Props> = ({
   const [series, setSeries] = useState<number[]>([]);
   const [agents, setAgents] = useState<any[]>([]);
   const [hasFetched, setHasFetched] = useState<boolean>(false);
+
   const fetchChartData = async () => {
     if (!selectedAgent) return;
 
@@ -68,24 +68,32 @@ const LeadStatusChart: React.FC<Props> = ({
   return (
     <>
       {showMenu && (
-        <div className="flex flex-col gap-4 mt-4 mb-6 p-4 border rounded-lg bg-gray-50 max-w-md mx-auto">
-          <label className="text-sm font-medium text-gray-700">
+        <div
+          className="flex flex-col gap-4 mt-4 mb-6 p-4 border rounded-lg max-w-md mx-auto 
+                        bg-white dark:bg-gray-900 
+                        border-gray-200 dark:border-gray-700"
+        >
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
             Start Date
           </label>
           <Input
             type="date"
             value={startDate}
             onChange={(e) => onStartDateChange(e.target.value)}
+            className="dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
           />
 
-          <label className="text-sm font-medium text-gray-700">End Date</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            End Date
+          </label>
           <Input
             type="date"
             value={endDate}
             onChange={(e) => onEndDateChange(e.target.value)}
+            className="dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
           />
 
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-bold text-gray-700 dark:text-gray-200">
             Select Agent
           </label>
           <Select
@@ -93,13 +101,17 @@ const LeadStatusChart: React.FC<Props> = ({
               value: agent._id,
               label: agent.name,
             }))}
-            onChange={(option) => onAgentChange(option?.value || "")}
+            onChange={(option: any) => onAgentChange(option?.value || "")}
             placeholder="Select Agent"
+            className="dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
           />
 
           <button
             onClick={fetchChartData}
-            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            className="mt-2 px-4 py-2 
+                       bg-blue-600 text-white rounded-md 
+                       hover:bg-blue-700 transition 
+                       dark:bg-blue-500 dark:hover:bg-blue-600"
           >
             Submit
           </button>
@@ -107,7 +119,9 @@ const LeadStatusChart: React.FC<Props> = ({
       )}
 
       {hasFetched && series.length === 0 ? (
-        <p className="text-center text-gray-500 mt-4">No leads found</p>
+        <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
+          No leads found
+        </p>
       ) : (
         series.length > 0 && (
           <Chart
@@ -118,8 +132,12 @@ const LeadStatusChart: React.FC<Props> = ({
               labels,
               legend: {
                 position: "bottom",
+                labels: {
+                  colors: ["#374151", "#d1d5db"], // adjust legend text colors
+                },
               },
               tooltip: {
+                theme: "dark", // adapts tooltip in dark mode
                 y: {
                   formatter: (val: number) => `${val} leads`,
                 },
@@ -134,7 +152,7 @@ const LeadStatusChart: React.FC<Props> = ({
                         label: "Leads Status",
                         fontSize: "16px",
                         fontWeight: 600,
-                        color: "#ffffff",
+                        color: "var(--tw-prose-body, #111827)", // auto-adapt with theme
                         formatter: () => {
                           const total = series.reduce(
                             (sum, val) => sum + val,
