@@ -4,18 +4,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import {
-  Funnel,
-  House,
-  Tags,
-  // FileText,
-  MessageSquare,
-  Activity,
-  UserCircle,
-  Users,
-  Link,
-  X,
-} from "lucide-react";
+import { Link, X } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
