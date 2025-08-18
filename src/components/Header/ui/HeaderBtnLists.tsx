@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
 import HeaderActionButton from "./HeaderBtn";
-import { Ellipsis, Funnel, Plus } from "lucide-react";
+import { Funnel, Plus } from "lucide-react";
 import { useModalStore } from "@/store/useModalStore";
 import CreateLeadModal from "@/features/leads/components/HeaderBtnModals/CreateLeadModal";
 
