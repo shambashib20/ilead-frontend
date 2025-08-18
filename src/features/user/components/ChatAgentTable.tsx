@@ -119,18 +119,13 @@ function ChatAgentTable() {
             Showing {chatAgents.length} of {totalStatuses} total chat agents
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-            >
+            <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
               Prev
             </Button>
             <span className="text-sm dark:text-white">
               Page {page} of {totalPages}
             </span>
             <Button
-              variant="outline"
               onClick={() => setPage(page + 1)}
               disabled={page === totalPages}
             >
