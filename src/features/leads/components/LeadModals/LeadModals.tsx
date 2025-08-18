@@ -50,6 +50,7 @@ import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderU
 
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "@/components/MainLoader/Loader";
+import { motion } from "framer-motion";
 
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
@@ -205,12 +206,14 @@ export function LeadLabels() {
 
   const [labels, setLabels] = useState<LabelItem[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchLabels() {
       try {
+        setIsLoading(true);
         const res = (await labelApi.labels()) as AxiosResponse<LabelResponse>;
         const cleanedLabels = res.data.data.map((label) => ({
           _id: label._id,
@@ -219,6 +222,8 @@ export function LeadLabels() {
         setLabels(cleanedLabels);
       } catch (err) {
         setError("Failed to load labels");
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -250,6 +255,9 @@ export function LeadLabels() {
       setIsSubmitting(false);
     }
   };
+  const filteredLabels = labels.filter((label) =>
+    label.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="space-y-4">
@@ -260,31 +268,40 @@ export function LeadLabels() {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full"
       />
-      <ul className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
-        {labels
-          .filter((label) =>
-            label.title.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((label) => (
-            <li key={label._id} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id={label._id}
-                checked={selected.has(label._id)}
-                onChange={() => toggleLabel(label._id)}
-                disabled={isSubmitting}
-              />
-              <label htmlFor={label._id} className="text-sm">
-                {label.title}
-              </label>
-            </li>
-          ))}
-      </ul>
-
+      <div className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
+        {isLoading ? (
+          <Loader />
+        ) : filteredLabels.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-gray-500 text-sm"
+          >
+            No labels found
+          </motion.div>
+        ) : (
+          <ul className="space-y-2">
+            {filteredLabels.map((label) => (
+              <li key={label._id} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id={label._id}
+                  checked={selected.has(label._id)}
+                  onChange={() => toggleLabel(label._id)}
+                  disabled={isSubmitting}
+                />
+                <label htmlFor={label._id} className="text-sm">
+                  {label.title}
+                </label>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
       {error && <div className="text-red-500 text-sm">{error}</div>}
 
       <Button
-        className="bg-green-600 hover:bg-green-700 w-full"
+        className=" w-full"
         disabled={isSubmitting || selected.size === 0}
         onClick={assignLabels}
       >
@@ -569,17 +586,25 @@ export function LeadStatus() {
 
   const [statuses, setStatuses] = useState<StatusItem[]>([]);
   const [selectedStatusId, setSelectedStatusId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const filteredStatuses = statuses.filter((status) =>
+    status.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   useEffect(() => {
     async function fetchStatuses() {
       try {
+        setIsLoading(true);
         const res =
           (await statusApi.status()) as unknown as AxiosResponse<StatusResponse>;
-        setStatuses(res.data.data); // Already StatusItem[]
+        setStatuses(res.data.data);
       } catch (err) {
         setError("Failed to load statuses");
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -614,32 +639,42 @@ export function LeadStatus() {
         className="w-full"
       />
 
-      <ul className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
-        {statuses
-          .filter((status) =>
-            status.title.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((status) => (
-            <li key={status._id} className="flex items-center gap-2">
-              <input
-                type="radio"
-                id={status._id}
-                name="status"
-                checked={selectedStatusId === status._id}
-                onChange={() => setSelectedStatusId(status._id)}
-                disabled={isSubmitting}
-              />
-              <label htmlFor={status._id} className="text-sm">
-                {status.title}
-              </label>
-            </li>
-          ))}
-      </ul>
+      <div className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
+        {isLoading ? (
+          <Loader />
+        ) : filteredStatuses.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-gray-500 text-sm"
+          >
+            No statuses found
+          </motion.div>
+        ) : (
+          <ul className="space-y-2">
+            {filteredStatuses.map((status) => (
+              <li key={status._id} className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id={status._id}
+                  name="status"
+                  checked={selectedStatusId === status._id}
+                  onChange={() => setSelectedStatusId(status._id)}
+                  disabled={isSubmitting}
+                />
+                <label htmlFor={status._id} className="text-sm">
+                  {status.title}
+                </label>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       {error && <div className="text-red-500 text-sm">{error}</div>}
 
       <Button
-        className="bg-green-600 hover:bg-green-700 w-full"
+        className="w-full"
         disabled={isSubmitting || !selectedStatusId}
         onClick={assignStatus}
       >
