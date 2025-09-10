@@ -5,16 +5,17 @@ import { ErrorComponent } from "@tanstack/react-router";
 import { queryClient } from "./utils/client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useUser } from "./features/auth/hooks/useUser";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster, type ToasterProps } from "sonner";
 import { CircleCheck, CircleX, Info, Loader, ShieldAlert } from "lucide-react";
-import type { ToasterProps } from "sonner";
+
 import { useTheme } from "./contexts/ThemeProvider";
+import BrandLoader from "./components/BrandLoader/BrandLoader";
 
 const router = createRouter({
   routeTree,
   defaultPendingComponent: () => (
-    <div className={`p-2 text-2xl`}>
-      <Loader />
+    <div className="h-screen flex items-center justify-center">
+      <BrandLoader />
     </div>
   ),
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,

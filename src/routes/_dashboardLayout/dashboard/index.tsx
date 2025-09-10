@@ -1,18 +1,17 @@
 import LeadCard from "@/features/dashboard/components/LeadCard";
 import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
-// import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
-// import { Plus } from "lucide-react";
 import type { Lead } from "@/features/leads/types";
 import { dashboardLeads } from "@/features/leads/services/HomePage.service";
 import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
 import { Menu } from "lucide-react";
 import LeadSourceChart from "@/features/dashboard/components/LeadSourceChart/LeadSourceChart";
-import Loader from "@/components/MainLoader/Loader";
+import SkeletonLoader from "@/components/SkeletonLoader";
+import { SkeletonLoaderCol } from "@/components/SkeletonLoader/SkeletonLoader";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
@@ -68,7 +67,13 @@ function RouteComponent() {
       .catch((err) => console.error("Lead API Error:", err));
   }, []);
 
-  if (!leadData) return <Loader />;
+  if (!leadData)
+    return (
+      <>
+        <SkeletonLoader />
+        <SkeletonLoaderCol />
+      </>
+    );
 
   const cardsData: DashboardCardType[] = [
     {

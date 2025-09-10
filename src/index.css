@@ -44,6 +44,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-btn-bg: var(--btn-bg-clr);
   --color-btn: var(--btn-clr);
+  --color-skeleton-base: var(--skeleton-base);
+  --color-skeleton-base-foreground: var(--skeleton-base-foreground);
 }
 
 :root {
@@ -52,7 +54,6 @@
   --background: oklch(0.9791 0 0);
   --foreground: oklch(0.4765 0.0435 294.88);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.4765 0.0435 294.88);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(1 0 0);
@@ -83,10 +84,12 @@
   --btn-bg-clr: rgb(59, 125, 237);
   --btn-bg-shadow-clr: oklch(0.8015 0.0666 282.21);
   --btn-clr: oklch(0.985 0 0);
+  --skeleton-base: oklch(92.797% 0.00011 271.152);
+  --skeleton-base-foreground: oklch(88.224% 0.0001 271.152);
 }
 
 .dark {
-  --background: rgb(22, 29, 49);
+  --background: rgb(21, 31, 59);
   --foreground: oklch(0.7789 0.0091 264.51);
   --card: oklch(0.3121 0.0412 268.6);
   --card-foreground: oklch(0.985 0 0);
@@ -109,7 +112,7 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: rgb(23, 59, 120);
+  --sidebar: oklch(36.36% 0.11246 260.311);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -120,6 +123,8 @@
   --btn-bg-clr: rgb(59, 125, 237);
   --btn-bg-shadow-clr: oklch(0.8015 0.0666 282.21);
   --btn-clr: oklch(0.985 0 0);
+  --skeleton-base: oklch(47.36% 0.15856 260.783 / 0.13);
+  --skeleton-base-foreground: oklch(47.483% 0.12242 260.399 / 0.199);
 }
 
 @layer base {

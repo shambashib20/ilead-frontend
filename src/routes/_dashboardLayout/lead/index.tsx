@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useLeads } from "@/features/leads/hooks/useLeads";
 import { useLeadFilters } from "@/features/leads/hooks/useLeadFilters";
 import LeadsBoard from "@/features/leads/components/LeadsBoard";
-import LoadingState from "@/features/leads/components/LeadsLoading";
-
 import LeadsTable from "@/features/leads/components/LeadsTable/LeadsTable";
 import { useViewContext } from "./route";
 import { useState } from "react";
+import SkeletonLoader from "@/components/SkeletonLoader";
+import { SkeletonLoaderCol } from "@/components/SkeletonLoader/SkeletonLoader";
 
 export const Route = createFileRoute("/_dashboardLayout/lead/")({
   component: RouteComponent,
@@ -30,7 +30,12 @@ function RouteComponent() {
   };
 
   if (isLoading) {
-    return <LoadingState />;
+    return (
+      <>
+        <SkeletonLoader />
+        <SkeletonLoaderCol />
+      </>
+    );
   }
 
   if (error) {
