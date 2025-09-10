@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -19,14 +20,25 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function LoginForm() {
-  const { login, isLoading, data, isSuccess } = useLogin();
+  const { login, isLoading } = useLogin();
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
     onSubmit: async ({ value }) => {
+      if (!value.email?.trim() && !value.password?.trim()) {
+        return toast.error("Email and Password are required");
+      }
+      if (!value.email?.trim()) {
+        return toast.error("Email is required");
+      }
+      if (!value.password?.trim()) {
+        return toast.error("Password is required");
+      }
+
       await login({ email: value.email, password: value.password });
+
       form.reset();
     },
   });

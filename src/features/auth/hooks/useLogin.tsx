@@ -4,9 +4,10 @@ import { toast } from "sonner";
 // import { loginService } from "../services/login.service";
 import { queryClient } from "@/utils/client";
 import { authService } from "@/features/auth/services/Auth.service";
-import Swal from "sweetalert2";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 export function useLogin() {
+  const { theme } = useTheme();
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: async ({
@@ -18,6 +19,7 @@ export function useLogin() {
     }) => {
       return authService.login({ email, password });
     },
+
     onSuccess: (data) => {
       console.log(data);
 
@@ -29,14 +31,14 @@ export function useLogin() {
           router.history.push("/dashboard");
         }, 2000); // Simulate a delay for the user experience
 
-        toast.success("Login Successful! 🎉", {
+        toast("Login Successful! 🎉", {
           description:
             "You have been logged in successfully. Redirecting to dashboard...",
           duration: 2000,
           dismissible: true,
           style: {
-            background: "#333",
-            color: "#fff",
+            background: theme === "dark" ? "#333" : "#fff",
+            color: theme === "dark" ? "#fff" : "#333",
           },
           action: {
             label: "Close",
@@ -48,17 +50,18 @@ export function useLogin() {
         console.log("Login successful:", data.message, data.data.user);
       }
     },
-    onError: (error) => {
-      toast.error("Login Failed", {
-        description:
-          "Invalid credentials. Please check your email and password.",
+    onError: (error, variables) => {
+      console.log(variables);
+
+      toast("Login Failed", {
+        description: error.message || "An error occurred during login.",
         duration: 2000,
         dismissible: true,
-        // style: {
-        //   background: "#173b78",
-        //   color: "#fff",
-        // },
-        // className: "bg-red-600",
+        style: {
+          background: theme === "dark" ? "#333" : "#fff",
+          color: theme === "dark" ? "#fff" : "#333",
+        },
+
         action: {
           label: "Close",
           onClick: () => toast.dismiss(),

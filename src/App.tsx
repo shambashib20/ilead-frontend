@@ -5,8 +5,10 @@ import { ErrorComponent } from "@tanstack/react-router";
 import { queryClient } from "./utils/client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useUser } from "./features/auth/hooks/useUser";
-import Loader from "./components/MainLoader/Loader";
 import { Toaster } from "@/components/ui/sonner";
+import { CircleCheck, CircleX, Info, Loader, ShieldAlert } from "lucide-react";
+import type { ToasterProps } from "sonner";
+import { useTheme } from "./contexts/ThemeProvider";
 
 const router = createRouter({
   routeTree,
@@ -33,6 +35,7 @@ declare module "@tanstack/react-router" {
 }
 function App() {
   const { data } = useUser();
+  const { theme } = useTheme();
 
   return (
     <>
@@ -44,7 +47,26 @@ function App() {
           isAuthenticated: !!data,
         }}
       />
-      <Toaster />
+      <Toaster
+        theme={theme as ToasterProps["theme"]}
+        icons={{
+          success: <CircleCheck size={20} />,
+          info: <Info size={20} />,
+          warning: <ShieldAlert />,
+          error: <CircleX size={20} />,
+          loading: <Loader size={20} />,
+        }}
+        toastOptions={{
+          classNames: {
+            toast: "toast",
+            title: "toast-title",
+            description: "toast-description",
+            actionButton: "toast-action-button",
+            cancelButton: "toast-cancel-button",
+            closeButton: "toast-close-button",
+          },
+        }}
+      />
       <TanStackRouterDevtools router={router} />
       <ReactQueryDevtools initialIsOpen={false} />
     </>
