@@ -5,10 +5,10 @@ import { ErrorComponent } from "@tanstack/react-router";
 import { queryClient } from "./utils/client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useUser } from "./features/auth/hooks/useUser";
-import { Toaster, type ToasterProps } from "sonner";
+import { Toaster } from "sonner";
 import { CircleCheck, CircleX, Info, Loader, ShieldAlert } from "lucide-react";
 
-import { useTheme } from "./contexts/ThemeProvider";
+// import { useTheme } from "./contexts/ThemeProvider";
 import BrandLoader from "./components/BrandLoader/BrandLoader";
 
 const router = createRouter({
@@ -36,7 +36,7 @@ declare module "@tanstack/react-router" {
 }
 function App() {
   const { data } = useUser();
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
 
   return (
     <>
@@ -49,7 +49,7 @@ function App() {
         }}
       />
       <Toaster
-        theme={theme as ToasterProps["theme"]}
+        // theme={theme as ToasterProps["theme"]}
         icons={{
           success: <CircleCheck size={20} />,
           info: <Info size={20} />,
