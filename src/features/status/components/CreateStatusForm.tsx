@@ -9,13 +9,11 @@ import { useModalStore } from "@/store/useModalStore";
 import { Switch } from "@/components/ui/switch";
 
 type Props = {
-  refreshStatuses: () => void;
+  onSuccess?: () => void;
   statusToEdit?: Status;
 };
-export default function CreateStatusForm({
-  refreshStatuses,
-  statusToEdit,
-}: Props) {
+
+export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
   const closeModal = useModalStore((state) => state.closeModal);
   const [title, setTitle] = useState(statusToEdit?.title || "");
   const [description, setDescription] = useState(
@@ -62,7 +60,7 @@ export default function CreateStatusForm({
         }
       }
 
-      refreshStatuses();
+      onSuccess?.();
       closeModal();
     } catch (err: any) {
       Swal.fire("Error", err.message || "Something went wrong", "error");

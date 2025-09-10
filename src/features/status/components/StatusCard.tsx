@@ -25,6 +25,7 @@ function StatusCard() {
   const limit = 10;
   const [totalPages, setTotalPages] = useState(1);
   const [totalStatuses, setTotalStatuses] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0); // 👈 refresh trigger
 
   const fetchData = async () => {
     setLoading(true);
@@ -43,7 +44,7 @@ function StatusCard() {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [page, refreshKey]); // 👈 refreshKey dependency
 
   const openModal = useModalStore((state) => state.openModal);
 
@@ -52,7 +53,7 @@ function StatusCard() {
       content: (
         <>
           <h2 className="text-lg font-semibold mb-4">Create New Status</h2>
-          <CreateStatusForm refreshStatuses={fetchData} />
+          <CreateStatusForm onSuccess={() => setRefreshKey((k) => k + 1)} />
         </>
       ),
       type: "form",
@@ -74,7 +75,7 @@ function StatusCard() {
     if (result.isConfirmed) {
       try {
         await statusService.deleteStatus({ id });
-        await fetchData();
+        setRefreshKey((k) => k + 1); // 👈 force refresh
         Swal.fire("Deleted!", "The status has been deactivated.", "success");
       } catch (error) {
         console.error("Delete failed:", error);
@@ -88,7 +89,10 @@ function StatusCard() {
       content: (
         <>
           <h2 className="text-lg font-semibold mb-4">Edit Status</h2>
-          <CreateStatusForm refreshStatuses={fetchData} statusToEdit={status} />
+          <CreateStatusForm
+            statusToEdit={status}
+            onSuccess={() => setRefreshKey((k) => k + 1)}
+          />
         </>
       ),
       type: "form",
