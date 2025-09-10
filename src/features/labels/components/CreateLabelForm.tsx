@@ -11,13 +11,10 @@ import { useModalStore } from "@/store/useModalStore";
 
 interface CreateLabelFormProps {
   labelToEdit?: Lables;
-  refreshStatuses?: () => void;
+  onSuccess?: () => void;
 }
 
-function CreateLabelForm({
-  labelToEdit,
-  refreshStatuses,
-}: CreateLabelFormProps) {
+function CreateLabelForm({ labelToEdit, onSuccess }: CreateLabelFormProps) {
   const [title, setTitle] = useState(labelToEdit?.title || "");
   const [description, setDescription] = useState(
     labelToEdit?.description || ""
@@ -37,14 +34,13 @@ function CreateLabelForm({
           await labelService.editLabel(labelToEdit!._id, {
             title,
             description,
-            data: labelToEdit,
           });
           Swal.fire("Success", "Label updated successfully", "success");
         } else {
           await labelService.createLabel({ title, description });
           Swal.fire("Success", "Label created successfully", "success");
         }
-        refreshStatuses?.();
+        onSuccess?.(); // 👈 yeh ek hi line handle karega refresh
         closeModal();
       } catch (err) {
         console.error("Label form error:", err);
@@ -53,7 +49,7 @@ function CreateLabelForm({
         setSubmitting(false);
       }
     },
-    [isEditing, title, description, labelToEdit, refreshStatuses, closeModal]
+    [isEditing, title, description, labelToEdit, onSuccess, closeModal]
   );
 
   useEffect(() => {
@@ -68,9 +64,7 @@ function CreateLabelForm({
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div>
-        <Label htmlFor="title" className="mb-2">
-          Title
-        </Label>
+        <Label htmlFor="title">Title</Label>
         <Input
           id="title"
           value={title}
@@ -79,11 +73,8 @@ function CreateLabelForm({
           required
         />
       </div>
-
       <div>
-        <Label htmlFor="description" className="mb-2">
-          Description
-        </Label>
+        <Label htmlFor="description">Description</Label>
         <Input
           id="description"
           value={description}
@@ -91,8 +82,6 @@ function CreateLabelForm({
           placeholder="Enter description"
         />
       </div>
-
-      {/* NO internal submit button here — modal footer will handle Submit/Cancel */}
     </form>
   );
 }

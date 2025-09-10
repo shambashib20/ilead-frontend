@@ -45,7 +45,7 @@ interface PaginatedLabelResponse {
 interface EditLabelPayload {
   title: string;
   description: string;
-  data: Lables;
+  data?: Lables;
 }
 
 interface EditLabelResponse {

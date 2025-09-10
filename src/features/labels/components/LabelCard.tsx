@@ -26,7 +26,7 @@ function LabelCard() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalLables, setTotalLables] = useState(0);
   const openModal = useModalStore((state) => state.openModal);
-  const [refreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
@@ -46,9 +46,11 @@ function LabelCard() {
   const setModalTitle = useModalStore((state) => state.setModalTitle);
 
   const handleOpenCreateModal = () => {
-    setModalTitle?.("Create Labelv ");
+    setModalTitle?.("Create Label ");
     openModal({
-      content: <CreateLabelForm />,
+      content: (
+        <CreateLabelForm onSuccess={() => setRefreshKey((k) => k + 1)} />
+      ),
       type: "form",
     });
   };
@@ -58,11 +60,14 @@ function LabelCard() {
       content: (
         <>
           <h2 className="text-lg font-semibold mb-4">Edit Label</h2>
-          <CreateLabelForm refreshStatuses={fetchData} labelToEdit={label} />
+          <CreateLabelForm
+            labelToEdit={label}
+            onSuccess={() => setRefreshKey((k) => k + 1)}
+          />
         </>
       ),
       type: "form",
-      customActions: <></>,
+      // customActions: <></>,
     });
   };
 
