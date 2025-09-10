@@ -1,7 +1,7 @@
-// features/leads/components/CreateSourceForm.tsx
+// CreateSourceForm.tsx
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   sourceService,
   type Source,
@@ -12,65 +12,79 @@ import { Button } from "@/components/ui/button";
 
 interface CreateSourceFormProps {
   sourceToEdit?: Source;
-  refreshStatuses?: () => void;
+  onSuccess?: () => void;
 }
 
-function CreateSourceForm({
-  sourceToEdit,
-  refreshStatuses,
-}: CreateSourceFormProps) {
+function CreateSourceForm({ sourceToEdit, onSuccess }: CreateSourceFormProps) {
   const [title, setTitle] = useState(sourceToEdit?.title || "");
   const [description, setDescription] = useState(
     sourceToEdit?.description || ""
   );
   const isEditing = !!sourceToEdit;
   const [submitting, setSubmitting] = useState(false);
+  const { closeModal } = useModalStore();
 
-  const { closeModal, setFormActions } = useModalStore();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const canSubmit = title.trim() !== "";
+    if (!title.trim()) {
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: "Title is required.",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
 
-  const handleSubmit = async () => {
     setSubmitting(true);
     try {
       if (sourceToEdit) {
         // Editing logic
         await sourceService.editSource(sourceToEdit._id, {
-          title,
-          description,
-          data: sourceToEdit, // You may skip this if `data` isn't used server-side
+          title: title.trim(),
+          description: description.trim(),
         });
-        Swal.fire("Success", "Source updated successfully", "success");
+        Swal.fire({
+          icon: "success",
+          title: "Updated",
+          text: "Source updated successfully",
+          timer: 2000,
+          showConfirmButton: false,
+        });
       } else {
         // Creation logic
-        await sourceService.createSource({ title, description });
-        Swal.fire("Success", "Source created successfully", "success");
+        await sourceService.createSource({
+          title: title.trim(),
+          description: description.trim(),
+        });
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Source created successfully",
+          timer: 2000,
+          showConfirmButton: false,
+        });
       }
 
-      refreshStatuses?.();
+      onSuccess?.();
       closeModal();
-    } catch (err) {
-      console.error("Source form error:", err);
-      Swal.fire("Error", "Operation failed", "error");
+    } catch (err: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.message || "Operation failed",
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    setFormActions?.({
-      onSubmit: handleSubmit,
-      onCancel: closeModal,
-      canSubmit,
-      isSubmitting: submitting,
-    });
-  }, [canSubmit, submitting]);
-
   return (
-    <form className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label htmlFor="title" className="mb-2">
-          Title
+          Title *
         </Label>
         <Input
           id="title"
@@ -78,6 +92,7 @@ function CreateSourceForm({
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter source title"
           required
+          disabled={submitting}
         />
       </div>
       <div>
@@ -89,11 +104,20 @@ function CreateSourceForm({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter description"
+          disabled={submitting}
         />
       </div>
 
-      <div className="submit">
-        <Button onClick={handleSubmit} disabled={submitting}>
+      <div className="flex gap-2 justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={closeModal}
+          disabled={submitting}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" disabled={submitting}>
           {submitting
             ? isEditing
               ? "Updating..."

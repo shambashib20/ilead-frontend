@@ -32,7 +32,13 @@ export const StatusColumn = memo(
           </h3>
         </div>
 
-        <div className="px-2 space-y-2 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+        <div
+          className="px-2 space-y-2 max-h-[500px] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 
+          [&::-webkit-scrollbar-track]:rounded-full
+          [&::-webkit-scrollbar-track]:bg-[#fff]
+          [&::-webkit-scrollbar-thumb]:rounded-full
+          [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]"
+        >
           {statusLeads.map((lead) => (
             <LeadCard key={lead._id} lead={lead} />
           ))}

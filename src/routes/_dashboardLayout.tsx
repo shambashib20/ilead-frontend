@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { navItems } from "@/components/Sidebar/data";
+import { filteredNavItems, navItems } from "@/components/Sidebar/data";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
@@ -20,13 +20,15 @@ export const Route = createFileRoute("/_dashboardLayout")({
 function RouteComponent() {
   const { mobileOpen, setMobileOpen } = useSidebarStore();
 
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const currentUserRole = user?.role || "";
+  // const user = JSON.parse(localStorage.getItem("user") || "{}");
+  // const currentUserRole = user?.role || "";
 
-  const filteredNavItems = navItems.filter((item) => {
-    if (!item.roles) return true;
-    return item.roles.includes(currentUserRole);
-  });
+  // const filteredNavItems = navItems.filter((item) => {
+  //   if (!item.roles) return true;
+  //   return item.roles.includes(currentUserRole);
+  // });
+
+  console.log(filteredNavItems);
 
   return (
     <div className="dashboard_layout">
@@ -37,7 +39,7 @@ function RouteComponent() {
           fixed inset-0 z-40 transition-transform duration-300 ease-in-out
           lg:hidden
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
-          bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100
+          bg-white text-gray-900 dark:bg-primary dark:text-gray-100
           w-64 shadow-lg
         `}
       >

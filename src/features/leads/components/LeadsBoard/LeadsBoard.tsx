@@ -33,8 +33,19 @@ export const LeadsBoard = memo(({ leads, statuses }: LeadsBoardProps) => {
 
   return (
     <div className="w-[1000px] mx-auto">
-      <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400 pb-3">
-        <div className="mt-10 inline-flex gap-4">
+      <div
+        className="overflow-x-auto [&::-webkit-scrollbar]:w-[4px]  [&::-webkit-scrollbar-track]:rounded-full  [&::-webkit-scrollbar-track]:bg-[#fff]
+                  [&::-webkit-scrollbar-thumb]:rounded-full
+                [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]"
+        style={{}}
+      >
+        <div
+          className="mt-10 inline-flex gap-4 overflow-x-auto pb-3 [&::-webkit-scrollbar]:w-[4px] 
+                [&::-webkit-scrollbar-track]:rounded-full
+                [&::-webkit-scrollbar-track]:bg-[#fff]
+                [&::-webkit-scrollbar-thumb]:rounded-full
+                [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]"
+        >
           {statuses.map((status) => (
             <StatusColumn
               key={status._id}

@@ -1,3 +1,4 @@
+// StatusCard.tsx
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useModalStore } from "@/store/useModalStore";
 import { Pencil, Trash } from "lucide-react";
-
 import CreateStatusForm from "./CreateStatusForm";
-
 import { statusService } from "@/features/leads/services/Status.service";
 import type { Status } from "@/features/leads/services/Status.service";
 import Swal from "sweetalert2";
@@ -25,7 +24,7 @@ function StatusCard() {
   const limit = 10;
   const [totalPages, setTotalPages] = useState(1);
   const [totalStatuses, setTotalStatuses] = useState(0);
-  const [refreshKey, setRefreshKey] = useState(0); // 👈 refresh trigger
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
@@ -37,6 +36,13 @@ function StatusCard() {
       setTotalStatuses(total);
     } catch (err) {
       console.error("Error fetching statuses:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch statuses",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } finally {
       setLoading(false);
     }
@@ -44,20 +50,26 @@ function StatusCard() {
 
   useEffect(() => {
     fetchData();
-  }, [page, refreshKey]); // 👈 refreshKey dependency
+  }, [page, refreshKey]);
 
   const openModal = useModalStore((state) => state.openModal);
+  const closeModal = useModalStore((state) => state.closeModal);
 
   const handleOpenCreateModal = () => {
     openModal({
       content: (
-        <>
+        <div className="px-2 py-4">
           <h2 className="text-lg font-semibold mb-4">Create New Status</h2>
-          <CreateStatusForm onSuccess={() => setRefreshKey((k) => k + 1)} />
-        </>
+          <CreateStatusForm
+            onSuccess={() => {
+              setRefreshKey((prev) => prev + 1);
+              closeModal();
+            }}
+            onCancel={closeModal}
+          />
+        </div>
       ),
-      type: "form",
-      customActions: <></>,
+      // type: "info",
     });
   };
 
@@ -75,11 +87,20 @@ function StatusCard() {
     if (result.isConfirmed) {
       try {
         await statusService.deleteStatus({ id });
-        setRefreshKey((k) => k + 1); // 👈 force refresh
-        Swal.fire("Deleted!", "The status has been deactivated.", "success");
-      } catch (error) {
-        console.error("Delete failed:", error);
-        Swal.fire("Error!", "Failed to delete the status.", "error");
+        setRefreshKey((prev) => prev + 1);
+        Swal.fire({
+          title: "Deleted!",
+          text: "The status has been deactivated.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (error: any) {
+        Swal.fire({
+          title: "Error!",
+          text: error.response?.data?.message || "Failed to delete the status.",
+          icon: "error",
+        });
       }
     }
   };
@@ -87,16 +108,19 @@ function StatusCard() {
   const handleEdit = (status: Status) => {
     openModal({
       content: (
-        <>
+        <div className="px-2 py-4">
           <h2 className="text-lg font-semibold mb-4">Edit Status</h2>
           <CreateStatusForm
             statusToEdit={status}
-            onSuccess={() => setRefreshKey((k) => k + 1)}
+            onSuccess={() => {
+              setRefreshKey((prev) => prev + 1);
+              closeModal();
+            }}
+            onCancel={closeModal}
           />
-        </>
+        </div>
       ),
-      type: "form",
-      customActions: <></>,
+      // type: "form",
     });
   };
 
@@ -121,7 +145,7 @@ function StatusCard() {
             {loading ? (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={4} // Fixed from 3 to 4
                   className="text-center py-4 dark:text-gray-300"
                 >
                   Loading...
@@ -154,7 +178,6 @@ function StatusCard() {
                       className="cursor-pointer text-blue-600 hover:text-blue-800"
                       onClick={() => handleEdit(status)}
                     />
-
                     <Trash
                       size={18}
                       className="cursor-pointer text-red-600 hover:text-red-800"
@@ -166,7 +189,7 @@ function StatusCard() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={4} // Fixed from 3 to 4
                   className="text-center py-4 dark:text-gray-400"
                 >
                   No statuses found.

@@ -1,3 +1,4 @@
+// SourceCard.tsx
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -17,14 +18,15 @@ import { Pencil, Trash } from "lucide-react";
 import Swal from "sweetalert2";
 
 function SourceCard() {
-  const [source, setSources] = useState<Source[]>([]);
+  const [sources, setSources] = useState<Source[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 10;
   const [totalPages, setTotalPages] = useState(1);
   const [totalSources, setTotalSources] = useState(0);
   const openModal = useModalStore((state) => state.openModal);
-  const [refreshKey] = useState(0);
+  const closeModal = useModalStore((state) => state.closeModal);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
@@ -35,7 +37,14 @@ function SourceCard() {
       setTotalPages(Math.ceil(total / limit));
       setTotalSources(total);
     } catch (err) {
-      console.error("Error fetching statuses:", err);
+      console.error("Error fetching sources:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch sources",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } finally {
       setLoading(false);
     }
@@ -46,28 +55,38 @@ function SourceCard() {
   const handleOpenCreateModal = () => {
     setModalTitle?.("Create Source");
     openModal({
-      content: <CreateSourceForm />,
-      type: "form",
+      content: (
+        <CreateSourceForm
+          onSuccess={() => {
+            setRefreshKey((prev) => prev + 1);
+            closeModal();
+          }}
+        />
+      ),
+      // type: "form",
     });
   };
 
   const handleEdit = (source: Source) => {
+    setModalTitle?.("Edit Source");
     openModal({
       content: (
-        <>
-          <h2 className="text-lg font-semibold mb-4">Edit Source</h2>
-          <CreateSourceForm refreshStatuses={fetchData} sourceToEdit={source} />
-        </>
+        <CreateSourceForm
+          sourceToEdit={source}
+          onSuccess={() => {
+            setRefreshKey((prev) => prev + 1);
+            closeModal();
+          }}
+        />
       ),
-      type: "form",
-      customActions: <></>,
+      // type: "form",
     });
   };
 
   const handleDelete = async (sourceId: string) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "This will permanently delete the source (hard delete)!.",
+      text: "This will permanently delete the source (hard delete)!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -78,11 +97,20 @@ function SourceCard() {
     if (result.isConfirmed) {
       try {
         await sourceService.deleteSource({ sourceId });
-        await fetchData();
-        Swal.fire("Deleted!", "The status has been deactivated.", "success");
-      } catch (error) {
-        console.error("Delete failed:", error);
-        Swal.fire("Error!", "Failed to delete the status.", "error");
+        setRefreshKey((prev) => prev + 1);
+        Swal.fire({
+          title: "Deleted!",
+          text: "The source has been deleted.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (error: any) {
+        Swal.fire({
+          title: "Error!",
+          text: error.response?.data?.message || "Failed to delete the source.",
+          icon: "error",
+        });
       }
     }
   };
@@ -105,7 +133,6 @@ function SourceCard() {
               <TableHead className="dark:text-gray-200">Title</TableHead>
               <TableHead className="dark:text-gray-200">Description</TableHead>
               <TableHead className="dark:text-gray-200">Actions</TableHead>
-              {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -118,8 +145,8 @@ function SourceCard() {
                   Loading...
                 </TableCell>
               </TableRow>
-            ) : source.length > 0 ? (
-              source.map((source) => (
+            ) : sources.length > 0 ? (
+              sources.map((source) => (
                 <TableRow key={source._id}>
                   <TableCell className="dark:text-gray-100">
                     {source.title}
@@ -149,7 +176,7 @@ function SourceCard() {
                   colSpan={3}
                   className="text-center py-4 dark:text-gray-400"
                 >
-                  No statuses found.
+                  No sources found.
                 </TableCell>
               </TableRow>
             )}
@@ -159,7 +186,7 @@ function SourceCard() {
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
-          Showing {source.length} of {totalSources} total sources
+          Showing {sources.length} of {totalSources} total sources
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={() => setPage(page - 1)} disabled={page === 1}>

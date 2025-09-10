@@ -39,19 +39,19 @@ interface SourcePayload {
 interface CreateSourceResponse {
   message: string;
   status: string;
-  data: Source;
+  data?: Source;
 }
 
 interface EditSourcePayload {
   title: string;
   description: string;
-  data: Source;
+  data?: Source;
 }
 
 interface EditSourceResponse {
   message: string;
   status: string;
-  data: Source;
+  data?: Source;
 }
 
 interface DeleteSourceParams {

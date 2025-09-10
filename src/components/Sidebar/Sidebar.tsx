@@ -6,17 +6,14 @@ import Logo_dark from "../../assets/logo_dark.png";
 import Logo_small from "../../assets/logo_small.png";
 import Logo_small_dark from "../../assets/logo-dark-sm.png";
 
-import { Link, useLocation } from "@tanstack/react-router";
 import { Circle, CircleDot } from "lucide-react";
-import { filteredNavItems } from "./data";
+import { filteredNavItems, SubMenuItem } from "./data";
 
 function Sidebar() {
   const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const effectiveCollapsed = isCollapsed && !isHovered;
-
-  const location = useLocation(); // 👈 yeh wala use karo
 
   return (
     <aside
@@ -25,11 +22,11 @@ function Sidebar() {
       className={`
         hidden lg:flex flex-col
         transition-[width] duration-300 ease-in-out
-        ${effectiveCollapsed ? "w-[80px]" : "w-[270px]"}
+        ${effectiveCollapsed ? "w-[80px]" : "w-[300px]"}
         bg-primary text-gray-600 dark:text-gray-300 shadow
       `}
     >
-      {/* Logo Section */}
+      {/* Logo Section (unchanged) */}
       <div
         className={`logo flex ${
           effectiveCollapsed ? "px-1 pt-4 pb-3" : "px-6 pt-6 pb-1"
@@ -66,38 +63,15 @@ function Sidebar() {
           [&::-webkit-scrollbar-thumb]:rounded-full
           [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
       >
-        <ul className="ps-4 pe-2 pt-4">
-          {filteredNavItems.map((item, idx) => {
-            const isActive = location.pathname === item.path; // 👈 abhi correct update hoga
-            return (
-              <li key={idx}>
-                <Link
-                  to={item.path}
-                  className={`
-                    flex items-center gap-4 text-[15px] h-11 w-full rounded-md p-2
-                    transition-all duration-200 ease-in-out group font-bold
-                    ${isActive ? "primary-gradient sidebar-active text-white" : ""}
-                  `}
-                >
-                  <span
-                    className="ps-1.5 transition-transform duration-300 ease-in-out
-                      group-hover:translate-x-1"
-                  >
-                    {item.icon}
-                  </span>
-                  <span
-                    title={effectiveCollapsed ? item.name : undefined}
-                    className={`
-                      overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out font-bold
-                      ${effectiveCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"}
-                    `}
-                  >
-                    {item.name}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
+        <ul className="ps-2 pe-2 pt-4">
+          {filteredNavItems.map((item, idx) => (
+            <SubMenuItem
+              key={idx}
+              item={item}
+              isCollapsed={effectiveCollapsed}
+              depth={0}
+            />
+          ))}
         </ul>
       </nav>
     </aside>

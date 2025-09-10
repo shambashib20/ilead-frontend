@@ -1,3 +1,4 @@
+// CreateStatusForm.tsx
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -5,75 +6,102 @@ import { Button } from "@/components/ui/button";
 import { statusService } from "@/features/leads/services/Status.service";
 import type { Status } from "@/features/leads/services/Status.service";
 import Swal from "sweetalert2";
-import { useModalStore } from "@/store/useModalStore";
 import { Switch } from "@/components/ui/switch";
 
 type Props = {
   onSuccess?: () => void;
+  onCancel?: () => void;
   statusToEdit?: Status;
 };
 
-export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
-  const closeModal = useModalStore((state) => state.closeModal);
+export default function CreateStatusForm({
+  onSuccess,
+  onCancel,
+  statusToEdit,
+}: Props) {
   const [title, setTitle] = useState(statusToEdit?.title || "");
   const [description, setDescription] = useState(
     statusToEdit?.description || ""
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [isActive, setIsActive] = useState(
     statusToEdit?.meta?.is_active ?? true
   );
 
   const isEditing = !!statusToEdit;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!title.trim()) {
-      Swal.fire("Error", "Title is required", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Validation Error",
+        text: "Title is required.",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
     setIsSubmitting(true);
     try {
       if (isEditing) {
-        // Edit logic
         const payload = {
           statusId: statusToEdit._id,
-          title,
-          description,
+          title: title.trim(),
+          description: description.trim(),
           meta: { is_active: isActive },
         };
         const res = await statusService.editStatus(payload);
+
         if (res.status === "SUCCESS") {
-          Swal.fire("Updated", res.message, "success");
+          Swal.fire({
+            icon: "success",
+            title: "Updated",
+            text: res.message,
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          onSuccess?.();
         } else {
-          Swal.fire("Error", res.message, "error");
+          throw new Error(res.message);
         }
       } else {
-        // Create logic
-        const payload = { title, description };
+        const payload = {
+          title: title.trim(),
+          description: description.trim(),
+        };
         const res = await statusService.createStatus(payload);
+
         if (res.status === "CREATED") {
-          Swal.fire("Success", res.message, "success");
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: res.message,
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          onSuccess?.();
         } else {
-          Swal.fire("Error", res.message, "error");
+          throw new Error(res.message);
         }
       }
-
-      onSuccess?.();
-      closeModal();
     } catch (err: any) {
-      Swal.fire("Error", err.message || "Something went wrong", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err.response?.data?.message || "Something went wrong",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="space-y-4 p-2">
+    <form onSubmit={handleSubmit} className="space-y-4 p-2">
       <div>
         <Label htmlFor="title" className="mb-2">
-          Status Title
+          Status Title *
         </Label>
         <Input
           id="title"
@@ -81,6 +109,7 @@ export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g., In Progress"
           required
+          disabled={isSubmitting}
         />
       </div>
 
@@ -93,8 +122,10 @@ export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Optional description"
+          disabled={isSubmitting}
         />
       </div>
+
       {isEditing && (
         <div className="flex items-center space-x-4">
           <Label htmlFor="active-toggle" className="text-sm font-medium">
@@ -104,6 +135,7 @@ export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
             id="active-toggle"
             checked={isActive}
             onCheckedChange={setIsActive}
+            disabled={isSubmitting}
           />
           <span className="text-sm text-muted-foreground">
             {isActive ? "Status is active" : "Status is inactive"}
@@ -111,8 +143,16 @@ export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
         </div>
       )}
 
-      <div className="submit">
-        <Button onClick={handleSubmit} disabled={isSubmitting}>
+      <div className="flex gap-2 justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting
             ? isEditing
               ? "Updating..."
@@ -122,6 +162,6 @@ export default function CreateStatusForm({ onSuccess, statusToEdit }: Props) {
               : "Create"}
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
