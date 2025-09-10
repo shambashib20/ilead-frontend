@@ -1,7 +1,10 @@
 import Header from "@/components/Header";
+import { navItems } from "@/components/Sidebar/data";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+
+import { Link, X } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
@@ -17,34 +20,47 @@ export const Route = createFileRoute("/_dashboardLayout")({
 function RouteComponent() {
   const { mobileOpen, setMobileOpen } = useSidebarStore();
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const currentUserRole = user?.role || "";
+
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.roles) return true;
+    return item.roles.includes(currentUserRole);
+  });
+
   return (
     <div className="dashboard_layout">
-      {/* Desktop Sidebar */}
       <Sidebar />
 
-      {/* Mobile Sidebar Drawer with Slide Animation */}
       <div
         className={`
           fixed inset-0 z-40 transition-transform duration-300 ease-in-out
           lg:hidden
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
-          bg-gray-900 text-white w-64
+          bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100
+          w-64 shadow-lg
         `}
       >
         <div className="p-4">
-          <button className="mb-4" onClick={() => setMobileOpen(false)}>
-            Close
+          <button
+            className="mb-6 flex items-center justify-end w-full text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition"
+            onClick={() => setMobileOpen(false)}
+          >
+            <X className="h-6 w-6" />
           </button>
-          <nav className="space-y-4">
-            <div className="flex items-center gap-2">
-              <i>🏠</i> <span>Home</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <i>📁</i> <span>Projects</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <i>⚙️</i> <span>Settings</span>
-            </div>
+
+          <nav className="space-y-2">
+            {filteredNavItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                onClick={() => setMobileOpen(false)}
+              >
+                <span className="text-lg">{item.icon}</span>
+                <span className="text-sm font-medium">{item.name}</span>
+              </Link>
+            ))}
           </nav>
         </div>
       </div>
@@ -66,7 +82,15 @@ function RouteComponent() {
         </div>
 
         <footer className="footer text-sm">
-          COPYRIGHT © 2025 Trueline Solution, All rights Reserved
+          Made with ❤ by{" "}
+          <a
+            href="https://www.shambashib.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Shambashib Majumdar
+          </a>{" "}
+          & Tushar Dutta
         </footer>
       </main>
     </div>

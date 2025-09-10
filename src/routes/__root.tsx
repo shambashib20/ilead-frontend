@@ -1,4 +1,5 @@
 import Modal from "@/components/Modal";
+import NotFound from "@/components/NotFound/NotFound";
 import type { QueryClient } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 
@@ -9,9 +10,7 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  notFoundComponent: () => {
-    return <p>Global Notfound page</p>;
-  },
+  notFoundComponent: () => <NotFound />,
 
   component: RootComponent,
 });

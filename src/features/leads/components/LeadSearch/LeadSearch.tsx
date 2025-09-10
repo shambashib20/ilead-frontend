@@ -396,29 +396,23 @@ function LeadSearch() {
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-600">
           <Button
             type="button"
-            variant="outline"
             size="sm"
             onClick={handleReset}
-            className="flex items-center gap-2 bg-transparent"
+            className="flex items-center gap-2"
           >
             <X className="h-4 w-4" />
             Reset
           </Button>
           <Button
             type="button"
-            variant="outline"
             size="sm"
             onClick={handleCalendarAction}
-            className="flex items-center gap-2 bg-transparent"
+            className="flex items-center gap-2 "
           >
             <Calendar className="h-4 w-4" />
             Calendar
           </Button>
-          <Button
-            type="submit"
-            size="sm"
-            className="flex items-center gap-2 bg-[#3a3285] hover:bg-[#2d2660]"
-          >
+          <Button type="submit" size="sm" className="flex items-center gap-2">
             <Search className="h-4 w-4" />
             Search
           </Button>

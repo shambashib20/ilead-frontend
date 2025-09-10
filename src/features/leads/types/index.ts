@@ -1,4 +1,9 @@
 export interface Lead {
+  follow_ups: any;
+  meta?: Record<string, any>;
+  address: string;
+  email: string;
+  company_name: string;
   _id: string;
   title: string;
   reference: string;
@@ -6,10 +11,12 @@ export interface Lead {
   phone_number: string;
   createdAt: string;
   assigned_to: { name: string };
-  status: { _id: string };
+  status: {
+    _id: string;
+    title: string;
+  };
   comment: string;
-  assigned_by: string;
-  meta: { ray_id: string };
+  assigned_by: { name: string };
   labels: Label[];
 }
 
@@ -19,5 +26,6 @@ export interface Status {
 }
 
 export interface Label {
+  _id: string;
   title: string;
 }

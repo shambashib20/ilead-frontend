@@ -8,7 +8,7 @@ import Logo_small_dark from "../../assets/logo-dark-sm.png";
 
 import { Link } from "@tanstack/react-router";
 import { Circle, CircleDot } from "lucide-react";
-import { navItems } from "./data";
+import { filteredNavItems } from "./data";
 
 function Sidebar() {
   const { theme } = useTheme();
@@ -61,14 +61,14 @@ function Sidebar() {
     [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
       >
         <ul className="ps-4 pe-2 pt-4">
-          {navItems.map((item, idx) => {
+          {filteredNavItems.map((item, idx) => {
             const isActive = location.pathname === item.path;
             return (
               <li key={idx}>
                 <Link
                   to={item.path}
                   className={`
-              flex items-center gap-4 text-[15px] h-11 w-full rounded-md p-2 transition-all duration-200 ease-in-out  group
+              flex items-center gap-4 text-[15px] h-11 w-full rounded-md p-2 transition-all duration-200 ease-in-out  group font-bold
               ${isActive ? "primary-gradient sidebar-active text-white" : ""}
             `}
                 >
@@ -81,7 +81,7 @@ function Sidebar() {
                   <span
                     title={effectiveCollapsed ? item.name : undefined}
                     className={`
-                overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out
+                overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out font-bold
                 ${effectiveCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"}
               `}
                   >
