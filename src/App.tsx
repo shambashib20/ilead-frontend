@@ -6,6 +6,7 @@ import { queryClient } from "./utils/client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useUser } from "./features/auth/hooks/useUser";
 import Loader from "./components/MainLoader/Loader";
+import { Toaster } from "@/components/ui/sonner";
 
 const router = createRouter({
   routeTree,
@@ -43,6 +44,7 @@ function App() {
           isAuthenticated: !!data,
         }}
       />
+      <Toaster />
       <TanStackRouterDevtools router={router} />
       <ReactQueryDevtools initialIsOpen={false} />
     </>

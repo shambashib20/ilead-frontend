@@ -125,7 +125,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    interpolate-size: allow-keywords
+    interpolate-size: allow-keywords;
   }
 
   body {
@@ -146,9 +146,7 @@
 }
 
 .primary-gradient {
-  background: linear-gradient(118deg,
-      #173B78,
-      rgba(228, 62, 43));
+  background: linear-gradient(118deg, #432ee5, rgba(228, 62, 43));
 }
 
 .sidebar-active {

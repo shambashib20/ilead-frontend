@@ -6,9 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-import Loader from "@/components/MainLoader/Loader";
-import Swal from "sweetalert2";
-import { useEffect } from "react";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -22,7 +19,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function LoginForm() {
-  const { login, isLoading, data } = useLogin();
+  const { login, isLoading, data, isSuccess } = useLogin();
   const form = useForm({
     defaultValues: {
       email: "",
@@ -34,21 +31,10 @@ function LoginForm() {
     },
   });
 
-  useEffect(() => {
-    if (data?.status) {
-      Swal.fire({
-        title: "Login Successful 🎉",
-        text: data?.message || "You have logged in successfully!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  }, [data]);
-
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
       <h3 className="heading mt-3 mb-6">Welcome to ETC CRM! 👋</h3>
-      {isLoading && <Loader />}
+      {/* {isLoading && <Loader />} */}
       {/* {!data?.status ? (
         <p className="error">{data?.message}</p>
       ) : (
@@ -113,28 +99,47 @@ function LoginForm() {
         </Link>
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
+        >
+          {([canSubmit, isSubmitting]) => (
             <div>
-              <Button type="submit" disabled={!canSubmit} className="w-full">
-                {isSubmitting ? "..." : "Sign In"}
+              {/* Primary Submit Button */}
+              <Button
+                type="submit"
+                disabled={!canSubmit || isLoading}
+                className="w-full"
+              >
+                {isSubmitting || isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Submitting...
+                  </div>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
+
+              {/* Helper Text */}
               <h3 className="small-primary text-sm text-center my-5">
                 New on our platform?{" "}
                 <Link to="/register" className="font-semibold">
                   Create an account
                 </Link>
               </h3>
-              <Button type="submit" disabled={!canSubmit} className="w-full">
-                {isSubmitting ? "..." : "Join Our Channel"}
-              </Button>
 
-              {/* <h3 className="small-primary text-sm text-center my-5">
-                Product by
-              </h3>
-              <img className="mx-auto" src={productByImg} alt="" /> */}
+              {/* Secondary Action (not a submit) */}
+              <Button
+                type="button"
+                disabled={isSubmitting}
+                className="w-full"
+                onClick={() =>
+                  window.open("https://t.me/yourchannel", "_blank")
+                }
+              >
+                Join Our Channel
+              </Button>
             </div>
           )}
-        />
+        </form.Subscribe>
 
         <Link to="/user-login">
           <Button type="button" className="w-full mt-5">
