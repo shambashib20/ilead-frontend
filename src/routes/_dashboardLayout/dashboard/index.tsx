@@ -33,7 +33,7 @@ function RouteComponent() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedAgent, setSelectedAgent] = useState("");
-
+  const [agent, setagent] = useState("");
   const [showSourceMenu, setShowSourceMenu] = useState(false);
   const [sourceStartDate, sourceSetStartDate] = useState("");
   const [sourceEndDate, sourceSetEndDate] = useState("");
@@ -199,24 +199,23 @@ function RouteComponent() {
                   <h3 className="font-semibold mb-1 text-[12px]">
                     FROM 01-09-2025 TO 11
                   </h3>
-
-                  <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
-                    ShambhaShib Majumdar
-                  </h4>
+                  {agent !== "" && (
+                    <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
+                      {agent}
+                    </h4>
+                  )}
                 </div>
 
-                <div className="h-40  my-2 flex flex-col gap-3 justify-center items-center">
-                  <h5 className="text-2xl">No Lead Found</h5>
-                  <h6 className="text-lg">0</h6>
-                </div>
                 <LeadStatusChart
                   showMenu={showMenu}
+                  closeMenu={() => setShowMenu(false)}
                   startDate={startDate}
                   endDate={endDate}
                   selectedAgent={selectedAgent}
                   onStartDateChange={setStartDate}
                   onEndDateChange={setEndDate}
                   onAgentChange={setSelectedAgent}
+                  onSetAgent={setagent}
                 />
 
                 <div className="px-4 sm:px-6 pb-4">
