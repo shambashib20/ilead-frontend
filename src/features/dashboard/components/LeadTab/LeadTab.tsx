@@ -50,7 +50,7 @@ function LeadTab({ data }: { data: LeadTabType }) {
                   className="border-s border-gray-200 dark:border-gray-200 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1"
                 >
                   <div className="h-9 w-9 rounded-full border bg-white text-black grid place-content-center-safe absolute -left-4.5 -top-3 ">
-                    T
+                    {lead.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2 font-medium text-[14px]">
