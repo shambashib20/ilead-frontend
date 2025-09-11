@@ -81,19 +81,22 @@ function RouteComponent() {
       tabData: {
         content: [
           {
-            label: `New (${leadData.leads_in_new.length})`,
+            label: `New`,
             description: "Leads that are new.",
             leads: leadData.leads_in_new,
+            length: leadData.leads_in_new.length,
           },
           {
-            label: `Processing (${leadData.leads_in_processing.length})`,
+            label: `Processing`,
             description: "Leads currently in process.",
             leads: leadData.leads_in_processing,
+            length: leadData.leads_in_processing.length,
           },
           {
             label: "Close-By",
             description: "Leads that are close to conversion.",
             leads: [], // You can add later if API supports it
+            length: 0,
           },
         ],
       },

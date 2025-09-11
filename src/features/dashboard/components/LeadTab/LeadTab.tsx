@@ -13,6 +13,7 @@ export type LeadTabType = {
     label: string;
     description: string;
     leads?: Lead[];
+    length?: number;
   }[];
 };
 function LeadTab({ data }: { data: LeadTabType }) {
@@ -22,8 +23,13 @@ function LeadTab({ data }: { data: LeadTabType }) {
     <Tabs defaultValue={firstValue}>
       <TabsList className="flex space-x-2 p-2">
         {data.content.map((item, index) => (
-          <TabsTrigger key={index} value={item.label}>
-            {item.label}
+          <TabsTrigger key={index} value={item.label} className="pb-2">
+            {item.label}{" "}
+            {item.length !== undefined && (
+              <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+                {item.length}
+              </span>
+            )}
           </TabsTrigger>
         ))}
       </TabsList>
