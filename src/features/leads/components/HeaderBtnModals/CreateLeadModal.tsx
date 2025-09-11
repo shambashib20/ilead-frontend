@@ -81,11 +81,50 @@ function CreateLeadModal() {
   };
 
   const handleSubmit = async () => {
+    if (!form.name.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Info",
+        text: "Please enter a name.",
+        timer: 1000,
+        showConfirmButton: false,
+      });
+      return;
+    }
+    if (!form.phone_number.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Info",
+        text: "Phone number is required.",
+        timer: 1000,
+        showConfirmButton: false,
+      });
+      return;
+    }
+    if (!form.status) {
+      Swal.fire({
+        icon: "warning",
+        title: "Missing Info",
+        text: "Select a status.",
+        timer: 1000,
+        showConfirmButton: false,
+      });
+      return;
+    }
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Email",
+        text: "Please provide a valid email.",
+        timer: 1000,
+        showConfirmButton: false,
+      });
+      return;
+    }
     try {
       setLoading(true);
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       const property_id = user?.property_id;
-
       if (!property_id) {
         Swal.fire("Error", "User property ID missing!", "error");
         return;
@@ -97,9 +136,23 @@ function CreateLeadModal() {
         assigned_by: "",
         property_id,
       };
-      console.warn(payload, "ll");
+
       await createLeadFromPlatform.createLeadFromPlatform(payload);
       Swal.fire("Success", "Lead created successfully!", "success");
+      // Optional: reset form
+      setForm({
+        name: "",
+        company_name: "",
+        phone_number: "",
+        email: "",
+        address: "",
+        comment: "",
+        reference: "",
+        labels: [],
+        status: "",
+        assigned_to: "",
+      });
+      setSelected(new Set());
     } catch (err) {
       console.error("Create lead failed", err);
       Swal.fire("Error", "Failed to create lead", "error");
