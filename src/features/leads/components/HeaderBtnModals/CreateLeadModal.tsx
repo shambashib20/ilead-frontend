@@ -109,8 +109,10 @@ function CreateLeadModal() {
   };
 
   return (
-    <div className="space-y-6 h-[200px] overflow-y-scroll">
-      <h2 className="text-lg font-semibold text-white">Create New Lead</h2>
+    <div className="space-y-6 min-h-[500px] h-[500px] overflow-auto px-6 pt-20 pb-20 [&::-webkit-scrollbar]:w-[4px]  [&::-webkit-scrollbar-track]:rounded-full  [&::-webkit-scrollbar-track]:bg-[#444c6b] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
+      <h2 className="text-lg font-semibold text-white absolute top-0 left-0 w-full bg-card p-4 border-b border-gray-400">
+        Create New Lead
+      </h2>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -257,13 +259,16 @@ function CreateLeadModal() {
         </div>
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        className="w-full text-white"
-        disabled={loading}
-      >
-        {loading ? "Creating..." : "Create Lead"}
-      </Button>
+      <div className="bg-card absolute bottom-0 left-0 w-full p-4 ">
+        <Button
+          variant={"default"}
+          onClick={handleSubmit}
+          className="w-full text-white"
+          disabled={loading}
+        >
+          {loading ? "Creating..." : "Create Lead"}
+        </Button>
+      </div>
     </div>
   );
 }

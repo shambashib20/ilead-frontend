@@ -52,7 +52,7 @@ export function Modal() {
           </DialogHeader>
         )}
 
-        <div className="px-3 py-0">{modalContent}</div>
+        <div className="px-0 py-0">{modalContent}</div>
 
         {(modalTitle || showFooter) && (
           <DialogFooter>
