@@ -157,13 +157,17 @@ export default function LeadsTable({
                       onChange={(e) =>
                         handleStatusChange(lead._id, e.target.value)
                       }
-                      className="border-none outline-none text-sm"
+                      className="border-none outline-none text-sm "
                     >
-                      <option value="" disabled>
+                      <option value="" disabled className="bg-primary">
                         Select status
                       </option>
                       {statuses.map((status) => (
-                        <option key={status._id} value={status._id}>
+                        <option
+                          key={status._id}
+                          value={status._id}
+                          className="bg-primary"
+                        >
                           {status.title}
                         </option>
                       ))}
@@ -172,59 +176,106 @@ export default function LeadsTable({
                 </TableRow>
 
                 {expandedRowId === lead._id && (
-                  <TableRow className="bg-zinc-50 dark:bg-zinc-900">
+                  <TableRow className="bg-zinc-50 dark:bg-card">
                     <TableCell colSpan={7} className="p-4">
-                      <div className="space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
-                        <div>
-                          <strong>Lead Name:</strong>{" "}
-                          <strong>{lead.name || "N/A"}</strong>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                        {/* Lead Name */}
+                        <div className="flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Lead Name :
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.name || "N/A"}
+                          </p>
                         </div>
-                        <div>
-                          <strong>Email:</strong>{" "}
-                          <strong>{lead.email || "N/A"}</strong>
+
+                        {/* Email */}
+                        <div className="flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Email
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.email || "N/A"}
+                          </p>
                         </div>
-                        <div>
-                          <strong>Phone Number:</strong>{" "}
-                          <strong>{lead.phone_number || "N/A"}</strong>
+
+                        {/* Phone Number */}
+                        <div className="flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Phone Number
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.phone_number || "N/A"}
+                          </p>
                         </div>
-                        <div>
-                          <strong>Labels:</strong>{" "}
-                          {lead.labels?.length > 0 ? (
-                            lead.labels.map((label, idx) => {
-                              const bgColor =
-                                statusColors[idx % statusColors.length];
-                              return (
-                                <span
-                                  key={label._id || label.title}
-                                  style={{ backgroundColor: bgColor }}
-                                  className="text-white text-xs px-3 mr-2 py-1 rounded inline-block"
-                                >
-                                  {label.title}
-                                </span>
-                              );
-                            })
+
+                        {/* Labels */}
+                        <div className="flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Labels
+                          </h4>
+                          {lead.labels?.length ? (
+                            <div className="flex flex-wrap gap-2">
+                              {lead.labels.map((label, idx) => {
+                                const bgColor =
+                                  statusColors[idx % statusColors.length];
+                                return (
+                                  <span
+                                    key={label._id || label.title}
+                                    style={{ backgroundColor: bgColor }}
+                                    className="text-white text-xs px-3 py-1 rounded-full"
+                                  >
+                                    {label.title}
+                                  </span>
+                                );
+                              })}
+                            </div>
                           ) : (
-                            <span className="bg-gray-600 text-white text-xs px-3 py-1 rounded">
+                            <span className="bg-gray-600 text-white text-xs px-3 py-1 rounded-full">
                               No Label
                             </span>
                           )}
                         </div>
-                        <div>
-                          <strong>Created By:</strong>{" "}
-                          {lead.assigned_by?.name || "N/A"}
+
+                        {/* Created By */}
+                        <div className="flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Created By :
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.assigned_by?.name || "N/A"}
+                          </p>
                         </div>
-                        <div>
-                          <strong>Reference:</strong> {lead.reference || "N/A"}
+
+                        {/* Reference */}
+                        <div className="flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Reference :
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.reference || "N/A"}
+                          </p>
                         </div>
-                        <div>
-                          <strong>Comment:</strong> {lead.comment || "N/A"}
+
+                        {/* Comment */}
+                        <div className="sm:col-span-2  flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Comment
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.comment || "N/A"}
+                          </p>
                         </div>
-                        <div>
-                          <strong>Address:</strong> {lead.address || "N/A"}
+
+                        {/* Address */}
+                        <div className="sm:col-span-2  flex gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                            Address
+                          </h4>
+                          <p className="text-zinc-700 dark:text-zinc-300">
+                            {lead.address || "N/A"}
+                          </p>
                         </div>
-                        {/* <div>
-                          <strong>Notes:</strong> {lead.notes || "No notes"}
-                        </div> */}
                       </div>
                     </TableCell>
                   </TableRow>

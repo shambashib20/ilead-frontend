@@ -168,8 +168,8 @@ function CreateLeadModal() {
       </h2>
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm text-white block mb-1">Full Name</label>
+        <div className="">
+          <label className="text-[12px] mb-2 text-white block">Full Name</label>
           <Input
             name="name"
             value={form.name}
@@ -179,7 +179,9 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-sm text-white block mb-1">Company Name</label>
+          <label className="text-[12px] text-white block mb-2">
+            Company Name
+          </label>
           <Input
             name="company_name"
             value={form.company_name}
@@ -189,7 +191,9 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-sm text-white block mb-1">Phone Number</label>
+          <label className="text-[12px] text-white block mb-2">
+            Phone Number
+          </label>
           <Input
             name="phone_number"
             value={form.phone_number}
@@ -199,7 +203,7 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-sm text-white block mb-1">Email</label>
+          <label className="text-[12px] text-white block mb-2">Email</label>
           <Input
             name="email"
             value={form.email}
@@ -209,7 +213,7 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-sm text-white block mb-1">Status</label>
+          <label className="text-[12px] text-white block mb-2">Status</label>
           <Select
             value={form.status}
             onValueChange={(val) => handleSelectChange("status", val)}
@@ -228,7 +232,7 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-sm text-white block mb-1">
+          <label className="text-[12px] text-white block mb-2">
             Assign Lead To
           </label>
           <Select
@@ -249,7 +253,7 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-sm text-white block mb-1">Reference</label>
+          <label className="text-[12px] text-white block mb-2">Reference</label>
           <Input
             name="reference"
             value={form.reference}
@@ -259,7 +263,7 @@ function CreateLeadModal() {
         </div>
 
         <div className="col-span-2">
-          <label className="text-sm text-white block mb-1">Labels</label>
+          <label className="text-[12px] text-white block mb-2">Labels</label>
           <div className="bg-[#2f3658] border border-[#444c6b] rounded p-2">
             <Input
               placeholder="Search labels..."
@@ -292,7 +296,7 @@ function CreateLeadModal() {
         </div>
 
         <div className="col-span-2">
-          <label className="text-sm text-white block mb-1">Address</label>
+          <label className="text-[12px] text-white block mb-2">Address</label>
           <Input
             name="address"
             value={form.address}
@@ -302,7 +306,7 @@ function CreateLeadModal() {
         </div>
 
         <div className="col-span-2">
-          <label className="text-sm text-white block mb-1">Comment</label>
+          <label className="text-[12px] text-white block mb-2">Comment</label>
           <Textarea
             name="comment"
             value={form.comment}

@@ -164,7 +164,7 @@ export const SubMenuItem = ({
           to={item.path}
           className={`
             flex items-center gap-4 text-[15px] h-11 rounded-md p-2
-            transition-all duration-200 ease-in-out group font-bold
+            transition-all duration-200 ease-in-out group font-medium
             ${isActive ? "primary-gradient sidebar-active text-white" : ""}
           `}
           style={{ paddingLeft: `${1 + depth * 1.5}rem` }}
