@@ -95,11 +95,11 @@ export default function LeadsTable({
   };
 
   return (
-    <div className="rounded-2xl shadow-sm border dark:border-zinc-800 overflow-hidden mt-10">
+    <div className="rounded-sm shadow-sm border dark:border-zinc-800 overflow-hidden mt-10">
       <div className="overflow-auto max-h-[65vh]">
         <Table className="min-w-full text-sm">
-          <TableHeader className="sticky top-0 z-10">
-            <TableRow>
+          <TableHeader className="sticky top-0 z-10 bg-primary hover:bg-primary">
+            <TableRow className="hover:bg-primary">
               <TableHead className="text-left px-4 py-3 text-zinc-700 dark:text-zinc-200">
                 S/N
               </TableHead>

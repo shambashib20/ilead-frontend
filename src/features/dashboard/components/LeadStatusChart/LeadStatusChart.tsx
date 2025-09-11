@@ -69,11 +69,11 @@ const LeadStatusChart: React.FC<Props> = ({
     <>
       {showMenu && (
         <div
-          className="flex flex-col gap-4 mt-4 mb-6 p-4 border rounded-lg max-w-md mx-auto 
-                        bg-white dark:bg-gray-900 
-                        border-gray-200 dark:border-gray-700"
+          className="flex flex-col gap-1 mt-4 mb-6 p-4 border rounded-lg max-w-full w-[350px] mx-auto 
+                        bg-white dark:bg-primary 
+                        border-gray-200 dark:border-gray-700 absolute right-3 top-12"
         >
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+          <label className="text-[12px] font-medium text-gray-700 dark:text-gray-200">
             Start Date
           </label>
           <Input

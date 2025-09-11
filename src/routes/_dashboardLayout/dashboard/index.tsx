@@ -135,6 +135,26 @@ function RouteComponent() {
   const allowedRoles = ["Admin", "Superadmin"];
   const hasAccess = allowedRoles.includes(user?.role);
 
+  const legendItems = [
+    { label: "New", color: "#2563eb" }, // blue
+    { label: "Processing", color: "#10b981" }, // green
+    { label: "Close-by", color: "#facc15" }, // yellow
+    { label: "Confirm", color: "#ef4444" }, // red
+    { label: "Cancel", color: "#8b5cf6" }, // purple
+
+    { label: "Campus Visit", color: "#3b82f6" },
+    { label: "Seat booking", color: "#f97316" },
+    { label: "Male Nursing", color: "#eab308" },
+    { label: "Distance Issue", color: "#14b8a6" },
+    { label: "Fees Issue", color: "#f43f5e" },
+    { label: "RNR", color: "#a855f7" },
+    { label: "Switch Off / Out Of Service", color: "#22c55e" },
+    { label: "JOB Enquiry", color: "#0ea5e9" },
+    { label: "Others Course", color: "#6b7280" },
+    { label: "H.S 2025", color: "#ec4899" },
+    { label: "Agent", color: "#f59e0b" },
+  ];
+
   return (
     <section className="dashboard-sec">
       <div className="stats  ">
@@ -163,9 +183,9 @@ function RouteComponent() {
         <div className="status mt-5">
           <div className="grid grid-cols-2 gap-4">
             <div className="col">
-              <Card className="pt-3 sm:pt-5 ">
+              <Card className="pt-3 sm:pt-5 relative ">
                 <div className="flex justify-between items-center px-3 sm:px-6">
-                  <CardTitle className="text-[12px] sm:text-base">
+                  <CardTitle className="text-[12px] sm:text-lg">
                     Lead Status
                   </CardTitle>
                   <button
@@ -175,17 +195,48 @@ function RouteComponent() {
                     <Menu className="w-6 h-6" />
                   </button>
                 </div>
-                <CardContent>
-                  <LeadStatusChart
-                    showMenu={showMenu}
-                    startDate={startDate}
-                    endDate={endDate}
-                    selectedAgent={selectedAgent}
-                    onStartDateChange={setStartDate}
-                    onEndDateChange={setEndDate}
-                    onAgentChange={setSelectedAgent}
-                  />
-                </CardContent>
+                <div className="px-3 sm:px-6">
+                  <h3 className="font-semibold mb-1 text-[12px]">
+                    FROM 01-09-2025 TO 11
+                  </h3>
+
+                  <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
+                    ShambhaShib Majumdar
+                  </h4>
+                </div>
+
+                <div className="h-40  my-2 flex flex-col gap-3 justify-center items-center">
+                  <h5 className="text-2xl">No Lead Found</h5>
+                  <h6 className="text-lg">0</h6>
+                </div>
+                <LeadStatusChart
+                  showMenu={showMenu}
+                  startDate={startDate}
+                  endDate={endDate}
+                  selectedAgent={selectedAgent}
+                  onStartDateChange={setStartDate}
+                  onEndDateChange={setEndDate}
+                  onAgentChange={setSelectedAgent}
+                />
+
+                <div className="px-4 sm:px-6 pb-4">
+                  <div className=" flex gap-4 justify-center flex-wrap text-[11px] sm:text-xs ">
+                    {legendItems.map((item) => (
+                      <div
+                        key={item.label}
+                        className="flex items-center space-x-1 "
+                      >
+                        <span
+                          className="inline-block w-4 h-4 rounded-full border border-white"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <span className="dark:text-gray-200 text-gray-800  ">
+                          {item.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </Card>
             </div>
 
