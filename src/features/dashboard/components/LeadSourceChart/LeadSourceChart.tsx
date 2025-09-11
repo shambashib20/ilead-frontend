@@ -87,36 +87,34 @@ const LeadSourceChart: React.FC<Props> = ({
       {showMenu && (
         <div
           className="flex flex-col gap-3 p-4 border rounded-lg w-[350px] 
-                      bg-white dark:bg-gray-900 
+                      bg-white dark:bg-gray-800 
                       border-gray-200 dark:border-gray-700 shadow-lg
-                      absolute right-0 top-0 z-10"
+                      absolute right-5 -top-10 z-10 "
         >
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
-            Filter Leads
-          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                Start Date
+              </label>
+              <Input
+                type="date"
+                value={startDate}
+                onChange={(e) => onStartDateChange(e.target.value)}
+                className="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-700"
+              />
+            </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-              Start Date
-            </label>
-            <Input
-              type="date"
-              value={startDate}
-              onChange={(e) => onStartDateChange(e.target.value)}
-              className="dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-              End Date
-            </label>
-            <Input
-              type="date"
-              value={endDate}
-              onChange={(e) => onEndDateChange(e.target.value)}
-              className="dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                End Date
+              </label>
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => onEndDateChange(e.target.value)}
+                className="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-700"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -147,28 +145,26 @@ const LeadSourceChart: React.FC<Props> = ({
               styles={{
                 control: (base) => ({
                   ...base,
-                  backgroundColor: "rgb(17 24 39)",
-                  borderColor: "rgb(55 65 81)",
-                  color: "rgb(255 255 255)",
+                  backgroundColor: "rgb(55 65 81)",
+                  borderColor: "rgb(75 85 99)",
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "rgb(17 24 39)",
+                  backgroundColor: "rgb(55 65 81)",
                 }),
                 option: (base, state) => ({
                   ...base,
                   backgroundColor: state.isFocused
-                    ? "rgb(55 65 81)"
-                    : "rgb(17 24 39)",
-                  color: "rgb(255 255 255)",
+                    ? "rgb(75 85 99)"
+                    : "rgb(55 65 81)",
                 }),
                 singleValue: (base) => ({
                   ...base,
-                  color: "rgb(255 255 255)",
+                  color: "rgb(243 244 246)",
                 }),
                 input: (base) => ({
                   ...base,
-                  color: "rgb(255 255 255)",
+                  color: "rgb(243 244 246)",
                 }),
               }}
             />
