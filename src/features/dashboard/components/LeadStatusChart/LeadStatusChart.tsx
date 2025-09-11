@@ -189,7 +189,7 @@ const LeadStatusChart: React.FC<Props> = ({
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
           </div>
         ) : hasFetched && series.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <div className="text-center py-12  rounded-lg">
             <p className="text-gray-500 dark:text-gray-400 text-lg">
               No leads found for the selected criteria
             </p>

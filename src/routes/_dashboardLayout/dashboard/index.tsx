@@ -34,6 +34,8 @@ function RouteComponent() {
   const [endDate, setEndDate] = useState("");
   const [selectedAgent, setSelectedAgent] = useState("");
   const [agent, setagent] = useState("");
+  const [agent2, setagent2] = useState("");
+
   const [showSourceMenu, setShowSourceMenu] = useState(false);
   const [sourceStartDate, sourceSetStartDate] = useState("");
   const [sourceEndDate, sourceSetEndDate] = useState("");
@@ -252,17 +254,45 @@ function RouteComponent() {
                     <Menu className="w-6 h-6" />
                   </button>
                 </div>
-                <CardContent>
-                  <LeadSourceChart
-                    showMenu={showSourceMenu}
-                    startDate={sourceStartDate}
-                    endDate={sourceEndDate}
-                    selectedAgent={sourceSelectedAgent}
-                    onStartDateChange={sourceSetStartDate}
-                    onEndDateChange={sourceSetEndDate}
-                    onAgentChange={sourceSetSelectedAgent}
-                  />
-                </CardContent>
+                <div className="px-3 sm:px-6">
+                  <h3 className="font-semibold mb-1 text-[12px]">
+                    FROM 01-09-2025 TO 11
+                  </h3>
+                  {agent2 !== "" && (
+                    <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
+                      {agent2}
+                    </h4>
+                  )}
+                </div>
+                <LeadSourceChart
+                  showMenu={showSourceMenu}
+                  closeMenu={() => setShowSourceMenu(false)}
+                  startDate={sourceStartDate}
+                  endDate={sourceEndDate}
+                  selectedAgent={sourceSelectedAgent}
+                  onStartDateChange={sourceSetStartDate}
+                  onEndDateChange={sourceSetEndDate}
+                  onAgentChange={sourceSetSelectedAgent}
+                  onSetAgent={setagent2}
+                />
+                <div className="px-4 sm:px-6 pb-4">
+                  <div className=" flex gap-4 justify-center flex-wrap text-[11px] sm:text-xs ">
+                    {legendItems.map((item) => (
+                      <div
+                        key={item.label}
+                        className="flex items-center space-x-1 "
+                      >
+                        <span
+                          className="inline-block w-4 h-4 rounded-full border border-white"
+                          style={{ backgroundColor: item.color }}
+                        />
+                        <span className="dark:text-gray-200 text-gray-800  ">
+                          {item.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </Card>
             </div>
           </div>
