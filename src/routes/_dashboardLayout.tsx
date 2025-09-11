@@ -95,14 +95,14 @@ function RouteComponent() {
       )}
 
       {/* Main Content */}
-      <main className="flex-auto flex flex-col z-10 relative py-4 px-4 overflow-x-hidden">
+      <main className="flex-auto flex flex-col z-10 relative py-4 px-4 overflow-x-hidden ">
         <Header />
 
         <div className="flex-1 overflow-y-visible mt-0 ">
           <Outlet />
         </div>
 
-        <footer className="footer text-sm">
+        <footer className="footer text-sm mt-10">
           Made with ❤ by{" "}
           <a
             href="https://www.shambashib.in/"

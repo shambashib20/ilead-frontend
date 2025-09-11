@@ -754,12 +754,23 @@ export function LeadDetail() {
       {/* Tabs */}
       <Tabs defaultValue="details" className="mt-4">
         <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto ">
-          <TabsTrigger value="details">Details</TabsTrigger>
+          <TabsTrigger value="details">
+            Details{" "}
+            <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+              0
+            </span>
+          </TabsTrigger>
           <TabsTrigger value="followup">
-            Follow Up ({lead.data.follow_ups?.length || 0})
+            Follow Up{" "}
+            <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+              {lead.data.follow_ups?.length || 0}
+            </span>
           </TabsTrigger>
           <TabsTrigger value="history">
-            History ({lead.data.logs?.length || 0})
+            History{" "}
+            <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+              {lead.data.logs?.length || 0}
+            </span>
           </TabsTrigger>
           {/* <TabsTrigger value="task">Task</TabsTrigger>
           <TabsTrigger value="reminder">Reminder</TabsTrigger>
