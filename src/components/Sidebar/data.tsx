@@ -63,7 +63,7 @@ export const navItems = [
     roles: ["Admin", "Superadmin"],
   },
   {
-    name: "Third Party Integrations",
+    name: "Integrations",
     icon: <UserCircle size={20} />,
     roles: ["Admin", "Superadmin"],
     subItems: [

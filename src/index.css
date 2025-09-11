@@ -46,6 +46,7 @@
   --color-btn: var(--btn-clr);
   --color-skeleton-base: var(--skeleton-base);
   --color-skeleton-base-foreground: var(--skeleton-base-foreground);
+  --color-primary-gradient: var(--primary-gradient);
 }
 
 :root {
@@ -86,6 +87,7 @@
   --btn-clr: oklch(0.985 0 0);
   --skeleton-base: oklch(92.797% 0.00011 271.152);
   --skeleton-base-foreground: oklch(88.224% 0.0001 271.152);
+  --primary-gradient: linear-gradient(118deg, #432ee5, rgba(228, 62, 43));
 }
 
 .dark {
@@ -95,7 +97,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #173b78;
+  --primary: #1a2e4f;
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);

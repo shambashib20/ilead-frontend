@@ -1,10 +1,12 @@
 import Header from "@/components/Header";
-import { filteredNavItems, navItems } from "@/components/Sidebar/data";
+import { filteredNavItems, SubMenuItem } from "@/components/Sidebar/data";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import { useTheme } from "@/contexts/ThemeProvider";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-
-import { Link, X } from "lucide-react";
+import Logo from "../assets/logo.png";
+import Logo_dark from "../assets/logo_dark.png";
+import { X } from "lucide-react";
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
@@ -19,15 +21,7 @@ export const Route = createFileRoute("/_dashboardLayout")({
 
 function RouteComponent() {
   const { mobileOpen, setMobileOpen } = useSidebarStore();
-
-  // const user = JSON.parse(localStorage.getItem("user") || "{}");
-  // const currentUserRole = user?.role || "";
-
-  // const filteredNavItems = navItems.filter((item) => {
-  //   if (!item.roles) return true;
-  //   return item.roles.includes(currentUserRole);
-  // });
-
+  const { theme } = useTheme();
   console.log(filteredNavItems);
 
   return (
@@ -44,14 +38,39 @@ function RouteComponent() {
         `}
       >
         <div className="p-4">
-          <button
-            className="mb-6 flex items-center justify-end w-full text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition"
-            onClick={() => setMobileOpen(false)}
-          >
-            <X className="h-6 w-6" />
-          </button>
+          <div className="logo flex items-center justify-between mb-6 pt-2">
+            <img
+              src={theme !== "light" ? Logo_dark : Logo}
+              alt=""
+              className="w-38 h-10"
+            />
+            <button
+              className=" mb-2 flex items-center justify-end w-full text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition"
+              onClick={() => setMobileOpen(false)}
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
 
-          <nav className="space-y-2">
+          <nav
+            className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 
+          [&::-webkit-scrollbar-track]:rounded-full
+          [&::-webkit-scrollbar-track]:transparent
+          [&::-webkit-scrollbar-thumb]:rounded-full
+          [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
+          >
+            <ul className="">
+              {filteredNavItems.map((item, idx) => (
+                <SubMenuItem
+                  key={idx}
+                  item={item}
+                  isCollapsed={false}
+                  depth={0}
+                />
+              ))}
+            </ul>
+          </nav>
+          {/* <nav className="space-y-2">
             {filteredNavItems.map((item) => (
               <Link
                 key={item.path}
@@ -63,7 +82,7 @@ function RouteComponent() {
                 <span className="text-sm font-medium">{item.name}</span>
               </Link>
             ))}
-          </nav>
+          </nav> */}
         </div>
       </div>
 
@@ -76,7 +95,7 @@ function RouteComponent() {
       )}
 
       {/* Main Content */}
-      <main className="flex-auto flex flex-col z-10 relative py-4 px-8 overflow-x-hidden">
+      <main className="flex-auto flex flex-col z-10 relative py-4 px-4 overflow-x-hidden">
         <Header />
 
         <div className="flex-1 overflow-y-visible mt-0 ">

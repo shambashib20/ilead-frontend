@@ -127,7 +127,7 @@ function RouteComponent() {
   return (
     <section className="dashboard-sec">
       <div className="stats  ">
-        <div className="grid grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
           {cardsData.map((card, idx) => (
             <LeadCard key={idx} title={card.title}>
               <LeadTab data={card.tabData} />
@@ -150,11 +150,13 @@ function RouteComponent() {
 
       {hasAccess && (
         <div className="status mt-5">
-          <div className="grid grid-cols-2 gap-7">
+          <div className="grid grid-cols-2 gap-4">
             <div className="col">
-              <Card>
-                <div className="flex justify-between items-center px-6">
-                  <CardTitle>Lead Status</CardTitle>
+              <Card className="pt-3 sm:pt-5">
+                <div className="flex justify-between items-center px-3 sm:px-6">
+                  <CardTitle className="text-[12px] sm:text-base">
+                    Lead Status
+                  </CardTitle>
                   <button
                     className="p-2 rounded-md hover:bg-primary transition"
                     onClick={() => setShowMenu((prev) => !prev)}
@@ -177,9 +179,11 @@ function RouteComponent() {
             </div>
 
             <div className="col">
-              <Card>
-                <div className="flex justify-between items-center px-6">
-                  <CardTitle>Lead Source</CardTitle>
+              <Card className="pt-3 sm:pt-5">
+                <div className="flex justify-between items-center px-3 sm:px-6">
+                  <CardTitle className="text-[12px] sm:text-base">
+                    Lead Source
+                  </CardTitle>
                   <button
                     className="p-2 rounded-md hover:bg-primary transition"
                     onClick={() => setShowSourceMenu((prev) => !prev)}

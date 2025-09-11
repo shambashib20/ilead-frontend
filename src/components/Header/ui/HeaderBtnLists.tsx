@@ -30,7 +30,7 @@ function HeaderBtnLists() {
   // const { mobileOpen } = useSidebarStore();
   const { openModal } = useModalStore();
   return (
-    <ul className="flex gap-2 items-center">
+    <ul className="hidden sm:flex gap-2 items-center ">
       {headerButtons.map((btn, index) => (
         <li
           key={index}
@@ -48,12 +48,6 @@ function HeaderBtnLists() {
           />
         </li>
       ))}
-
-      {/* <li>
-        <Button size="icon" className="rounded-full h-8 w-8">
-          <Ellipsis />
-        </Button>
-      </li> */}
     </ul>
   );
 }

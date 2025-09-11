@@ -25,18 +25,19 @@ function Header() {
   }, []);
   return (
     <header className="bg-primary p-3 flex items-center justify-between shadow-lead rounded-sm sticky top-0 z-10">
+      <button
+        className="lg:hidden me-3"
+        onClick={() => {
+          setMobileOpen(true);
+        }}
+      >
+        <Menu className="h-6 w-6 cursor-pointer" />
+      </button>
+
       <HeaderBtnLists />
       <div className="ms-auto flex gap-2 ">
         <HeaderOptionsBox logs={logs} />
         <UserProfileBox />
-        <button
-          className="lg:hidden"
-          onClick={() => {
-            setMobileOpen(true);
-          }}
-        >
-          <Menu className="h-6 w-6 cursor-pointer" />
-        </button>
       </div>
     </header>
   );
