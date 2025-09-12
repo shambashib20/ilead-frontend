@@ -62,8 +62,8 @@ function CreateLabelForm({ labelToEdit, onSuccess }: CreateLabelFormProps) {
   }, [setFormActions, handleSubmit, closeModal, canSubmit, submitting]);
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div>
+    <form className="space-y-4 px-4" onSubmit={handleSubmit}>
+      <div className="flex flex-col gap-2">
         <Label htmlFor="title">Title</Label>
         <Input
           id="title"
@@ -73,7 +73,7 @@ function CreateLabelForm({ labelToEdit, onSuccess }: CreateLabelFormProps) {
           required
         />
       </div>
-      <div>
+      <div className="flex flex-col gap-2">
         <Label htmlFor="description">Description</Label>
         <Input
           id="description"

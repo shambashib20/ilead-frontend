@@ -432,7 +432,7 @@ export function LeadCreateCustomer() {
       <div className="flex items-center justify-center">
         <Info className="text-orange-300" size={90} strokeWidth={1} />
       </div>
-      <h3 className="text-2xl text-center px-3 font-semibold text-gray-50 mx-auto">
+      <h3 className="text-2xl text-center px-3 font-semibold text-foreground mx-auto">
         Are You Sure You Want To Convert This Lead To Customer?
       </h3>
       <ul className="flex items-center justify-center gap-4">

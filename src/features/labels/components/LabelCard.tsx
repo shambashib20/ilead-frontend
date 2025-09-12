@@ -58,13 +58,13 @@ function LabelCard() {
   const handleEdit = (label: Lables) => {
     openModal({
       content: (
-        <>
+        <div className="pt-6 px-4">
           <h2 className="text-lg font-semibold mb-4">Edit Label</h2>
           <CreateLabelForm
             labelToEdit={label}
             onSuccess={() => setRefreshKey((k) => k + 1)}
           />
-        </>
+        </div>
       ),
       type: "form",
       // customActions: <></>,
