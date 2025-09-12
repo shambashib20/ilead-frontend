@@ -148,7 +148,7 @@ export function LeadDelete() {
         form.handleSubmit();
       }}
     >
-      <div className="space-y-4">
+      <div className="space-y-4 px-5">
         <form.Field
           name="reason"
           validators={{
@@ -157,7 +157,7 @@ export function LeadDelete() {
           }}
         >
           {(field) => (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <Label htmlFor={field.name}>Delete Reason:</Label>
               <Textarea
                 placeholder="Enter Delete Reason"
@@ -260,7 +260,7 @@ export function LeadLabels() {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-5 pt-2">
       <Input
         placeholder="Search labels..."
         disabled={isSubmitting}
@@ -268,7 +268,13 @@ export function LeadLabels() {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full"
       />
-      <div className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2">
+      <div
+        className="min-h-[200px] max-h-[150px] overflow-y-auto mt-3 space-y-2 [&::-webkit-scrollbar]:w-1.5 
+          [&::-webkit-scrollbar-track]:rounded-full
+          [&::-webkit-scrollbar-track]:transparent
+          [&::-webkit-scrollbar-thumb]:rounded-full
+          [&::-webkit-scrollbar-thumb]:transparent"
+      >
         {isLoading ? (
           <Loader />
         ) : filteredLabels.length === 0 ? (
@@ -282,17 +288,27 @@ export function LeadLabels() {
         ) : (
           <ul className="space-y-2">
             {filteredLabels.map((label) => (
-              <li key={label._id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id={label._id}
-                  checked={selected.has(label._id)}
-                  onChange={() => toggleLabel(label._id)}
-                  disabled={isSubmitting}
-                />
-                <label htmlFor={label._id} className="text-sm">
-                  {label.title}
-                </label>
+              <li key={label._id}>
+                <div
+                  onClick={() => toggleLabel(label._id)}
+                  className={`flex items-center justify-between cursor-pointer rounded-md px-3 py-2
+                    transition-colors
+                    ${
+                      selected.has(label._id)
+                        ? "bg-indigo-600 text-white"
+                        : "bg-zinc-100 dark:bg-zinc-800 text-black dark:text-white"
+                    }
+                    hover:bg-indigo-500 hover:text-white`}
+                >
+                  <span className="text-sm">{label.title}</span>
+                  {/* Optional: hidden checkbox for accessibility */}
+                  <input
+                    type="checkbox"
+                    className="hidden"
+                    checked={selected.has(label._id)}
+                    readOnly
+                  />
+                </div>
               </li>
             ))}
           </ul>
@@ -352,7 +368,7 @@ export function LeadAssign() {
   }, [selectedAgentId, isSubmitting]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-5 pt-2">
       <div>
         <Label htmlFor="user">User:</Label>
         <Select onValueChange={(value) => setSelectedAgentId(value)}>
@@ -412,7 +428,7 @@ export function LeadCreateCustomer() {
   };
 
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-4 p-4 py-8">
       <div className="flex items-center justify-center">
         <Info className="text-orange-300" size={90} strokeWidth={1} />
       </div>
@@ -506,9 +522,9 @@ export function LeadFollowUp() {
   ]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-5 pt-2">
       <div>
-        <label className="text-sm text-gray-300 block mb-1">
+        <label className="text-sm text-foreground block mb-2">
           Next Follow-Up Date:
         </label>
         <Popover>
@@ -516,7 +532,7 @@ export function LeadFollowUp() {
             <Button
               variant={"outline"}
               className={cn(
-                "w-full justify-start text-left font-normal border-gray-500 bg-zinc-900 text-white hover:bg-zinc-800",
+                "w-full justify-start text-left font-normal bg-primary  border-gray-500 text-foreground hover:bg-zinc-800",
                 !selectedDate && "text-muted-foreground"
               )}
               disabled={isSubmitting}
@@ -525,7 +541,7 @@ export function LeadFollowUp() {
               {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-zinc-900 text-white border border-gray-600">
+          <PopoverContent className="w-auto p-0 bg-primary text-foreground border border-gray-600">
             <Calendar
               mode="single"
               selected={selectedDate}
@@ -544,7 +560,7 @@ export function LeadFollowUp() {
         />
       </div>
       <div>
-        <label className="text-sm text-gray-300 block mb-1">Comment:</label>
+        <label className="text-sm text-foreground block mb-2">Comment:</label>
         <Textarea
           placeholder="Enter your follow-up comment"
           value={comment}
@@ -556,7 +572,7 @@ export function LeadFollowUp() {
 
       <div className="flex gap-4">
         <div className="w-1/2">
-          <label className="text-sm text-gray-300 block mb-1">
+          <label className="text-sm text-foreground block mb-2">
             Upload File:
           </label>
           <FileUploader
@@ -566,7 +582,7 @@ export function LeadFollowUp() {
         </div>
 
         <div className="w-1/2">
-          <label className="text-sm text-gray-300 block mb-1">
+          <label className="text-sm text-foreground block mb-2">
             Record Audio:
           </label>
           <AudioRecorderUploader
@@ -630,7 +646,7 @@ export function LeadStatus() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-5 pt-2">
       <Input
         placeholder="Search status..."
         disabled={isSubmitting}

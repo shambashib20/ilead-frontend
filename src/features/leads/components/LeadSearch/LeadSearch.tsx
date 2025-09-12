@@ -403,7 +403,7 @@ function LeadSearch() {
             <X className="h-4 w-4" />
             Reset
           </Button>
-          <Button
+          {/* <Button
             type="button"
             size="sm"
             onClick={handleCalendarAction}
@@ -411,7 +411,7 @@ function LeadSearch() {
           >
             <Calendar className="h-4 w-4" />
             Calendar
-          </Button>
+          </Button> */}
           <Button type="submit" size="sm" className="flex items-center gap-2">
             <Search className="h-4 w-4" />
             Search

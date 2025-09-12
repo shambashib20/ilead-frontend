@@ -70,7 +70,7 @@ export function AudioRecorderUploader({
   };
 
   return (
-    <div className="border border-dashed border-gray-400 p-3 rounded-md text-center space-y-2">
+    <div className="border border-dashed border-gray-400 p-3 rounded-md text-center space-y-2 h-21">
       <button
         onClick={toggleRecording}
         disabled={disabled}

@@ -13,6 +13,12 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  RefreshCw,
+  Send,
+  Tag,
+  Trash,
+  TrendingUp,
+  UserPlus,
 } from "lucide-react";
 import { formatDateTime } from "../../utils/formatTime";
 import { useEffect, useState } from "react";
@@ -21,6 +27,14 @@ import { LeadsModule, type Status } from "../../services/LeadsModule.service";
 import Swal from "sweetalert2";
 
 import { statusColorMap } from "../../utils/constants";
+import {
+  LeadAssign,
+  LeadCreateCustomer,
+  LeadDelete,
+  LeadLabels,
+} from "../LeadModals";
+import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
+import { useModalStore } from "@/store/useModalStore";
 const leadsApi = new LeadsModule();
 
 type Pagination = {
@@ -41,6 +55,63 @@ type Props = {
   onStatusChange?: (leadId: string, statusId: string) => void;
 };
 
+const CARD_ACTIONS = [
+  {
+    icon: Trash,
+    color: "red",
+    label: "Delete Lead",
+    title: "Delete Lead",
+    el: <LeadDelete />,
+    type: "form" as const,
+    customActions: undefined,
+  },
+  {
+    icon: Tag,
+    color: "green",
+    label: "Lead Label Assign",
+    title: "Lead Label Assign",
+    el: <LeadLabels />,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: TrendingUp,
+    color: "black",
+    label: "Lead Assignment",
+    title: "Change Lead Assign To",
+    el: <LeadAssign />,
+    type: "form",
+    customActions: undefined,
+  },
+  {
+    icon: UserPlus,
+    color: "blue",
+    label: "Convert Lead to Customer",
+    title: null,
+    el: <LeadCreateCustomer />,
+    type: "info" as const,
+    customActions: undefined,
+  },
+  {
+    icon: RefreshCw,
+    color: "blue",
+    label: "Change Lead Status",
+    title: "Change Lead Status",
+    el: <LeadStatus />,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: Send,
+    color: "white",
+    label: "Lead Follow Up",
+    title: "Add Lead Follow Up",
+    el: <LeadFollowUp />,
+    type: "form" as const,
+    customActions: undefined,
+  },
+] as const;
+
 export default function LeadsTable({
   leads,
   pagination,
@@ -49,7 +120,7 @@ export default function LeadsTable({
 }: Props) {
   const { page, limit, totalPages, hasNextPage, hasPrevPage } = pagination;
   const [statuses, setStatuses] = useState<Status[]>([]);
-
+  const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const statusColors = Array.from(statusColorMap.values());
   useEffect(() => {
@@ -121,16 +192,22 @@ export default function LeadsTable({
               <TableHead className="text-left px-4 py-3 text-zinc-700 dark:text-zinc-200">
                 Status
               </TableHead>
+              <TableHead className="text-left px-4 py-3 text-zinc-700 dark:text-zinc-200">
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {leads.map((lead, index) => (
               <>
-                <TableRow key={lead._id} onClick={() => toggleExpand(lead._id)}>
+                <TableRow key={lead._id}>
                   <TableCell className="px-4 py-3 text-zinc-700 dark:text-zinc-300 font-medium">
                     {(page - 1) * limit + index + 1}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell
+                    className="text-right"
+                    onClick={() => toggleExpand(lead._id)}
+                  >
                     {expandedRowId === lead._id ? (
                       <ChevronUp size={18} />
                     ) : (
@@ -157,7 +234,7 @@ export default function LeadsTable({
                       onChange={(e) =>
                         handleStatusChange(lead._id, e.target.value)
                       }
-                      className="border-none outline-none text-sm "
+                      className="border-none outline-none text-sm w-30 "
                     >
                       <option value="" disabled className="bg-primary">
                         Select status
@@ -172,6 +249,48 @@ export default function LeadsTable({
                         </option>
                       ))}
                     </select>
+                  </TableCell>
+
+                  <TableCell>
+                    {CARD_ACTIONS.map(
+                      ({
+                        icon: Icon,
+                        color,
+                        label,
+                        el,
+                        type,
+                        customActions,
+                        title,
+                      }) => (
+                        <button
+                          key={label}
+                          className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
+                          title={label}
+                          onClick={() => {
+                            setModalTitle?.(title);
+                            setModalSize?.("sm");
+                            setData?.({
+                              _id: lead._id,
+                              rayId: lead.meta?.ray_id,
+                            });
+                            openModal({
+                              content: el,
+                              type,
+                              customActions,
+                            });
+                          }}
+                        >
+                          <div className="relative">
+                            <Icon size={16} color={color} />
+                            {label === "Lead Follow Up" && (
+                              <span className="absolute -top-1 -right-1 bg-gray-300 dark:bg-gray-800 text-black dark:text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                                {lead.follow_ups?.length ?? 0}
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      )
+                    )}
                   </TableCell>
                 </TableRow>
 
