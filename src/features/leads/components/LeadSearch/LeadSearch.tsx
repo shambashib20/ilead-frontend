@@ -4,7 +4,7 @@ import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, Calendar, Search } from "lucide-react";
+import { X, Search } from "lucide-react";
 import Select from "react-select";
 import type { FilterPayload } from "../../services/Leads.service";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -199,9 +199,9 @@ function LeadSearch() {
     });
   };
 
-  const handleCalendarAction = () => {
-    console.log("Calendar action triggered");
-  };
+  // const handleCalendarAction = () => {
+  //   console.log("Calendar action triggered");
+  // };
 
   const colourStyles = {
     control: (styles: any) => ({
