@@ -82,13 +82,13 @@ export default function UserProfileDetailsCard() {
 
   const getBooleanBadge = (
     value: boolean,
-    trueVariant:
-      | "default"
-      | "destructive"
-      | "outline"
-      | "secondary"
-      | "success",
-    falseVariant: "default" | "destructive" | "outline" | "secondary",
+    // trueVariant:
+    //   | "default"
+    //   | "destructive"
+    //   | "outline"
+    //   | "secondary"
+    //   | "success",
+    // falseVariant: "default" | "destructive" | "outline" | "secondary",
     label: string
   ) => (
     <div className="flex items-center gap-1">
@@ -204,21 +204,20 @@ export default function UserProfileDetailsCard() {
           <div className="flex flex-wrap gap-4 py-1">
             {getBooleanBadge(
               user.is_verified,
-              "success",
-              "outline",
-              "Verified"
+              "success"
+              // "outline",
+              // "Verified"
             )}
             {getBooleanBadge(
               user.is_banned,
-              "destructive",
-              "outline",
-              "Banned"
+              "destructive"
+              // "outline",s
             )}
             {getBooleanBadge(
               user.reported,
-              "destructive",
-              "outline",
-              "Reported"
+              "destructive"
+              // "outline",
+              // "Reported"
             )}
           </div>
 

@@ -139,7 +139,7 @@ function LoginForm() {
               </h3>
 
               {/* Secondary Action (not a submit) */}
-              <Button
+              {/* <Button
                 type="button"
                 disabled={isSubmitting}
                 className="w-full"
@@ -148,7 +148,7 @@ function LoginForm() {
                 }
               >
                 Join Our Channel
-              </Button>
+              </Button> */}
             </div>
           )}
         </form.Subscribe>
