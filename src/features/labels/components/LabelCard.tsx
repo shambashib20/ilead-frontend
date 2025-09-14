@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 import CreateLabelForm from "./CreateLabelForm";
 import Swal from "sweetalert2";
+import SkeletonTableLoader from "@/components/SkeletonTableLoader";
 
 function LabelCard() {
   const [label, setLables] = useState<Lables[]>([]);
@@ -104,65 +105,70 @@ function LabelCard() {
         <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
         <Button onClick={handleOpenCreateModal}>Add New Label</Button>
       </div>
-
-      <div className="rounded-md border dark:border-gray-700">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="dark:text-gray-200">Title</TableHead>
-              <TableHead className="dark:text-gray-200">Description</TableHead>
-              <TableHead className="dark:text-gray-200">Actions</TableHead>
-              {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+      {loading ? (
+        <SkeletonTableLoader />
+      ) : (
+        <div className="">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-center py-4 dark:text-gray-300"
-                >
-                  Loading...
-                </TableCell>
+                <TableHead className="dark:text-gray-200">Title</TableHead>
+                <TableHead className="dark:text-gray-200">
+                  Description
+                </TableHead>
+                <TableHead className="dark:text-gray-200">Actions</TableHead>
+                {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
               </TableRow>
-            ) : label.length > 0 ? (
-              label.map((label) => (
-                <TableRow key={label._id}>
-                  <TableCell className="dark:text-gray-100">
-                    {label.title}
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    {label.description}
-                  </TableCell>
-
-                  <TableCell className="flex gap-2 items-center">
-                    <Pencil
-                      size={18}
-                      className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      onClick={() => handleEdit(label)}
-                    />
-
-                    <Trash
-                      size={18}
-                      className="cursor-pointer text-red-600 hover:text-red-800"
-                      onClick={() => handleDelete(label._id)}
-                    />
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={3}
+                    className="text-center py-4 dark:text-gray-300"
+                  >
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-center py-4 dark:text-gray-400"
-                >
-                  No statuses found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : label.length > 0 ? (
+                label.map((label) => (
+                  <TableRow key={label._id}>
+                    <TableCell className="dark:text-gray-100">
+                      {label.title}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      {label.description}
+                    </TableCell>
+
+                    <TableCell className="flex gap-2 items-center">
+                      <Pencil
+                        size={18}
+                        className="cursor-pointer text-blue-600 hover:text-blue-800"
+                        onClick={() => handleEdit(label)}
+                      />
+
+                      <Trash
+                        size={18}
+                        className="cursor-pointer text-red-600 hover:text-red-800"
+                        onClick={() => handleDelete(label._id)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={3}
+                    className="text-center py-4 dark:text-gray-400"
+                  >
+                    No statuses found.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground dark:text-gray-300">

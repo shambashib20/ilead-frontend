@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import CreateSourceForm from "./CreateSourceForm";
 import { Pencil, Trash } from "lucide-react";
 import Swal from "sweetalert2";
+import SkeletonTableLoader from "@/components/SkeletonTableLoader";
 
 function SourceCard() {
   const [sources, setSources] = useState<Source[]>([]);
@@ -125,65 +126,69 @@ function SourceCard() {
         <h2 className="text-xl font-semibold dark:text-white">Source List</h2>
         <Button onClick={handleOpenCreateModal}>Add New Source</Button>
       </div>
-
-      <div className="rounded-md border dark:border-gray-700">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="dark:text-gray-200">Title</TableHead>
-              <TableHead className="dark:text-gray-200">Description</TableHead>
-              <TableHead className="dark:text-gray-200">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+      {loading ? (
+        <SkeletonTableLoader />
+      ) : (
+        <div className=" border dark:border-gray-700">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-center py-4 dark:text-gray-300"
-                >
-                  Loading...
-                </TableCell>
+                <TableHead className="dark:text-gray-200">Title</TableHead>
+                <TableHead className="dark:text-gray-200">
+                  Description
+                </TableHead>
+                <TableHead className="dark:text-gray-200">Actions</TableHead>
               </TableRow>
-            ) : sources.length > 0 ? (
-              sources.map((source) => (
-                <TableRow key={source._id}>
-                  <TableCell className="dark:text-gray-100">
-                    {source.title}
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    {source.description}
-                  </TableCell>
-
-                  <TableCell className="flex gap-2 items-center">
-                    <Pencil
-                      size={18}
-                      className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      onClick={() => handleEdit(source)}
-                    />
-
-                    <Trash
-                      size={18}
-                      className="cursor-pointer text-red-600 hover:text-red-800"
-                      onClick={() => handleDelete(source._id)}
-                    />
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={3}
+                    className="text-center py-4 dark:text-gray-300"
+                  >
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={3}
-                  className="text-center py-4 dark:text-gray-400"
-                >
-                  No sources found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : sources.length > 0 ? (
+                sources.map((source) => (
+                  <TableRow key={source._id}>
+                    <TableCell className="dark:text-gray-100">
+                      {source.title}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      {source.description}
+                    </TableCell>
 
+                    <TableCell className="flex gap-2 items-center">
+                      <Pencil
+                        size={18}
+                        className="cursor-pointer text-blue-600 hover:text-blue-800"
+                        onClick={() => handleEdit(source)}
+                      />
+
+                      <Trash
+                        size={18}
+                        className="cursor-pointer text-red-600 hover:text-red-800"
+                        onClick={() => handleDelete(source._id)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={3}
+                    className="text-center py-4 dark:text-gray-400"
+                  >
+                    No sources found.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
           Showing {sources.length} of {totalSources} total sources

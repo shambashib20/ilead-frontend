@@ -29,7 +29,7 @@ function AuthLayout() {
   const logo = isMobile
     ? theme === "light"
       ? LogoIcon
-      : LogoIconDark
+      : LogoIcon
     : theme === "light"
       ? Logo
       : LogoDark;

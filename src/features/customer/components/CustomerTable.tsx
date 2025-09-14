@@ -15,7 +15,7 @@ import { customerService } from "../services/Customer.service";
 import type { Customer } from "../services/Customer.service";
 
 import { Button } from "@/components/ui/button";
-import Loader from "@/components/MainLoader/Loader";
+import SkeletonTableLoader from "@/components/SkeletonTableLoader";
 
 function CustomerTable() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -55,7 +55,7 @@ function CustomerTable() {
       {/* Loader replaces the table completely */}
       {loading ? (
         <div className="flex justify-center items-center py-10">
-          <Loader />
+          <SkeletonTableLoader />
         </div>
       ) : (
         <div className="rounded-md border dark:border-gray-700">

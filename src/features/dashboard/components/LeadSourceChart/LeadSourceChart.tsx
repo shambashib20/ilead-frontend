@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 
 import { chatAgentService } from "@/features/leads/services/ChatAgents.service";
 import { sourceStatsService } from "@/features/leads/services/LeadsModule.service";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 interface Props {
   showMenu: boolean;
@@ -33,6 +34,7 @@ const LeadSourceChart: React.FC<Props> = ({
   const [series, setSeries] = useState<number[]>([]);
   const [agents, setAgents] = useState<any[]>([]);
   const [hasFetched, setHasFetched] = useState<boolean>(false);
+  const { theme } = useTheme();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchChartData = async () => {
@@ -86,25 +88,35 @@ const LeadSourceChart: React.FC<Props> = ({
     <div className="relative w-full">
       {showMenu && (
         <div
-          className="flex flex-col gap-3 p-4 border rounded-lg w-[350px] 
-                      bg-white dark:bg-gray-800 
-                      border-gray-200 dark:border-gray-700 shadow-lg
-                      absolute right-5 -top-10 z-10 "
+          className="
+  flex flex-col gap-5 mt-4 mb-6 p-4 
+  border border-gray-100 dark:border-border rounded-lg shadow-md 
+  w-[90%] max-w-full md:w-[350px]
+  bg-white dark:bg-background 
+  mx-auto 
+  absolute
+  left-2/4
+  -translate-x-2/4
+  top-[-40px]
+  right-0
+  md:mx-0 md:-translate-x-28 md:right-6 md:-top-10
+  z-30
+"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+          <div className="grid grid-cols-2 gap-4 items-start">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm   font-medium text-gray-700 dark:text-gray-200">
                 Start Date
               </label>
               <Input
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-700"
+                className="bg-transparent dark:bg-transparent "
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
                 End Date
               </label>
@@ -112,12 +124,12 @@ const LeadSourceChart: React.FC<Props> = ({
                 type="date"
                 value={endDate}
                 onChange={(e) => onEndDateChange(e.target.value)}
-                className="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-700"
+                className="bg-transparent dark:bg-transparent "
               />
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
               Select Agent
             </label>
@@ -145,18 +157,22 @@ const LeadSourceChart: React.FC<Props> = ({
               styles={{
                 control: (base) => ({
                   ...base,
-                  backgroundColor: "rgb(55 65 81)",
-                  borderColor: "rgb(75 85 99)",
+                  backgroundColor: theme === "dark" ? "#1a2e4f" : "#fff",
+                  borderColor: theme === "dark" ? "#3a3285" : "#ddd",
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "rgb(55 65 81)",
+                  backgroundColor: theme === "dark" ? "rgb(55 65 81)" : "#fff",
                 }),
                 option: (base, state) => ({
                   ...base,
                   backgroundColor: state.isFocused
-                    ? "rgb(75 85 99)"
-                    : "rgb(55 65 81)",
+                    ? theme === "dark"
+                      ? "rgb(75 85 99)"
+                      : "#ddd"
+                    : theme === "dark"
+                      ? "rgb(55 65 81)"
+                      : "#fff",
                 }),
                 singleValue: (base) => ({
                   ...base,
@@ -276,8 +292,8 @@ const LeadSourceChart: React.FC<Props> = ({
             />
           </div>
         ) : (
-          <div className="h-40  my-2 flex flex-col gap-3 justify-center items-center">
-            <h5 className="text-2xl">No Lead Found</h5>
+          <div className="h-20 md:h-40  my-2  flex flex-col gap-3 justify-center items-center">
+            <h5 className="text-base md:text-2xl ">No Lead Found</h5>
             <h6 className="text-lg">0</h6>
           </div>
         )}

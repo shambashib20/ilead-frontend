@@ -87,11 +87,22 @@ const LeadStatusChart: React.FC<Props> = ({
     <div className="relative w-full">
       {showMenu && (
         <div
-          className="flex flex-col gap-5 mt-4 mb-6 p-4 border  rounded-lg w-[350px] mx-auto 
-                      bg-background 
-                       shadow-md absolute right-5 -top-8  z-30"
+          className="
+  flex flex-col gap-5 mt-4 mb-6 p-4 
+  border border-gray-100 dark:border-border rounded-lg shadow-md 
+  w-[90%] max-w-full md:w-[350px]
+  bg-white dark:bg-background 
+  mx-auto 
+  absolute
+  left-2/4
+  -translate-x-2/4
+  top-[-40px]
+  right-0
+  md:mx-0 md:-translate-x-28 md:right-6 md:-top-10
+  z-30
+"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          <div className="grid grid-cols-2 gap-4 items-start">
             <div className="flex flex-col gap-2">
               <label className="text-sm   font-medium text-gray-700 dark:text-gray-200">
                 Start Date
@@ -100,7 +111,7 @@ const LeadStatusChart: React.FC<Props> = ({
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="bg-transparent dark:bg-transparent "
+                className="bg-transparent dark:bg-transparent   "
               />
             </div>
 
@@ -263,7 +274,7 @@ const LeadStatusChart: React.FC<Props> = ({
                     breakpoint: 480,
                     options: {
                       chart: {
-                        width: 200,
+                        width: 300,
                       },
                       legend: {
                         position: "bottom",
@@ -278,8 +289,8 @@ const LeadStatusChart: React.FC<Props> = ({
             />
           </div>
         ) : (
-          <div className="h-40  my-2 flex flex-col gap-3 justify-center items-center">
-            <h5 className="text-2xl">No Lead Found</h5>
+          <div className="h-20 md:h-40  my-2  flex flex-col gap-3 justify-center items-center">
+            <h5 className="text-base md:text-2xl ">No Lead Found</h5>
             <h6 className="text-lg">0</h6>
           </div>
         )}

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
+import { useMedia } from "@/hooks/useMedia";
 import {
   ArrowDownUp,
   ChartColumnBig,
@@ -15,9 +16,11 @@ type LeadOptionsProps = {
 };
 
 function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
+  const isMobile = useMedia("(max-width: 767px)");
+
   return (
     <div className="flex justify-between items-center">
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-3">
         <div className="views">
           <ul className="flex items-center rounded-sm border border-bg-btn text-btn-bg">
             <li>
@@ -27,7 +30,7 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
                 }`}
                 onClick={() => setIsTableView(false)}
               >
-                <ChartColumnBig size={19} />
+                <ChartColumnBig size={isMobile ? 14 : 20} />
               </button>
             </li>
             <li>
@@ -37,33 +40,33 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
                 }`}
                 onClick={() => setIsTableView(true)}
               >
-                <List size={19} />
+                <List size={isMobile ? 14 : 20} />
               </button>
             </li>
           </ul>
         </div>
-        <CardTitle className="text-2xl font-medium">Leads</CardTitle>
+        <CardTitle className="text-lg md:text-2xl font-medium">Leads</CardTitle>
       </div>
       <div>
         <ul className="flex items-center gap-3">
           <li>
             <Button size={"icon"}>
-              <Plus />
+              <Plus size={isMobile ? 14 : 20} />
             </Button>
           </li>
           <li>
             <Button size={"icon"}>
-              <CloudUpload />
+              <CloudUpload size={isMobile ? 14 : 20} />
             </Button>
           </li>
           <li>
             <Button size={"icon"}>
-              <Settings />
+              <Settings size={isMobile ? 14 : 20} />
             </Button>
           </li>
           <li>
             <Button size={"icon"}>
-              <ArrowDownUp />
+              <ArrowDownUp size={isMobile ? 14 : 20} />
             </Button>
           </li>
         </ul>

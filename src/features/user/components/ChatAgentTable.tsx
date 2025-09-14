@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/useModalStore";
 
 import CreateUserModal from "./CreateUserModal";
+import SkeletonTableLoader from "@/components/SkeletonTableLoader";
 
 function ChatAgentTable() {
   const [chatAgents, setChatAgents] = useState<Agent[]>([]);
@@ -67,50 +68,54 @@ function ChatAgentTable() {
         </Button>
       </div>
 
-      <div className="rounded-md border dark:border-gray-700">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Created At</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+      {loading ? (
+        <SkeletonTableLoader />
+      ) : (
+        <div className="border dark:border-gray-700">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="text-center py-4 dark:text-gray-300"
-                >
-                  Loading...
-                </TableCell>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Created At</TableHead>
               </TableRow>
-            ) : chatAgents.length > 0 ? (
-              chatAgents.map((agent) => (
-                <TableRow key={agent._id}>
-                  <TableCell>{agent.name}</TableCell>
-                  <TableCell>{agent.email}</TableCell>
-                  <TableCell>{agent.phone_number}</TableCell>
-                  <TableCell>
-                    {new Date(agent.createdAt).toLocaleString()}
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="text-center py-4 dark:text-gray-300"
+                  >
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="text-center py-4 dark:text-gray-400"
-                >
-                  No chat agents made yet! Create one!
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : chatAgents.length > 0 ? (
+                chatAgents.map((agent) => (
+                  <TableRow key={agent._id}>
+                    <TableCell>{agent.name}</TableCell>
+                    <TableCell>{agent.email}</TableCell>
+                    <TableCell>{agent.phone_number}</TableCell>
+                    <TableCell>
+                      {new Date(agent.createdAt).toLocaleString()}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="text-center py-4 dark:text-gray-400"
+                  >
+                    No chat agents made yet! Create one!
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
       {/* Pagination Row */}
       {pagination && (

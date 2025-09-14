@@ -16,6 +16,7 @@ import CreateStatusForm from "./CreateStatusForm";
 import { statusService } from "@/features/leads/services/Status.service";
 import type { Status } from "@/features/leads/services/Status.service";
 import Swal from "sweetalert2";
+import SkeletonTableLoader from "@/components/SkeletonTableLoader";
 
 function StatusCard() {
   const [statuses, setStatuses] = useState<Status[]>([]);
@@ -130,76 +131,82 @@ function StatusCard() {
         <h2 className="text-xl font-semibold dark:text-white">Status List</h2>
         <Button onClick={handleOpenCreateModal}>Add New Status</Button>
       </div>
-
-      <div className="rounded-md border dark:border-gray-700">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="dark:text-gray-200">Title</TableHead>
-              <TableHead className="dark:text-gray-200">Description</TableHead>
-              <TableHead className="dark:text-gray-200">Status</TableHead>
-              <TableHead className="dark:text-gray-200">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
+      {loading ? (
+        <SkeletonTableLoader />
+      ) : (
+        <div className="border dark:border-gray-700">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell
-                  colSpan={4} // Fixed from 3 to 4
-                  className="text-center py-4 dark:text-gray-300"
-                >
-                  Loading...
-                </TableCell>
+                <TableHead className="dark:text-gray-200">Title</TableHead>
+                <TableHead className="dark:text-gray-200">
+                  Description
+                </TableHead>
+                <TableHead className="dark:text-gray-200">Status</TableHead>
+                <TableHead className="dark:text-gray-200">Actions</TableHead>
               </TableRow>
-            ) : statuses.length > 0 ? (
-              statuses.map((status) => (
-                <TableRow key={status._id}>
-                  <TableCell className="dark:text-gray-100">
-                    {status.title}
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    {status.description}
-                  </TableCell>
-                  <TableCell className="dark:text-gray-100">
-                    <Badge
-                      variant={status.meta.is_active ? "default" : "secondary"}
-                      className={
-                        status.meta.is_active
-                          ? "bg-green-600 hover:bg-green-700 text-white"
-                          : "bg-gray-500 hover:bg-gray-600 text-white"
-                      }
-                    >
-                      {status.meta.is_active ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="flex gap-2 items-center">
-                    <Pencil
-                      size={18}
-                      className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      onClick={() => handleEdit(status)}
-                    />
-                    <Trash
-                      size={18}
-                      className="cursor-pointer text-red-600 hover:text-red-800"
-                      onClick={() => handleDelete(status._id)}
-                    />
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={4} // Fixed from 3 to 4
+                    className="text-center py-4 dark:text-gray-300"
+                  >
+                    Loading...
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={4} // Fixed from 3 to 4
-                  className="text-center py-4 dark:text-gray-400"
-                >
-                  No statuses found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
+              ) : statuses.length > 0 ? (
+                statuses.map((status) => (
+                  <TableRow key={status._id}>
+                    <TableCell className="dark:text-gray-100">
+                      {status.title}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      {status.description}
+                    </TableCell>
+                    <TableCell className="dark:text-gray-100">
+                      <Badge
+                        variant={
+                          status.meta.is_active ? "default" : "secondary"
+                        }
+                        className={
+                          status.meta.is_active
+                            ? "bg-green-600 hover:bg-green-700 text-white"
+                            : "bg-gray-500 hover:bg-gray-600 text-white"
+                        }
+                      >
+                        {status.meta.is_active ? "Active" : "Inactive"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="flex gap-2 items-center">
+                      <Pencil
+                        size={18}
+                        className="cursor-pointer text-blue-600 hover:text-blue-800"
+                        onClick={() => handleEdit(status)}
+                      />
+                      <Trash
+                        size={18}
+                        className="cursor-pointer text-red-600 hover:text-red-800"
+                        onClick={() => handleDelete(status._id)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={4} // Fixed from 3 to 4
+                    className="text-center py-4 dark:text-gray-400"
+                  >
+                    No statuses found.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
           Showing {statuses.length} of {totalStatuses} total statuses

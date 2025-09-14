@@ -23,10 +23,14 @@ function LeadTab({ data }: { data: LeadTabType }) {
     <Tabs defaultValue={firstValue}>
       <TabsList className="flex space-x-2 p-2">
         {data.content.map((item, index) => (
-          <TabsTrigger key={index} value={item.label} className="pb-2">
+          <TabsTrigger
+            key={index}
+            value={item.label}
+            className="pb-2 text-[10px] md:text-[14px]"
+          >
             {item.label}{" "}
             {item.length !== undefined && (
-              <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+              <span className="bg-pink-600 text-white font-bold md:h-5 md:w-5 h-4 w-4 rounded-full inline-flex items-center justify-center">
                 {item.length}
               </span>
             )}
@@ -114,7 +118,7 @@ function LeadTab({ data }: { data: LeadTabType }) {
               )}
             </ul>
           ) : (
-            <p className="text-sm text-gray-200 text-center">
+            <p className="text-[10px] sm:text-sm text-gray-800 dark:text-gray-200 text-center">
               No leads in this tab.
             </p>
           )}

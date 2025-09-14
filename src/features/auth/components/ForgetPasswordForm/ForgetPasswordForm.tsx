@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Link } from "@tanstack/react-router";
 
 function ForgetPasswordForm() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
@@ -30,9 +31,7 @@ function ForgetPasswordForm() {
         Forgot your password?
         <br />
       </h3>
-      <h3 className="heading mt-3 mb-6">
-        Enter your email or phone number to reset it
-      </h3>
+
       {isLoading && <p>Loading...</p>}
       {!data?.status ? (
         <p className="error">{data?.message}</p>
@@ -50,11 +49,20 @@ function ForgetPasswordForm() {
             onChange={(e) => setEmailOrPhone(e.target.value)}
             required
           />
+          <h6 className="text-[10px] mt-0 mb-6 text-red-600">
+            Enter your email or phone number to reset it
+          </h6>
         </div>
 
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? "Processing..." : "Submit"}
         </Button>
+        <h3 className="small-primary text-[12px] md:text-sm text-center my-0">
+          Remember Your Password?{" "}
+          <Link to="/login" className="font-semibold">
+            Sign in{" "}
+          </Link>
+        </h3>
       </form>
 
       {hasSubmitted && isError && error && (

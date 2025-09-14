@@ -163,13 +163,15 @@ function CreateLeadModal() {
 
   return (
     <div className="space-y-6 min-h-[500px] h-[500px] overflow-auto px-6 pt-20 pb-20 [&::-webkit-scrollbar]:w-[4px]  [&::-webkit-scrollbar-track]:rounded-full  [&::-webkit-scrollbar-track]:bg-[#444c6b] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
-      <h2 className="text-lg font-semibold text-white absolute top-0 left-0 w-full bg-card p-4 border-b border-gray-400">
+      <h2 className="text-lg font-semibold text-foreground absolute top-0 left-0 w-full bg-primary p-4 border-b border-gray-200 dark:border-gray-700">
         Create New Lead
       </h2>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="">
-          <label className="text-[12px] mb-2 text-white block">Full Name</label>
+          <label className="text-[12px] mb-2 text-foreground block">
+            Full Name
+          </label>
           <Input
             name="name"
             value={form.name}
@@ -179,7 +181,7 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-[12px] text-white block mb-2">
+          <label className="text-[12px] text-foreground block mb-2">
             Company Name
           </label>
           <Input
@@ -191,7 +193,7 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-[12px] text-white block mb-2">
+          <label className="text-[12px] text-foreground block mb-2">
             Phone Number
           </label>
           <Input
@@ -203,7 +205,9 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-[12px] text-white block mb-2">Email</label>
+          <label className="text-[12px] text-foreground block mb-2">
+            Email
+          </label>
           <Input
             name="email"
             value={form.email}
@@ -213,12 +217,14 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-[12px] text-white block mb-2">Status</label>
+          <label className="text-[12px] text-foreground block mb-2">
+            Status
+          </label>
           <Select
             value={form.status}
             onValueChange={(val) => handleSelectChange("status", val)}
           >
-            <SelectTrigger className="w-full bg-[#2f3658] text-white border border-[#444c6b]">
+            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
             <SelectContent>
@@ -232,14 +238,14 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-[12px] text-white block mb-2">
+          <label className="text-[12px] text-foreground block mb-2">
             Assign Lead To
           </label>
           <Select
             value={form.assigned_to}
             onValueChange={(val) => handleSelectChange("assigned_to", val)}
           >
-            <SelectTrigger className="w-full bg-[#2f3658] text-white border border-[#444c6b]">
+            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
               <SelectValue placeholder="Select agent" />
             </SelectTrigger>
             <SelectContent>
@@ -253,7 +259,9 @@ function CreateLeadModal() {
         </div>
 
         <div>
-          <label className="text-[12px] text-white block mb-2">Reference</label>
+          <label className="text-[12px] text-foreground block mb-2">
+            Reference
+          </label>
           <Input
             name="reference"
             value={form.reference}
@@ -263,8 +271,10 @@ function CreateLeadModal() {
         </div>
 
         <div className="col-span-2">
-          <label className="text-[12px] text-white block mb-2">Labels</label>
-          <div className="bg-[#2f3658] border border-[#444c6b] rounded p-2">
+          <label className="text-[12px] text-foreground block mb-2">
+            Labels
+          </label>
+          <div className="bg-primary border border-primary rounded p-2">
             <Input
               placeholder="Search labels..."
               disabled={isSubmitting}
@@ -286,7 +296,10 @@ function CreateLeadModal() {
                       onChange={() => toggleLabel(label._id)}
                       disabled={isSubmitting}
                     />
-                    <label htmlFor={label._id} className="text-sm text-white">
+                    <label
+                      htmlFor={label._id}
+                      className="text-sm text-foreground"
+                    >
                       {label.title}
                     </label>
                   </li>
@@ -296,7 +309,9 @@ function CreateLeadModal() {
         </div>
 
         <div className="col-span-2">
-          <label className="text-[12px] text-white block mb-2">Address</label>
+          <label className="text-[12px] text-foreground block mb-2">
+            Address
+          </label>
           <Input
             name="address"
             value={form.address}
@@ -306,21 +321,24 @@ function CreateLeadModal() {
         </div>
 
         <div className="col-span-2">
-          <label className="text-[12px] text-white block mb-2">Comment</label>
+          <label className="text-[12px] text-foreground block mb-2">
+            Comment
+          </label>
           <Textarea
             name="comment"
             value={form.comment}
             onChange={handleChange}
             placeholder="Comment"
+            className=" border-gray-200 rounded dark:border-gray-700"
           />
         </div>
       </div>
 
-      <div className="bg-card absolute bottom-0 left-0 w-full p-4 ">
+      <div className="bg-primary  absolute bottom-0 left-0 w-full p-4 ">
         <Button
           variant={"default"}
           onClick={handleSubmit}
-          className="w-full text-white"
+          className="w-full "
           disabled={loading}
         >
           {loading ? "Creating..." : "Create Lead"}

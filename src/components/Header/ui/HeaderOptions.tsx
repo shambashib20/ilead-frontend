@@ -4,6 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useMedia } from "@/hooks/useMedia";
 import { Link } from "@tanstack/react-router";
 import { Bell, ListTodo, Moon, PhoneMissed, Search } from "lucide-react";
 
@@ -18,6 +19,7 @@ const icons = [
 
 export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
   const logCount = logs.length;
+  const isMobile = useMedia("(max-width: 767px)");
 
   return (
     <ul className="flex gap-3 items-center">
@@ -39,7 +41,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative flex items-center justify-center h-8 w-8 cursor-pointer">
-                    <Icon size={22} />
+                    <Icon size={isMobile ? 18 : 22} />
                     {logCount > 0 && (
                       <span className="absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                         {logCount > 99 ? "99+" : logCount}
@@ -80,7 +82,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
         return (
           <li key={idx}>
             <Link to=".">
-              <Icon size={20} />
+              <Icon size={isMobile ? 18 : 20} />
             </Link>
           </li>
         );
