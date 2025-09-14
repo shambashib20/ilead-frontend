@@ -7,21 +7,6 @@ export const Route = createFileRoute("/_authLayout/register")({
 });
 
 function RegisterPage() {
-  // const register = useAuthStore((state) => state.register);
-
-  // function handleSubmit(formData: FormData) {
-  //   const data = Object.assign(
-  //     {},
-  //     ...Array.from(formData.entries()).map(([key, value]) => ({
-  //       [key]: value,
-  //     }))
-  //   );
-  //   register(data);
-  //   console.log("Form submitted with data:", data);
-  //   // Here you would typically call a register function from your auth store
-  //   // register(data);
-  // }
-
   return (
     <div className="register-page">
       {" "}

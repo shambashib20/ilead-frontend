@@ -21,6 +21,7 @@ const buttonVariants = cva(
         link: "text-foreground text-[12px] underline-offset-4 hover:underline",
         rounded:
           "text-foreground text-[12px] shadow-none hover:shadow-[0_4px_20px_var(--btn-bg-shadow-clr)] transition-shadow rounded-full bg-btn-bg text-btn gap-1 cursor-pointer",
+        tertiary: "bg-transparent border border-btn-bg text-btn-bg",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

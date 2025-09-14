@@ -7,6 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import Swal from "sweetalert2";
 import { workspaceService } from "@/features/leads/services/Property.service";
 import { useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -52,20 +53,19 @@ function RegisterForm() {
 
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
-      <h3 className="heading mt-3 mb-6">
-        Welcome to ETC CRM! A custom tailor made service for your business
-        needs!
+      <h3 className="text-2xl md:text-lg font-medium mt-3 text-center md:text-start  ">
+        Welcome to ETC CRM!
+        {/* A custom tailor made service for your business
+        needs! */}
       </h3>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-6 max-w-md mx-auto mt-10"
-      >
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto mt-6">
         <div>
           <Label className="mb-2">Name</Label>
           <Input
             name="name"
             value={form.name}
             onChange={handleChange}
+            placeholder="Name"
             required
           />
         </div>
@@ -77,6 +77,7 @@ function RegisterForm() {
             name="email"
             value={form.email}
             onChange={handleChange}
+            placeholder="Email"
             required
           />
         </div>
@@ -87,6 +88,7 @@ function RegisterForm() {
             name="phone_number"
             value={form.phone_number}
             onChange={handleChange}
+            placeholder="Phone Number"
             required
           />
         </div>
@@ -99,6 +101,7 @@ function RegisterForm() {
               name="password"
               value={form.password}
               onChange={handleChange}
+              placeholder="Password"
               required
             />
             <span
@@ -120,6 +123,7 @@ function RegisterForm() {
             name="orgName"
             value={form.orgName}
             onChange={handleChange}
+            placeholder="Organization Name"
             required
           />
         </div>
@@ -128,14 +132,29 @@ function RegisterForm() {
           <Label className="mb-2">Organization Description</Label>
           <Input
             name="orgDescription"
+            placeholder="Organization Description"
             value={form.orgDescription}
             onChange={handleChange}
           />
         </div>
-
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Registering..." : "Register"}
-        </Button>
+        <div className="pb-20">
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Registering..." : "Register"}
+          </Button>
+          <h3 className="small-primary text-[12px] md:text-sm text-center my-2 mb-6">
+            Already Registered?{" "}
+            <Link to="/login" className="font-semibold">
+              Sign in
+            </Link>
+          </h3>
+          <Button
+            type="submit"
+            // disabled={!canSubmit}
+            className="w-full bg-yellow-600"
+          >
+            {"Join Our Channel"}
+          </Button>
+        </div>
       </form>
     </div>
   );

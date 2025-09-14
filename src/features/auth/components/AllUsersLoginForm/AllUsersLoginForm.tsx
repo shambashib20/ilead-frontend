@@ -35,7 +35,9 @@ function AllUsersLoginForm() {
   console.log(error);
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
-      <h3 className="heading mt-3 mb-6">Welcome to ETC CRM! 👋</h3>
+      <h3 className="text-2xl md:text-lg font-medium mt-3 mb-6 text-center md:text-start ">
+        Welcome to ETC CRM! 👋
+      </h3>
       {isLoading && <p>Loading...</p>}
       {!data?.status ? (
         <p className="error">{data?.message}</p>
@@ -106,13 +108,17 @@ function AllUsersLoginForm() {
               <Button type="submit" disabled={!canSubmit} className="w-full">
                 {isSubmitting ? "..." : "Sign In"}
               </Button>
-              <h3 className="small-primary text-sm text-center my-5">
-                New on our platform?{" "}
-                <Link to="/register" className="font-semibold">
-                  Create an account
+              <h3 className="small-primary text-[12px] md:text-sm text-center my-2 mb-6">
+                Already Registered?{" "}
+                <Link to="/login" className="font-semibold">
+                  Sign in
                 </Link>
               </h3>
-              <Button type="submit" disabled={!canSubmit} className="w-full">
+              <Button
+                type="submit"
+                disabled={!canSubmit}
+                className="w-full bg-yellow-600"
+              >
                 {isSubmitting ? "..." : "Join Our Channel"}
               </Button>
               {/* <h3 className="small-primary text-sm text-center my-5">

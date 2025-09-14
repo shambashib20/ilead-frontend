@@ -114,7 +114,9 @@ function LeadTab({ data }: { data: LeadTabType }) {
               )}
             </ul>
           ) : (
-            <p className="text-sm text-gray-200">No leads in this tab.</p>
+            <p className="text-sm text-gray-200 text-center">
+              No leads in this tab.
+            </p>
           )}
         </TabsContent>
       ))}

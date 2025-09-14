@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { useState } from "react";
+import { useBoolean } from "@/hooks/useBoolean";
+import { Eye, EyeOff } from "lucide-react";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -21,6 +24,8 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 
 function LoginForm() {
   const { login, isLoading } = useLogin();
+  // const []=useState();
+  const { value: showPassword, toggle } = useBoolean(false);
   const form = useForm({
     defaultValues: {
       email: "",
@@ -44,14 +49,11 @@ function LoginForm() {
   });
 
   return (
-    <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">
-      <h3 className="heading mt-3 mb-6">Welcome to ETC CRM! 👋</h3>
-      {/* {isLoading && <Loader />} */}
-      {/* {!data?.status ? (
-        <p className="error">{data?.message}</p>
-      ) : (
-        <p className="error">{data?.message}</p>
-      )} */}
+    <div className="login_form w-[450px] max-w-full lg:w-full mx-auto ">
+      <h3 className="text-2xl md:text-lg font-medium mt-3 mb-6 text-center md:text-start ">
+        Login to ETC CRM! 👋
+      </h3>
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -89,15 +91,24 @@ function LoginForm() {
                 <Label htmlFor={field.name} className="mb-2">
                   Password: <span>*</span>
                 </Label>
-                <Input
-                  type="password"
-                  id={field.name}
-                  name={field.name}
-                  placeholder="******"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    id={field.name}
+                    name={field.name}
+                    placeholder="******"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <span
+                    className="absolute right-2 top-2.5 cursor-pointer"
+                    onClick={() => toggle()}
+                  >
+                    {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </span>
+                </div>
+
                 <FieldInfo field={field} />
               </>
             )}
@@ -131,7 +142,7 @@ function LoginForm() {
               </Button>
 
               {/* Helper Text */}
-              <h3 className="small-primary text-sm text-center my-5">
+              <h3 className="small-primary text-[12px] md:text-sm text-center my-2">
                 New on our platform?{" "}
                 <Link to="/register" className="font-semibold">
                   Create an account
@@ -154,7 +165,7 @@ function LoginForm() {
         </form.Subscribe>
 
         <Link to="/user-login">
-          <Button type="button" className="w-full mt-5">
+          <Button variant={"tertiary"} type="button" className="w-full mt-5">
             All Users Login
           </Button>
         </Link>

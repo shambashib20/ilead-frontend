@@ -263,3 +263,11 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--primary) / 0.8);
 } */
+
+/* input::placeholder {
+  @apply text-[12px] md:text-sm;
+}
+
+input::placeholder {
+  @apply text-[12px] md:text-sm;
+} */
