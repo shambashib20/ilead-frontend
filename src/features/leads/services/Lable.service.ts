@@ -1,10 +1,16 @@
 import { ApiClient } from "@/services/ApiClient.service";
 
+export interface Agents {
+  agent_id: {
+    name: string;
+  };
+}
+
 export interface Lables {
   _id: string;
   description: string;
   title: string;
-  meta: { is_active: boolean };
+  meta: { is_active: boolean; assigned_agents: Agents[] };
 }
 
 interface LableResponse {

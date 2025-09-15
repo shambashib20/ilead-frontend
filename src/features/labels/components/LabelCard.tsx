@@ -18,6 +18,7 @@ import { Pencil, Trash } from "lucide-react";
 import CreateLabelForm from "./CreateLabelForm";
 import Swal from "sweetalert2";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
+import { Input } from "@/components/ui/input";
 
 function LabelCard() {
   const [label, setLables] = useState<Lables[]>([]);
@@ -101,43 +102,50 @@ function LabelCard() {
 
   return (
     <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
         <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
-        <Button onClick={handleOpenCreateModal}>Add New Label</Button>
+        <div className="flex items-center gap-5">
+          <Input placeholder="Search" className="dark:placeholder:text-white" />
+          <Button onClick={handleOpenCreateModal}>+</Button>
+        </div>
       </div>
       {loading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className="">
+        <div className="bg-primary rounded-sm  ">
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="dark:text-gray-200">Title</TableHead>
-                <TableHead className="dark:text-gray-200">
-                  Description
-                </TableHead>
+            <TableHeader className="">
+              <TableRow className="hover:bg-primary">
+                <TableHead className="dark:text-gray-200  ">No.</TableHead>
+                <TableHead className="dark:text-gray-200 ">Title</TableHead>
+
                 <TableHead className="dark:text-gray-200">Actions</TableHead>
+                <TableHead className="dark:text-gray-200 ">
+                  Allocated Users
+                </TableHead>
                 {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="bg-white">
               {loading ? (
                 <TableRow>
                   <TableCell
                     colSpan={3}
-                    className="text-center py-4 dark:text-gray-300"
+                    className="text-center py-4 text-gray-500"
                   >
                     Loading...
                   </TableCell>
                 </TableRow>
               ) : label.length > 0 ? (
-                label.map((label) => (
+                label.map((label, ind) => (
                   <TableRow key={label._id}>
-                    <TableCell className="dark:text-gray-100">
-                      {label.title}
+                    <TableCell className="  dark:text-background  ">
+                      {ind + 1}
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
-                      {label.description}
+                    <TableCell className="dark:text-background">
+                      <span className="bg-gray-100 px-4 py-2 rounded-sm">
+                        {label.title}
+                      </span>
                     </TableCell>
 
                     <TableCell className="flex gap-2 items-center">
@@ -152,6 +160,26 @@ function LabelCard() {
                         className="cursor-pointer text-red-600 hover:text-red-800"
                         onClick={() => handleDelete(label._id)}
                       />
+                    </TableCell>
+                    <TableCell className="dark:text-background">
+                      {label?.meta?.assigned_agents?.length > 0 ? (
+                        <ul className="flex items-center -space-x-5">
+                          {label.meta.assigned_agents.map((item, index) => (
+                            <li
+                              key={index}
+                              className="border border-gray-200 rounded-full p-1 bg-white"
+                            >
+                              <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold">
+                                {item?.agent_id?.name?.charAt(0) ?? "?"}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500 italic">
+                          No staffs allocated
+                        </p>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
@@ -170,7 +198,7 @@ function LabelCard() {
         </div>
       )}
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center bg-primary p-4 rounded-sm">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
           Showing {label.length} of {totalLables} total labels
         </div>
