@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import LogoDark from "@/assets/logo_dark.png";
 import Logo from "@/assets/logo.png";
 import LogoIcon from "@/assets/logo_small.png";
-import LogoIconDark from "@/assets/logo-dark-sm.png";
+// import LogoIconDark from "@/assets/logo-dark-sm.png";
 
 import loginAsset from "@/assets/login-v2.svg";
 import { useTheme } from "@/contexts/ThemeProvider";
