@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 
 function LabelCard() {
   const [label, setLables] = useState<Lables[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 10;
@@ -50,9 +51,7 @@ function LabelCard() {
   const handleOpenCreateModal = () => {
     setModalTitle?.("Create Label ");
     openModal({
-      content: (
-        <CreateLabelForm onSuccess={() => setRefreshKey((k) => k + 1)} />
-      ),
+      content: <CreateLabelForm />,
       type: "form",
     });
   };
@@ -116,7 +115,7 @@ function LabelCard() {
           <Table>
             <TableHeader className="">
               <TableRow className="hover:bg-primary">
-                <TableHead className="dark:text-gray-200  ">No.</TableHead>
+                <TableHead className="dark:text-gray-200">No.</TableHead>
                 <TableHead className="dark:text-gray-200 ">Title</TableHead>
 
                 <TableHead className="dark:text-gray-200">Actions</TableHead>

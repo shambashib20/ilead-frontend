@@ -166,7 +166,7 @@ export default function LeadsTable({
   };
 
   return (
-    <div className="rounded-sm shadow-sm border dark:border-zinc-800 overflow-hidden mt-10">
+    <div className="rounded-sm shadow-sm  overflow-hidden mt-10">
       <div className="overflow-auto max-h-[65vh]">
         <Table className="min-w-full text-sm">
           <TableHeader className="sticky top-0 z-10 bg-primary hover:bg-primary">
@@ -444,7 +444,7 @@ export default function LeadsTable({
             className="bg-transparent border rounded px-2 py-1 text-sm"
           >
             {[5, 10, 20, 50, 100].map((size) => (
-              <option key={size} value={size}>
+              <option key={size} value={size} className="bg-primary">
                 {size}
               </option>
             ))}
