@@ -1,6 +1,6 @@
 import {
   queryOptions,
-  useQuery,
+  // useQuery,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { labelService } from "../services/Label.service";

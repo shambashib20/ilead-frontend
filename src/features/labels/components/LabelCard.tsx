@@ -13,7 +13,7 @@ import { labelService } from "@/features/leads/services/Lable.service";
 import { useModalStore } from "@/store/useModalStore";
 import type { Lables } from "@/features/leads/services/Lable.service";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 import CreateLabelForm from "./CreateLabelForm";
 import Swal from "sweetalert2";
@@ -29,7 +29,7 @@ function LabelCard() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalLables, setTotalLables] = useState(0);
   const openModal = useModalStore((state) => state.openModal);
-  const [refreshKey, setRefreshKey] = useState(0);
+  // const [refreshKey, setRefreshKey] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
@@ -56,14 +56,14 @@ function LabelCard() {
     });
   };
 
-  const handleEdit = (label: Lables) => {
+  const handleEdit = () => {
     openModal({
       content: (
         <div className="pt-6 px-4">
           <h2 className="text-lg font-semibold mb-4">Edit Label</h2>
           <CreateLabelForm
-            labelToEdit={label}
-            onSuccess={() => setRefreshKey((k) => k + 1)}
+          // labelToEdit={label}
+          // onSuccess={() => setRefreshKey((k) => k + 1)}
           />
         </div>
       ),
@@ -76,7 +76,7 @@ function LabelCard() {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "This will permanently delete the label (hard delete)!.",
-      icon: "warning",
+      // icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
@@ -95,9 +95,9 @@ function LabelCard() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [page, refreshKey]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [page, refreshKey]);
 
   return (
     <div className="p-4 space-y-4">
@@ -151,7 +151,7 @@ function LabelCard() {
                       <Pencil
                         size={18}
                         className="cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => handleEdit(label)}
+                        onClick={() => handleEdit()}
                       />
 
                       <Trash

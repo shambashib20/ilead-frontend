@@ -19,7 +19,7 @@ export function useCreateLabel() {
     },
 
     // onMutate: (variables) => {},
-    onError: (error: unknown, variables, context) => {
+    onError: (error: unknown) => {
       console.error("Create label failed:", error);
 
       let message = "Something went wrong while creating the label.";
@@ -36,7 +36,7 @@ export function useCreateLabel() {
 
       toast.error(message);
     },
-    onSuccess: (data, variables, context) => {
+    onSuccess: () => {
       queryClient.invalidateQueries();
       toast.success("Label Created SucessFully");
     },

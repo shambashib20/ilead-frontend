@@ -18,7 +18,7 @@ import { Pencil, Trash, UserPlus } from "lucide-react";
 import { useState } from "react";
 import CreateLabelForm from "@/features/labels/components/CreateLabelForm";
 import { useModalStore } from "@/store/useModalStore";
-import type { Lables } from "@/features/labels/services/Label.service";
+// import type { Lables } from "@/features/labels/services/Label.service";
 import { useDeleteLabel } from "@/features/labels/hooks/useDeleteLead";
 import Swal from "sweetalert2";
 
