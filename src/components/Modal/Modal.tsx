@@ -10,6 +10,13 @@ import {
 import { useModalStore } from "@/store/useModalStore";
 import { Button } from "../ui/button";
 
+const MODAL_SIZE = {
+  sm: "w-[400px]",
+  normal: "w-[700px]",
+  md: "w-[800px]",
+  lg: "w-[1000px]",
+  xl: "w-[1200px]",
+};
 export function Modal() {
   const {
     isOpen,
@@ -44,7 +51,7 @@ export function Modal() {
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent
-        className={`${modalSize === "sm" ? "max-w-lg" : "w-[1300px] max-w-[1300px]"}`}
+        className={`${MODAL_SIZE[modalSize ?? "normal"] ?? "w-[400px]"}`}
       >
         {modalTitle && (
           <DialogHeader className="bg-[#3a3285] text-white">

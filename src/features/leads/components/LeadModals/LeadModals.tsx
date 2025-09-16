@@ -27,6 +27,8 @@ import {
   TrendingUp,
   UserPlus,
   CalendarIcon,
+  Download,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -51,6 +53,8 @@ import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderU
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "@/components/MainLoader/Loader";
 import { motion } from "framer-motion";
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Switch } from "@/components/ui/switch";
 
 const leadsApi = new LeadsModule();
 const labelApi = new LabelService();
@@ -1028,6 +1032,266 @@ export function LeadDetail() {
           <p>No invoices available.</p>
         </TabsContent> */}
       </Tabs>
+    </div>
+  );
+}
+
+interface ImportLeadFormData {
+  status: string;
+  source: string;
+  user: string;
+  label: string;
+  date: string;
+  file: File | null;
+  emailAutomation: boolean;
+  whatsappAutomation: boolean;
+  removeDuplicateRecord: boolean;
+}
+
+export function ImportLeadForm() {
+  const [fileName, setFileName] = useState<string>("No file chosen");
+
+  const form = useForm<ImportLeadFormData>({
+    defaultValues: {
+      status: "",
+      source: "",
+      user: "Shambashib Majumdar",
+      label: "",
+      date: "16-09-2025",
+      file: null,
+      emailAutomation: false,
+      whatsappAutomation: false,
+      removeDuplicateRecord: false,
+    },
+    onSubmit: async ({ value }) => {
+      console.log("Form submitted:", value);
+      // Handle form submission here
+    },
+  });
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
+      form.setFieldValue("file", file);
+    } else {
+      setFileName("No file chosen");
+      form.setFieldValue("file", null);
+    }
+  };
+
+  const handleDownloadFormat = () => {
+    // Handle download format logic
+    console.log("Download format clicked");
+  };
+
+  return (
+    <div className="w-[full] max-w-[800px]  mx-auto bg-primary">
+      <div className="p-6 space-y-6">
+        {/* Download Format Button */}
+        <Button onClick={handleDownloadFormat}>
+          <Download className="w-4 h-4" />
+          Download Format
+        </Button>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            form.handleSubmit();
+          }}
+          className="space-y-6"
+        >
+          {/* First Row - Status, Source, User */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <form.Field name="status">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor="status">Status:</Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value) => field.handleChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">New</SelectItem>
+                      <SelectItem value="contacted">Contacted</SelectItem>
+                      <SelectItem value="qualified">Qualified</SelectItem>
+                      <SelectItem value="converted">Converted</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="source">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor="source">Source:</Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value) => field.handleChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="website">Website</SelectItem>
+                      <SelectItem value="social-media">Social Media</SelectItem>
+                      <SelectItem value="referral">Referral</SelectItem>
+                      <SelectItem value="advertisement">
+                        Advertisement
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="user">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor="user">User:</Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value) => field.handleChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Shambashib Majumdar">
+                        Shambashib Majumdar
+                      </SelectItem>
+                      <SelectItem value="John Doe">John Doe</SelectItem>
+                      <SelectItem value="Jane Smith">Jane Smith</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </form.Field>
+          </div>
+
+          {/* Second Row - Label, Date */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form.Field name="label">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor="label">Label: (Optional)</Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value) => field.handleChange(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="hot">Hot</SelectItem>
+                      <SelectItem value="warm">Warm</SelectItem>
+                      <SelectItem value="cold">Cold</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="date">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date:</Label>
+                  <Input
+                    type="date"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              )}
+            </form.Field>
+          </div>
+
+          {/* File Upload */}
+          <div className="space-y-2">
+            <div className="relative">
+              <input
+                type="file"
+                id="file-upload"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                onChange={handleFileChange}
+                accept=".csv,.xlsx,.xls"
+              />
+              <div className="flex items-center justify-between bg-purple-600 text-white p-3 rounded-lg cursor-pointer hover:bg-purple-700 transition-colors">
+                <span className="flex items-center gap-2">
+                  <Upload className="w-4 h-4" />
+                  Choose file
+                </span>
+                <span className="text-purple-100">{fileName}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Toggle Switches */}
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <form.Field name="emailAutomation">
+              {(field) => (
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="email-automation">Email Automation</Label>
+                  <Switch
+                    id="email-automation"
+                    checked={field.state.value}
+                    onCheckedChange={(checked) => field.handleChange(checked)}
+                  />
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="whatsappAutomation">
+              {(field) => (
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="whatsapp-automation">
+                    Whatsapp Automation
+                  </Label>
+                  <Switch
+                    id="whatsapp-automation"
+                    checked={field.state.value}
+                    onCheckedChange={(checked) => field.handleChange(checked)}
+                  />
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="removeDuplicateRecord">
+              {(field) => (
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="remove-duplicate">
+                    Remove Duplicate Record
+                  </Label>
+                  <Switch
+                    id="remove-duplicate"
+                    checked={field.state.value}
+                    onCheckedChange={(checked) => field.handleChange(checked)}
+                  />
+                </div>
+              )}
+            </form.Field>
+          </div> */}
+
+          {/* Notes Section */}
+          <div className="dark:bg-yellow-400/30 bg-orange-600/30 p-2">
+            <h4 className="dark:text-yellow-400 text-orange-600 font-semibold mb-2">
+              Notes:-
+            </h4>
+            <ul className="dark:text-yellow-400 text-orange-600 text-sm space-y-1">
+              <li>• Import max 500 Records at a time.</li>
+              <li>• Country code is required with contact numbers.</li>
+            </ul>
+          </div>
+
+          {/* Action Buttons */}
+        </form>
+      </div>
     </div>
   );
 }

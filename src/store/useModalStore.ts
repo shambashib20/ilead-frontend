@@ -14,7 +14,7 @@ type ModalStore = {
   isOpen: boolean;
   modalContent: React.ReactNode;
   modalTitle?: React.ReactNode;
-  modalSize?: "sm" | "md" | "lg" | "xl";
+  modalSize?: "sm" | "md" | "lg" | "xl" | "normal";
   modalType: ModalType;
   data: any;
   formActions?: FormActions;
@@ -24,7 +24,7 @@ type ModalStore = {
     type?: ModalType;
     customActions?: React.ReactNode;
   }) => void;
-  setModalSize?: (size: "sm" | "md" | "lg" | "xl") => void;
+  setModalSize?: (size: "sm" | "md" | "lg" | "xl" | "normal") => void;
   setModalTitle?: (title: string | null) => void;
   setData?: (data: any) => void;
   setFormActions?: (actions: FormActions) => void;

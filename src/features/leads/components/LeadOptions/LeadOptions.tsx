@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
 import { useMedia } from "@/hooks/useMedia";
+import { useModalStore } from "@/store/useModalStore";
 import {
   ArrowDownUp,
   ChartColumnBig,
@@ -9,6 +10,7 @@ import {
   Plus,
   Settings,
 } from "lucide-react";
+import { ImportLeadForm } from "../LeadModals/LeadModals";
 
 type LeadOptionsProps = {
   isTableView: boolean;
@@ -17,7 +19,17 @@ type LeadOptionsProps = {
 
 function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   const isMobile = useMedia("(max-width: 767px)");
+  const { openModal, setModalTitle, setModalSize } = useModalStore();
 
+  function handleUploadDocModal() {
+    setModalTitle?.("Import Lead");
+    setModalSize?.("normal");
+    openModal({
+      content: <ImportLeadForm />,
+
+      type: "form",
+    });
+  }
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-3">
@@ -55,7 +67,7 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
             </Button>
           </li>
           <li>
-            <Button size={"icon"}>
+            <Button size={"icon"} onClick={handleUploadDocModal}>
               <CloudUpload size={isMobile ? 14 : 20} />
             </Button>
           </li>
