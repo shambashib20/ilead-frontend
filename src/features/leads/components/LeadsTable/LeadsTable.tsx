@@ -35,6 +35,7 @@ import {
 } from "../LeadModals";
 import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
 import { useModalStore } from "@/store/useModalStore";
+import { useTheme } from "@/contexts/ThemeProvider";
 const leadsApi = new LeadsModule();
 
 type Pagination = {
@@ -59,6 +60,7 @@ const CARD_ACTIONS = [
   {
     icon: Trash,
     color: "red",
+    dark: "red",
     label: "Delete Lead",
     title: "Delete Lead",
     el: <LeadDelete />,
@@ -68,6 +70,7 @@ const CARD_ACTIONS = [
   {
     icon: Tag,
     color: "green",
+    dark: "green",
     label: "Lead Label Assign",
     title: "Lead Label Assign",
     el: <LeadLabels />,
@@ -76,7 +79,8 @@ const CARD_ACTIONS = [
   },
   {
     icon: TrendingUp,
-    color: "black",
+    color: "yellow",
+    dark: "black",
     label: "Lead Assignment",
     title: "Change Lead Assign To",
     el: <LeadAssign />,
@@ -85,7 +89,8 @@ const CARD_ACTIONS = [
   },
   {
     icon: UserPlus,
-    color: "blue",
+    color: "pink",
+    dark: "blue",
     label: "Convert Lead to Customer",
     title: null,
     el: <LeadCreateCustomer />,
@@ -94,7 +99,8 @@ const CARD_ACTIONS = [
   },
   {
     icon: RefreshCw,
-    color: "blue",
+    color: "orange",
+    dark: "orange",
     label: "Change Lead Status",
     title: "Change Lead Status",
     el: <LeadStatus />,
@@ -104,6 +110,7 @@ const CARD_ACTIONS = [
   {
     icon: Send,
     color: "white",
+    dark: "black",
     label: "Lead Follow Up",
     title: "Add Lead Follow Up",
     el: <LeadFollowUp />,
@@ -123,6 +130,7 @@ export default function LeadsTable({
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const statusColors = Array.from(statusColorMap.values());
+  const { theme } = useTheme();
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
@@ -168,8 +176,8 @@ export default function LeadsTable({
   return (
     <div className="rounded-sm shadow-sm  overflow-hidden mt-10">
       <div className="overflow-auto max-h-[65vh]">
-        <Table className="min-w-full text-sm">
-          <TableHeader className="sticky top-0 z-10 bg-primary hover:bg-primary">
+        <Table className="min-w-full text-sm bg-primary">
+          <TableHeader className="sticky top-0 z-10  hover:bg-primary">
             <TableRow className="hover:bg-primary">
               <TableHead className="text-left px-4 py-3 text-zinc-700 dark:text-zinc-200">
                 S/N
@@ -256,6 +264,7 @@ export default function LeadsTable({
                       ({
                         icon: Icon,
                         color,
+                        dark,
                         label,
                         el,
                         type,
@@ -281,7 +290,10 @@ export default function LeadsTable({
                           }}
                         >
                           <div className="relative">
-                            <Icon size={16} color={color} />
+                            <Icon
+                              size={16}
+                              color={theme === "dark" ? color : dark}
+                            />
                             {label === "Lead Follow Up" && (
                               <span className="absolute -top-1 -right-1 bg-gray-300 dark:bg-gray-800 text-black dark:text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
                                 {lead.follow_ups?.length ?? 0}
