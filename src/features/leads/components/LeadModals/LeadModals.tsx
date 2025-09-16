@@ -738,7 +738,7 @@ export function LeadDetail() {
   // Extract fields
 
   return (
-    <div className="min-h-[400px] max-h-[450px] overflow-y-auto ">
+    <div className="min-h-[400px] max-h-[450px] overflow-y-auto px-3 ">
       {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
         <li className="cursor-pointer">
@@ -788,79 +788,82 @@ export function LeadDetail() {
               {lead.data.logs?.length || 0}
             </span>
           </TabsTrigger>
-          {/* <TabsTrigger value="task">Task</TabsTrigger>
-          <TabsTrigger value="reminder">Reminder</TabsTrigger>
-          <TabsTrigger value="meeting">Meeting</TabsTrigger>
-          <TabsTrigger value="quotation">Quotation</TabsTrigger>
-          <TabsTrigger value="invoice">Invoice</TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="details">
           <div className="grid grid-cols-2 gap-4">
             {/* Left Column */}
-            <div className="border border-gray-700 rounded">
-              <h3 className="font-semibold text-white mb-2 bg-[var(--primary)] p-4 text-center">
+            <div className="shadow-sm dark:border rounded-sm overflow-auto">
+              <h3 className="font-semibold text-white mb-2 bg-[#3a3285]  p-4 text-center">
                 Lead Information
               </h3>
               <div className="p-4">
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Name:</b> {lead.data.name}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
+                  <b className="flex flex-col gap-1">Name:</b> {lead.data.name}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Company:</b> {lead.data.company_name || "-"}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Company:</b>{" "}
+                  {lead.data.company_name || "-"}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Phone:</b> {lead.data.phone_number}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Phone:</b>{" "}
+                  {lead.data.phone_number}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Whatsapp:</b> {lead.data.meta.whatsapp || "-"}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Whatsapp:</b>{" "}
+                  {lead.data.meta.whatsapp || "-"}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Email:</b> {lead.data.email || "-"}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Email:</b>{" "}
+                  {lead.data.email || "-"}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Address:</b> {lead.data.address || "-"}
-                </p>
-
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Comment:</b> {lead.data.comment || "-"}
-                </p>
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Reference:</b> {lead.data.reference || "-"}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Address:</b>{" "}
+                  {lead.data.address || "-"}
                 </p>
 
-                <p className="text-sm text-gray-300 mb-2">
-                  <b>Course selected:</b> {lead.data.meta.course || "-"}
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Comment:</b>{" "}
+                  {lead.data.comment || "-"}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Reference:</b>{" "}
+                  {lead.data.reference || "-"}
+                </p>
+
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
+                  <b className="flex flex-col gap-1">Course selected:</b>{" "}
+                  {lead.data.meta.course || "-"}
+                </p>
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
                   <b>Stream Selected:</b> {lead.data.meta.stream || "-"}
                 </p>
               </div>
             </div>
 
             {/* Right Column */}
-            <div className="border border-gray-700 rounded">
-              <h3 className="font-semibold text-white mb-2 bg-[var(--primary)] p-4 text-center">
+            <div className="shadow-sm dark:border rounded-sm overflow-auto">
+              <h3 className="font-semibold text-white mb-2 bg-[#3a3285]  p-4 text-center">
                 General Information
               </h3>
               <div className="p-4">
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Date:</b> {new Date(lead.data.createdAt).toLocaleString()}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Status:</b> {lead.data.status.title || "N/A"}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Source:</b> {lead?.data?.meta?.source?.title || "N/A"}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Labels:</b>{" "}
                   <div className="flex gap-2 flex-wrap mt-1">
                     {lead.data.labels.length > 0
                       ? lead.data.labels.map((lbl: any) => (
                           <span
                             key={lbl._id}
-                            className="bg-purple-700 px-2 py-1 rounded text-xs"
+                            className="bg-[#3a3285] px-2 py-1 rounded text-xs text-white "
                           >
                             {lbl.title}
                           </span>
@@ -868,10 +871,10 @@ export function LeadDetail() {
                       : "-"}
                   </div>
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Created By:</b> {lead.data.assigned_by?.name || ""}
                 </p>
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Assign To:</b> {lead.data.assigned_to?.name || "N/A"}
                 </p>
               </div>
@@ -882,7 +885,7 @@ export function LeadDetail() {
                 Lead Meta Data
               </h3>
               <div className="p-4">
-                <p className="text-sm text-gray-300 mb-2">
+                <p className="text-sm text-foreground mb-2">
                   <b>Enriched Location (City):</b>{" "}
                   {lead.data.meta.location.city}
                 </p>

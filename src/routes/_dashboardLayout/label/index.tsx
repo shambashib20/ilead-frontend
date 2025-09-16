@@ -21,11 +21,14 @@ import { useModalStore } from "@/store/useModalStore";
 // import type { Lables } from "@/features/labels/services/Label.service";
 import { useDeleteLabel } from "@/features/labels/hooks/useDeleteLead";
 import Swal from "sweetalert2";
+import AssignUsersForm from "@/features/labels/components/AssignUsersForm";
+import { AgentsQueryOptions } from "@/features/leads/hooks/useChatAgents";
 
 export const Route = createFileRoute("/_dashboardLayout/label/")({
   component: RouteComponent,
   loader: (opts) => {
     opts.context.queryClient.ensureQueryData(labelsQueryOptions());
+    opts.context.queryClient.ensureQueryData(AgentsQueryOptions());
   },
 });
 
@@ -59,7 +62,13 @@ function RouteComponent() {
     });
   };
 
-  const handleUserAssign = async () => {};
+  const handleUserAssign = async (labelId: string, chatAgents: any) => {
+    setModalTitle?.("Create Label ");
+    openModal({
+      content: <AssignUsersForm selectedId={labelId} users={chatAgents} />,
+      type: "form",
+    });
+  };
 
   const handleDelete = async (labelId: string) => {
     // console.log(labelId);
@@ -127,7 +136,13 @@ function RouteComponent() {
                       {ind + 1}
                     </TableCell>
                     <TableCell className="dark:text-background">
-                      <span className="bg-gray-100 px-4 py-2 rounded-sm">
+                      <span
+                        style={{
+                          background: label.meta?.color_code,
+                          color: label.meta?.color_code && "#fff",
+                        }}
+                        className={`bg-gray-100 px-4 py-2 rounded-sm `}
+                      >
                         {label.title}
                       </span>
                     </TableCell>
@@ -148,7 +163,12 @@ function RouteComponent() {
                       <UserPlus
                         size={18}
                         className="cursor-pointer text-purple-600 hover:text-purple-800"
-                        onClick={() => handleUserAssign()}
+                        onClick={() =>
+                          handleUserAssign(
+                            label?._id,
+                            label?.meta?.assigned_agents
+                          )
+                        }
                       />
                     </TableCell>
                     <TableCell className="dark:text-background">
@@ -156,8 +176,9 @@ function RouteComponent() {
                         <ul className="flex items-center -space-x-5">
                           {label.meta.assigned_agents.map((item, index) => (
                             <li
+                              title={item.agent_id?.name}
                               key={index}
-                              className="border border-gray-200 rounded-full p-1 bg-white"
+                              className="border border-gray-200 rounded-full p-1 bg-white hover:scale-130 transition hover:relative hover:z-50"
                             >
                               <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold">
                                 {item?.agent_id?.name?.charAt(0) ?? "?"}

@@ -15,7 +15,11 @@ export function useCreateLabel() {
       color: string;
     }) => {
       console.log(title, description, color);
-      return labelService.createLabel({ title, description, color });
+      return labelService.createLabel({
+        title,
+        description,
+        color_code: color,
+      });
     },
 
     // onMutate: (variables) => {},

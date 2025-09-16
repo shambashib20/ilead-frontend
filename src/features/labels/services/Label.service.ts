@@ -10,7 +10,7 @@ export interface Lables {
   _id: string;
   description: string;
   title: string;
-  meta: { is_active: boolean; assigned_agents: Agents[] };
+  meta: { is_active: boolean; assigned_agents: Agents[]; color_code: string };
 }
 
 interface LableResponse {
@@ -30,7 +30,7 @@ export interface CreateLabelResponse {
 export interface LabelPayload {
   title: string;
   description: string;
-  color: string;
+  color_code: string;
 }
 
 interface PaginatedLabelResponse {
@@ -52,7 +52,8 @@ interface PaginatedLabelResponse {
 interface EditLabelPayload {
   title?: string;
   description?: string;
-  color?: string;
+  color_code?: string;
+  chatAgentIds?: { id: string }[];
 }
 
 interface EditLabelResponse {
