@@ -6,9 +6,20 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { ChevronsDown } from "lucide-react";
 import { useContext, useState } from "react";
 import { ViewContext } from "@/features/leads/contexts/ViewContext";
+import { StatusQueryOptions } from "@/features/leads/hooks/useStatus";
+import { sourceQueryOptions } from "@/features/leads/hooks/useSource";
+import { AgentsQueryOptions } from "@/hooks/useChatAgents";
+import { labelsQueryOptions } from "@/features/labels/hooks/useLables";
 
 export const Route = createFileRoute("/_dashboardLayout/lead")({
   component: RouteComponent,
+
+  loader: (opts) => {
+    opts.context.queryClient.ensureQueryData(StatusQueryOptions());
+    opts.context.queryClient.ensureQueryData(sourceQueryOptions());
+    opts.context.queryClient.ensureQueryData(AgentsQueryOptions());
+    opts.context.queryClient.ensureQueryData(labelsQueryOptions());
+  },
 });
 
 export function useViewContext() {

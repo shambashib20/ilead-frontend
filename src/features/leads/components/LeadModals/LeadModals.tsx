@@ -53,6 +53,10 @@ import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderU
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "@/components/MainLoader/Loader";
 import { motion } from "framer-motion";
+import { useStatus } from "../../hooks/useStatus";
+import { useLabels } from "@/features/labels/hooks/useLables";
+import { useSource } from "../../hooks/useSource";
+import { useImportLeads } from "../../hooks/useImportLeads";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Switch } from "@/components/ui/switch";
 
@@ -1036,29 +1040,37 @@ export function LeadDetail() {
   );
 }
 
-interface ImportLeadFormData {
-  status: string;
-  source: string;
-  user: string;
-  label: string;
-  date: string;
-  file: File | null;
-  emailAutomation: boolean;
-  whatsappAutomation: boolean;
-  removeDuplicateRecord: boolean;
-}
+// interface ImportLeadFormData {
+//   status: string;
+//   source: string;
+//   user: string;
+//   label: string;
+//   date: string;
+//   file: File | null;
+//   emailAutomation: boolean;
+//   whatsappAutomation: boolean;
+//   removeDuplicateRecord: boolean;
+// }
 
 export function ImportLeadForm() {
   const [fileName, setFileName] = useState<string>("No file chosen");
+  const { setFormActions } = useModalStore();
 
-  const form = useForm<ImportLeadFormData>({
+  const { status } = useStatus();
+  const { labels } = useLabels();
+  const { sources } = useSource();
+  const { agents } = useChatAgents();
+
+  const { importLeadsAsync, isPending } = useImportLeads();
+
+  const form = useForm({
     defaultValues: {
       status: "",
       source: "",
-      user: "Shambashib Majumdar",
+      user: "",
       label: "",
-      date: "16-09-2025",
-      file: null,
+      date: "2025-09-17",
+      file: null as File | null,
       emailAutomation: false,
       whatsappAutomation: false,
       removeDuplicateRecord: false,
@@ -1066,6 +1078,14 @@ export function ImportLeadForm() {
     onSubmit: async ({ value }) => {
       console.log("Form submitted:", value);
       // Handle form submission here
+      await importLeadsAsync({
+        assigned_to: value?.user,
+        file: value?.file ?? null,
+        label_ids: value?.label,
+        source_id: value?.source,
+        status_id: value?.status,
+      });
+      form.reset();
     },
   });
 
@@ -1085,11 +1105,21 @@ export function ImportLeadForm() {
     console.log("Download format clicked");
   };
 
+  useEffect(() => {
+    setFormActions?.({
+      onSubmit: () => form.handleSubmit(),
+      onCancel: () => form.reset(),
+      canSubmit: form.state.canSubmit,
+      isSubmitting: isPending,
+    });
+    useModalStore.getState().setSubmitLabel?.("Assign");
+  }, [form.state.canSubmit, isPending]);
+
   return (
     <div className="w-[full] max-w-[800px]  mx-auto bg-primary">
-      <div className="p-6 space-y-6">
+      <div className="px-4  space-y-4">
         {/* Download Format Button */}
-        <Button onClick={handleDownloadFormat}>
+        <Button onClick={handleDownloadFormat} className="bg-[#3a3285]">
           <Download className="w-4 h-4" />
           Download Format
         </Button>
@@ -1100,11 +1130,21 @@ export function ImportLeadForm() {
             e.stopPropagation();
             form.handleSubmit();
           }}
-          className="space-y-6"
+          className="space-y-2"
         >
           {/* First Row - Status, Source, User */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <form.Field name="status">
+            <form.Field
+              name="status"
+              validators={{
+                onChange: ({ value }) => {
+                  if (value === "") {
+                    return "Please Select Status";
+                  }
+                  return undefined;
+                },
+              }}
+            >
               {(field) => (
                 <div className="space-y-2">
                   <Label htmlFor="status">Status:</Label>
@@ -1112,21 +1152,35 @@ export function ImportLeadForm() {
                     value={field.state.value}
                     onValueChange={(value) => field.handleChange(value)}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full border-gray-300 dark:border-[#3a3285] rounded">
                       <SelectValue placeholder="Select..." />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="new">New</SelectItem>
-                      <SelectItem value="contacted">Contacted</SelectItem>
-                      <SelectItem value="qualified">Qualified</SelectItem>
-                      <SelectItem value="converted">Converted</SelectItem>
+                      {status.data?.map((item) => {
+                        return (
+                          <SelectItem value={item._id}>{item.title}</SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
+
+                  {!field.state.meta.isValid && (
+                    <em role="alert">{field.state.meta.errors.join(", ")}</em>
+                  )}
                 </div>
               )}
             </form.Field>
 
-            <form.Field name="source">
+            <form.Field
+              name="source"
+              validators={{
+                onChange: ({ value }) => {
+                  if (!value) {
+                    return "Please Select Source";
+                  }
+                },
+              }}
+            >
               {(field) => (
                 <div className="space-y-2">
                   <Label htmlFor="source">Source:</Label>
@@ -1134,23 +1188,34 @@ export function ImportLeadForm() {
                     value={field.state.value}
                     onValueChange={(value) => field.handleChange(value)}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full border-gray-300 dark:border-[#3a3285] rounded">
                       <SelectValue placeholder="Select..." />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="website">Website</SelectItem>
-                      <SelectItem value="social-media">Social Media</SelectItem>
-                      <SelectItem value="referral">Referral</SelectItem>
-                      <SelectItem value="advertisement">
-                        Advertisement
-                      </SelectItem>
+                      {sources.map((item) => {
+                        return (
+                          <SelectItem value={item._id}>{item.title}</SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
+                  {field.state.meta.isTouched && !field.state.meta.isValid && (
+                    <em role="alert">{field.state.meta.errors.join(", ")}</em>
+                  )}
                 </div>
               )}
             </form.Field>
 
-            <form.Field name="user">
+            <form.Field
+              name="user"
+              validators={{
+                onChange: ({ value }) => {
+                  if (!value) {
+                    return "Please Select User";
+                  }
+                },
+              }}
+            >
               {(field) => (
                 <div className="space-y-2">
                   <Label htmlFor="user">User:</Label>
@@ -1158,17 +1223,20 @@ export function ImportLeadForm() {
                     value={field.state.value}
                     onValueChange={(value) => field.handleChange(value)}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full border-gray-300 dark:border-[#3a3285] rounded">
                       <SelectValue placeholder="Select..." />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Shambashib Majumdar">
-                        Shambashib Majumdar
-                      </SelectItem>
-                      <SelectItem value="John Doe">John Doe</SelectItem>
-                      <SelectItem value="Jane Smith">Jane Smith</SelectItem>
+                      {agents.data?.map((item) => {
+                        return (
+                          <SelectItem value={item._id}>{item.name}</SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
+                  {field.state.meta.isTouched && !field.state.meta.isValid && (
+                    <em role="alert">{field.state.meta.errors.join(", ")}</em>
+                  )}
                 </div>
               )}
             </form.Field>
@@ -1176,7 +1244,17 @@ export function ImportLeadForm() {
 
           {/* Second Row - Label, Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <form.Field name="label">
+            <form.Field
+              name="label"
+              validators={{
+                onChange: ({ value }) => {
+                  if (value === "") {
+                    return "Please Select Label";
+                  }
+                  return undefined;
+                },
+              }}
+            >
               {(field) => (
                 <div className="space-y-2">
                   <Label htmlFor="label">Label: (Optional)</Label>
@@ -1184,20 +1262,34 @@ export function ImportLeadForm() {
                     value={field.state.value}
                     onValueChange={(value) => field.handleChange(value)}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full border-gray-300 dark:border-[#3a3285] rounded">
                       <SelectValue placeholder="Select..." />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="hot">Hot</SelectItem>
-                      <SelectItem value="warm">Warm</SelectItem>
-                      <SelectItem value="cold">Cold</SelectItem>
+                      {labels?.labels?.map((item) => {
+                        return (
+                          <SelectItem value={item._id}>{item.title}</SelectItem>
+                        );
+                      })}
                     </SelectContent>
                   </Select>
+                  {field.state.meta.isTouched && !field.state.meta.isValid && (
+                    <em role="alert">{field.state.meta.errors.join(", ")}</em>
+                  )}
                 </div>
               )}
             </form.Field>
 
-            <form.Field name="date">
+            <form.Field
+              name="date"
+              validators={{
+                onChange: ({ value }) => {
+                  if (!value) {
+                    return "Please select a valid Date";
+                  }
+                },
+              }}
+            >
               {(field) => (
                 <div className="space-y-2">
                   <Label htmlFor="date">Date:</Label>
@@ -1207,6 +1299,9 @@ export function ImportLeadForm() {
                     onChange={(e) => field.handleChange(e.target.value)}
                     className="w-full"
                   />
+                  {field.state.meta.isTouched && !field.state.meta.isValid && (
+                    <em role="alert">{field.state.meta.errors.join(", ")}</em>
+                  )}
                 </div>
               )}
             </form.Field>
@@ -1222,7 +1317,7 @@ export function ImportLeadForm() {
                 onChange={handleFileChange}
                 accept=".csv,.xlsx,.xls"
               />
-              <div className="flex items-center justify-between bg-purple-600 text-white p-3 rounded-lg cursor-pointer hover:bg-purple-700 transition-colors">
+              <div className="flex items-center justify-between bg-[#3a3285] text-white p-3 rounded-lg cursor-pointer hover:bg-purple-700 transition-colors">
                 <span className="flex items-center gap-2">
                   <Upload className="w-4 h-4" />
                   Choose file
@@ -1279,14 +1374,34 @@ export function ImportLeadForm() {
           </div> */}
 
           {/* Notes Section */}
-          <div className="dark:bg-yellow-400/30 bg-orange-600/30 p-2">
-            <h4 className="dark:text-yellow-400 text-orange-600 font-semibold mb-2">
-              Notes:-
-            </h4>
-            <ul className="dark:text-yellow-400 text-orange-600 text-sm space-y-1">
-              <li>• Import max 500 Records at a time.</li>
-              <li>• Country code is required with contact numbers.</li>
-            </ul>
+          <div className="rounded-lg border dark:border-yellow-400/40 border-orange-600/40 dark:bg-yellow-400/20 bg-orange-600/20 p-4 shadow-sm mt-8">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg
+                  className="w-5 h-5 dark:text-yellow-400 text-orange-600 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium dark:text-yellow-400 text-orange-600">
+                  Notes:
+                </h3>
+                <div className="mt-2 text-sm dark:text-yellow-400/90 text-orange-600/90">
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Import max 500 Records at a time.</li>
+                    <li>Country code is required with contact numbers.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Action Buttons */}

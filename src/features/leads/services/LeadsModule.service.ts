@@ -179,8 +179,37 @@ export class LeadsModule extends ApiClient {
     const response = await this.post<any>("/create", payload);
     return response.data;
   }
-}
 
+  async importLead({
+    file,
+    status_id,
+    source_id,
+    assigned_to,
+    label_ids,
+  }: {
+    file: File | null;
+    status_id: string;
+    source_id: string;
+    assigned_to: string;
+    label_ids: string;
+  }) {
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+    }
+    formData.append("status_id", status_id);
+    formData.append("source_id", source_id);
+    formData.append("assigned_to", assigned_to);
+    formData.append("label_ids", label_ids);
+
+    const response = await this.post("/import-leads", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data;
+  }
+}
+export const leadsServoceModule = new LeadsModule();
 export const statsService = new LeadsModule();
 export const sourceStatsService = new LeadsModule();
 export const deleteLeadsService = new LeadsModule();
