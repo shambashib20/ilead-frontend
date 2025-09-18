@@ -17,11 +17,8 @@ import {
 import { useChatAgents } from "../../hooks/useChatAgents";
 import { Input } from "@/components/ui/input";
 import {
-  EllipsisVertical,
   Info,
-  RefreshCcw,
   Send,
-  SquarePen,
   Tag,
   Trash,
   TrendingUp,
