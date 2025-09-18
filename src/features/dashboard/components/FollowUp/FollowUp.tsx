@@ -47,7 +47,7 @@ function FollowUp() {
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.status?.title || "-"}</TableCell>
                 <TableCell>{item.assigned_to?.name || "-"}</TableCell>
-                <TableCell>{item.mobile || "-"}</TableCell>
+                <TableCell>{"-"}</TableCell>
                 <TableCell>
                   {item.next_followup_date
                     ? format(
@@ -71,25 +71,25 @@ function FollowUp() {
                         </div>
                         <div className="flex">
                           <span className="font-semibold w-32">Email:</span>
-                          <span>{item.email || "-"}</span>
+                          <span>{"-"}</span>
                         </div>
                         <div className="flex">
                           <span className="font-semibold w-32">Mobile:</span>
-                          <span>{item.mobile || "-"}</span>
+                          <span>{"-"}</span>
                         </div>
                         <div className="flex">
                           <span className="font-semibold w-32">Company:</span>
-                          <span>{item.company_name || "-"}</span>
+                          <span>{"-"}</span>
                         </div>
                         <div className="flex">
                           <span className="font-semibold w-32">Address:</span>
-                          <span>{item.address || "-"}</span>
+                          <span>{"-"}</span>
                         </div>
                         <div className="flex">
                           <span className="font-semibold w-32">
                             Created By:
                           </span>
-                          <span>{item.createdBy?.name || "-"}</span>
+                          <span>{"-"}</span>
                         </div>
                         <div className="flex">
                           <span className="font-semibold w-32">Status:</span>
