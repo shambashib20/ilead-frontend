@@ -4,13 +4,17 @@ import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X, Search } from "lucide-react";
+import { X, Search, Calendar } from "lucide-react";
 import Select from "react-select";
 import type { FilterPayload } from "../../services/Leads.service";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { useLabels } from "../../hooks/useLabels";
 import { useSource } from "../../hooks/useSource";
 import { useChatAgents } from "../../hooks/useChatAgents";
+import { useModalStore } from "@/store/useModalStore";
+import { DateRangeModal } from "../LeadModals/LeadModals";
+import { useState } from "react";
+import { format } from "date-fns";
 
 // Your existing default options
 const defaultLabelOption = { value: "", label: "All Labels" };
@@ -27,6 +31,8 @@ type FormData = {
   source: OptionType[];
   searchByDate: OptionType[];
   searchQuery: string;
+  startDate: Date;
+  endDate: Date;
 };
 type LeadSearchParams = {
   labelIds?: string;
@@ -35,9 +41,15 @@ type LeadSearchParams = {
   createdByIds?: string;
   search?: string;
   sortBy?: string;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 function LeadSearch() {
+  const [date, setDate] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
   const navigate = useNavigate();
   const searchParams = useSearch({ from: "/_dashboardLayout/lead" }) as {
     labelIds?: string;
@@ -46,8 +58,11 @@ function LeadSearch() {
     createdByIds?: string;
     search?: string;
     sortBy?: string;
+    startDate?: Date;
+    endDate?: Date;
   }; // Adjust route as needed
-
+  const { openModal, setModalTitle, closeModal, setModalSize } =
+    useModalStore();
   // Parse filters from URL search params
   const getFiltersFromSearch = (): FilterPayload => {
     return {
@@ -63,6 +78,8 @@ function LeadSearch() {
         : [],
       search: searchParams?.search || "",
       sortBy: searchParams?.sortBy || "",
+      startDate: searchParams?.startDate || new Date(),
+      endDate: searchParams?.endDate || new Date(),
     };
   };
 
@@ -153,6 +170,8 @@ function LeadSearch() {
           ]
         : [],
       searchQuery: filters.search,
+      endDate: filters?.endDate ?? new Date(),
+      startDate: filters?.startDate ?? new Date(),
     };
   };
 
@@ -168,6 +187,8 @@ function LeadSearch() {
           .filter((v) => v !== ""),
         search: value.searchQuery,
         sortBy: value.searchByDate[0]?.value ?? "",
+        startDate: date.startDate ?? new Date(),
+        endDate: date.endDate ?? new Date(),
       };
 
       // Update URL search params
@@ -199,9 +220,36 @@ function LeadSearch() {
     });
   };
 
-  // const handleCalendarAction = () => {
-  //   console.log("Calendar action triggered");
-  // };
+  // const getDateFromDateRangeModal = (startDate?: Date, endDate?: Date) =>
+  //   setDate({
+  //     startDate: startDate ?? new Date(),
+  //     endDate: endDate ?? new Date(),
+  //   });
+
+  const handleCalendarAction = () => {
+    setModalSize?.("lg");
+    setModalTitle?.("Date Ranges");
+    openModal({
+      content: (
+        <DateRangeModal
+          setDate={({ startDate, endDate }) => {
+            setDate((prev) => ({
+              ...prev,
+              startDate,
+              endDate,
+            }));
+          }}
+        />
+      ),
+      type: "info",
+      customActions: (
+        <div className="flex justify-end space-x-3 ">
+          <Button onClick={closeModal}>Save</Button>
+        </div>
+      ),
+    });
+    console.log("Calendar action triggered");
+  };
 
   const colourStyles = {
     control: (styles: any) => ({
@@ -275,7 +323,6 @@ function LeadSearch() {
               </div>
             )}
           />
-
           {/* Assign To Field */}
           <form.Field
             name="assignTo"
@@ -299,7 +346,6 @@ function LeadSearch() {
               </div>
             )}
           />
-
           {/* Labels Field */}
           <form.Field
             name="labels"
@@ -323,7 +369,6 @@ function LeadSearch() {
               </div>
             )}
           />
-
           {/* Source Field */}
           <form.Field
             name="source"
@@ -347,7 +392,6 @@ function LeadSearch() {
               </div>
             )}
           />
-
           {/* Search By Date Field */}
           <form.Field
             name="searchByDate"
@@ -371,7 +415,6 @@ function LeadSearch() {
               </div>
             )}
           />
-
           {/* Search Query Field */}
           <form.Field
             name="searchQuery"
@@ -390,6 +433,11 @@ function LeadSearch() {
               </div>
             )}
           />
+          <h4 className="text-foreground">
+            {date.startDate ? format(date.startDate, "MMM d, yyyy") : ""}
+            {" - "}
+            {date.endDate ? format(date.endDate, "MMM d, yyyy") : ""}
+          </h4>
         </div>
 
         {/* Action Buttons */}
@@ -403,7 +451,7 @@ function LeadSearch() {
             <X className="h-4 w-4" />
             Reset
           </Button>
-          {/* <Button
+          <Button
             type="button"
             size="sm"
             onClick={handleCalendarAction}
@@ -411,7 +459,7 @@ function LeadSearch() {
           >
             <Calendar className="h-4 w-4" />
             Calendar
-          </Button> */}
+          </Button>
           <Button type="submit" size="sm" className="flex items-center gap-2">
             <Search className="h-4 w-4" />
             Search

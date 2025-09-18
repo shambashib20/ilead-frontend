@@ -40,6 +40,8 @@ export type FilterPayload = {
   is_table_view?: boolean;
   page?: number;
   limit?: number;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type Pagination = {
@@ -74,6 +76,8 @@ class LeadsService extends ApiClient {
       is_table_view: filters.is_table_view ?? false,
       page: filters.page ?? 1,
       limit: filters.limit ?? 10,
+      startDate: filters?.startDate,
+      endDate: filters?.endDate,
     });
     return response.data;
   }
