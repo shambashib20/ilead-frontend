@@ -9,6 +9,8 @@ interface SearchParams {
   createdByIds?: string;
   search?: string;
   sortBy?: string;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 export function useLeadFilters() {
@@ -24,6 +26,8 @@ export function useLeadFilters() {
       createdByIds: searchParams?.createdByIds?.split(",") ?? [],
       search: searchParams?.search ?? "",
       sortBy: searchParams?.sortBy ?? "",
+      startDate: searchParams?.startDate ?? new Date(),
+      endDate: searchParams?.endDate ?? new Date(),
     }),
     [searchParams]
   );

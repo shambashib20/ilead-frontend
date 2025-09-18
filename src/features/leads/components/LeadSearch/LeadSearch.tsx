@@ -203,6 +203,8 @@ function LeadSearch() {
         searchParams.createdByIds = (filters.createdByIds ?? []).join(",");
       if (filters.search) searchParams.search = filters.search;
       if (filters.sortBy) searchParams.sortBy = filters.sortBy;
+      if (filters.startDate) searchParams.startDate = filters.startDate;
+      if (filters.endDate) searchParams.endDate = filters.endDate;
 
       console.log(filters);
 

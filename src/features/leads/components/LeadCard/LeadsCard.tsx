@@ -22,15 +22,16 @@ import {
 
 import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
 import { statusColorMap } from "../../utils/constants";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 interface LeadCardProps {
   lead: Lead;
 }
-
 const CARD_ACTIONS = [
   {
     icon: Trash,
     color: "red",
+    dark: "red",
     label: "Delete Lead",
     title: "Delete Lead",
     el: <LeadDelete />,
@@ -40,6 +41,7 @@ const CARD_ACTIONS = [
   {
     icon: Tag,
     color: "green",
+    dark: "green",
     label: "Lead Label Assign",
     title: "Lead Label Assign",
     el: <LeadLabels />,
@@ -48,7 +50,8 @@ const CARD_ACTIONS = [
   },
   {
     icon: TrendingUp,
-    color: "black",
+    color: "yellow",
+    dark: "black",
     label: "Lead Assignment",
     title: "Change Lead Assign To",
     el: <LeadAssign />,
@@ -57,7 +60,8 @@ const CARD_ACTIONS = [
   },
   {
     icon: UserPlus,
-    color: "blue",
+    color: "pink",
+    dark: "blue",
     label: "Convert Lead to Customer",
     title: null,
     el: <LeadCreateCustomer />,
@@ -66,7 +70,8 @@ const CARD_ACTIONS = [
   },
   {
     icon: RefreshCw,
-    color: "blue",
+    color: "orange",
+    dark: "orange",
     label: "Change Lead Status",
     title: "Change Lead Status",
     el: <LeadStatus />,
@@ -76,6 +81,7 @@ const CARD_ACTIONS = [
   {
     icon: Send,
     color: "white",
+    dark: "black",
     label: "Lead Follow Up",
     title: "Add Lead Follow Up",
     el: <LeadFollowUp />,
@@ -92,7 +98,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const assignedBy = String(lead?.assigned_by?.name || "Test User");
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
   const statusColors = Array.from(statusColorMap.values());
-
+  const { theme } = useTheme();
   return (
     <div className="bg-white dark:bg-primary rounded-lg shadow hover:shadow-lg transition-all">
       <div
@@ -159,7 +165,16 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
 
       <div className="mt-3 items-center py-3 px-2 border-t border-gray-300 dark:border-gray-600 flex gap-1.5">
         {CARD_ACTIONS.map(
-          ({ icon: Icon, color, label, el, type, customActions, title }) => (
+          ({
+            icon: Icon,
+            color,
+            dark,
+            label,
+            el,
+            type,
+            customActions,
+            title,
+          }) => (
             <button
               key={label}
               className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
@@ -179,7 +194,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
               }}
             >
               <div className="relative">
-                <Icon size={16} color={color} />
+                <Icon size={16} color={theme === "dark" ? color : dark} />
                 {label === "Lead Follow Up" && (
                   <span className="absolute -top-1 -right-1 bg-gray-300 dark:bg-gray-800 text-black dark:text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
                     {lead.follow_ups?.length ?? 0}
