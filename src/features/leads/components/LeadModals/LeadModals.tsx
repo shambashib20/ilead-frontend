@@ -31,6 +31,7 @@ import {
   Upload,
   ChevronLeft,
   ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,6 +72,7 @@ import { useStatus } from "../../hooks/useStatus";
 import { useLabels } from "@/features/labels/hooks/useLables";
 import { useSource } from "../../hooks/useSource";
 import { useImportLeads } from "../../hooks/useImportLeads";
+import { useTheme } from "@/contexts/ThemeProvider";
 // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 // import { Switch } from "@/components/ui/switch";
 
@@ -722,8 +724,73 @@ export function LeadStatus() {
   );
 }
 
+const CARD_ACTIONS = [
+  {
+    icon: Trash,
+    color: "red",
+    dark: "white",
+    label: "Delete Lead",
+    title: "Delete Lead",
+    el: <LeadDelete />,
+    type: "form" as const,
+    customActions: undefined,
+  },
+  {
+    icon: Tag,
+    color: "green",
+    dark: "White",
+    label: "Lead Label Assign",
+    title: "Lead Label Assign",
+    el: <LeadLabels />,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: TrendingUp,
+    color: "yellow",
+    dark: "White",
+    label: "Lead Assignment",
+    title: "Change Lead Assign To",
+    el: <LeadAssign />,
+    type: "form",
+    customActions: undefined,
+  },
+  {
+    icon: UserPlus,
+    color: "pink",
+    dark: "White",
+    label: "Convert Lead to Customer",
+    title: null,
+    el: <LeadCreateCustomer />,
+    type: "info" as const,
+    customActions: undefined,
+  },
+  {
+    icon: RefreshCw,
+    color: "orange",
+    dark: "White",
+    label: "Change Lead Status",
+    title: "Change Lead Status",
+    el: <LeadStatus />,
+    type: "action" as const,
+    customActions: undefined,
+  },
+  {
+    icon: Send,
+    color: "white",
+    dark: "White",
+    label: "Lead Follow Up",
+    title: "Add Lead Follow Up",
+    el: <LeadFollowUp />,
+    type: "form" as const,
+    customActions: undefined,
+  },
+] as const;
+
 export function LeadDetail() {
-  const { data } = useModalStore();
+  const { data, setModalTitle, openModal, setData, setModalSize } =
+    useModalStore();
+  const { theme } = useTheme();
   const leadId = data?._id;
   const [lead, setLead] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -763,30 +830,46 @@ export function LeadDetail() {
     <div className="min-h-[400px] max-h-[450px] overflow-y-auto px-3 ">
       {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
-        <li className="cursor-pointer">
-          <SquarePen size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <Send size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <TrendingUp size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <UserPlus size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <Trash size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <Tag size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <RefreshCcw size={26} strokeWidth={1.4} />
-        </li>
-        <li className="cursor-pointer">
-          <EllipsisVertical size={26} strokeWidth={1.4} />
-        </li>
+        {CARD_ACTIONS.map(
+          ({
+            icon: Icon,
+            color,
+            dark,
+            label,
+            el,
+            type,
+            customActions,
+            title,
+          }) => (
+            <button
+              key={label}
+              className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
+              title={label}
+              onClick={() => {
+                setModalTitle?.(title);
+                setModalSize?.("sm");
+                setData?.({
+                  _id: lead._id,
+                  rayId: lead.meta?.ray_id,
+                });
+                openModal({
+                  content: el,
+                  type,
+                  customActions,
+                });
+              }}
+            >
+              <div className="relative">
+                <Icon size={24} color={theme !== "dark" ? color : dark} />
+                {label === "Lead Follow Up" && (
+                  <span className="absolute -top-1 -right-1 bg-gray-300 dark:bg-gray-800 text-black dark:text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+                    {lead.follow_ups?.length ?? 0}
+                  </span>
+                )}
+              </div>
+            </button>
+          )
+        )}
       </ul>
 
       {/* Tabs */}

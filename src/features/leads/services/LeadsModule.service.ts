@@ -48,6 +48,21 @@ interface LeadsPerStatusResponse {
   };
 }
 
+interface MissedFollowUps {
+  message: string;
+  status: string;
+  data: {
+    leadId: string;
+    name: string;
+    status: { _id: string; title: string };
+    assigned_to: { _id: string; name: string; email: string };
+    labels: { _id: string; title: string }[];
+    next_followup_date: string;
+    comment: string;
+    meta: { source: { title: string } };
+  }[];
+}
+
 interface LeadsPerSourceResponse {
   message: string;
   status: string;
@@ -207,6 +222,10 @@ export class LeadsModule extends ApiClient {
     });
 
     return response.data;
+  }
+
+  async missedFollowups() {
+    return this.get<MissedFollowUps>("/missed-follow-ups");
   }
 }
 export const leadsServoceModule = new LeadsModule();

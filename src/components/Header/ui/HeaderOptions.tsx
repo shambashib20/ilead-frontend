@@ -4,7 +4,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import FollowUp from "@/features/dashboard/components/FollowUp";
 import { useMedia } from "@/hooks/useMedia";
+import { useModalStore } from "@/store/useModalStore";
 import { Link } from "@tanstack/react-router";
 import { Bell, ListTodo, Moon, PhoneMissed, Search } from "lucide-react";
 
@@ -20,13 +22,25 @@ const icons = [
 export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
   const logCount = logs.length;
   const isMobile = useMedia("(max-width: 767px)");
+  const { openModal, setModalTitle, setModalSize, closeModal } =
+    useModalStore();
+
+  function handleFollowUps() {
+    setModalSize?.("xl");
+    setModalTitle?.("Missed Follow ups ");
+    openModal?.({
+      content: <FollowUp />,
+      type: "action",
+      customActions: <></>,
+    });
+  }
 
   return (
     <ul className="flex gap-3 items-center">
       {icons.map((Icon, idx) => {
         const isMoon = Icon === Moon;
         const isBell = Icon === Bell;
-
+        const isPhone = Icon === PhoneMissed;
         if (isMoon) {
           return (
             <li key={idx}>
@@ -79,6 +93,16 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
           );
         }
 
+        if (isPhone) {
+          return (
+            <li>
+              <Icon
+                size={isMobile ? 18 : 20}
+                onClick={() => handleFollowUps()}
+              />
+            </li>
+          );
+        }
         return (
           <li key={idx}>
             <Link to=".">

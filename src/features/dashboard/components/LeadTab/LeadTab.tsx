@@ -7,6 +7,8 @@ import {
 } from "../../../../components/ui/tabs";
 
 import { User, Mail, MapPin, Phone } from "lucide-react";
+import { useModalStore } from "@/store/useModalStore";
+import { LeadDetail } from "@/features/leads/components/LeadModals";
 
 export type LeadTabType = {
   content: {
@@ -18,6 +20,19 @@ export type LeadTabType = {
 };
 function LeadTab({ data }: { data: LeadTabType }) {
   const firstValue = data.content[0]?.label || "tab0";
+
+  const { setModalTitle, setData, setModalSize, openModal } = useModalStore();
+
+  function handleModal({ _id, rayId }: { _id: string; rayId: string }) {
+    setModalTitle?.("Lead Details");
+    setData?.({ _id, rayId });
+
+    setModalSize?.("lg");
+    openModal({
+      content: <LeadDetail />,
+      type: "action" as const,
+    });
+  }
 
   return (
     <Tabs defaultValue={firstValue}>
@@ -53,7 +68,13 @@ function LeadTab({ data }: { data: LeadTabType }) {
                   lead.name && ( // 🔑 top-level guard, skip whole li if no name
                     <li
                       key={lead._id}
-                      className="border-s border-gray-200 dark:border-gray-200 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1"
+                      className="border-s border-gray-200 dark:border-gray-200 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1 dark:hover:bg-amber-50/5"
+                      onClick={() =>
+                        handleModal({
+                          _id: lead._id,
+                          rayId: lead?.meta?.ray_id,
+                        })
+                      }
                     >
                       {/* Avatar */}
                       <div className="h-9 w-9 rounded-full border bg-white text-black grid place-content-center absolute -left-4.5 -top-4 ">

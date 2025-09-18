@@ -12,9 +12,13 @@ import { Menu } from "lucide-react";
 import LeadSourceChart from "@/features/dashboard/components/LeadSourceChart/LeadSourceChart";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { SkeletonLoaderCol } from "@/components/SkeletonLoader/SkeletonLoader";
+import { missedFollowUpsQueryOptions } from "@/features/leads/hooks/useMissedFollowUp";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
+  loader: (opts) => {
+    opts.context.queryClient.ensureQueryData(missedFollowUpsQueryOptions());
+  },
 });
 
 type DashboardCardType = {
