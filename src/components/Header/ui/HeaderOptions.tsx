@@ -1,4 +1,5 @@
 import ThemeToggler from "@/components/ThemeToggler";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +32,11 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
     openModal?.({
       content: <FollowUp />,
       type: "action",
-      customActions: <></>,
+      customActions: (
+        <div>
+          <Button onClick={() => closeModal()}>Close</Button>
+        </div>
+      ),
     });
   }
 
