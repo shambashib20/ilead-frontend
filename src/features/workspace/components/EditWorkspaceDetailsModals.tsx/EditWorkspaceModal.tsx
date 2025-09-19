@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea"; // if available
 import { workspaceService } from "@/features/leads/services/Property.service";
 import { useModalStore } from "@/store/useModalStore";
 import Swal from "sweetalert2";
+import { useUser } from "@/features/auth/hooks/useUser";
 
 export function EditWorkspaceModal({ initialData }: { initialData: any }) {
   const [formData, setFormData] = useState({
@@ -14,12 +15,17 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
     description: initialData.description,
   });
 
+  const { data } = useUser(); // user data with role
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const closeModal = useModalStore((state) => state.closeModal);
   const setFormActions = useModalStore((state) => state.setFormActions);
 
-  const canSubmit =
-    formData.name.trim() !== "" && formData.description.trim() !== "";
+  const isSuperAdmin = data?.role === "Superadmin";
+
+  const canSubmit = isSuperAdmin
+    ? formData.description.trim() !== ""
+    : formData.name.trim() !== "" && formData.description.trim() !== "";
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -58,12 +64,20 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
 
   return (
     <div className="space-y-4 px-2 py-3">
+      {/* Name field */}
       <div>
         <Label htmlFor="name" className="mb-2">
           Name
         </Label>
-        <Input id="name" value={formData.name} onChange={handleChange} />
+        <Input
+          id="name"
+          value={formData.name}
+          onChange={handleChange}
+          disabled={isSuperAdmin} // disable for superadmin
+        />
       </div>
+
+      {/* Description field */}
       <div>
         <Label htmlFor="description" className="mb-2">
           Description

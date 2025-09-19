@@ -126,6 +126,14 @@ interface FolllowUpResponse {
     };
   };
 }
+
+interface ExportLeads {
+  message: string;
+  status: string;
+  data: {
+    // download_url: string;
+  };
+}
 export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
@@ -226,6 +234,10 @@ export class LeadsModule extends ApiClient {
 
   async missedFollowups() {
     return this.get<MissedFollowUps>("/missed-follow-ups");
+  }
+
+  async exportLeads() {
+    return this.get<ExportLeads>("/export-leads");
   }
 }
 export const leadsServoceModule = new LeadsModule();

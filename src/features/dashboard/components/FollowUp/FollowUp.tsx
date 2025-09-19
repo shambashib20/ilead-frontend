@@ -20,7 +20,7 @@ function FollowUp() {
 
   return (
     <Table>
-      <TableCaption>Missed Follow-ups</TableCaption>
+      {/* <TableCaption>Missed Follow-ups</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead>No.</TableHead>

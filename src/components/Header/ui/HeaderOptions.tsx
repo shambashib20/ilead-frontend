@@ -9,16 +9,9 @@ import FollowUp from "@/features/dashboard/components/FollowUp";
 import { useMedia } from "@/hooks/useMedia";
 import { useModalStore } from "@/store/useModalStore";
 import { Link } from "@tanstack/react-router";
-import { Bell, ListTodo, Moon, PhoneMissed, Search } from "lucide-react";
+import { Bell, Moon, PhoneMissed } from "lucide-react";
 
-const icons = [
-  PhoneMissed,
-  ListTodo,
-  // Copy,
-  Search,
-  Moon,
-  Bell,
-];
+const icons = [PhoneMissed, Moon, Bell];
 
 export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
   const logCount = logs.length;
