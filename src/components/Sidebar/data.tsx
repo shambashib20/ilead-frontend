@@ -67,7 +67,7 @@ export const navItems = [
     icon: <UserCircle size={20} />,
     roles: ["Admin", "Superadmin"],
     subItems: [
-      { name: "API Connections", path: "/integrations/api" },
+      { name: "API Connections", path: "/third-party-integration/" },
       { name: "Webhooks", path: "/integrations/webhooks" },
       { name: "Marketplace", path: "/integrations/marketplace" },
     ],
