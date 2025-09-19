@@ -1213,9 +1213,14 @@ export function ImportLeadForm() {
     <div className="w-[full] max-w-[800px]  mx-auto bg-primary">
       <div className="px-4  space-y-4">
         {/* Download Format Button */}
-        <Button onClick={handleDownloadFormat} className="bg-[#3a3285]">
-          <Download className="w-4 h-4" />
-          Download Format
+        <Button asChild className="bg-[#3a3285]">
+          <a
+            href="/templates/Lead_Download_Template.xlsx"
+            download="Lead_Download_Template.xlsx"
+          >
+            <Download className="w-4 h-4" />
+            Download Format
+          </a>
         </Button>
 
         <form

@@ -204,9 +204,9 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             </button>
           )
         )}
-        <button className="ms-auto p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors">
+        {/* <button className="ms-auto p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors">
           <EllipsisVertical size={16} />
-        </button>
+        </button> */}
       </div>
     </div>
   );

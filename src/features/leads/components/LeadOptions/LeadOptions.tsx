@@ -3,16 +3,17 @@ import { CardTitle } from "@/components/ui/card";
 import { useMedia } from "@/hooks/useMedia";
 import { useModalStore } from "@/store/useModalStore";
 import {
-  ArrowDownUp,
+  // ArrowDownUp,
   ChartColumnBig,
   CloudUpload,
   List,
   Plus,
-  Settings,
+  // Settings,
 } from "lucide-react";
 import { ImportLeadForm } from "../LeadModals/LeadModals";
 // import { useExportLeads } from "../../hooks/useExportLeads";
 import axios from "axios";
+import CreateLeadModal from "../HeaderBtnModals/CreateLeadModal";
 
 type LeadOptionsProps = {
   isTableView: boolean;
@@ -48,6 +49,15 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
     } catch (err) {
       console.error("Export failed:", err);
     }
+  }
+
+  function handleCreateModal() {
+    // setModalTitle?.("Create Lead");
+    // setModalSize?.("normal");
+    openModal({
+      content: <CreateLeadModal />,
+      type: "info",
+    });
   }
 
   function handleUploadDocModal() {
@@ -107,7 +117,7 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
       <div>
         <ul className="flex items-center gap-3">
           <li>
-            <Button size={"icon"}>
+            <Button size={"icon"} onClick={handleCreateModal}>
               <Plus size={isMobile ? 14 : 20} />
             </Button>
           </li>
@@ -116,11 +126,11 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
               <CloudUpload size={isMobile ? 14 : 20} />
             </Button>
           </li>
-          <li>
+          {/* <li>
             <Button size={"icon"}>
               <Settings size={isMobile ? 14 : 20} />
             </Button>
-          </li>
+          </li> */}
           {isTableView && (
             <li>
               <Button size={"icon"} onClick={handleExportDocModal}>
@@ -132,11 +142,11 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
             </li>
           )}
 
-          <li>
+          {/* <li>
             <Button size={"icon"}>
               <ArrowDownUp size={isMobile ? 14 : 20} />
             </Button>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>
