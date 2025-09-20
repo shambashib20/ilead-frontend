@@ -46,7 +46,7 @@ function FacebookIntegration() {
   const handleSave = async () => {
     try {
       const response =
-        await facebookIntegrationService.connectWithFacebookPage();
+        await facebookIntegrationService.connectWithFacebookPage(selectedLabel);
 
       // Optional: You can show response data in alert or log it
       console.log("Facebook page connection response:", response);
