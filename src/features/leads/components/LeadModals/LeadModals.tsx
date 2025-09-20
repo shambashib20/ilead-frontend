@@ -1215,8 +1215,8 @@ export function ImportLeadForm() {
         {/* Download Format Button */}
         <Button asChild className="bg-[#3a3285]">
           <a
-            href="/templates/Lead_Download_Template.xlsx"
-            download="Lead_Download_Template.xlsx"
+            href="/Lead_Download_Format_CRM.xlsx"
+            download="Lead_Download_Format_CRM.xlsx"
           >
             <Download className="w-4 h-4" />
             Download Format
