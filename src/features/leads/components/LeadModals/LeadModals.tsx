@@ -1194,10 +1194,10 @@ export function ImportLeadForm() {
     }
   };
 
-  const handleDownloadFormat = () => {
-    // Handle download format logic
-    console.log("Download format clicked");
-  };
+  // const handleDownloadFormat = () => {
+  //   // Handle download format logic
+  //   console.log("Download format clicked");
+  // };
 
   useEffect(() => {
     setFormActions?.({

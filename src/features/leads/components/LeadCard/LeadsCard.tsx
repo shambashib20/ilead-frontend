@@ -1,6 +1,5 @@
 import { memo } from "react";
 import {
-  EllipsisVertical,
   Phone,
   RefreshCw,
   Send,
