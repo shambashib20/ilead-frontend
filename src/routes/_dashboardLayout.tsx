@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import { filteredNavItems, SubMenuItem } from "@/components/Sidebar/data";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import { SidebarMenuItem } from "@/components/Sidebar/data";
+import Sidebar, { filteredNavItems } from "@/components/Sidebar/Sidebar";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
@@ -61,7 +61,7 @@ function RouteComponent() {
             >
               <ul className="">
                 {filteredNavItems.map((item, idx) => (
-                  <SubMenuItem
+                  <SidebarMenuItem
                     key={idx}
                     item={item}
                     isCollapsed={false}

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { useLocation } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import {
@@ -12,34 +13,35 @@ import {
   TrendingUp,
   ChevronDown,
   ChevronRight,
+  Filter,
+  Settings,
+  Plug,
+  CreditCard,
+  Bell,
+  Shield,
+  Sliders,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
-const user = JSON.parse(localStorage.getItem("user") || "{}");
-const currentUserRole = user?.role || "";
+export type NavItem = {
+  name: string;
+  icon?: ReactNode; // har jagah icon zaroori nahi hoga, isliye optional
+  path?: string;
+  roles?: string[];
+  subItems?: NavItem[]; // recursion
+};
+
+interface SidebarMenuItemProps {
+  item: NavItem;
+  isCollapsed: boolean;
+  depth?: number;
+  currentUserRole?: string;
+}
 
 // All navigation items
-export const navItems = [
+export const navItems: NavItem[] = [
   { name: "Dashboard", icon: <House size={20} />, path: "/dashboard" },
-  { name: "Lead", icon: <Funnel size={20} />, path: "/lead" },
-  {
-    name: "Label",
-    icon: <Tags size={20} />,
-    path: "/label",
-    roles: ["Admin", "Superadmin"],
-  },
-  {
-    name: "Status",
-    icon: <TrendingUp size={20} />,
-    path: "/status",
-    roles: ["Admin", "Superadmin"],
-  },
-  {
-    name: "Source",
-    icon: <Activity size={20} />,
-    path: "/source",
-    roles: ["Admin", "Superadmin"],
-  },
+  { name: "Lead", icon: <Filter size={20} />, path: "/lead" },
   {
     name: "Workspace Logs",
     icon: <MessageSquare size={20} />,
@@ -59,126 +61,204 @@ export const navItems = [
   {
     name: "Customers",
     icon: <UserCircle size={20} />,
-    path: "/customer",
+    path: "/customers",
     roles: ["Admin", "Superadmin"],
   },
   {
     name: "Integrations",
-    icon: <UserCircle size={20} />,
+    icon: <Plug size={20} />,
     roles: ["Admin", "Superadmin"],
     subItems: [
-      { name: "API Connections", path: "/third-party-integration/" },
+      { name: "API Connections", path: "/integrations/api" },
       { name: "Webhooks", path: "/integrations/webhooks" },
       { name: "Marketplace", path: "/integrations/marketplace" },
     ],
   },
+  {
+    name: "General Settings",
+    icon: <Settings size={20} />,
+    subItems: [
+      {
+        name: "Attributes",
+        subItems: [
+          {
+            name: "Labels",
+            icon: <Tags size={18} />,
+            path: "/settings/labels",
+            roles: ["Admin", "Superadmin"],
+          },
+          {
+            name: "Status",
+            icon: <TrendingUp size={18} />,
+            path: "/settings/status",
+            roles: ["Admin", "Superadmin"],
+          },
+          {
+            name: "Sources",
+            icon: <Activity size={18} />,
+            path: "/settings/sources",
+            roles: ["Admin", "Superadmin"],
+          },
+        ],
+      },
+      {
+        name: "Preferences",
+        icon: <Sliders size={18} />,
+        path: "/settings/preferences",
+      },
+      {
+        name: "Securty",
+        icon: <Shield size={18} />,
+        path: "/settings/security",
+      },
+      {
+        name: "Notifications",
+        icon: <Bell size={18} />,
+        path: "/settings/notifications",
+      },
+      {
+        name: "Billing",
+        icon: <CreditCard size={18} />,
+        path: "/settings/billing",
+      },
+    ],
+    roles: ["Admin", "Superadmin"],
+  },
 ];
 
-// Filter items based on role
-export const filteredNavItems = navItems.filter((item) => {
-  if (!item.roles) return true;
-  return item.roles.includes(currentUserRole); // Only show if role allowed
-});
-
-export const SubMenuItem = ({
+export const SidebarMenuItem = ({
   item,
   isCollapsed,
   depth = 0,
-}: {
-  item: (typeof navItems)[0];
-  isCollapsed: boolean;
-  depth: number;
-}) => {
+  currentUserRole = "Admin",
+}: SidebarMenuItemProps) => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Check if user has permission to see this item
+  const hasPermission = !item.roles || item.roles.includes(currentUserRole);
+
+  if (!hasPermission) return null;
 
   const hasSubItems = item.subItems && item.subItems.length > 0;
   const isActive = location.pathname === item.path;
 
-  // Check if any subitem is active
-  const isSubItemActive =
-    hasSubItems &&
-    item.subItems.some((subItem) => location.pathname === subItem.path);
+  // Recursive function to check if any nested item is active
+  const checkActiveRecursive = (items: NavItem[]): boolean => {
+    return items.some(
+      (subItem) =>
+        location.pathname === subItem.path ||
+        (subItem.subItems && checkActiveRecursive(subItem.subItems))
+    );
+  };
 
-  return (
-    <li>
-      {hasSubItems ? (
-        <>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`
-              flex items-center justify-between w-full text-[15px] h-11 rounded-md p-2
-              transition-all duration-200 ease-in-out group font-bold
-              ${isActive || isSubItemActive ? "primary-gradient sidebar-active text-white" : ""}
-            `}
-            style={{ paddingLeft: `${1.3 + depth * 1.5}rem` }}
-          >
-            <div className="flex items-center gap-4">
-              <span className=" transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+  const isSubItemActive = hasSubItems
+    ? checkActiveRecursive(item.subItems!)
+    : false;
+  const shouldHighlight = isActive || isSubItemActive;
+
+  const baseStyles = cn(
+    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative",
+    "hover:bg-sidebar-hover hover:translate-x-1",
+    shouldHighlight &&
+      "bg-gradient-to-r from-sidebar-active to-accent text-sidebar-text-active shadow-lg",
+    !shouldHighlight && "text-sidebar-text hover:text-sidebar-text"
+  );
+
+  const indentStyles = {
+    paddingLeft: `${1 + depth * 3}px`,
+  };
+
+  // If item has subItems, render as expandable button
+  if (hasSubItems) {
+    return (
+      <li>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={cn(baseStyles, "w-full justify-between px-3")}
+          style={indentStyles}
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            {item.icon && (
+              <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
                 {item.icon}
               </span>
-              {!isCollapsed && (
-                <span className="overflow-hidden whitespace-nowrap">
-                  {item.name}
-                </span>
-              )}
-            </div>
-            {!isCollapsed && (
-              <span className="transition-transform duration-200">
-                {isOpen ? (
-                  <ChevronDown size={16} />
-                ) : (
-                  <ChevronRight size={16} />
-                )}
-              </span>
             )}
-          </button>
-
-          {!isCollapsed && isOpen && (
-            <ul className="mt-1">
-              {item.subItems.map((subItem, subIdx) => (
-                <li key={subIdx}>
-                  <Link
-                    to={subItem.path}
-                    className={`
-                      flex items-center gap-4 text-[14px] h-9 rounded-md p-2 mx-2
-                      transition-all duration-200 ease-in-out group font-medium
-                      ${location.pathname === subItem.path ? "primary-gradient sidebar-active text-white" : ""}
-                    `}
-                    style={{ paddingLeft: `${2.5 + depth * 1.5}rem` }}
-                  >
-                    <span className="transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-                      • {/* You can replace with an icon if needed */}
-                    </span>
-                    <span className="overflow-hidden whitespace-nowrap">
-                      {subItem.name}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </>
-      ) : (
-        <Link
-          to={item.path}
-          className={`
-            flex items-center gap-4 text-[15px] h-11 rounded-md p-2
-            transition-all duration-200 ease-in-out group font-medium
-            ${isActive ? "primary-gradient sidebar-active text-white" : ""}
-          `}
-          style={{ paddingLeft: `${1 + depth * 1.5}rem` }}
-        >
-          <span className="ps-1 transition-transform duration-300 ease-in-out group-hover:translate-x-1">
-            {item.icon}
-          </span>
+            {!isCollapsed && (
+              <span className="truncate font-medium">{item.name}</span>
+            )}
+          </div>
           {!isCollapsed && (
-            <span className="overflow-hidden whitespace-nowrap">
-              {item.name}
+            <span className="flex-shrink-0 transition-transform duration-200">
+              {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </span>
           )}
+        </button>
+
+        {/* Recursive rendering of sub-items */}
+        {!isCollapsed && isOpen && item.subItems && (
+          <ul className="mt-1 space-y-1 ">
+            {item.subItems.map((subItem, index) => (
+              <SidebarMenuItem
+                key={`${subItem.name}-${index}`}
+                item={subItem}
+                isCollapsed={isCollapsed}
+                depth={depth + 1}
+                currentUserRole={currentUserRole}
+              />
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
+
+  // If item has a path, render as Link
+  if (item.path) {
+    return (
+      <li>
+        <Link
+          to={item.path}
+          className={cn(baseStyles, "px-3")}
+          style={indentStyles}
+        >
+          {item.icon ? (
+            <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
+              {item.icon}
+            </span>
+          ) : (
+            <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-sidebar-text-muted group-hover:bg-sidebar-text" />
+            </span>
+          )}
+          {!isCollapsed && (
+            <span className="truncate font-medium">{item.name}</span>
+          )}
         </Link>
-      )}
+      </li>
+    );
+  }
+
+  // If item has neither subItems nor path, render as static item
+  return (
+    <li>
+      <div
+        className={cn(baseStyles, "px-3 cursor-default")}
+        style={indentStyles}
+      >
+        {item.icon ? (
+          <span className="flex-shrink-0">{item.icon}</span>
+        ) : (
+          <span className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-sidebar-text-muted" />
+          </span>
+        )}
+        {!isCollapsed && (
+          <span className="truncate font-medium text-sidebar-text-muted">
+            {item.name}
+          </span>
+        )}
+      </div>
     </li>
   );
 };

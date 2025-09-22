@@ -7,7 +7,16 @@ import Logo_small from "../../assets/logo_small.png";
 import Logo_small_dark from "../../assets/logo-dark-sm.png";
 
 import { Circle, CircleDot } from "lucide-react";
-import { filteredNavItems, SubMenuItem } from "./data";
+import { navItems, SidebarMenuItem } from "./data";
+
+const user = JSON.parse(localStorage.getItem("user") || "{}");
+const currentUserRole = user?.role || "";
+
+// Filter items based on role
+export const filteredNavItems = navItems.filter((item) => {
+  if (!item.roles) return true;
+  return item.roles.includes(currentUserRole); // Only show if role allowed
+});
 
 function Sidebar() {
   const { theme } = useTheme();
@@ -57,7 +66,7 @@ function Sidebar() {
 
       {/* Nav Section */}
       <nav
-        className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 
+        className="flex-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 
           [&::-webkit-scrollbar-track]:rounded-full
           [&::-webkit-scrollbar-track]:transparent
           [&::-webkit-scrollbar-thumb]:rounded-full
@@ -65,11 +74,11 @@ function Sidebar() {
       >
         <ul className="ps-2 pe-2 pt-4">
           {filteredNavItems.map((item, idx) => (
-            <SubMenuItem
+            <SidebarMenuItem
               key={idx}
               item={item}
               isCollapsed={effectiveCollapsed}
-              depth={0}
+              depth={2}
             />
           ))}
         </ul>
