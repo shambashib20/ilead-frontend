@@ -61,7 +61,7 @@ export const navItems: NavItem[] = [
   {
     name: "Customers",
     icon: <UserCircle size={20} />,
-    path: "/customers",
+    path: "/customer",
     roles: ["Admin", "Superadmin"],
   },
   {
@@ -69,7 +69,7 @@ export const navItems: NavItem[] = [
     icon: <Plug size={20} />,
     roles: ["Admin", "Superadmin"],
     subItems: [
-      { name: "API Connections", path: "/integrations/api" },
+      { name: "API Connections", path: "/third-party-integration" },
       { name: "Webhooks", path: "/integrations/webhooks" },
       { name: "Marketplace", path: "/integrations/marketplace" },
     ],
@@ -85,42 +85,22 @@ export const navItems: NavItem[] = [
           {
             name: "Labels",
             icon: <Tags size={18} />,
-            path: "/settings/labels",
+            path: "/label",
             roles: ["Admin", "Superadmin"],
           },
           {
             name: "Status",
             icon: <TrendingUp size={18} />,
-            path: "/settings/status",
+            path: "/status",
             roles: ["Admin", "Superadmin"],
           },
           {
             name: "Sources",
             icon: <Activity size={18} />,
-            path: "/settings/sources",
+            path: "/source",
             roles: ["Admin", "Superadmin"],
           },
         ],
-      },
-      {
-        name: "Preferences",
-        icon: <Sliders size={18} />,
-        path: "/settings/preferences",
-      },
-      {
-        name: "Securty",
-        icon: <Shield size={18} />,
-        path: "/settings/security",
-      },
-      {
-        name: "Notifications",
-        icon: <Bell size={18} />,
-        path: "/settings/notifications",
-      },
-      {
-        name: "Billing",
-        icon: <CreditCard size={18} />,
-        path: "/settings/billing",
       },
     ],
     roles: ["Admin", "Superadmin"],
