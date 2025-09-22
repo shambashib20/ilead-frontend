@@ -87,7 +87,7 @@
   --btn-clr: oklch(0.985 0 0);
   --skeleton-base: oklch(92.797% 0.00011 271.152);
   --skeleton-base-foreground: oklch(88.224% 0.0001 271.152);
-  --primary-gradient: linear-gradient(118deg, #432ee5, rgba(228, 62, 43));
+  --primary-gradient: linear-gradient(118deg, #432ee5, #e43e2b);
 }
 
 .dark {

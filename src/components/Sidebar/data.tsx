@@ -80,6 +80,7 @@ export const navItems: NavItem[] = [
     subItems: [
       {
         name: "Attributes",
+        icon: <Funnel size={18} />,
         subItems: [
           {
             name: "Labels",
@@ -158,21 +159,21 @@ export const SidebarMenuItem = ({
   const shouldHighlight = isActive || isSubItemActive;
 
   const baseStyles = cn(
-    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative",
+    "flex items-center gap-3 text-sm h-11  rounded-lg transition-all duration-200 ease-in-out group relative",
     "hover:bg-sidebar-hover hover:translate-x-1",
     shouldHighlight &&
-      "bg-gradient-to-r from-sidebar-active to-accent text-sidebar-text-active shadow-lg",
+      "bg-gradient-to-r from-[#432ee5] to-[#e43e2b] text-sidebar-text-active shadow-lg",
     !shouldHighlight && "text-sidebar-text hover:text-sidebar-text"
   );
 
   const indentStyles = {
-    paddingLeft: `${1 + depth * 3}px`,
+    paddingLeft: `${0.6 + depth * 0.2}rem`,
   };
 
   // If item has subItems, render as expandable button
   if (hasSubItems) {
     return (
-      <li>
+      <li className="overflow-hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className={cn(baseStyles, "w-full justify-between px-3")}
@@ -216,7 +217,7 @@ export const SidebarMenuItem = ({
   // If item has a path, render as Link
   if (item.path) {
     return (
-      <li>
+      <li className="overflow-hidden">
         <Link
           to={item.path}
           className={cn(baseStyles, "px-3")}
@@ -241,7 +242,7 @@ export const SidebarMenuItem = ({
 
   // If item has neither subItems nor path, render as static item
   return (
-    <li>
+    <li className="overflow-hidden">
       <div
         className={cn(baseStyles, "px-3 cursor-default")}
         style={indentStyles}

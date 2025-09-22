@@ -66,19 +66,19 @@ function Sidebar() {
 
       {/* Nav Section */}
       <nav
-        className="flex-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 
+        className="flex-1 overflow-y-scroll [&::-webkit-scrollbar]:w-1.5 
           [&::-webkit-scrollbar-track]:rounded-full
           [&::-webkit-scrollbar-track]:transparent
           [&::-webkit-scrollbar-thumb]:rounded-full
           [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
       >
-        <ul className="ps-2 pe-2 pt-4">
+        <ul className="ps-2 pe-2 pt-4 ">
           {filteredNavItems.map((item, idx) => (
             <SidebarMenuItem
               key={idx}
               item={item}
               isCollapsed={effectiveCollapsed}
-              depth={2}
+              depth={3}
             />
           ))}
         </ul>
