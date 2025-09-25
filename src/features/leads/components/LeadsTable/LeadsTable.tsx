@@ -281,6 +281,8 @@ export default function LeadsTable({
                             setData?.({
                               _id: lead._id,
                               rayId: lead.meta?.ray_id,
+                              labels: lead.labels,
+                              status: lead.status,
                             });
                             openModal({
                               content: el,

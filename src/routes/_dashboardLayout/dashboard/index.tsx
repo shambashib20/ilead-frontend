@@ -108,33 +108,33 @@ function RouteComponent() {
       },
     },
     // You can populate tasks and reminders similarly later
-    // {
-    //   title: "Today's Task",
-    //   tabData: {
-    //     content: [
-    //       { label: "Today", description: "Tasks not yet started.", length: 0 },
-    //       {
-    //         label: "Tommorow",
-    //         description: "Tasks currently happening.",
-    //         length: 0,
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   title: "Today's Reminders",
-    //   tabData: {
-    //     content: [
-    //       { label: "Reminders", description: "Today's reminders.", length: 0 },
-    //       {
-    //         label: "Meetings",
-    //         description: "Reminders coming soon.",
-    //         length: 0,
-    //       },
-    //       { label: "Events", description: "You missed these.", length: 0 },
-    //     ],
-    //   },
-    // },
+    {
+      title: "Today's Task",
+      tabData: {
+        content: [
+          { label: "Today", description: "Tasks not yet started.", length: 0 },
+          {
+            label: "Tommorow",
+            description: "Tasks currently happening.",
+            length: 0,
+          },
+        ],
+      },
+    },
+    {
+      title: "Today's Reminders",
+      tabData: {
+        content: [
+          { label: "Reminders", description: "Today's reminders.", length: 0 },
+          {
+            label: "Meetings",
+            description: "Reminders coming soon.",
+            length: 0,
+          },
+          { label: "Events", description: "You missed these.", length: 0 },
+        ],
+      },
+    },
   ];
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");

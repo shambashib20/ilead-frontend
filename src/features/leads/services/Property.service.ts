@@ -23,6 +23,9 @@ interface KeyAccess {
 }
 
 export type Property = {
+  location: string;
+  plan_name: string;
+  owner: any;
   meta?: {
     [key: string]: any;
   };
@@ -83,30 +86,27 @@ interface ResgistrationResponse {
   };
 }
 
-
 interface UpdateLogPayload {
   logId: string;
 }
 
-interface UpdateLogResponse {  
-    message: string,
-    status: string,
-    data: {
-        title: string,
-        description: string,
-        status: string,
-        meta: {
-            leadId: string,
-            readStatus: string,
-            readAt: string
-        },
-        _id: string,
-        createdAt: string,
-        updatedAt: string
-    }
-
+interface UpdateLogResponse {
+  message: string;
+  status: string;
+  data: {
+    title: string;
+    description: string;
+    status: string;
+    meta: {
+      leadId: string;
+      readStatus: string;
+      readAt: string;
+    };
+    _id: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
-
 
 export class PropertyModule extends ApiClient {
   constructor() {

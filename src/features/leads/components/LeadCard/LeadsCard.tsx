@@ -89,11 +89,11 @@ const CARD_ACTIONS = [
 ] as const;
 
 export const LeadCard = memo(({ lead }: LeadCardProps) => {
-  const assignedToName = lead.assigned_to.name;
+  const assignedToName = lead.assigned_to.name || "";
   const leadName = String(lead.name);
   const phoneNumber = String(lead.phone_number);
-  const createdAt = String(lead.createdAt);
-  const assignedBy = String(lead?.assigned_by?.name || "Test User");
+  const createdAt = String(lead.createdAt || "");
+  const assignedBy = String(lead?.assigned_by?.name || "");
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
   const { theme } = useTheme();
   return (
@@ -118,7 +118,9 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
                 return (
                   <span
                     key={label._id || label.title}
-                    style={{ backgroundColor: label.meta?.color_code }}
+                    style={{
+                      backgroundColor: label.meta?.color_code || "gray",
+                    }}
                     className="text-white text-xs px-3 py-1 rounded"
                   >
                     {label.title}
@@ -148,10 +150,15 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             <span className="font-medium">CD:</span>
             <span>{new Date(createdAt).toLocaleString()}</span>
           </div>
-          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
-            <span className="font-medium">BY:</span>
-            <span>{assignedBy}</span>
-          </div>
+          {assignedBy !== "" ? (
+            <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
+              <span className="font-medium">BY:</span>
+              <span>{assignedBy}</span>
+            </div>
+          ) : (
+            <div></div>
+          )}
+
           <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">TO:</span>
             <span>{assignedToName}</span>

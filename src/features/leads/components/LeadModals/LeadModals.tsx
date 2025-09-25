@@ -778,6 +778,7 @@ export function LeadDetail() {
   }
 
   // Extract fields
+  console.log(lead);
 
   return (
     <div className="min-h-[400px] max-h-[450px] overflow-y-auto px-3 ">
@@ -802,8 +803,10 @@ export function LeadDetail() {
                 setModalTitle?.(title);
                 setModalSize?.("sm");
                 setData?.({
-                  _id: lead._id,
-                  rayId: lead.meta?.ray_id,
+                  _id: lead._id ?? lead?.data?._id,
+                  rayId: lead.meta?.ray_id ?? lead.data?.meta?.ray_id,
+                  labels: lead.labels ?? lead.data.labels,
+                  status: lead.status ?? lead?.data?.status,
                 });
                 openModal({
                   content: el,
@@ -920,9 +923,15 @@ export function LeadDetail() {
                     {lead.data.labels.length > 0
                       ? lead.data.labels.map((lbl: any) => (
                           <span
+                            style={{
+                              backgroundColor: lbl?.meta?.color_code || "gray",
+
+                              // color: "red",
+                            }}
                             key={lbl._id}
-                            className="bg-[#3a3285] px-2 py-1 rounded text-xs text-white "
+                            className="px-2 py-1 rounded text-xs inline-block text-white "
                           >
+                            {/* {JSON.stringify(lbl?.meta?.color_code)  "dd"} */}
                             {lbl.title}
                           </span>
                         ))
@@ -1053,7 +1062,7 @@ export function LeadDetail() {
                 .map((log: any, index: number) => (
                   <li
                     key={log._id || index}
-                    className="border border-gray-700 rounded p-4 bg-[#1f1f2f] text-white"
+                    className="border border-gray-700 rounded p-4 bg-background text-white"
                   >
                     <div className="flex justify-between items-center mb-2">
                       <h4 className="font-semibold text-base">{log.title}</h4>

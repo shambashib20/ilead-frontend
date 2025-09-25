@@ -46,7 +46,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
         const isPhone = Icon === PhoneMissed;
         if (isMoon) {
           return (
-            <li key={idx}>
+            <li key={idx} className="cursor-pointer">
               <ThemeToggler />
             </li>
           );
@@ -54,7 +54,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
 
         if (isBell) {
           return (
-            <li key={idx} className="relative flex items-center">
+            <li key={idx} className="relative flex items-center ">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="relative flex items-center justify-center h-8 w-8 cursor-pointer">
@@ -98,7 +98,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
 
         if (isPhone) {
           return (
-            <li>
+            <li className="cursor-pointer">
               <Icon
                 size={isMobile ? 18 : 20}
                 onClick={() => handleFollowUps()}
@@ -107,7 +107,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
           );
         }
         return (
-          <li key={idx}>
+          <li key={idx} className="cursor-pointer">
             <Link to=".">
               <Icon size={isMobile ? 18 : 20} />
             </Link>
