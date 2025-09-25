@@ -5,7 +5,6 @@ import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { useEffect, useState } from "react";
 import { useDeleteLead } from "../../hooks/useDeleteLeads";
 
-// import { useMutation } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -52,12 +51,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { LeadsModule } from "../../services/LeadsModule.service";
-import { LabelService } from "../../services/Lable.service";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { CustomerModule } from "../../services/Customer.service";
-import type { AxiosResponse } from "axios";
-import { StatusService } from "../../services/Status.service";
 
 import { FileUploader } from "@/components/MediaUploader/FileUploader";
 import { AudioRecorderUploader } from "@/components/MediaUploader/AudioRecorderUploader";
@@ -70,16 +65,15 @@ import { useLabels } from "@/features/labels/hooks/useLables";
 import { useSource } from "../../hooks/useSource";
 import { useImportLeads } from "../../hooks/useImportLeads";
 import { useTheme } from "@/contexts/ThemeProvider";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Switch } from "@/components/ui/switch";
+import { useAllLabels } from "../../hooks/useAllLabels";
+import { useAssignLabels } from "../../hooks/useAssignLable";
+import { useAssignLeadToChatAgent } from "../../hooks/useAssignLeadToChatAgent";
+import { useConvertLeadToCustomer } from "../../hooks/useConvertLeadToCustomer";
+import { useUpdateLeadStatus } from "../../hooks/useUpdateLeadStatus";
 
 const leadsApi = new LeadsModule();
-const labelApi = new LabelService();
-
-const statusApi = new StatusService();
 
 const MySwal = withReactContent(Swal);
-const customerModule = new CustomerModule();
 export interface LabelItem {
   _id: string;
   title: string;
@@ -224,32 +218,10 @@ export function LeadLabels() {
   const { data, closeModal } = useModalStore();
   const leadId = data?._id;
   const [search, setSearch] = useState("");
-
-  const [labels, setLabels] = useState<LabelItem[]>([]);
+  const { allLables, allLablesLoading } = useAllLabels();
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchLabels() {
-      try {
-        setIsLoading(true);
-        const res = (await labelApi.labels()) as AxiosResponse<LabelResponse>;
-        const cleanedLabels = res.data.data.map((label) => ({
-          _id: label._id,
-          title: label.title,
-        }));
-        setLabels(cleanedLabels);
-      } catch (err) {
-        setError("Failed to load labels");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchLabels();
-  }, []);
+  const { asyncAssignLabelsMutate, isPending } = useAssignLabels();
 
   const toggleLabel = (id: string) => {
     setSelected((prev) => {
@@ -259,24 +231,39 @@ export function LeadLabels() {
     });
   };
 
-  const assignLabels = async () => {
-    if (!leadId || selected.size === 0) return;
+  useEffect(() => {
+    const ids = new Set(data.labels.map((item: any) => item._id));
+    setSelected(ids as unknown as any);
+  }, [data.labels]);
 
-    setIsSubmitting(true);
-    setError(null);
+  // const assignLabels = async () => {
+  //   if (!leadId || selected.size === 0) return;
+
+  //   setIsSubmitting(true);
+  //   setError(null);
+  //   try {
+  //     await leadsApi.assignLabelToLead({
+  //       leadId,
+  //       labelIds: Array.from(selected),
+  //     });
+  //     closeModal(); // close on success
+  //   } catch (err) {
+  //     setError("Failed to assign labels. Try again.");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+  const handleAssign = async () => {
     try {
-      await leadsApi.assignLabelToLead({
-        leadId,
-        labelIds: Array.from(selected),
-      });
-      closeModal(); // close on success
+      await asyncAssignLabelsMutate({ leadId, labelIds: Array.from(selected) });
+      closeModal();
     } catch (err) {
       setError("Failed to assign labels. Try again.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
-  const filteredLabels = labels.filter((label) =>
+
+  const filteredLabels = allLables.data.filter((label) =>
     label.title.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -284,7 +271,7 @@ export function LeadLabels() {
     <div className="space-y-4 px-5 pt-2">
       <Input
         placeholder="Search labels..."
-        disabled={isSubmitting}
+        disabled={isPending}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="w-full"
@@ -296,7 +283,7 @@ export function LeadLabels() {
           [&::-webkit-scrollbar-thumb]:rounded-full
           [&::-webkit-scrollbar-thumb]:transparent"
       >
-        {isLoading ? (
+        {allLablesLoading ? (
           <Loader />
         ) : filteredLabels.length === 0 ? (
           <motion.div
@@ -339,10 +326,10 @@ export function LeadLabels() {
 
       <Button
         className=" w-full"
-        disabled={isSubmitting || selected.size === 0}
-        onClick={assignLabels}
+        disabled={isPending || selected.size === 0}
+        onClick={handleAssign}
       >
-        {isSubmitting ? "Assigning..." : "Assign Labels"}
+        {isPending ? "Assigning..." : "Assign Labels"}
       </Button>
     </div>
   );
@@ -350,30 +337,25 @@ export function LeadLabels() {
 
 export function LeadAssign() {
   const { agents } = useChatAgents();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const { data, closeModal, setFormActions, setSubmitLabel } = useModalStore();
+  const { assignToAgentAsync, isPending } = useAssignLeadToChatAgent();
 
   const handleAssign = async () => {
     if (!selectedAgentId) {
       Swal.fire("Error", "Please select an agent.", "error");
       return;
     }
-
     try {
-      const payload = {
+      await assignToAgentAsync({
         leadId: data._id,
         chatAgentId: selectedAgentId,
-      };
-
-      await leadsApi.assignLeadTo(payload);
+      });
 
       Swal.fire("Success", "Lead assigned successfully.", "success");
       closeModal?.();
-    } catch (error: any) {
-      Swal.fire("Error", error?.message || "Something went wrong", "error");
-    } finally {
-      setIsSubmitting(false);
+    } catch (err: any) {
+      Swal.fire("Error", err?.message || "Something went wrong", "error");
     }
   };
 
@@ -384,9 +366,9 @@ export function LeadAssign() {
       onSubmit: handleAssign,
       onCancel: () => closeModal?.(),
       canSubmit: !!selectedAgentId,
-      isSubmitting,
+      isSubmitting: isPending,
     });
-  }, [selectedAgentId, isSubmitting]);
+  }, [selectedAgentId, isPending]);
 
   return (
     <div className="space-y-4 px-5 pt-2">
@@ -411,8 +393,8 @@ export function LeadAssign() {
 
 export function LeadCreateCustomer() {
   const { closeModal, data } = useModalStore();
-  const [loading, setLoading] = useState(false);
 
+  const { convertAsync, isPending } = useConvertLeadToCustomer();
   const handleConvert = async () => {
     if (!data?._id) {
       await MySwal.fire({
@@ -423,31 +405,27 @@ export function LeadCreateCustomer() {
       return;
     }
 
-    setLoading(true);
     try {
-      const res = await customerModule.convertToCustomer({ leadId: data._id });
+      const res = await convertAsync({ leadId: data._id });
 
       await MySwal.fire({
         icon: "success",
         title: "Conversion Successful",
-        text: res.message,
+        text: (res as any)?.message ?? "Converted successfully",
         timer: 2000,
         showConfirmButton: false,
       });
 
       closeModal();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Conversion error:", error);
       await MySwal.fire({
         icon: "error",
         title: "Conversion Failed",
-        text: "Could not convert the lead to a customer.",
+        text: error?.message ?? "Could not convert the lead to a customer.",
       });
-    } finally {
-      setLoading(false);
     }
   };
-
   return (
     <div className="space-y-4 p-4 py-8">
       <div className="flex items-center justify-center">
@@ -458,8 +436,8 @@ export function LeadCreateCustomer() {
       </h3>
       <ul className="flex items-center justify-center gap-4">
         <li>
-          <Button onClick={handleConvert} disabled={loading}>
-            {loading ? "Converting..." : "Yes Convert"}
+          <Button onClick={handleConvert} disabled={isPending}>
+            {isPending ? "Converting..." : "Yes Convert"}
           </Button>
         </li>
         <li>
@@ -471,6 +449,7 @@ export function LeadCreateCustomer() {
     </div>
   );
 }
+
 export function LeadFollowUp() {
   const { data, closeModal, setFormActions, setSubmitLabel } = useModalStore();
   const leadId = data?._id;
@@ -620,57 +599,34 @@ export function LeadStatus() {
   const { data, closeModal } = useModalStore();
   const leadId = data?._id;
   const [search, setSearch] = useState("");
-
-  const [statuses, setStatuses] = useState<StatusItem[]>([]);
+  const { status, isLoading } = useStatus();
   const [selectedStatusId, setSelectedStatusId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const filteredStatuses = statuses.filter((status) =>
+  const { updateStatusAsync, isPending, error } = useUpdateLeadStatus();
+  const filteredStatuses = status.data.filter((status) =>
     status.title.toLowerCase().includes(search.toLowerCase())
   );
 
   useEffect(() => {
-    async function fetchStatuses() {
-      try {
-        setIsLoading(true);
-        const res =
-          (await statusApi.status()) as unknown as AxiosResponse<StatusResponse>;
-        setStatuses(res.data.data);
-      } catch (err) {
-        setError("Failed to load statuses");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchStatuses();
+    setSelectedStatusId(data.status._id);
   }, []);
 
   const assignStatus = async () => {
     if (!leadId || !selectedStatusId) return;
-
-    setIsSubmitting(true);
-    setError(null);
     try {
-      await leadsApi.updateLeadStatus({
-        leadId,
-        statusId: selectedStatusId,
-      });
-      closeModal(); // close on success
+      await updateStatusAsync({ leadId, statusId: selectedStatusId });
+      closeModal();
     } catch (err) {
-      setError("Failed to update status. Try again.");
-    } finally {
-      setIsSubmitting(false);
+      // error already logged by hook
     }
   };
+
+  console.log(data?.status);
 
   return (
     <div className="space-y-4 px-5 pt-2">
       <Input
         placeholder="Search status..."
-        disabled={isSubmitting}
+        disabled={isPending}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="w-full"
@@ -697,7 +653,7 @@ export function LeadStatus() {
                   name="status"
                   checked={selectedStatusId === status._id}
                   onChange={() => setSelectedStatusId(status._id)}
-                  disabled={isSubmitting}
+                  disabled={isPending}
                 />
                 <label htmlFor={status._id} className="text-sm">
                   {status.title}
@@ -708,14 +664,14 @@ export function LeadStatus() {
         )}
       </div>
 
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {error && <div className="text-red-500 text-sm">{error.message}</div>}
 
       <Button
         className="w-full"
-        disabled={isSubmitting || !selectedStatusId}
+        disabled={isPending || !selectedStatusId}
         onClick={assignStatus}
       >
-        {isSubmitting ? "Updating..." : "Update Status"}
+        {isPending ? "Updating..." : "Update Status"}
       </Button>
     </div>
   );

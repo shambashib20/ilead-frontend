@@ -20,10 +20,15 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
     useModalStore();
 
   function handleFollowUps() {
-    setModalSize?.("xl");
+    setModalSize?.("lg");
     setModalTitle?.("Missed Follow ups ");
     openModal?.({
-      content: <FollowUp />,
+      content: (
+        <div className="mx-3 border-1 border-gray-600 rounded-2xl overflow-hidden">
+          {" "}
+          <FollowUp />
+        </div>
+      ),
       type: "action",
       customActions: (
         <div>

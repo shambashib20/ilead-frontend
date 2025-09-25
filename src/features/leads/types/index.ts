@@ -28,4 +28,7 @@ export interface Status {
 export interface Label {
   _id: string;
   title: string;
+  meta: {
+    color_code: string;
+  };
 }

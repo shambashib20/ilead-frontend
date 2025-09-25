@@ -25,7 +25,7 @@ export interface Leads {
     comment: string;
     assigned_by: { name: string };
 
-    labels: [{ _id: string; title: string }];
+    labels: [{ _id: string; title: string; meta: { color_code: string } }];
     follow_ups: [];
   }[];
   pagination: Pagination;

@@ -92,6 +92,13 @@ function RouteComponent() {
       _id: lead.status?._id ?? "",
       title: statuses.find((s) => s._id === lead.status?._id)?.title ?? "",
     },
+    labels: Array.isArray(lead.labels)
+      ? lead.labels.map((label) => ({
+          _id: label._id ?? "",
+          title: label.title ?? "",
+          meta: label.meta ?? { color_code: "" },
+        }))
+      : [],
   }));
 
   return isTableView ? (

@@ -18,9 +18,9 @@ function FollowUp() {
   if (!missedFollowUps?.data?.length) return <p>No missed follow-ups</p>;
 
   return (
-    <Table>
+    <Table className="">
       {/* <TableCaption>Missed Follow-ups</TableCaption> */}
-      <TableHeader>
+      <TableHeader className="bg-">
         <TableRow>
           <TableHead>No.</TableHead>
           <TableHead>Customer Name</TableHead>
@@ -39,7 +39,7 @@ function FollowUp() {
             <>
               <TableRow
                 key={item.leadId}
-                className="cursor-pointer"
+                className="cursor-pointer bg-purple-900/20 text-bg-purple-900 font-semibold hover:bg-purple-700/50 dark:text-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50"
                 onClick={() => setExpandedRow(isExpanded ? null : item.leadId)}
               >
                 <TableCell>{index + 1}</TableCell>

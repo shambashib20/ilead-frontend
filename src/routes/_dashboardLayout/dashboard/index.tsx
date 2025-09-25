@@ -108,33 +108,33 @@ function RouteComponent() {
       },
     },
     // You can populate tasks and reminders similarly later
-    {
-      title: "Today's Task",
-      tabData: {
-        content: [
-          { label: "Today", description: "Tasks not yet started.", length: 0 },
-          {
-            label: "Tommorow",
-            description: "Tasks currently happening.",
-            length: 0,
-          },
-        ],
-      },
-    },
-    {
-      title: "Today's Reminders",
-      tabData: {
-        content: [
-          { label: "Reminders", description: "Today's reminders.", length: 0 },
-          {
-            label: "Meetings",
-            description: "Reminders coming soon.",
-            length: 0,
-          },
-          { label: "Events", description: "You missed these.", length: 0 },
-        ],
-      },
-    },
+    // {
+    //   title: "Today's Task",
+    //   tabData: {
+    //     content: [
+    //       { label: "Today", description: "Tasks not yet started.", length: 0 },
+    //       {
+    //         label: "Tommorow",
+    //         description: "Tasks currently happening.",
+    //         length: 0,
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   title: "Today's Reminders",
+    //   tabData: {
+    //     content: [
+    //       { label: "Reminders", description: "Today's reminders.", length: 0 },
+    //       {
+    //         label: "Meetings",
+    //         description: "Reminders coming soon.",
+    //         length: 0,
+    //       },
+    //       { label: "Events", description: "You missed these.", length: 0 },
+    //     ],
+    //   },
+    // },
   ];
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -208,7 +208,7 @@ function RouteComponent() {
                       `  FROM ${startDate} to ${endDate}`}
                   </h3>
                   {agent !== "" && (
-                    <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
+                    <h4 className="bg-blue-300/20 p-1 px-2 text-[10px] text-puple-300 dark:text-blue-50  font-semibold rounded w-fit">
                       {agent}
                     </h4>
                   )}

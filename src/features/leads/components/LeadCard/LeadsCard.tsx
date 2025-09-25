@@ -20,7 +20,6 @@ import {
 } from "../LeadModals";
 
 import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
-import { statusColorMap } from "../../utils/constants";
 import { useTheme } from "@/contexts/ThemeProvider";
 
 interface LeadCardProps {
@@ -96,7 +95,6 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const createdAt = String(lead.createdAt);
   const assignedBy = String(lead?.assigned_by?.name || "Test User");
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
-  const statusColors = Array.from(statusColorMap.values());
   const { theme } = useTheme();
   return (
     <div className="bg-white dark:bg-primary rounded-lg shadow hover:shadow-lg transition-all">
@@ -116,12 +114,11 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         <div className="pt-5 px-6">
           <div className="flex flex-wrap gap-2 mb-3">
             {lead.labels?.length > 0 ? (
-              lead.labels.map((label, idx) => {
-                const bgColor = statusColors[idx % statusColors.length]; // cycle colors
+              lead.labels.map((label) => {
                 return (
                   <span
                     key={label._id || label.title}
-                    style={{ backgroundColor: bgColor }}
+                    style={{ backgroundColor: label.meta?.color_code }}
                     className="text-white text-xs px-3 py-1 rounded"
                   >
                     {label.title}
@@ -162,7 +159,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         </div>
       </div>
 
-      <div className="mt-3 items-center py-3 px-2 border-t border-gray-300 dark:border-gray-600 flex gap-1.5">
+      <div className="mt-3 items-center py-3 px-2 border-t border-gray-300 dark:border-gray-600 flex gap-1.5 relative z-20">
         {CARD_ACTIONS.map(
           ({
             icon: Icon,
@@ -184,7 +181,10 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
                 setData?.({
                   _id: lead._id,
                   rayId: lead.meta?.ray_id,
+                  labels: lead.labels,
+                  status: lead.status,
                 });
+
                 openModal({
                   content: el,
                   type,

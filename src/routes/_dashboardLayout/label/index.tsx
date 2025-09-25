@@ -148,17 +148,20 @@ function RouteComponent() {
                     </TableCell>
 
                     <TableCell className="flex gap-2 items-center">
-                      <Pencil
-                        size={18}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => handleEdit(label)}
-                      />
-
-                      <Trash
-                        size={18}
-                        className="cursor-pointer text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(label._id)}
-                      />
+                      {label?.meta?.is_editable && (
+                        <Pencil
+                          size={18}
+                          className="cursor-pointer text-blue-600 hover:text-blue-800"
+                          onClick={() => handleEdit(label)}
+                        />
+                      )}
+                      {label?.meta?.is_editable && (
+                        <Trash
+                          size={18}
+                          className="cursor-pointer text-red-600 hover:text-red-800"
+                          onClick={() => handleDelete(label._id)}
+                        />
+                      )}
 
                       <UserPlus
                         size={18}
@@ -172,7 +175,8 @@ function RouteComponent() {
                       />
                     </TableCell>
                     <TableCell className="dark:text-background">
-                      {label?.meta?.assigned_agents?.length > 0 ? (
+                      {Array.isArray(label?.meta?.assigned_agents) &&
+                      label.meta.assigned_agents.length > 0 ? (
                         <ul className="flex items-center -space-x-5">
                           {label.meta.assigned_agents.map((item, index) => (
                             <li

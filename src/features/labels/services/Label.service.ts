@@ -10,7 +10,12 @@ export interface Lables {
   _id: string;
   description: string;
   title: string;
-  meta: { is_active: boolean; assigned_agents: Agents[]; color_code: string };
+  meta: {
+    is_active?: boolean;
+    assigned_agents?: Agents[];
+    color_code?: string;
+    is_editable?: boolean;
+  };
 }
 
 interface LableResponse {

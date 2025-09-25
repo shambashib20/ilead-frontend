@@ -10,6 +10,7 @@ import { StatusQueryOptions } from "@/features/leads/hooks/useStatus";
 import { sourceQueryOptions } from "@/features/leads/hooks/useSource";
 import { AgentsQueryOptions } from "@/hooks/useChatAgents";
 import { labelsQueryOptions } from "@/features/labels/hooks/useLables";
+import { allLabelsQueryOptions } from "@/features/leads/hooks/useAllLabels";
 // import { exportLeadsQueryOption } from "@/features/leads/hooks/useExportLeads";
 
 export const Route = createFileRoute("/_dashboardLayout/lead")({
@@ -20,6 +21,8 @@ export const Route = createFileRoute("/_dashboardLayout/lead")({
     opts.context.queryClient.ensureQueryData(sourceQueryOptions());
     opts.context.queryClient.ensureQueryData(AgentsQueryOptions());
     opts.context.queryClient.ensureQueryData(labelsQueryOptions());
+    opts.context.queryClient.ensureQueryData(allLabelsQueryOptions());
+
     // opts.context.queryClient.ensureQueryData(exportLeadsQueryOption());
   },
 });

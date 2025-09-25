@@ -7,6 +7,10 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Logo from "../assets/logo.png";
 import Logo_dark from "../assets/logo_dark.png";
 import { X } from "lucide-react";
+import { useEffect } from "react";
+import { useModalStore } from "@/store/useModalStore";
+import FollowUp from "@/features/dashboard/components/FollowUp";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
@@ -22,7 +26,46 @@ export const Route = createFileRoute("/_dashboardLayout")({
 function RouteComponent() {
   const { mobileOpen, setMobileOpen } = useSidebarStore();
   const { theme } = useTheme();
+  const { openModal, setModalTitle, setModalSize, closeModal } =
+    useModalStore();
   console.log(filteredNavItems);
+
+  useEffect(() => {
+    let start = performance.now();
+    let rafId: number;
+
+    function tick(now: number) {
+      const elapsed = now - start;
+
+      if (elapsed >= 2 * 60 * 1000) {
+        // 2 min ho gaye
+        setModalSize?.("lg");
+        setModalTitle?.("Missed Follow ups ");
+        openModal?.({
+          content: (
+            <div className="mx-3 border-1 border-gray-600 rounded-2xl overflow-hidden">
+              <FollowUp />
+            </div>
+          ),
+          type: "action",
+          customActions: (
+            <div>
+              <Button onClick={() => closeModal()}>Close</Button>
+            </div>
+          ),
+        });
+
+        // reset timer
+        start = now;
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    rafId = requestAnimationFrame(tick);
+
+    return () => cancelAnimationFrame(rafId); // cleanup
+  }, []);
 
   return (
     <div className="dashboard_layout">

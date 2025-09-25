@@ -8,7 +8,7 @@ import { X, Search, Calendar } from "lucide-react";
 import Select from "react-select";
 import type { FilterPayload } from "../../services/Leads.service";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useLabels } from "../../hooks/useLabels";
+import { useAllLabels } from "../../hooks/useAllLabels";
 import { useSource } from "../../hooks/useSource";
 import { useChatAgents } from "../../hooks/useChatAgents";
 import { useModalStore } from "@/store/useModalStore";
@@ -85,13 +85,13 @@ function LeadSearch() {
 
   const currentFilters = getFiltersFromSearch();
   const { theme } = useTheme();
-  const { lables } = useLabels();
+  const { allLables } = useAllLabels();
   const { sources } = useSource();
   const { agents } = useChatAgents();
 
   const labelOptions = [
     defaultLabelOption,
-    ...(lables?.data?.map((lbl) => ({
+    ...(allLables?.data?.map((lbl) => ({
       value: lbl._id,
       label: lbl.title,
     })) || []),

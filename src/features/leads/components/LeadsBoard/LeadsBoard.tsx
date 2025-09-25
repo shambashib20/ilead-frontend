@@ -87,11 +87,11 @@ export const LeadsBoard = memo(({ leads, statuses }: LeadsBoardProps) => {
 
   return (
     <div className="w-[980px] mx-auto relative">
-      <div className="absolute top-2/4 left-2/4 -translate-2/4 flex justify-between w-full z-10 px-4">
+      <div className="absolute top-2/4 left-2/4 -translate-2/4   flex justify-between w-full z-10 px-4">
         {canScrollLeft && (
           <button
             onClick={() => scroll("left")}
-            className=" relative -left-9 bg-white shadow-md rounded-full p-2 z-10"
+            className=" relative -left-10 top-5 bg-white shadow-md rounded-full p-2 z-10"
           >
             <ChevronLeft className="w-5 h-5 text-[#173b78]" />
           </button>
@@ -100,7 +100,7 @@ export const LeadsBoard = memo(({ leads, statuses }: LeadsBoardProps) => {
         {canScrollRight && (
           <button
             onClick={() => scroll("right")}
-            className="relative -left-9 bg-white shadow-md rounded-full p-2 z-10"
+            className="relative -left-10 top-5 bg-white shadow-md rounded-full p-2 z-10"
           >
             <ChevronRight className="w-5 h-5 text-[#173b78]" />
           </button>
