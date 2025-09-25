@@ -62,7 +62,7 @@ function FacebookIntegration() {
     const fetchLabels = async () => {
       try {
         const response = await labelService.labels();
-        setLabels(response.data.data);
+        setLabels(response?.data?.data);
       } catch (error) {
         console.error("Error fetching labels:", error);
       }
