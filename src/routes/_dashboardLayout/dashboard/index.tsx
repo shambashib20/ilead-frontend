@@ -166,8 +166,8 @@ function RouteComponent() {
     },
   ];
 
-  const allowedRoles = ["Admin", "Superadmin"];
-  const hasAccess = allowedRoles.includes(user?.role);
+  // const allowedRoles = ["Admin", "Superadmin"];
+  // const hasAccess = allowedRoles.includes(user?.role);
 
   const legendItems = status?.data?.map((item) => {
     return {
