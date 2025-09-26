@@ -8,4 +8,12 @@ import {
   LeadStatus,
 } from "./LeadModals";
 
-export { LeadDelete, LeadAssign, LeadLabels, LeadCreateCustomer, LeadDetail };
+export {
+  LeadDelete,
+  LeadAssign,
+  LeadLabels,
+  LeadCreateCustomer,
+  LeadDetail,
+  LeadFollowUp,
+  LeadStatus,
+};

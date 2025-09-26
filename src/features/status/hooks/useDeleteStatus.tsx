@@ -50,7 +50,7 @@ export function useDeleteStatus() {
       return { previous, toastId };
     },
 
-    onError: (err, id, context) => {
+    onError: (_err, _id, context) => {
       // rollback optimistic update if something failed
       if (context?.previous) {
         queryClient.setQueryData(["statuses"], context.previous);
@@ -60,7 +60,7 @@ export function useDeleteStatus() {
       toast.error("Failed to delete status", { id: context?.toastId });
     },
 
-    onSuccess: (_data, id, context) => {
+    onSuccess: (_data, _id, context) => {
       // update the same toast to success
       toast.success("Status deleted", { id: context?.toastId });
     },

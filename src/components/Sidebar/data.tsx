@@ -16,7 +16,6 @@ import {
   Filter,
   Settings,
   Plug,
-  Trash,
   Trash2,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
