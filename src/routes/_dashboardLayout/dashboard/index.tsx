@@ -17,6 +17,7 @@ import {
   StatusQueryOptions,
   useStatus,
 } from "@/features/leads/hooks/useStatus";
+import { getData } from "@/utils/localStorage";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
@@ -37,20 +38,21 @@ function RouteComponent() {
     leads_in_new: Lead[];
     leads_in_processing: Lead[];
   } | null>(null);
+  const user = getData("user");
 
   const [showMenu, setShowMenu] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedAgent, setSelectedAgent] = useState("");
-  const [agent, setagent] = useState("");
-  const [agent2, setagent2] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState(() => user._id ?? "");
+  const [agent, setagent] = useState(() => user.name ?? "");
+  const [agent2, setagent2] = useState(() => user.name ?? "");
   const { status } = useStatus();
   const [showSourceMenu, setShowSourceMenu] = useState(false);
   const [sourceStartDate, sourceSetStartDate] = useState("");
   const [sourceEndDate, sourceSetEndDate] = useState("");
-  const [sourceSelectedAgent, sourceSetSelectedAgent] = useState("");
-
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const [sourceSelectedAgent, sourceSetSelectedAgent] = useState(
+    () => user._id ?? ""
+  );
 
   // useEffect(() => {
   //   leadsServoceModule.overdueFollowUps().then((data) => console.log(data));
@@ -300,7 +302,7 @@ function RouteComponent() {
                     `  FROM ${sourceStartDate} to ${sourceEndDate}`}
                 </h3>
                 {agent2 !== "" && (
-                  <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
+                  <h4 className="bg-blue-300/20 p-1 px-2 text-[10px] text-puple-300 dark:text-blue-50  font-semibold rounded w-fit">
                     {agent2}
                   </h4>
                 )}

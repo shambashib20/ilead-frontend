@@ -5,6 +5,7 @@ import Select from "react-select";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { getData } from "@/utils/localStorage";
 
 interface Props {
   showMenu: boolean;
@@ -36,6 +37,7 @@ const LeadStatusChart: React.FC<Props> = ({
   const [hasFetched, setHasFetched] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { theme } = useTheme();
+  const user = getData("user");
   const fetchChartData = async () => {
     if (!selectedAgent) return;
 
@@ -44,7 +46,7 @@ const LeadStatusChart: React.FC<Props> = ({
       const res = await statsService.getLeadsAccordingToStatus({
         startDate,
         endDate,
-        agentId: selectedAgent,
+        agentId: user?.role === "Superadmin" ? selectedAgent : user?._id,
       });
       const response = res.data.data;
       setLabels(
@@ -128,62 +130,66 @@ const LeadStatusChart: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-              Select Agent
-            </label>
-            <Select
-              options={agents.map((agent) => ({
-                value: agent._id,
-                label: agent.name,
-              }))}
-              value={
-                agents.find((agent) => agent._id === selectedAgent)
-                  ? {
-                      value: selectedAgent,
-                      label: agents.find((agent) => agent._id === selectedAgent)
-                        ?.name,
-                    }
-                  : null
-              }
-              onChange={(option: any) => {
-                onAgentChange(option?.value || "");
-                onSetAgent(option.label);
-              }}
-              placeholder="Select Agent"
-              className="react-select-container  "
-              classNamePrefix="react-select"
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  backgroundColor: theme === "dark" ? "#1a2e4f" : "#fff",
-                  borderColor: theme === "dark" ? "#3a3285" : "#ddd",
-                }),
-                menu: (base) => ({
-                  ...base,
-                  backgroundColor: theme === "dark" ? "rgb(55 65 81)" : "#fff",
-                }),
-                option: (base, state) => ({
-                  ...base,
-                  backgroundColor: state.isFocused
-                    ? theme === "dark"
-                      ? "rgb(75 85 99)"
-                      : "#ddd"
-                    : theme === "dark"
-                      ? "rgb(55 65 81)"
-                      : "#fff",
-                }),
-                singleValue: (base) => ({
-                  ...base,
-                  color: "rgb(243 244 246)",
-                }),
-                input: (base) => ({
-                  ...base,
-                  color: "rgb(243 244 246)",
-                }),
-              }}
-            />
-          </div>
+          {user.role === "Superadmin" && (
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                Select Agent
+              </label>
+              <Select
+                options={agents.map((agent) => ({
+                  value: agent._id,
+                  label: agent.name,
+                }))}
+                value={
+                  agents.find((agent) => agent._id === selectedAgent)
+                    ? {
+                        value: selectedAgent,
+                        label: agents.find(
+                          (agent) => agent._id === selectedAgent
+                        )?.name,
+                      }
+                    : null
+                }
+                onChange={(option: any) => {
+                  onAgentChange(option?.value || "");
+                  onSetAgent(option.label);
+                }}
+                placeholder="Select Agent"
+                className="react-select-container  "
+                classNamePrefix="react-select"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    backgroundColor: theme === "dark" ? "#1a2e4f" : "#fff",
+                    borderColor: theme === "dark" ? "#3a3285" : "#ddd",
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    backgroundColor:
+                      theme === "dark" ? "rgb(55 65 81)" : "#fff",
+                  }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isFocused
+                      ? theme === "dark"
+                        ? "rgb(75 85 99)"
+                        : "#ddd"
+                      : theme === "dark"
+                        ? "rgb(55 65 81)"
+                        : "#fff",
+                  }),
+                  singleValue: (base) => ({
+                    ...base,
+                    color: "rgb(243 244 246)",
+                  }),
+                  input: (base) => ({
+                    ...base,
+                    color: "rgb(243 244 246)",
+                  }),
+                }}
+              />
+            </div>
+          )}
 
           <button
             onClick={fetchChartData}
