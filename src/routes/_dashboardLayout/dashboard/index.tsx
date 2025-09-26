@@ -13,11 +13,16 @@ import LeadSourceChart from "@/features/dashboard/components/LeadSourceChart/Lea
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { SkeletonLoaderCol } from "@/components/SkeletonLoader/SkeletonLoader";
 import { missedFollowUpsQueryOptions } from "@/features/leads/hooks/useMissedFollowUp";
+import {
+  StatusQueryOptions,
+  useStatus,
+} from "@/features/leads/hooks/useStatus";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
   loader: (opts) => {
     opts.context.queryClient.ensureQueryData(missedFollowUpsQueryOptions());
+    opts.context.queryClient.ensureQueryData(StatusQueryOptions());
   },
 });
 
@@ -39,7 +44,7 @@ function RouteComponent() {
   const [selectedAgent, setSelectedAgent] = useState("");
   const [agent, setagent] = useState("");
   const [agent2, setagent2] = useState("");
-
+  const { status } = useStatus();
   const [showSourceMenu, setShowSourceMenu] = useState(false);
   const [sourceStartDate, sourceSetStartDate] = useState("");
   const [sourceEndDate, sourceSetEndDate] = useState("");
@@ -164,25 +169,32 @@ function RouteComponent() {
   const allowedRoles = ["Admin", "Superadmin"];
   const hasAccess = allowedRoles.includes(user?.role);
 
-  const legendItems = [
-    { label: "New", color: "#2563eb" }, // blue
-    { label: "Processing", color: "#10b981" }, // green
-    { label: "Close-by", color: "#facc15" }, // yellow
-    { label: "Confirm", color: "#ef4444" }, // red
-    { label: "Cancel", color: "#8b5cf6" }, // purple
+  const legendItems = status?.data?.map((item) => {
+    return {
+      id: item._id,
+      title: item.title,
+      color: item.meta.color_code ? item.meta.color_code : "#444",
+    };
+  });
+  // const legendItems = [
+  //   { label: "New", color: "#2563eb" }, // blue
+  //   { label: "Processing", color: "#10b981" }, // green
+  //   { label: "Close-by", color: "#facc15" }, // yellow
+  //   { label: "Confirm", color: "#ef4444" }, // red
+  //   { label: "Cancel", color: "#8b5cf6" }, // purple
 
-    { label: "Campus Visit", color: "#3b82f6" },
-    { label: "Seat booking", color: "#f97316" },
-    { label: "Male Nursing", color: "#eab308" },
-    { label: "Distance Issue", color: "#14b8a6" },
-    { label: "Fees Issue", color: "#f43f5e" },
-    { label: "RNR", color: "#a855f7" },
-    { label: "Switch Off / Out Of Service", color: "#22c55e" },
-    { label: "JOB Enquiry", color: "#0ea5e9" },
-    { label: "Others Course", color: "#6b7280" },
-    { label: "H.S 2025", color: "#ec4899" },
-    { label: "Agent", color: "#f59e0b" },
-  ];
+  //   { label: "Campus Visit", color: "#3b82f6" },
+  //   { label: "Seat booking", color: "#f97316" },
+  //   { label: "Male Nursing", color: "#eab308" },
+  //   { label: "Distance Issue", color: "#14b8a6" },
+  //   { label: "Fees Issue", color: "#f43f5e" },
+  //   { label: "RNR", color: "#a855f7" },
+  //   { label: "Switch Off / Out Of Service", color: "#22c55e" },
+  //   { label: "JOB Enquiry", color: "#0ea5e9" },
+  //   { label: "Others Course", color: "#6b7280" },
+  //   { label: "H.S 2025", color: "#ec4899" },
+  //   { label: "Agent", color: "#f59e0b" },
+  // ];
 
   console.log();
 
@@ -255,7 +267,7 @@ function RouteComponent() {
                   <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs ">
                     {legendItems.map((item) => (
                       <div
-                        key={item.label}
+                        key={item.id}
                         className="flex items-center space-x-1 "
                       >
                         <span
@@ -263,7 +275,7 @@ function RouteComponent() {
                           style={{ backgroundColor: item.color }}
                         />
                         <span className="dark:text-gray-200 text-gray-800  ">
-                          {item.label}
+                          {item.title}
                         </span>
                       </div>
                     ))}
@@ -312,7 +324,7 @@ function RouteComponent() {
                   <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs  ">
                     {legendItems.map((item) => (
                       <div
-                        key={item.label}
+                        key={item.id}
                         className="flex items-center space-x-1 "
                       >
                         <span
@@ -320,7 +332,7 @@ function RouteComponent() {
                           style={{ backgroundColor: item.color }}
                         />
                         <span className="dark:text-gray-200 text-gray-800  ">
-                          {item.label}
+                          {item.title}
                         </span>
                       </div>
                     ))}
