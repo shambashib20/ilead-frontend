@@ -5,7 +5,7 @@ export interface Status {
   description: string;
   title: string;
   property_id: string;
-  meta: { is_active: boolean; color_code: string };
+  meta: { is_active: boolean; color_code: string; is_editable: string };
 }
 
 interface StatusResponse {

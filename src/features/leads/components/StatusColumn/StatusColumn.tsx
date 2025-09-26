@@ -1,6 +1,5 @@
 import { memo } from "react";
 import LeadCard from "../LeadCard";
-import { statusColorMap } from "@/features/leads/utils/constants";
 import type { Lead, Status } from "@/features/leads/types";
 
 interface StatusColumnProps {
@@ -13,7 +12,6 @@ export const StatusColumn = memo(
   ({ status, leads, leadCount }: StatusColumnProps) => {
     // Filter leads that belong to this status
     const statusLeads = leads.filter((lead) => lead.status._id === status._id);
-    const backgroundColor = statusColorMap.get(status.title) ?? "gray";
 
     // Convert status title to string to ensure safe rendering
     const statusTitle = String(status.title);
@@ -22,7 +20,11 @@ export const StatusColumn = memo(
       <div className="flex-shrink-0 w-[280px] rounded-lg bg-transparent">
         <div className="px-2 mb-5">
           <h3
-            style={{ backgroundColor }}
+            style={{
+              backgroundColor: status.meta.color_code
+                ? status.meta.color_code
+                : "gray",
+            }}
             className="font-semibold py-2 px-3 rounded text-white flex items-center"
           >
             {statusTitle}

@@ -23,6 +23,7 @@ export interface Lead {
 export interface Status {
   _id: string;
   title: string;
+  meta: { color_code: string };
 }
 
 export interface Label {

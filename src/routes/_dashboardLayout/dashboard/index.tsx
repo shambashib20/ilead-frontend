@@ -222,127 +222,119 @@ function RouteComponent() {
         </Card>
       </div> */}
 
-      {hasAccess && (
-        <div className="status mt-5">
-          <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
-            <div className="col">
-              <Card className="pt-3 sm:pt-5 relative ">
-                <div className="flex justify-between items-center px-3 sm:px-6">
-                  <CardTitle className="text-[16px] sm:text-lg">
-                    Lead Status
-                  </CardTitle>
-                  <button
-                    className="p-2 rounded-md hover:bg-primary transition"
-                    onClick={() => setShowMenu((prev) => !prev)}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </button>
-                </div>
-                <div className="px-3 sm:px-6">
-                  <h3 className="font-semibold mb-1 text-[12px]">
-                    {!!startDate &&
-                      !!endDate &&
-                      `  FROM ${startDate} to ${endDate}`}
-                  </h3>
-                  {agent !== "" && (
-                    <h4 className="bg-blue-300/20 p-1 px-2 text-[10px] text-puple-300 dark:text-blue-50  font-semibold rounded w-fit">
-                      {agent}
-                    </h4>
-                  )}
-                </div>
+      <div className="status mt-5">
+        <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
+          <div className="col">
+            <Card className="pt-3 sm:pt-5 relative ">
+              <div className="flex justify-between items-center px-3 sm:px-6">
+                <CardTitle className="text-[16px] sm:text-lg">
+                  Lead Status
+                </CardTitle>
+                <button
+                  className="p-2 rounded-md hover:bg-primary transition"
+                  onClick={() => setShowMenu((prev) => !prev)}
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="px-3 sm:px-6">
+                <h3 className="font-semibold mb-1 text-[12px]">
+                  {!!startDate &&
+                    !!endDate &&
+                    `  FROM ${startDate} to ${endDate}`}
+                </h3>
+                {agent !== "" && (
+                  <h4 className="bg-blue-300/20 p-1 px-2 text-[10px] text-puple-300 dark:text-blue-50  font-semibold rounded w-fit">
+                    {agent}
+                  </h4>
+                )}
+              </div>
 
-                <LeadStatusChart
-                  showMenu={showMenu}
-                  closeMenu={() => setShowMenu(false)}
-                  startDate={startDate}
-                  endDate={endDate}
-                  selectedAgent={selectedAgent}
-                  onStartDateChange={setStartDate}
-                  onEndDateChange={setEndDate}
-                  onAgentChange={setSelectedAgent}
-                  onSetAgent={setagent}
-                />
+              <LeadStatusChart
+                showMenu={showMenu}
+                closeMenu={() => setShowMenu(false)}
+                startDate={startDate}
+                endDate={endDate}
+                selectedAgent={selectedAgent}
+                onStartDateChange={setStartDate}
+                onEndDateChange={setEndDate}
+                onAgentChange={setSelectedAgent}
+                onSetAgent={setagent}
+              />
 
-                <div className="px-4 sm:px-6 pb-0">
-                  <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs ">
-                    {legendItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center space-x-1 "
-                      >
-                        <span
-                          className="inline-block w-2 h-2 md:w-4 md:h-4  rounded-full border border-white"
-                          style={{ backgroundColor: item.color }}
-                        />
-                        <span className="dark:text-gray-200 text-gray-800  ">
-                          {item.title}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+              <div className="px-4 sm:px-6 pb-0">
+                <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs ">
+                  {legendItems.map((item) => (
+                    <div key={item.id} className="flex items-center space-x-1 ">
+                      <span
+                        className="inline-block w-2 h-2 md:w-4 md:h-4  rounded-full border border-white"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="dark:text-gray-200 text-gray-800  ">
+                        {item.title}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              </Card>
-            </div>
+              </div>
+            </Card>
+          </div>
 
-            <div className="col">
-              <Card className="pt-3 sm:pt-5">
-                <div className="flex justify-between items-center px-3 sm:px-6">
-                  <CardTitle className="text-[16px] sm:text-base">
-                    Lead Source
-                  </CardTitle>
-                  <button
-                    className="p-2 rounded-md hover:bg-primary transition"
-                    onClick={() => setShowSourceMenu((prev) => !prev)}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </button>
+          <div className="col">
+            <Card className="pt-3 sm:pt-5">
+              <div className="flex justify-between items-center px-3 sm:px-6">
+                <CardTitle className="text-[16px] sm:text-base">
+                  Lead Source
+                </CardTitle>
+                <button
+                  className="p-2 rounded-md hover:bg-primary transition"
+                  onClick={() => setShowSourceMenu((prev) => !prev)}
+                >
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="px-3 sm:px-6">
+                <h3 className="font-semibold mb-1 text-[12px]">
+                  {!!sourceStartDate &&
+                    !!sourceEndDate &&
+                    `  FROM ${sourceStartDate} to ${sourceEndDate}`}
+                </h3>
+                {agent2 !== "" && (
+                  <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
+                    {agent2}
+                  </h4>
+                )}
+              </div>
+              <LeadSourceChart
+                showMenu={showSourceMenu}
+                closeMenu={() => setShowSourceMenu(false)}
+                startDate={sourceStartDate}
+                endDate={sourceEndDate}
+                selectedAgent={sourceSelectedAgent}
+                onStartDateChange={sourceSetStartDate}
+                onEndDateChange={sourceSetEndDate}
+                onAgentChange={sourceSetSelectedAgent}
+                onSetAgent={setagent2}
+              />
+              <div className="px-4 sm:px-6 pb-2">
+                <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs  ">
+                  {legendItems.map((item) => (
+                    <div key={item.id} className="flex items-center space-x-1 ">
+                      <span
+                        className="inline-block w-2 h-2 md:w-4 md:h-4  rounded-full border border-white"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="dark:text-gray-200 text-gray-800  ">
+                        {item.title}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <div className="px-3 sm:px-6">
-                  <h3 className="font-semibold mb-1 text-[12px]">
-                    {!!sourceStartDate &&
-                      !!sourceEndDate &&
-                      `  FROM ${sourceStartDate} to ${sourceEndDate}`}
-                  </h3>
-                  {agent2 !== "" && (
-                    <h4 className="bg-blue-700/20 p-1 px-2 text-[10px] text-blue-700 font-semibold rounded w-fit">
-                      {agent2}
-                    </h4>
-                  )}
-                </div>
-                <LeadSourceChart
-                  showMenu={showSourceMenu}
-                  closeMenu={() => setShowSourceMenu(false)}
-                  startDate={sourceStartDate}
-                  endDate={sourceEndDate}
-                  selectedAgent={sourceSelectedAgent}
-                  onStartDateChange={sourceSetStartDate}
-                  onEndDateChange={sourceSetEndDate}
-                  onAgentChange={sourceSetSelectedAgent}
-                  onSetAgent={setagent2}
-                />
-                <div className="px-4 sm:px-6 pb-2">
-                  <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs  ">
-                    {legendItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center space-x-1 "
-                      >
-                        <span
-                          className="inline-block w-2 h-2 md:w-4 md:h-4  rounded-full border border-white"
-                          style={{ backgroundColor: item.color }}
-                        />
-                        <span className="dark:text-gray-200 text-gray-800  ">
-                          {item.title}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            </div>
+              </div>
+            </Card>
           </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }

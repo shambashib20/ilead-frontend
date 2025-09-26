@@ -5,7 +5,7 @@ export interface Leads {
   name: string;
   company_name: string;
   logs: [];
-  statuses: { _id: string; title: string }[];
+  statuses: { _id: string; title: string; meta: { color_code: string } }[];
   leads: {
     meta: {};
     email: string;

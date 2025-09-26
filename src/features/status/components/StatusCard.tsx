@@ -186,16 +186,20 @@ function StatusCard() {
                     </TableCell>
 
                     <TableCell className="flex gap-2 items-center">
-                      <Pencil
-                        size={18}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => handleEdit(st)}
-                      />
-                      <Trash
-                        size={18}
-                        className="cursor-pointer text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(st._id)}
-                      />
+                      {st.meta?.is_editable && (
+                        <>
+                          <Pencil
+                            size={18}
+                            className="cursor-pointer text-blue-600 hover:text-blue-800"
+                            onClick={() => handleEdit(st)}
+                          />
+                          <Trash
+                            size={18}
+                            className="cursor-pointer text-red-600 hover:text-red-800"
+                            onClick={() => handleDelete(st._id)}
+                          />
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
