@@ -1,92 +1,16 @@
 import { memo } from "react";
-import {
-  Phone,
-  RefreshCw,
-  Send,
-  Tag,
-  Trash,
-  TrendingUp,
-  User,
-  UserPlus,
-} from "lucide-react";
+import { Phone, User } from "lucide-react";
 import type { Lead } from "@/features/leads/types";
 import { useModalStore } from "@/store/useModalStore";
-import {
-  LeadAssign,
-  LeadCreateCustomer,
-  LeadDelete,
-  LeadDetail,
-  LeadLabels,
-} from "../LeadModals";
+import { LeadDetail } from "../LeadModals";
 
-import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { getCardActions } from "@/utils/cardActions";
+import { getData } from "@/utils/localStorage";
 
 interface LeadCardProps {
   lead: Lead;
 }
-const CARD_ACTIONS = [
-  {
-    icon: Trash,
-    color: "red",
-    dark: "red",
-    label: "Delete Lead",
-    title: "Delete Lead",
-    el: <LeadDelete />,
-    type: "form" as const,
-    customActions: undefined,
-  },
-  {
-    icon: Tag,
-    color: "green",
-    dark: "green",
-    label: "Lead Label Assign",
-    title: "Lead Label Assign",
-    el: <LeadLabels />,
-    type: "action" as const,
-    customActions: undefined,
-  },
-  {
-    icon: TrendingUp,
-    color: "yellow",
-    dark: "black",
-    label: "Lead Assignment",
-    title: "Change Lead Assign To",
-    el: <LeadAssign />,
-    type: "form",
-    customActions: undefined,
-  },
-  {
-    icon: UserPlus,
-    color: "pink",
-    dark: "blue",
-    label: "Convert Lead to Customer",
-    title: null,
-    el: <LeadCreateCustomer />,
-    type: "info" as const,
-    customActions: undefined,
-  },
-  {
-    icon: RefreshCw,
-    color: "orange",
-    dark: "orange",
-    label: "Change Lead Status",
-    title: "Change Lead Status",
-    el: <LeadStatus />,
-    type: "action" as const,
-    customActions: undefined,
-  },
-  {
-    icon: Send,
-    color: "white",
-    dark: "black",
-    label: "Lead Follow Up",
-    title: "Add Lead Follow Up",
-    el: <LeadFollowUp />,
-    type: "form" as const,
-    customActions: undefined,
-  },
-] as const;
 
 export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const assignedToName = lead.assigned_to.name || "";
@@ -95,7 +19,13 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const createdAt = String(lead.createdAt || "");
   const assignedBy = String(lead?.assigned_by?.name || "");
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
+  const user =
+    typeof window !== "undefined" ? (getData("user") ?? undefined) : undefined;
+  const actions = getCardActions(user.role);
   const { theme } = useTheme();
+
+  console.log(user.role);
+
   return (
     <div className="bg-white dark:bg-primary rounded-lg shadow hover:shadow-lg transition-all">
       <div
@@ -167,7 +97,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
       </div>
 
       <div className="mt-3 items-center py-3 px-2 border-t border-gray-300 dark:border-gray-600 flex gap-1.5 relative z-20">
-        {CARD_ACTIONS.map(
+        {actions.map(
           ({
             icon: Icon,
             color,

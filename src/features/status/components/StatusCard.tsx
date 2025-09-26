@@ -1,5 +1,5 @@
 // StatusCard.tsx
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,128 +13,134 @@ import { Badge } from "@/components/ui/badge";
 import { useModalStore } from "@/store/useModalStore";
 import { Pencil, Trash } from "lucide-react";
 import CreateStatusForm from "./CreateStatusForm";
-import { statusService } from "@/features/leads/services/Status.service";
-import type { Status } from "@/features/leads/services/Status.service";
 import Swal from "sweetalert2";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
+import { Input } from "@/components/ui/input";
+import { useStatus } from "../hooks/useStatus";
+import { useDeleteStatus } from "../hooks/useDeleteStatus";
 
 function StatusCard() {
-  const [statuses, setStatuses] = useState<Status[]>([]);
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const limit = 10;
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalStatuses, setTotalStatuses] = useState(0);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const { status, isLoading } = useStatus(page, 10);
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const res = await statusService.getPaginatedStatuses(page, limit);
-      setStatuses(res.data.data.statuses);
-      const total = res.data.data.pagination.total || 0;
-      setTotalPages(Math.ceil(total / limit));
-      setTotalStatuses(total);
-    } catch (err) {
-      console.error("Error fetching statuses:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to fetch statuses",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [page, refreshKey]);
+  const totalItems = status.pagination.total;
+  const totalPages = status.pagination.totalPages;
 
   const openModal = useModalStore((state) => state.openModal);
   const closeModal = useModalStore((state) => state.closeModal);
+  const setModalSize = useModalStore((state) => state.setModalSize);
+  const setModalTitle = useModalStore((state) => state.setModalTitle);
+  const { deleteStatus } = useDeleteStatus();
+
+  const [search, setSearch] = useState("");
+
+  const filteredStatuses = useMemo(() => {
+    const pageItems = status?.statuses ?? [];
+    const q = (search ?? "").toString().trim().toLowerCase();
+    if (!q) return pageItems;
+    return pageItems.filter((s: any) => {
+      const candidates = [
+        s?.title,
+        s?.description,
+        s?.meta?.color_code,
+        s?._id,
+      ];
+      for (const c of candidates) {
+        if (typeof c === "string" && c.toLowerCase().includes(q)) return true;
+      }
+      // fallback
+      try {
+        return JSON.stringify(s).toLowerCase().includes(q);
+      } catch {
+        return false;
+      }
+    });
+  }, [status, search]);
 
   const handleOpenCreateModal = () => {
+    setModalTitle?.("Add Status");
+    setModalSize?.("sm");
     openModal({
       content: (
-        <div className="px-2 py-4">
-          <h2 className="text-lg font-semibold mb-4">Create New Status</h2>
-          <CreateStatusForm
-            onSuccess={() => {
-              setRefreshKey((prev) => prev + 1);
-              closeModal();
-            }}
-            onCancel={closeModal}
-          />
+        <div className="px-2">
+          <CreateStatusForm />
         </div>
       ),
-      // type: "info",
+      type: "info",
+      customActions: (
+        <div>
+          <Button variant={"destructive"} onClick={() => closeModal()}>
+            Close
+          </Button>
+        </div>
+      ),
     });
   };
 
-  const handleDelete = async (id: string) => {
+  const handleEdit = (status: any) => {
+    setModalTitle?.("Edit Status");
+    setModalSize?.("sm");
+    openModal({
+      content: (
+        <div className="px-2">
+          <CreateStatusForm status={status} />
+        </div>
+      ),
+      type: "info",
+      customActions: (
+        <div>
+          <Button variant={"destructive"} onClick={() => closeModal()}>
+            Close
+          </Button>
+        </div>
+      ),
+    });
+  };
+
+  const handleDelete = async (statusId: string) => {
+    // console.log(labelId);
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "This will deactivate the status (soft delete).",
+      text: "This will permanently delete the Status (hard delete)!.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
     });
-
     if (result.isConfirmed) {
       try {
-        await statusService.deleteStatus({ id });
-        setRefreshKey((prev) => prev + 1);
-        Swal.fire({
-          title: "Deleted!",
-          text: "The status has been deactivated.",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      } catch (error: any) {
-        Swal.fire({
-          title: "Error!",
-          text: error.response?.data?.message || "Failed to delete the status.",
-          icon: "error",
-        });
+        await deleteStatus(statusId);
+        // await fetchData();
+        // Swal.fire("Deleted!", "The status has been deleted!", "success");
+      } catch (error) {
+        // console.error("Delete failed:", error);
+        Swal.fire("Error!", "Failed to delete the status.", "error");
       }
     }
   };
 
-  const handleEdit = (status: Status) => {
-    openModal({
-      content: (
-        <div className="px-2 py-4">
-          <h2 className="text-lg font-semibold mb-4">Edit Status</h2>
-          <CreateStatusForm
-            statusToEdit={status}
-            onSuccess={() => {
-              setRefreshKey((prev) => prev + 1);
-              closeModal();
-            }}
-            onCancel={closeModal}
-          />
-        </div>
-      ),
-      // type: "form",
-    });
-  };
-
   return (
     <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
         <h2 className="text-xl font-semibold dark:text-white">Status List</h2>
-        <Button onClick={handleOpenCreateModal}>Add New Status</Button>
+        <div className="flex items-center gap-5">
+          <Input
+            placeholder="Search"
+            className="dark:placeholder:text-white"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setSearch("");
+            }}
+          />
+          <Button onClick={() => handleOpenCreateModal()}>+</Button>
+        </div>
       </div>
-      {loading ? (
+      {isLoading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className="border dark:border-gray-700">
+        <div className="bg-primary rounded-sm ">
           <Table>
             <TableHeader>
               <TableRow>
@@ -146,49 +152,49 @@ function StatusCard() {
                 <TableHead className="dark:text-gray-200">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={4} // Fixed from 3 to 4
-                    className="text-center py-4 dark:text-gray-300"
-                  >
-                    Loading...
-                  </TableCell>
-                </TableRow>
-              ) : statuses.length > 0 ? (
-                statuses.map((status) => (
-                  <TableRow key={status._id}>
-                    <TableCell className="dark:text-gray-100">
-                      {status.title}
+            <TableBody className="bg-white">
+              {filteredStatuses.length > 0 ? (
+                filteredStatuses.map((st: any) => (
+                  <TableRow key={st._id}>
+                    <TableCell className="text-gray-800">
+                      <span
+                        className=" px-3 py-2 rounded-md"
+                        style={{
+                          backgroundColor: st?.meta?.color_code ?? "#777",
+                          color: st?.meta?.color_code ? "#fff" : "#000",
+                        }}
+                      >
+                        {st.title}
+                      </span>
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
-                      {status.description}
+
+                    <TableCell className="text-gray-800">
+                      {st.description}
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
+
+                    <TableCell className="text-gray-800">
                       <Badge
-                        variant={
-                          status.meta.is_active ? "default" : "secondary"
-                        }
+                        variant={st.meta?.is_active ? "default" : "secondary"}
                         className={
-                          status.meta.is_active
+                          st.meta?.is_active
                             ? "bg-green-600 hover:bg-green-700 text-white"
                             : "bg-gray-500 hover:bg-gray-600 text-white"
                         }
                       >
-                        {status.meta.is_active ? "Active" : "Inactive"}
+                        {st.meta?.is_active ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
+
                     <TableCell className="flex gap-2 items-center">
                       <Pencil
                         size={18}
                         className="cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => handleEdit(status)}
+                        onClick={() => handleEdit(st)}
                       />
                       <Trash
                         size={18}
                         className="cursor-pointer text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(status._id)}
+                        onClick={() => handleDelete(st._id)}
                       />
                     </TableCell>
                   </TableRow>
@@ -196,10 +202,10 @@ function StatusCard() {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={4} // Fixed from 3 to 4
-                    className="text-center py-4 dark:text-gray-400"
+                    colSpan={4}
+                    className="text-center py-4 text-gray-800"
                   >
-                    No statuses found.
+                    No statuses found on this page.
                   </TableCell>
                 </TableRow>
               )}
@@ -209,17 +215,20 @@ function StatusCard() {
       )}
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
-          Showing {statuses.length} of {totalStatuses} total statuses
+          Showing {filteredStatuses.length} of {totalItems} total statuses
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
+          <Button
+            onClick={() => setPage(Math.max(1, page - 1))}
+            disabled={page === 1}
+          >
             Prev
           </Button>
           <span className="text-sm dark:text-white">
             Page {page} of {totalPages}
           </span>
           <Button
-            onClick={() => setPage(page + 1)}
+            onClick={() => setPage(Math.min(page + 1, totalPages))}
             disabled={page === totalPages}
           >
             Next

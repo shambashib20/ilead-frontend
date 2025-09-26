@@ -20,6 +20,7 @@ import { Route as AuthLayoutResetPasswordImport } from './routes/_authLayout/res
 import { Route as AuthLayoutRegisterImport } from './routes/_authLayout/register'
 import { Route as AuthLayoutLoginImport } from './routes/_authLayout/login'
 import { Route as AuthLayoutForgetPasswordImport } from './routes/_authLayout/forget-password'
+import { Route as DashboardLayoutLeadTrashRouteImport } from './routes/_dashboardLayout/lead-trash/route'
 import { Route as DashboardLayoutLeadRouteImport } from './routes/_dashboardLayout/lead/route'
 import { Route as DashboardLayoutWorkspaceLogsIndexImport } from './routes/_dashboardLayout/workspace-logs/index'
 import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
@@ -85,6 +86,13 @@ const AuthLayoutForgetPasswordRoute = AuthLayoutForgetPasswordImport.update({
   path: '/forget-password',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
+
+const DashboardLayoutLeadTrashRouteRoute =
+  DashboardLayoutLeadTrashRouteImport.update({
+    id: '/lead-trash',
+    path: '/lead-trash',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 
 const DashboardLayoutLeadRouteRoute = DashboardLayoutLeadRouteImport.update({
   id: '/lead',
@@ -198,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/lead'
       fullPath: '/lead'
       preLoaderRoute: typeof DashboardLayoutLeadRouteImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/lead-trash': {
+      id: '/_dashboardLayout/lead-trash'
+      path: '/lead-trash'
+      fullPath: '/lead-trash'
+      preLoaderRoute: typeof DashboardLayoutLeadTrashRouteImport
       parentRoute: typeof DashboardLayoutImport
     }
     '/_authLayout/forget-password': {
@@ -372,6 +387,7 @@ const DashboardLayoutLeadRouteRouteWithChildren =
 
 interface DashboardLayoutRouteChildren {
   DashboardLayoutLeadRouteRoute: typeof DashboardLayoutLeadRouteRouteWithChildren
+  DashboardLayoutLeadTrashRouteRoute: typeof DashboardLayoutLeadTrashRouteRoute
   DashboardLayoutCustomerIndexRoute: typeof DashboardLayoutCustomerIndexRoute
   DashboardLayoutDashboardIndexRoute: typeof DashboardLayoutDashboardIndexRoute
   DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute
@@ -386,6 +402,7 @@ interface DashboardLayoutRouteChildren {
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutLeadRouteRoute: DashboardLayoutLeadRouteRouteWithChildren,
+  DashboardLayoutLeadTrashRouteRoute: DashboardLayoutLeadTrashRouteRoute,
   DashboardLayoutCustomerIndexRoute: DashboardLayoutCustomerIndexRoute,
   DashboardLayoutDashboardIndexRoute: DashboardLayoutDashboardIndexRoute,
   DashboardLayoutLabelIndexRoute: DashboardLayoutLabelIndexRoute,
@@ -408,6 +425,7 @@ const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '': typeof DashboardLayoutRouteWithChildren
   '/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
+  '/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
   '/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/login': typeof AuthLayoutLoginRoute
   '/register': typeof AuthLayoutRegisterRoute
@@ -429,6 +447,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof DashboardLayoutRouteWithChildren
+  '/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
   '/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/login': typeof AuthLayoutLoginRoute
   '/register': typeof AuthLayoutRegisterRoute
@@ -454,6 +473,7 @@ export interface FileRoutesById {
   '/_authLayout': typeof AuthLayoutRouteWithChildren
   '/_dashboardLayout': typeof DashboardLayoutRouteWithChildren
   '/_dashboardLayout/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
+  '/_dashboardLayout/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
   '/_authLayout/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/_authLayout/login': typeof AuthLayoutLoginRoute
   '/_authLayout/register': typeof AuthLayoutRegisterRoute
@@ -478,6 +498,7 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/lead'
+    | '/lead-trash'
     | '/forget-password'
     | '/login'
     | '/register'
@@ -498,6 +519,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
+    | '/lead-trash'
     | '/forget-password'
     | '/login'
     | '/register'
@@ -521,6 +543,7 @@ export interface FileRouteTypes {
     | '/_authLayout'
     | '/_dashboardLayout'
     | '/_dashboardLayout/lead'
+    | '/_dashboardLayout/lead-trash'
     | '/_authLayout/forget-password'
     | '/_authLayout/login'
     | '/_authLayout/register'
@@ -588,6 +611,7 @@ export const routeTree = rootRoute
       "filePath": "_dashboardLayout.tsx",
       "children": [
         "/_dashboardLayout/lead",
+        "/_dashboardLayout/lead-trash",
         "/_dashboardLayout/customer/",
         "/_dashboardLayout/dashboard/",
         "/_dashboardLayout/label/",
@@ -606,6 +630,10 @@ export const routeTree = rootRoute
       "children": [
         "/_dashboardLayout/lead/"
       ]
+    },
+    "/_dashboardLayout/lead-trash": {
+      "filePath": "_dashboardLayout/lead-trash/route.tsx",
+      "parent": "/_dashboardLayout"
     },
     "/_authLayout/forget-password": {
       "filePath": "_authLayout/forget-password.tsx",

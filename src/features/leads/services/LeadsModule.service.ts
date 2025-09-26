@@ -134,6 +134,35 @@ interface ExportLeads {
     // download_url: string;
   };
 }
+
+export interface ArchivedLeadsPayload {
+  page: number;
+  limit: number;
+}
+
+interface ArchivedLeads {
+  leads: Lead[];
+  pagination: {
+    totalItems: 0;
+    totalPages: 0;
+    currentPage: 1;
+    limit: 10;
+    hasNextPage: false;
+    hasPrevPage: false;
+  };
+}
+
+export interface ArchivedLeadResponse {
+  message: string;
+  status: string;
+  data: ArchivedLeads;
+}
+export interface OverdueFollowUpResponse {
+  message: string;
+  status: string;
+  data: any;
+}
+
 export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
@@ -238,6 +267,13 @@ export class LeadsModule extends ApiClient {
 
   async exportLeads() {
     return this.get<ExportLeads>("/export-leads");
+  }
+
+  async achivedLeads(payload: ArchivedLeadsPayload) {
+    return this.post<ArchivedLeadResponse>("/archived-leads", payload);
+  }
+  async overdueFollowUps() {
+    return this.get<OverdueFollowUpResponse>("/overdue-followups");
   }
 }
 export const leadsServoceModule = new LeadsModule();

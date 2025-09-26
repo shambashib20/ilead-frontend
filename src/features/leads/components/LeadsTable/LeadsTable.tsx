@@ -13,12 +13,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  RefreshCw,
-  Send,
-  Tag,
-  Trash,
-  TrendingUp,
-  UserPlus,
 } from "lucide-react";
 import { formatDateTime } from "../../utils/formatTime";
 import { useEffect, useState } from "react";
@@ -27,15 +21,10 @@ import { LeadsModule, type Status } from "../../services/LeadsModule.service";
 import Swal from "sweetalert2";
 
 import { statusColorMap } from "../../utils/constants";
-import {
-  LeadAssign,
-  LeadCreateCustomer,
-  LeadDelete,
-  LeadLabels,
-} from "../LeadModals";
-import { LeadFollowUp, LeadStatus } from "../LeadModals/LeadModals";
+
 import { useModalStore } from "@/store/useModalStore";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { getCardActions } from "@/utils/cardActions";
 const leadsApi = new LeadsModule();
 
 type Pagination = {
@@ -56,69 +45,6 @@ type Props = {
   onStatusChange?: (leadId: string, statusId: string) => void;
 };
 
-const CARD_ACTIONS = [
-  {
-    icon: Trash,
-    color: "red",
-    dark: "red",
-    label: "Delete Lead",
-    title: "Delete Lead",
-    el: <LeadDelete />,
-    type: "form" as const,
-    customActions: undefined,
-  },
-  {
-    icon: Tag,
-    color: "green",
-    dark: "green",
-    label: "Lead Label Assign",
-    title: "Lead Label Assign",
-    el: <LeadLabels />,
-    type: "action" as const,
-    customActions: undefined,
-  },
-  {
-    icon: TrendingUp,
-    color: "yellow",
-    dark: "black",
-    label: "Lead Assignment",
-    title: "Change Lead Assign To",
-    el: <LeadAssign />,
-    type: "form",
-    customActions: undefined,
-  },
-  {
-    icon: UserPlus,
-    color: "pink",
-    dark: "blue",
-    label: "Convert Lead to Customer",
-    title: null,
-    el: <LeadCreateCustomer />,
-    type: "info" as const,
-    customActions: undefined,
-  },
-  {
-    icon: RefreshCw,
-    color: "orange",
-    dark: "orange",
-    label: "Change Lead Status",
-    title: "Change Lead Status",
-    el: <LeadStatus />,
-    type: "action" as const,
-    customActions: undefined,
-  },
-  {
-    icon: Send,
-    color: "white",
-    dark: "black",
-    label: "Lead Follow Up",
-    title: "Add Lead Follow Up",
-    el: <LeadFollowUp />,
-    type: "form" as const,
-    customActions: undefined,
-  },
-] as const;
-
 export default function LeadsTable({
   leads,
   pagination,
@@ -128,6 +54,11 @@ export default function LeadsTable({
   const { page, limit, totalPages, hasNextPage, hasPrevPage } = pagination;
   const [statuses, setStatuses] = useState<Status[]>([]);
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
+  const role =
+    typeof window !== "undefined"
+      ? (localStorage.getItem("role") ?? undefined)
+      : undefined;
+  const actions = getCardActions(role);
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const statusColors = Array.from(statusColorMap.values());
   const { theme } = useTheme();
@@ -260,7 +191,7 @@ export default function LeadsTable({
                   </TableCell>
 
                   <TableCell>
-                    {CARD_ACTIONS.map(
+                    {actions.map(
                       ({
                         icon: Icon,
                         color,

@@ -17,17 +17,11 @@ import { useChatAgents } from "../../hooks/useChatAgents";
 import { Input } from "@/components/ui/input";
 import {
   Info,
-  Send,
-  Tag,
-  Trash,
-  TrendingUp,
-  UserPlus,
   CalendarIcon,
   Download,
   Upload,
   ChevronLeft,
   ChevronRight,
-  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -70,6 +64,7 @@ import { useAssignLabels } from "../../hooks/useAssignLable";
 import { useAssignLeadToChatAgent } from "../../hooks/useAssignLeadToChatAgent";
 import { useConvertLeadToCustomer } from "../../hooks/useConvertLeadToCustomer";
 import { useUpdateLeadStatus } from "../../hooks/useUpdateLeadStatus";
+import { getCardActions } from "@/utils/cardActions";
 
 const leadsApi = new LeadsModule();
 
@@ -677,69 +672,6 @@ export function LeadStatus() {
   );
 }
 
-const CARD_ACTIONS = [
-  {
-    icon: Trash,
-    color: "red",
-    dark: "white",
-    label: "Delete Lead",
-    title: "Delete Lead",
-    el: <LeadDelete />,
-    type: "form" as const,
-    customActions: undefined,
-  },
-  {
-    icon: Tag,
-    color: "green",
-    dark: "White",
-    label: "Lead Label Assign",
-    title: "Lead Label Assign",
-    el: <LeadLabels />,
-    type: "action" as const,
-    customActions: undefined,
-  },
-  {
-    icon: TrendingUp,
-    color: "yellow",
-    dark: "White",
-    label: "Lead Assignment",
-    title: "Change Lead Assign To",
-    el: <LeadAssign />,
-    type: "form",
-    customActions: undefined,
-  },
-  {
-    icon: UserPlus,
-    color: "pink",
-    dark: "White",
-    label: "Convert Lead to Customer",
-    title: null,
-    el: <LeadCreateCustomer />,
-    type: "info" as const,
-    customActions: undefined,
-  },
-  {
-    icon: RefreshCw,
-    color: "orange",
-    dark: "White",
-    label: "Change Lead Status",
-    title: "Change Lead Status",
-    el: <LeadStatus />,
-    type: "action" as const,
-    customActions: undefined,
-  },
-  {
-    icon: Send,
-    color: "white",
-    dark: "White",
-    label: "Lead Follow Up",
-    title: "Add Lead Follow Up",
-    el: <LeadFollowUp />,
-    type: "form" as const,
-    customActions: undefined,
-  },
-] as const;
-
 export function LeadDetail() {
   const { data, setModalTitle, openModal, setData, setModalSize } =
     useModalStore();
@@ -747,7 +679,11 @@ export function LeadDetail() {
   const leadId = data?._id;
   const [lead, setLead] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
+  const role =
+    typeof window !== "undefined"
+      ? (localStorage.getItem("role") ?? undefined)
+      : undefined;
+  const actions = getCardActions(role);
   useEffect(() => {
     if (!leadId) return;
 
@@ -784,7 +720,7 @@ export function LeadDetail() {
     <div className="min-h-[400px] max-h-[450px] overflow-y-auto px-3 ">
       {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
-        {CARD_ACTIONS.map(
+        {actions.map(
           ({
             icon: Icon,
             color,

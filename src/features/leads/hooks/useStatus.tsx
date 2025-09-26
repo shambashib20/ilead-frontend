@@ -3,7 +3,7 @@ import { statusService } from "../services/Status.service";
 
 export const StatusQueryOptions = () =>
   queryOptions({
-    queryKey: ["status"],
+    queryKey: ["statusAll"],
     queryFn: () => statusService.status(),
   });
 

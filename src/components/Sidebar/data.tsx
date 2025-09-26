@@ -16,6 +16,8 @@ import {
   Filter,
   Settings,
   Plug,
+  Trash,
+  Trash2,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
@@ -97,6 +99,11 @@ export const navItems: NavItem[] = [
             roles: ["Admin", "Superadmin"],
           },
         ],
+      },
+      {
+        name: "Leads Trash",
+        icon: <Trash2 size={18} />,
+        path: "/lead-trash",
       },
     ],
     roles: ["Admin", "Superadmin"],

@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Pencil, Trash, UserPlus } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CreateLabelForm from "@/features/labels/components/CreateLabelForm";
 import { useModalStore } from "@/store/useModalStore";
 // import type { Lables } from "@/features/labels/services/Label.service";
@@ -41,6 +41,32 @@ function RouteComponent() {
   const totalPages = labels.pagination.totalPages;
   const openModal = useModalStore((state) => state.openModal);
   const setModalTitle = useModalStore((state) => state.setModalTitle);
+  const [search, setSearch] = useState("");
+
+  const filteredLabels = useMemo(() => {
+    const pageItems = labels?.labels ?? [];
+    const q = (search ?? "").toString().trim().toLowerCase();
+    if (!q) return pageItems;
+    return pageItems.filter((item: any) => {
+      // check a few likely fields; expand if you need
+      const candidates = [
+        item?.title,
+        item?.name,
+        item?.email,
+        item?.reference,
+        item?.company_name,
+      ];
+      for (const c of candidates) {
+        if (typeof c === "string" && c.toLowerCase().includes(q)) return true;
+      }
+      // fallback: check entire object string (rare)
+      try {
+        return JSON.stringify(item).toLowerCase().includes(q);
+      } catch {
+        return false;
+      }
+    });
+  }, [labels, search]);
 
   const handleCreateModal = () => {
     setModalTitle?.("Create Label ");
@@ -98,7 +124,16 @@ function RouteComponent() {
       <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
         <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
         <div className="flex items-center gap-5">
-          <Input placeholder="Search" className="dark:placeholder:text-white" />
+          <Input
+            placeholder="Search"
+            className="dark:placeholder:text-white"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            // optional: clear on Esc
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setSearch("");
+            }}
+          />
           <Button onClick={handleCreateModal}>+</Button>
         </div>
       </div>
@@ -120,28 +155,20 @@ function RouteComponent() {
               </TableRow>
             </TableHeader>
             <TableBody className="bg-white">
-              {isLoading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-center py-4 text-gray-500"
-                  >
-                    Loading...
-                  </TableCell>
-                </TableRow>
-              ) : labels?.labels?.length > 0 ? (
-                labels?.labels.map((label, ind) => (
+              {filteredLabels.length > 0 ? (
+                filteredLabels.map((label: any, ind: number) => (
                   <TableRow key={label._id}>
-                    <TableCell className="  dark:text-background  ">
-                      {ind + 1}
+                    <TableCell className="dark:text-background">
+                      {ind + 1 + (page - 1) * limit}
                     </TableCell>
+
                     <TableCell className="dark:text-background">
                       <span
                         style={{
                           background: label.meta?.color_code,
-                          color: label.meta?.color_code && "#fff",
+                          color: label.meta?.color_code ? "#fff" : undefined,
                         }}
-                        className={`bg-gray-100 px-4 py-2 rounded-sm `}
+                        className={`bg-gray-100 px-4 py-2 rounded-sm`}
                       >
                         {label.title}
                       </span>
@@ -174,21 +201,24 @@ function RouteComponent() {
                         }
                       />
                     </TableCell>
+
                     <TableCell className="dark:text-background">
                       {Array.isArray(label?.meta?.assigned_agents) &&
                       label.meta.assigned_agents.length > 0 ? (
                         <ul className="flex items-center -space-x-5">
-                          {label.meta.assigned_agents.map((item, index) => (
-                            <li
-                              title={item.agent_id?.name}
-                              key={index}
-                              className="border border-gray-200 rounded-full p-1 bg-white hover:scale-130 transition hover:relative hover:z-50"
-                            >
-                              <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold">
-                                {item?.agent_id?.name?.charAt(0) ?? "?"}
-                              </span>
-                            </li>
-                          ))}
+                          {label.meta.assigned_agents.map(
+                            (item: any, index: number) => (
+                              <li
+                                title={item.agent_id?.name}
+                                key={index}
+                                className="border border-gray-200 rounded-full p-1 bg-white hover:scale-130 transition hover:relative hover:z-50"
+                              >
+                                <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold">
+                                  {item?.agent_id?.name?.charAt(0) ?? "?"}
+                                </span>
+                              </li>
+                            )
+                          )}
                         </ul>
                       ) : (
                         <p className="text-sm text-gray-500 italic">
@@ -201,10 +231,10 @@ function RouteComponent() {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={3}
+                    colSpan={4}
                     className="text-center py-4 dark:text-gray-400"
                   >
-                    No statuses found.
+                    No labels found on this page.
                   </TableCell>
                 </TableRow>
               )}
@@ -215,16 +245,23 @@ function RouteComponent() {
 
       <div className="flex justify-between items-center bg-primary p-4 rounded-sm">
         <div className="text-sm text-muted-foreground dark:text-gray-300">
-          Showing {labels?.labels.length} of {totalItems} total labels
+          {/* show filtered count for current page and totalItems as before */}
+          Showing {filteredLabels.length} of {totalItems} total labels
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
+          <Button
+            onClick={() => setPage(Math.max(1, page - 1))}
+            disabled={page === 1}
+          >
             Prev
           </Button>
           <span className="text-sm dark:text-white">
             Page {page} of {totalPages}
           </span>
-          <Button onClick={() => setPage(page + 1)} disabled={page === 0}>
+          <Button
+            onClick={() => setPage(Math.min(totalPages, page + 1))}
+            disabled={page === totalPages}
+          >
             Next
           </Button>
         </div>

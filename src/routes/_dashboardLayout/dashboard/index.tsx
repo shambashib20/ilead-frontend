@@ -45,6 +45,12 @@ function RouteComponent() {
   const [sourceEndDate, sourceSetEndDate] = useState("");
   const [sourceSelectedAgent, sourceSetSelectedAgent] = useState("");
 
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // useEffect(() => {
+  //   leadsServoceModule.overdueFollowUps().then((data) => console.log(data));
+  // }, []);
+
   useEffect(() => {
     dashboardLeads
       .getTodayLeads()
@@ -108,19 +114,37 @@ function RouteComponent() {
       },
     },
     // You can populate tasks and reminders similarly later
-    {
-      title: "Today's Task",
-      tabData: {
-        content: [
-          { label: "Today", description: "Tasks not yet started.", length: 0 },
-          {
-            label: "Tommorow",
-            description: "Tasks currently happening.",
-            length: 0,
+
+    user.role === "Superadmin"
+      ? {
+          title: "Today's Task",
+          tabData: {
+            content: [
+              {
+                label: "Today",
+                description: "Tasks not yet started.",
+                length: 0,
+              },
+              {
+                label: "Tommorow",
+                description: "Tasks currently happening.",
+                length: 0,
+              },
+            ],
           },
-        ],
-      },
-    },
+        }
+      : {
+          title: "Today's Follow Ups",
+          tabData: {
+            content: [
+              {
+                label: "Today",
+                description: "Tasks not yet started.",
+                length: 0,
+              },
+            ],
+          },
+        },
     {
       title: "Today's Reminders",
       tabData: {
@@ -137,7 +161,6 @@ function RouteComponent() {
     },
   ];
 
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const allowedRoles = ["Admin", "Superadmin"];
   const hasAccess = allowedRoles.includes(user?.role);
 
@@ -160,6 +183,8 @@ function RouteComponent() {
     { label: "H.S 2025", color: "#ec4899" },
     { label: "Agent", color: "#f59e0b" },
   ];
+
+  console.log();
 
   return (
     <section className="dashboard-sec">
