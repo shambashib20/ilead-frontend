@@ -6,6 +6,8 @@ import { useModalStore } from "@/store/useModalStore";
 
 import clsx from "clsx";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/features/auth/hooks/useUser";
 
 type BadgeVariant = "green" | "red" | "yellow" | "gray" | "purple";
 
@@ -36,7 +38,7 @@ function WorkspaceDetailsCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { openModal, setModalTitle } = useModalStore();
-
+  const { data } = useUser();
   useEffect(() => {
     let mounted = true;
     const fetchWorkspace = async () => {
@@ -107,7 +109,7 @@ function WorkspaceDetailsCard() {
                 </div>
 
                 <div className="hidden sm:flex items-center gap-2">
-                  <button
+                  <Button
                     onClick={() => {
                       setModalTitle?.("Edit Workspace Details!");
                       openModal({
@@ -115,10 +117,9 @@ function WorkspaceDetailsCard() {
                         type: "form",
                       });
                     }}
-                    className="px-3 py-1.5 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 shadow-sm"
                   >
                     Edit
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -208,14 +209,14 @@ function WorkspaceDetailsCard() {
                   {/* <div className="text-xs text-slate-400">Owner</div> */}
                   <div className="flex items-center gap-3 mt-2">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-yellow-400 flex items-center justify-center text-black font-bold">
-                      {workspace.owner?.name?.[0] ?? "M"}
+                      {data?.name?.charAt(0) ?? "M"}
                     </div>
                     <div>
                       <div className="text-sm font-medium">
-                        {workspace.owner?.name ?? "Unknown"}
+                        {data?.name ?? "Unknown"}
                       </div>
                       <div className="text-xs text-slate-400">
-                        {workspace.owner?.role ?? "Owner"}
+                        {data?.role ?? "Owner"}
                       </div>
                     </div>
                   </div>
@@ -231,13 +232,13 @@ function WorkspaceDetailsCard() {
 
               <div className="mt-4 text-sm text-slate-300 space-y-2">
                 <div>
-                  <div className="text-xs text-slate-400">Contact</div>
-                  <div>{workspace.owner?.phone ?? "—"}</div>
+                  <div className="text-xs text-slate-400">Email</div>
+                  <div>{data?.email ?? "—"}</div>
                 </div>
 
                 <div>
-                  <div className="text-xs text-slate-400">Location</div>
-                  <div>{workspace.location ?? "—"}</div>
+                  <div className="text-xs text-slate-400">Phone</div>
+                  <div>{data?.phone_number ?? "—"}</div>
                 </div>
               </div>
 
