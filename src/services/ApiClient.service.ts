@@ -6,7 +6,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
  * Base API Client Class using Axios
  */
 export class ApiClient {
-  private static readonly BASE_URL = `https://crm-server-tsnj.onrender.com/api`;
+  private static readonly BASE_URL = `https://hahhmr7zur.us-east-1.awsapprunner.com/api`;
   protected axiosInstance: AxiosInstance;
   private readonly modulePath: string;
 
@@ -33,7 +33,6 @@ export class ApiClient {
     );
   }
 
-  /** Join modulePath + endpoint (handles slashes) */
   private url(endpoint: string) {
     const ep = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
     return `${this.modulePath}${ep}`; // e.g. "/auth/login"
