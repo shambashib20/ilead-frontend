@@ -46,9 +46,12 @@ type LeadSearchParams = {
 };
 
 function LeadSearch() {
-  const [date, setDate] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+  const [date, setDate] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: null,
+    endDate: null,
   });
   const navigate = useNavigate();
   const searchParams = useSearch({ from: "/_dashboardLayout/lead" }) as {
@@ -187,8 +190,8 @@ function LeadSearch() {
           .filter((v) => v !== ""),
         search: value.searchQuery,
         sortBy: value.searchByDate[0]?.value ?? "",
-        startDate: date.startDate ?? new Date(),
-        endDate: date.endDate ?? new Date(),
+        startDate: date.startDate ?? undefined,
+        endDate: date.endDate ?? undefined,
       };
 
       // Update URL search params
