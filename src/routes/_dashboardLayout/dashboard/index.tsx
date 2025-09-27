@@ -2,7 +2,7 @@ import LeadCard from "@/features/dashboard/components/LeadCard";
 import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
 import { Card, CardTitle } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 import type { Lead } from "@/features/leads/types";
@@ -18,18 +18,30 @@ import {
   useStatus,
 } from "@/features/leads/hooks/useStatus";
 import { getData } from "@/utils/localStorage";
+import {
+  TodaysChatAgentsFollowupsQueryOptions,
+  useTodaysChatFollowUps,
+} from "@/features/dashboard/hooks/useTodaysChatFollowUps";
+import UpcomingFollowUpsList from "@/features/dashboard/components/UpcommingFollowUpList/UpcommingFollowUpList";
+import { useOverdueFollowUps } from "@/features/dashboard/hooks/useOverdueFollowUps";
+import { useUser } from "@/features/auth/hooks/useUser";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
   loader: (opts) => {
     opts.context.queryClient.ensureQueryData(missedFollowUpsQueryOptions());
     opts.context.queryClient.ensureQueryData(StatusQueryOptions());
+    opts.context.queryClient.ensureQueryData(
+      TodaysChatAgentsFollowupsQueryOptions()
+    );
   },
 });
 
 type DashboardCardType = {
   title: string;
-  tabData: LeadTabType;
+  mode: "tab" | "simple";
+  tabData?: LeadTabType; // only when mode === "tab"
+  component?: React.ReactNode; // only when mode === "simple"
 };
 
 function RouteComponent() {
@@ -38,21 +50,26 @@ function RouteComponent() {
     leads_in_new: Lead[];
     leads_in_processing: Lead[];
   } | null>(null);
-  const user = getData("user");
+  const user = useUser();
 
   const [showMenu, setShowMenu] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedAgent, setSelectedAgent] = useState(() => user._id ?? "");
-  const [agent, setagent] = useState(() => user.name ?? "");
-  const [agent2, setagent2] = useState(() => user.name ?? "");
+  const [selectedAgent, setSelectedAgent] = useState(
+    () => user.data?._id ?? ""
+  );
+  const [agent, setagent] = useState(() => user?.data.name ?? "");
+  const [agent2, setagent2] = useState(() => user?.data.name ?? "");
   const { status } = useStatus();
   const [showSourceMenu, setShowSourceMenu] = useState(false);
   const [sourceStartDate, sourceSetStartDate] = useState("");
   const [sourceEndDate, sourceSetEndDate] = useState("");
   const [sourceSelectedAgent, sourceSetSelectedAgent] = useState(
-    () => user._id ?? ""
+    () => user?.data._id ?? ""
   );
+
+  const { todaysFollowups } = useTodaysChatFollowUps();
+  const { overdueFollowups } = useOverdueFollowUps();
 
   // useEffect(() => {
   //   leadsServoceModule.overdueFollowUps().then((data) => console.log(data));
@@ -86,98 +103,104 @@ function RouteComponent() {
       .catch((err) => console.error("Lead API Error:", err));
   }, []);
 
-  if (!leadData)
-    return (
-      <>
-        <SkeletonLoader />
-        <SkeletonLoaderCol />
-      </>
-    );
-
-  const cardsData: DashboardCardType[] = [
-    {
-      title: "Today's Lead",
-      tabData: {
-        content: [
-          {
-            label: `New`,
-            description: "Leads that are new.",
-            leads: leadData.leads_in_new,
-            length: leadData.leads_in_new.length,
-          },
-          {
-            label: `Processing`,
-            description: "Leads currently in process.",
-            leads: leadData.leads_in_processing,
-            length: leadData.leads_in_processing.length,
-          },
-          {
-            label: "Close-By",
-            description: "Leads that are close to conversion.",
-            leads: [], // You can add later if API supports it
-            length: 0,
-          },
-        ],
-      },
-    },
-    // You can populate tasks and reminders similarly later
-
-    user.role === "Superadmin"
-      ? {
-          title: "Today's Task",
-          tabData: {
-            content: [
-              {
-                label: "Today",
-                description: "Tasks not yet started.",
-                length: 0,
-              },
-              {
-                label: "Tommorow",
-                description: "Tasks currently happening.",
-                length: 0,
-              },
-            ],
-          },
-        }
-      : {
-          title: "Today's Follow Ups",
-          tabData: {
-            content: [
-              {
-                label: "Today",
-                description: "Tasks not yet started.",
-                length: 0,
-              },
-            ],
-          },
+  const cardsData: DashboardCardType[] = useMemo(
+    () => [
+      {
+        title: "Today's Lead",
+        mode: "tab",
+        tabData: {
+          content: [
+            {
+              label: `New`,
+              description: "Leads that are new.",
+              leads: leadData?.leads_in_new ?? [],
+              length: leadData?.leads_in_new?.length ?? 0,
+            },
+            {
+              label: `Processing`,
+              description: "Leads currently in process.",
+              leads: leadData?.leads_in_processing ?? [],
+              length: leadData?.leads_in_processing?.length ?? 0,
+            },
+            {
+              label: "Close-By",
+              description: "Leads that are close to conversion.",
+              leads: [],
+              length: 0,
+            },
+          ],
         },
-    {
-      title: "Today's Reminders",
-      tabData: {
-        content: [
-          { label: "Reminders", description: "Today's reminders.", length: 0 },
-          {
-            label: "Meetings",
-            description: "Reminders coming soon.",
-            length: 0,
-          },
-          { label: "Events", description: "You missed these.", length: 0 },
-        ],
       },
-    },
-  ];
+      user?.data?.role === "Superadmin"
+        ? {
+            title: "Today's Task",
+            mode: "tab",
+            tabData: {
+              content: [
+                {
+                  label: "Today",
+                  description: "Tasks not yet started.",
+                  length: 0,
+                },
+                {
+                  label: "Tomorrow",
+                  description: "Tasks scheduled for tomorrow.",
+                  length: 0,
+                },
+              ],
+            },
+          }
+        : {
+            title: "Upcoming Follow Ups",
+            mode: "simple",
+            component: (
+              <UpcomingFollowUpsList leads={todaysFollowups?.data ?? []} />
+            ),
+          },
+
+      user?.data?.role === "Superadmin"
+        ? {
+            title: "Today's Reminders",
+            mode: "tab",
+            tabData: {
+              content: [
+                {
+                  label: "Reminders",
+                  description: "Today's reminders.",
+                  length: 0,
+                },
+                {
+                  label: "Meetings",
+                  description: "Today's meetings.",
+                  length: 0,
+                },
+                { label: "Events", description: "Missed events.", length: 0 },
+              ],
+            },
+          }
+        : {
+            title: "Missed Follow Ups",
+            mode: "simple",
+            component: (
+              <UpcomingFollowUpsList leads={overdueFollowups?.data ?? []} />
+            ),
+          },
+    ],
+    [leadData, user?.data?.role]
+  );
 
   // const allowedRoles = ["Admin", "Superadmin"];
   // const hasAccess = allowedRoles.includes(user?.role);
 
-  const legendItems = status?.data?.map((item) => {
-    return {
+  const legendItems = useMemo(() => {
+    const items = status?.data ?? [];
+    return items.map((item: any) => ({
       id: item._id,
       title: item.title,
-      color: item.meta.color_code ? item.meta.color_code : "#444",
-    };
-  });
+      color: item.meta?.color_code ?? "#444",
+    }));
+  }, [status?.data]);
+
   // const legendItems = [
   //   { label: "New", color: "#2563eb" }, // blue
   //   { label: "Processing", color: "#10b981" }, // green
@@ -198,15 +221,26 @@ function RouteComponent() {
   //   { label: "Agent", color: "#f59e0b" },
   // ];
 
-  console.log();
+  if (!leadData)
+    return (
+      <>
+        <SkeletonLoader />
+        <SkeletonLoaderCol />
+      </>
+    );
 
   return (
     <section className="dashboard-sec">
+      {/* {error && <div className="text-sm text-red-500 mb-3 px-2">{error}</div>} */}
       <div className="stats  ">
         <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
-          {cardsData.map((card, idx) => (
-            <LeadCard key={idx} title={card.title}>
-              <LeadTab data={card.tabData} />
+          {cardsData.map((card) => (
+            <LeadCard key={card.title} title={card.title}>
+              {card.mode === "tab" && card.tabData ? (
+                <LeadTab data={card.tabData} />
+              ) : (
+                card.component
+              )}
             </LeadCard>
           ))}
         </div>

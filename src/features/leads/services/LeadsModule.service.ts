@@ -160,7 +160,13 @@ export interface ArchivedLeadResponse {
 export interface OverdueFollowUpResponse {
   message: string;
   status: string;
-  data: any;
+  data: Lead[];
+}
+
+export interface TodaysFollowUpResponse {
+  message: string;
+  status: string;
+  data: Lead[];
 }
 
 export class LeadsModule extends ApiClient {
@@ -274,6 +280,9 @@ export class LeadsModule extends ApiClient {
   }
   async overdueFollowUps() {
     return this.get<OverdueFollowUpResponse>("/overdue-followups");
+  }
+  async todaysFollowupds() {
+    return this.get<TodaysFollowUpResponse>("/todays-followups");
   }
 }
 export const leadsServoceModule = new LeadsModule();
