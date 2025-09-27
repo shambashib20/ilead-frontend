@@ -144,7 +144,7 @@ export const SidebarMenuItem = ({
     "flex items-center gap-3 text-sm h-11  rounded-lg transition-all duration-200 ease-in-out group relative",
     "hover:bg-sidebar-hover hover:translate-x-1",
     shouldHighlight &&
-      "bg-gradient-to-r from-[#432ee5] to-[#e43e2b] text-sidebar-text-active shadow-lg",
+      "bg-gradient-to-r from-[#432ee5] to-[#e43e2b] text-white shadow-lg",
     !shouldHighlight && "text-sidebar-text hover:text-sidebar-text"
   );
 

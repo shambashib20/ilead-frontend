@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/features/auth/hooks/useUser";
+import BrandLoader from "@/components/BrandLoader/BrandLoader";
 
 type BadgeVariant = "green" | "red" | "yellow" | "gray" | "purple";
 
@@ -61,8 +62,8 @@ function WorkspaceDetailsCard() {
 
   if (loading)
     return (
-      <div className="p-6 text-sm text-gray-700 dark:text-gray-300">
-        Loading workspace details...
+      <div className="grid place-items-center min-h-full">
+        <BrandLoader />
       </div>
     );
   if (error)
@@ -107,20 +108,23 @@ function WorkspaceDetailsCard() {
                     Workspace details & usage
                   </p>
                 </div>
-
-                <div className="hidden sm:flex items-center gap-2">
-                  <Button
-                    onClick={() => {
-                      setModalTitle?.("Edit Workspace Details!");
-                      openModal({
-                        content: <EditWorkspaceModal initialData={workspace} />,
-                        type: "form",
-                      });
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </div>
+                {data?.data?.role !== "Superadmin" && (
+                  <div className="hidden sm:flex items-center gap-2">
+                    <Button
+                      onClick={() => {
+                        setModalTitle?.("Edit Workspace Details!");
+                        openModal({
+                          content: (
+                            <EditWorkspaceModal initialData={workspace} />
+                          ),
+                          type: "form",
+                        });
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
