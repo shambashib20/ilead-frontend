@@ -14,13 +14,10 @@ export default function UserProfileBox() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(
-        "https://hahhmr7zur.us-east-1.awsapprunner.com/api/auth/logout",
-        {
-          method: "GET", // usually logout should be POST, but keep GET if your API says so
-          credentials: "include", // if you use cookies
-        }
-      );
+      const res = await fetch("https://crm-server-tsnj.onrender.com/api/", {
+        method: "GET", // usually logout should be POST, but keep GET if your API says so
+        credentials: "include", // if you use cookies
+      });
 
       const data = await res.json();
       console.log("Logout response:", data);
