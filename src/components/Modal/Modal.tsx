@@ -51,7 +51,7 @@ export function Modal() {
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent
-        className={`${MODAL_SIZE[modalSize ?? "normal"] ?? "w-[400px]"}`}
+        className={`${MODAL_SIZE[modalSize ?? "normal"] ?? "w-[400px]"} overflow-hidden`}
       >
         {modalTitle && (
           <DialogHeader className="bg-[#3a3285] text-white">

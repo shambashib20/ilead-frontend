@@ -20,14 +20,14 @@ function FollowUp() {
   return (
     <Table className="">
       {/* <TableCaption>Missed Follow-ups</TableCaption> */}
-      <TableHeader className="bg-">
+      <TableHeader className="bg-violet-900 dark:bg-violet-950">
         <TableRow>
-          <TableHead>No.</TableHead>
-          <TableHead>Customer Name</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Assign To</TableHead>
-          <TableHead>Mobile</TableHead>
-          <TableHead>Follow Up Date</TableHead>
+          <TableHead className=" text-white">No.</TableHead>
+          <TableHead className=" text-white">Customer Name</TableHead>
+          <TableHead className=" text-white">Status</TableHead>
+          <TableHead className="text-white">Assign To</TableHead>
+          {/* <TableHead>Mobile</TableHead> */}
+          <TableHead className="text-white">Follow Up Date</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -46,7 +46,7 @@ function FollowUp() {
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.status?.title || "-"}</TableCell>
                 <TableCell>{item.assigned_to?.name || "-"}</TableCell>
-                <TableCell>{"-"}</TableCell>
+                {/* <TableCell>{"-"}</TableCell> */}
                 <TableCell>
                   {item.next_followup_date
                     ? format(
@@ -59,7 +59,7 @@ function FollowUp() {
 
               {isExpanded && (
                 <TableRow className="bg-primary">
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={5}>
                     <div className="p-1 text-sm space-y-2">
                       <div className="grid grid-cols-2 gap-x-8 gap-y-2">
                         <div className="flex">

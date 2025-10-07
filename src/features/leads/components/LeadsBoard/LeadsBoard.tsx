@@ -86,7 +86,7 @@ export const LeadsBoard = memo(({ leads, statuses }: LeadsBoardProps) => {
   }
 
   return (
-    <div className="w-[980px] mx-auto relative">
+    <div className="w-full mx-auto relative">
       <div className="absolute top-2/4 left-2/4 -translate-2/4   flex justify-between w-full z-10 px-4">
         {canScrollLeft && (
           <button

@@ -24,8 +24,9 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
     setModalTitle?.("Missed Follow ups ");
     openModal?.({
       content: (
-        <div className="mx-3 border-1 border-gray-600 rounded-2xl overflow-hidden">
+        <div className="mx-3 overflow-hidden">
           {" "}
+          {/* <hello /> */}
           <FollowUp />
         </div>
       ),
@@ -98,7 +99,7 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
 
         if (isPhone) {
           return (
-            <li className="cursor-pointer">
+            <li key={idx} className="cursor-pointer">
               <Icon
                 size={isMobile ? 18 : 20}
                 onClick={() => handleFollowUps()}

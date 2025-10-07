@@ -58,7 +58,7 @@ export function LeadTab({ data }: { data: LeadTabType }) {
             <span className="flex items-center justify-center text-center gap-2">
               <span>{item.label}</span>
               {typeof item.length === "number" && (
-                <span className="bg-pink-600 text-white font-bold md:h-5 md:w-5 h-4 w-4 rounded-full inline-flex items-center justify-center">
+                <span className="bg-pink-600 text-white font-bold md:h-5 md:w-5 h-4 w-4 rounded-full grid text-[12px] place-content-center">
                   {item.length}
                 </span>
               )}
