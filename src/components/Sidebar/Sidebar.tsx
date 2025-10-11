@@ -32,7 +32,7 @@ function Sidebar() {
         hidden lg:flex flex-col
         transition-[width] duration-300 ease-in-out
         ${effectiveCollapsed ? "w-[80px]" : "w-[250px]"}
-        bg-primary text-gray-600 dark:text-gray-300 shadow
+        bg-primary text-gray-600 dark:text-gray-300 
       `}
     >
       {/* Logo Section (unchanged) */}

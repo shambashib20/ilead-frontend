@@ -1,6 +1,7 @@
 import { memo } from "react";
 import LeadCard from "../LeadCard";
 import type { Lead, Status } from "@/features/leads/types";
+import { useMissedFollowUps } from "../../hooks/useMissedFollowUp";
 
 interface StatusColumnProps {
   status: Status;
@@ -12,10 +13,25 @@ export const StatusColumn = memo(
   ({ status, leads, leadCount }: StatusColumnProps) => {
     // Filter leads that belong to this status
     const statusLeads = leads.filter((lead) => lead.status._id === status._id);
-
+    const { missedFollowUps } = useMissedFollowUps();
     // Convert status title to string to ensure safe rendering
     const statusTitle = String(status.title);
 
+    const updatedLeads = leads?.map((lead) => {
+      const hasMissed = missedFollowUps.data.some(
+        (item) => item.leadId === lead._id
+      );
+
+      return {
+        ...lead,
+        missedFollowup: hasMissed,
+      };
+    });
+
+    console.log(updatedLeads);
+
+    console.log(missedFollowUps.data);
+    // const updatedLeads=
     return (
       <div className="flex-shrink-0 w-[280px] rounded-lg bg-transparent">
         <div className="px-2 mb-5">
@@ -41,9 +57,11 @@ export const StatusColumn = memo(
           [&::-webkit-scrollbar-thumb]:rounded-full
           [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]"
         >
-          {statusLeads.map((lead) => (
-            <LeadCard key={lead._id} lead={lead} />
-          ))}
+          {statusLeads.map((lead) => {
+            const updatedLead =
+              updatedLeads?.find((l) => l._id === lead._id) || lead;
+            return <LeadCard key={lead._id} lead={updatedLead} />;
+          })}
         </div>
       </div>
     );

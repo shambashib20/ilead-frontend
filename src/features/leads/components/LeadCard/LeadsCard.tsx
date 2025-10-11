@@ -7,6 +7,7 @@ import { LeadDetail } from "../LeadModals";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { getCardActions } from "@/utils/cardActions";
 import { getData } from "@/utils/localStorage";
+import { cn } from "@/lib/utils";
 
 interface LeadCardProps {
   lead: Lead;
@@ -27,7 +28,14 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   console.log(user.role);
 
   return (
-    <div className="bg-white dark:bg-primary rounded-lg shadow hover:shadow-lg transition-all">
+    <div
+      className={cn(
+        "rounded-lg shadow hover:shadow-lg transition-all",
+        lead.missedFollowup
+          ? "bg-red-600/15 dark:bg-red-800/80 text-white"
+          : "bg-white dark:bg-primary text-white"
+      )}
+    >
       <div
         className="cursor-pointer"
         onClick={() => {
@@ -51,7 +59,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
                     style={{
                       backgroundColor: label.meta?.color_code || "gray",
                     }}
-                    className="text-white text-xs px-3 py-1 rounded"
+                    className=" text-xs px-3 py-1 rounded"
                   >
                     {label.title}
                   </span>

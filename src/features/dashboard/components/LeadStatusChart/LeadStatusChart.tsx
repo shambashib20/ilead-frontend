@@ -7,6 +7,25 @@ import Chart from "react-apexcharts";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { getData } from "@/utils/localStorage";
 
+export const statusColorMap = new Map<string, string>([
+  ["New", "#056681"],
+  ["Processing", "#3a3285"],
+  ["Agent", "#fac940"],
+  ["Confirm", "#486e03"],
+  ["H.S 2025", "#659b03"],
+  ["Switch Off/ Out of Service", "#c62f2f"],
+  ["RNR", "#fb8f13"],
+  ["Fees Issue", "#dfb9b9"],
+  ["Distance Issue", "#1f34d1"],
+  ["Close-By", "#659b03"],
+  ["Campus Visit", "#fac940"],
+  ["Seat booking", "#a05a5a"],
+  ["Others Course", "#486e03"],
+  ["JOB Enquiry", "#056681"],
+  ["Male Nursing", "#959a44"],
+  ["Cancel", "#e60023"],
+]);
+
 interface Props {
   showMenu: boolean;
   closeMenu: () => void;
@@ -225,20 +244,19 @@ const LeadStatusChart: React.FC<Props> = ({
               options={{
                 chart: {
                   type: "donut",
-                  foreColor: "#6B7280", // Default text color
+                  foreColor: "#6B7280",
                 },
                 labels,
+                colors: labels.map(
+                  (label) => statusColorMap.get(label) || "#999999"
+                ),
                 legend: {
                   position: "bottom",
-                  labels: {
-                    colors: ["#6B7280"], // Legend text color
-                  },
+                  labels: { colors: ["#6B7280"] },
                 },
                 tooltip: {
                   theme: "dark",
-                  y: {
-                    formatter: (val: number) => `${val} leads`,
-                  },
+                  y: { formatter: (val: number) => `${val} leads` },
                 },
                 plotOptions: {
                   pie: {
@@ -251,22 +269,17 @@ const LeadStatusChart: React.FC<Props> = ({
                           fontSize: "16px",
                           fontWeight: 600,
                           color: "#6B7280",
-                          formatter: () => {
-                            const total = series.reduce(
-                              (sum, val) => sum + val,
-                              0
-                            );
-                            return `${total}`;
-                          },
+                          formatter: () =>
+                            series
+                              .reduce((sum, val) => sum + val, 0)
+                              .toString(),
                         },
                       },
                     },
                   },
                 },
                 dataLabels: {
-                  style: {
-                    colors: ["#fff"],
-                  },
+                  style: { colors: ["#fff"] },
                   dropShadow: {
                     enabled: true,
                     top: 1,
@@ -279,12 +292,8 @@ const LeadStatusChart: React.FC<Props> = ({
                   {
                     breakpoint: 480,
                     options: {
-                      chart: {
-                        width: 300,
-                      },
-                      legend: {
-                        position: "bottom",
-                      },
+                      chart: { width: 300 },
+                      legend: { position: "bottom" },
                     },
                   },
                 ],

@@ -3,6 +3,7 @@ export interface Lead {
   meta?: Record<string, any>;
   address: string;
   email: string;
+  missedFollowup?: boolean;
   company_name: string;
   _id: string;
   title: string;

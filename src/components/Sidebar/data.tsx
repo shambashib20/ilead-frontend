@@ -1,11 +1,9 @@
 import { cn } from "@/lib/utils";
-import { useLocation } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   Funnel,
   House,
   Tags,
-  // FileText,
   MessageSquare,
   Activity,
   UserCircle,
@@ -17,25 +15,27 @@ import {
   Settings,
   Plug,
   Trash2,
+  ChartArea,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
+
+type Role = "Admin" | "Superadmin" | "User";
 
 export type NavItem = {
   name: string;
-  icon?: ReactNode; // har jagah icon zaroori nahi hoga, isliye optional
+  icon?: ReactNode;
   path?: string;
-  roles?: string[];
-  subItems?: NavItem[]; // recursion
+  roles?: Role[];
+  subItems?: NavItem[];
 };
 
 interface SidebarMenuItemProps {
   item: NavItem;
   isCollapsed: boolean;
   depth?: number;
-  currentUserRole?: string;
+  currentUserRole?: Role;
 }
 
-// All navigation items
 export const navItems: NavItem[] = [
   { name: "Dashboard", icon: <House size={20} />, path: "/dashboard" },
   { name: "Lead", icon: <Filter size={20} />, path: "/lead" },
@@ -71,6 +71,7 @@ export const navItems: NavItem[] = [
       { name: "Marketplace", path: "/integrations/marketplace" },
     ],
   },
+
   {
     name: "General Settings",
     icon: <Settings size={20} />,
@@ -107,7 +108,39 @@ export const navItems: NavItem[] = [
     ],
     roles: ["Admin", "Superadmin"],
   },
+  {
+    name: "Reports",
+    icon: <ChartArea size={20} />,
+    roles: ["Admin", "Superadmin"],
+    path: "/report",
+  },
 ];
+
+function normalize(p?: string) {
+  if (!p) return "";
+  return p.endsWith("/") && p !== "/" ? p.slice(0, -1) : p;
+}
+
+function isPathActive(current: string, target?: string) {
+  if (!target) return false;
+  const a = normalize(current);
+  const b = normalize(target);
+  return a === b;
+}
+
+function isAnyDescendantActive(
+  items: NavItem[] | undefined,
+  current: string
+): boolean {
+  if (!items) return false;
+  const a = normalize(current);
+  return items.some(
+    (si) =>
+      (si.path &&
+        (normalize(si.path) === a || a.startsWith(normalize(si.path) + "/"))) ||
+      isAnyDescendantActive(si.subItems, current)
+  );
+}
 
 export const SidebarMenuItem = ({
   item,
@@ -116,50 +149,64 @@ export const SidebarMenuItem = ({
   currentUserRole = "Admin",
 }: SidebarMenuItemProps) => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
+  const currentPath = location.pathname;
 
-  // Check if user has permission to see this item
+  // Permission gate
   const hasPermission = !item.roles || item.roles.includes(currentUserRole);
-
   if (!hasPermission) return null;
 
-  const hasSubItems = item.subItems && item.subItems.length > 0;
-  const isActive = location.pathname === item.path;
+  const hasSubItems = !!(item.subItems && item.subItems.length > 0);
 
-  // Recursive function to check if any nested item is active
-  const checkActiveRecursive = (items: NavItem[]): boolean => {
-    return items.some(
-      (subItem) =>
-        location.pathname === subItem.path ||
-        (subItem.subItems && checkActiveRecursive(subItem.subItems))
-    );
-  };
+  const isActive = isPathActive(currentPath, item.path);
 
-  const isSubItemActive = hasSubItems
-    ? checkActiveRecursive(item.subItems!)
-    : false;
-  const shouldHighlight = isActive || isSubItemActive;
-
-  const baseStyles = cn(
-    "flex items-center gap-3 text-sm h-11  rounded-lg transition-all duration-200 ease-in-out group relative",
-    "hover:bg-sidebar-hover hover:translate-x-1",
-    shouldHighlight &&
-      "bg-gradient-to-r from-[#432ee5] to-[#e43e2b] text-white shadow-lg",
-    !shouldHighlight && "text-sidebar-text hover:text-sidebar-text"
+  const subTreeActive = useMemo(
+    () => isAnyDescendantActive(item.subItems, currentPath),
+    [item.subItems, currentPath]
   );
 
-  const indentStyles = {
-    paddingLeft: `${0.6 + depth * 0.2}rem`,
-  };
+  const shouldHighlight = isActive || subTreeActive;
 
-  // If item has subItems, render as expandable button
+  // Default-open if any descendant is active
+  const [isOpen, setIsOpen] = useState<boolean>(subTreeActive);
+
+  const baseStyles = cn(
+    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative",
+    "hover:bg-sidebar-hover hover:translate-x-1",
+    shouldHighlight
+      ? "bg-gradient-to-r from-[#432ee5] to-[#e43e2b] text-white shadow-lg"
+      : "text-sidebar-text hover:text-sidebar-text"
+  );
+
+  const linkBase = cn(
+    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative px-3",
+    "hover:bg-sidebar-hover hover:translate-x-1",
+    shouldHighlight
+      ? "bg-gradient-to-r from-[#432ee5] to-[#e43e2b] text-white shadow-lg"
+      : "text-sidebar-text hover:text-sidebar-text"
+  );
+
+  const groupBase = cn(
+    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative w-full justify-between px-3",
+    "hover:bg-sidebar-hover hover:translate-x-1",
+    // if group is open due to active child, show a subtle state, not the gradient
+    isOpen && subTreeActive
+      ? "ring-1 ring-sidebar-border/40 bg-sidebar-elev"
+      : ""
+  );
+
+  const indentStyles = { paddingLeft: `${0.6 + depth * 0.2}rem` };
+
   if (hasSubItems) {
+    const submenuId = `submenu-${item.name.replace(/\s+/g, "-").toLowerCase()}`;
     return (
       <li className="overflow-hidden">
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={cn(baseStyles, "w-full justify-between px-3")}
+          onClick={() => setIsOpen((o) => !o)}
+          className={groupBase}
           style={indentStyles}
+          aria-expanded={isOpen}
+          aria-controls={submenuId}
+          type="button"
         >
           <div className="flex items-center gap-3 min-w-0">
             {item.icon && (
@@ -178,12 +225,11 @@ export const SidebarMenuItem = ({
           )}
         </button>
 
-        {/* Recursive rendering of sub-items */}
         {!isCollapsed && isOpen && item.subItems && (
-          <ul className="mt-1 space-y-1 ">
-            {item.subItems.map((subItem, index) => (
+          <ul id={submenuId} className="mt-1 space-y-1">
+            {item.subItems.map((subItem) => (
               <SidebarMenuItem
-                key={`${subItem.name}-${index}`}
+                key={subItem.path || subItem.name}
                 item={subItem}
                 isCollapsed={isCollapsed}
                 depth={depth + 1}
@@ -196,14 +242,14 @@ export const SidebarMenuItem = ({
     );
   }
 
-  // If item has a path, render as Link
   if (item.path) {
     return (
       <li className="overflow-hidden">
         <Link
           to={item.path}
-          className={cn(baseStyles, "px-3")}
+          className={linkBase}
           style={indentStyles}
+          aria-current={shouldHighlight ? "page" : undefined}
         >
           {item.icon ? (
             <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
@@ -222,7 +268,6 @@ export const SidebarMenuItem = ({
     );
   }
 
-  // If item has neither subItems nor path, render as static item
   return (
     <li className="overflow-hidden">
       <div
