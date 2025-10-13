@@ -140,6 +140,16 @@ export interface ArchivedLeadsPayload {
   limit: number;
 }
 
+export interface GetReports {
+  sourceTitle: string;
+}
+
+export interface GetRepcortsResponse {
+  message: string;
+  status: string;
+  data: {};
+}
+
 interface ArchivedLeads {
   leads: Lead[];
   pagination: {
@@ -283,6 +293,13 @@ export class LeadsModule extends ApiClient {
   }
   async todaysFollowupds() {
     return this.get<TodaysFollowUpResponse>("/todays-followups");
+  }
+
+  async getReports(payload: GetReports) {
+    return this.post<GetRepcortsResponse>(
+      "/statistics-by-source-agent",
+      payload
+    );
   }
 }
 export const leadsServoceModule = new LeadsModule();

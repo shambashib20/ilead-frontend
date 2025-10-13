@@ -14,7 +14,6 @@ export const Route = createFileRoute("/_appLayout")({
 function RouteComponent() {
   return (
     <div>
-      Hello "/_appLayout"!
       <Outlet />
     </div>
   );

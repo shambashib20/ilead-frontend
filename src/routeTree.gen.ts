@@ -34,6 +34,7 @@ import { Route as DashboardLayoutLeadIndexImport } from './routes/_dashboardLayo
 import { Route as DashboardLayoutLabelIndexImport } from './routes/_dashboardLayout/label/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboardLayout/dashboard/index'
 import { Route as DashboardLayoutCustomerIndexImport } from './routes/_dashboardLayout/customer/index'
+import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLayout/report/$slug'
 
 // Create/Update Routes
 
@@ -185,6 +186,12 @@ const DashboardLayoutCustomerIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutReportSlugRoute = DashboardLayoutReportSlugImport.update({
+  id: '/report/$slug',
+  path: '/report/$slug',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -265,6 +272,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppLayoutIndexImport
       parentRoute: typeof AppLayoutImport
+    }
+    '/_dashboardLayout/report/$slug': {
+      id: '/_dashboardLayout/report/$slug'
+      path: '/report/$slug'
+      fullPath: '/report/$slug'
+      preLoaderRoute: typeof DashboardLayoutReportSlugImport
+      parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboardLayout/customer/': {
       id: '/_dashboardLayout/customer/'
@@ -404,6 +418,7 @@ const DashboardLayoutLeadRouteRouteWithChildren =
 interface DashboardLayoutRouteChildren {
   DashboardLayoutLeadRouteRoute: typeof DashboardLayoutLeadRouteRouteWithChildren
   DashboardLayoutLeadTrashRouteRoute: typeof DashboardLayoutLeadTrashRouteRoute
+  DashboardLayoutReportSlugRoute: typeof DashboardLayoutReportSlugRoute
   DashboardLayoutCustomerIndexRoute: typeof DashboardLayoutCustomerIndexRoute
   DashboardLayoutDashboardIndexRoute: typeof DashboardLayoutDashboardIndexRoute
   DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute
@@ -420,6 +435,7 @@ interface DashboardLayoutRouteChildren {
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutLeadRouteRoute: DashboardLayoutLeadRouteRouteWithChildren,
   DashboardLayoutLeadTrashRouteRoute: DashboardLayoutLeadTrashRouteRoute,
+  DashboardLayoutReportSlugRoute: DashboardLayoutReportSlugRoute,
   DashboardLayoutCustomerIndexRoute: DashboardLayoutCustomerIndexRoute,
   DashboardLayoutDashboardIndexRoute: DashboardLayoutDashboardIndexRoute,
   DashboardLayoutLabelIndexRoute: DashboardLayoutLabelIndexRoute,
@@ -450,6 +466,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
+  '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
   '/dashboard': typeof DashboardLayoutDashboardIndexRoute
   '/label': typeof DashboardLayoutLabelIndexRoute
@@ -473,6 +490,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
+  '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
   '/dashboard': typeof DashboardLayoutDashboardIndexRoute
   '/label': typeof DashboardLayoutLabelIndexRoute
@@ -500,6 +518,7 @@ export interface FileRoutesById {
   '/_authLayout/reset-password': typeof AuthLayoutResetPasswordRoute
   '/_authLayout/user-login': typeof AuthLayoutUserLoginRoute
   '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_dashboardLayout/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/_dashboardLayout/customer/': typeof DashboardLayoutCustomerIndexRoute
   '/_dashboardLayout/dashboard/': typeof DashboardLayoutDashboardIndexRoute
   '/_dashboardLayout/label/': typeof DashboardLayoutLabelIndexRoute
@@ -526,6 +545,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/user-login'
     | '/'
+    | '/report/$slug'
     | '/customer'
     | '/dashboard'
     | '/label'
@@ -548,6 +568,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/user-login'
     | '/'
+    | '/report/$slug'
     | '/customer'
     | '/dashboard'
     | '/label'
@@ -573,6 +594,7 @@ export interface FileRouteTypes {
     | '/_authLayout/reset-password'
     | '/_authLayout/user-login'
     | '/_appLayout/'
+    | '/_dashboardLayout/report/$slug'
     | '/_dashboardLayout/customer/'
     | '/_dashboardLayout/dashboard/'
     | '/_dashboardLayout/label/'
@@ -636,6 +658,7 @@ export const routeTree = rootRoute
       "children": [
         "/_dashboardLayout/lead",
         "/_dashboardLayout/lead-trash",
+        "/_dashboardLayout/report/$slug",
         "/_dashboardLayout/customer/",
         "/_dashboardLayout/dashboard/",
         "/_dashboardLayout/label/",
@@ -683,6 +706,10 @@ export const routeTree = rootRoute
     "/_appLayout/": {
       "filePath": "_appLayout/index.tsx",
       "parent": "/_appLayout"
+    },
+    "/_dashboardLayout/report/$slug": {
+      "filePath": "_dashboardLayout/report/$slug.tsx",
+      "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/customer/": {
       "filePath": "_dashboardLayout/customer/index.tsx",
