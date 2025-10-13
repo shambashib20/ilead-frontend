@@ -297,7 +297,7 @@ const LeadSourceChart: React.FC<Props> = ({
             />
           </div>
         ) : (
-          <div className="h-20 md:h-40  my-2  flex flex-col gap-3 justify-center items-center">
+          <div className="h-20 md:h-27  my-2  flex flex-col gap-3 justify-center items-center">
             <h5 className="text-base md:text-2xl ">No Lead Found</h5>
             <h6 className="text-lg">0</h6>
           </div>

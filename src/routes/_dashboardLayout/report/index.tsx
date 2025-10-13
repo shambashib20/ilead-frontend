@@ -5,5 +5,11 @@ export const Route = createFileRoute("/_dashboardLayout/report/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_dashboardLayout/report/"!</div>;
+  return (
+    <section className="reports">
+      <div className="report-head ">
+        <h3 className=" font-semibold">General Reports</h3>
+      </div>
+    </section>
+  );
 }

@@ -299,11 +299,11 @@ function RouteComponent() {
               />
 
               <div className="px-4 sm:px-6 pb-0">
-                <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs ">
+                <div className=" flex gap-3 md:gap-3 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs ">
                   {legendItems.map((item) => (
                     <div key={item.id} className="flex items-center space-x-1 ">
                       <span
-                        className="inline-block w-2 h-2 md:w-4 md:h-4  rounded-full border border-white"
+                        className="inline-block w-2 h-2 md:w-3 md:h-3  rounded-full border dark:border-white border-gray-800"
                         style={{ backgroundColor: item.color }}
                       />
                       <span className="dark:text-gray-200 text-gray-800  ">
@@ -352,12 +352,12 @@ function RouteComponent() {
                 onAgentChange={sourceSetSelectedAgent}
                 onSetAgent={setagent2}
               />
-              <div className="px-4 sm:px-6 pb-2">
-                <div className=" flex gap-3 md:gap-5 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs  ">
+              <div className="px-4 sm:px-6 pb-0">
+                <div className=" flex gap-3 md:gap-3 justify-center flex-wrap text-[10px] md:text-[11px] sm:text-xs ">
                   {legendItems.map((item) => (
                     <div key={item.id} className="flex items-center space-x-1 ">
                       <span
-                        className="inline-block w-2 h-2 md:w-4 md:h-4  rounded-full border border-white"
+                        className="inline-block w-2 h-2 md:w-3 md:h-3  rounded-full border dark:border-white border-gray-800"
                         style={{ backgroundColor: item.color }}
                       />
                       <span className="dark:text-gray-200 text-gray-800  ">

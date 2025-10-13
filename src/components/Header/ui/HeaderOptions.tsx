@@ -69,18 +69,18 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
-                  className="w-80 max-h-96 overflow-y-auto"
+                  className="w-80 max-h-96 overflow-y-auto "
                   align="end"
                 >
                   {logs.length > 0 ? (
                     logs.map((log, i) => (
                       <Link to="/workspace-logs" key={log._id || i}>
-                        <div className="p-2 border-b last:border-none hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <div className="p-2 border-b last:border-none hover:bg-gray-100 dark:hover:bg-blue-950/30 transition">
                           <p className="text-sm font-semibold">{log.title}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs dark:text-gray-100">
                             {log.description}
                           </p>
-                          <span className="text-[10px] text-gray-400">
+                          <span className="text-[10px] dark:text-gray-100">
                             {new Date(log.createdAt).toLocaleString()}
                           </span>
                         </div>
