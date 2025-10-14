@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_appLayout")({
@@ -15,6 +16,7 @@ function RouteComponent() {
   return (
     <div>
       <Outlet />
+      <Footer />
     </div>
   );
 }

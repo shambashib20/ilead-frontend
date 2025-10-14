@@ -34,6 +34,9 @@ import { Route as DashboardLayoutLeadIndexImport } from './routes/_dashboardLayo
 import { Route as DashboardLayoutLabelIndexImport } from './routes/_dashboardLayout/label/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboardLayout/dashboard/index'
 import { Route as DashboardLayoutCustomerIndexImport } from './routes/_dashboardLayout/customer/index'
+import { Route as AppLayoutTermsConditionIndexImport } from './routes/_appLayout/terms-condition/index'
+import { Route as AppLayoutRefundIndexImport } from './routes/_appLayout/refund/index'
+import { Route as AppLayoutPublicdetailsIndexImport } from './routes/_appLayout/publicdetails/index'
 import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLayout/report/$slug'
 
 // Create/Update Routes
@@ -186,6 +189,26 @@ const DashboardLayoutCustomerIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const AppLayoutTermsConditionIndexRoute =
+  AppLayoutTermsConditionIndexImport.update({
+    id: '/terms-condition/',
+    path: '/terms-condition/',
+    getParentRoute: () => AppLayoutRoute,
+  } as any)
+
+const AppLayoutRefundIndexRoute = AppLayoutRefundIndexImport.update({
+  id: '/refund/',
+  path: '/refund/',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
+
+const AppLayoutPublicdetailsIndexRoute =
+  AppLayoutPublicdetailsIndexImport.update({
+    id: '/publicdetails/',
+    path: '/publicdetails/',
+    getParentRoute: () => AppLayoutRoute,
+  } as any)
+
 const DashboardLayoutReportSlugRoute = DashboardLayoutReportSlugImport.update({
   id: '/report/$slug',
   path: '/report/$slug',
@@ -280,6 +303,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutReportSlugImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_appLayout/publicdetails/': {
+      id: '/_appLayout/publicdetails/'
+      path: '/publicdetails'
+      fullPath: '/publicdetails'
+      preLoaderRoute: typeof AppLayoutPublicdetailsIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_appLayout/refund/': {
+      id: '/_appLayout/refund/'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof AppLayoutRefundIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_appLayout/terms-condition/': {
+      id: '/_appLayout/terms-condition/'
+      path: '/terms-condition'
+      fullPath: '/terms-condition'
+      preLoaderRoute: typeof AppLayoutTermsConditionIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
     '/_dashboardLayout/customer/': {
       id: '/_dashboardLayout/customer/'
       path: '/customer'
@@ -371,10 +415,16 @@ declare module '@tanstack/react-router' {
 
 interface AppLayoutRouteChildren {
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutPublicdetailsIndexRoute: typeof AppLayoutPublicdetailsIndexRoute
+  AppLayoutRefundIndexRoute: typeof AppLayoutRefundIndexRoute
+  AppLayoutTermsConditionIndexRoute: typeof AppLayoutTermsConditionIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppLayoutIndexRoute: AppLayoutIndexRoute,
+  AppLayoutPublicdetailsIndexRoute: AppLayoutPublicdetailsIndexRoute,
+  AppLayoutRefundIndexRoute: AppLayoutRefundIndexRoute,
+  AppLayoutTermsConditionIndexRoute: AppLayoutTermsConditionIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
@@ -467,6 +517,9 @@ export interface FileRoutesByFullPath {
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
+  '/publicdetails': typeof AppLayoutPublicdetailsIndexRoute
+  '/refund': typeof AppLayoutRefundIndexRoute
+  '/terms-condition': typeof AppLayoutTermsConditionIndexRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
   '/dashboard': typeof DashboardLayoutDashboardIndexRoute
   '/label': typeof DashboardLayoutLabelIndexRoute
@@ -491,6 +544,9 @@ export interface FileRoutesByTo {
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
+  '/publicdetails': typeof AppLayoutPublicdetailsIndexRoute
+  '/refund': typeof AppLayoutRefundIndexRoute
+  '/terms-condition': typeof AppLayoutTermsConditionIndexRoute
   '/customer': typeof DashboardLayoutCustomerIndexRoute
   '/dashboard': typeof DashboardLayoutDashboardIndexRoute
   '/label': typeof DashboardLayoutLabelIndexRoute
@@ -519,6 +575,9 @@ export interface FileRoutesById {
   '/_authLayout/user-login': typeof AuthLayoutUserLoginRoute
   '/_appLayout/': typeof AppLayoutIndexRoute
   '/_dashboardLayout/report/$slug': typeof DashboardLayoutReportSlugRoute
+  '/_appLayout/publicdetails/': typeof AppLayoutPublicdetailsIndexRoute
+  '/_appLayout/refund/': typeof AppLayoutRefundIndexRoute
+  '/_appLayout/terms-condition/': typeof AppLayoutTermsConditionIndexRoute
   '/_dashboardLayout/customer/': typeof DashboardLayoutCustomerIndexRoute
   '/_dashboardLayout/dashboard/': typeof DashboardLayoutDashboardIndexRoute
   '/_dashboardLayout/label/': typeof DashboardLayoutLabelIndexRoute
@@ -546,6 +605,9 @@ export interface FileRouteTypes {
     | '/user-login'
     | '/'
     | '/report/$slug'
+    | '/publicdetails'
+    | '/refund'
+    | '/terms-condition'
     | '/customer'
     | '/dashboard'
     | '/label'
@@ -569,6 +631,9 @@ export interface FileRouteTypes {
     | '/user-login'
     | '/'
     | '/report/$slug'
+    | '/publicdetails'
+    | '/refund'
+    | '/terms-condition'
     | '/customer'
     | '/dashboard'
     | '/label'
@@ -595,6 +660,9 @@ export interface FileRouteTypes {
     | '/_authLayout/user-login'
     | '/_appLayout/'
     | '/_dashboardLayout/report/$slug'
+    | '/_appLayout/publicdetails/'
+    | '/_appLayout/refund/'
+    | '/_appLayout/terms-condition/'
     | '/_dashboardLayout/customer/'
     | '/_dashboardLayout/dashboard/'
     | '/_dashboardLayout/label/'
@@ -640,7 +708,10 @@ export const routeTree = rootRoute
     "/_appLayout": {
       "filePath": "_appLayout.tsx",
       "children": [
-        "/_appLayout/"
+        "/_appLayout/",
+        "/_appLayout/publicdetails/",
+        "/_appLayout/refund/",
+        "/_appLayout/terms-condition/"
       ]
     },
     "/_authLayout": {
@@ -710,6 +781,18 @@ export const routeTree = rootRoute
     "/_dashboardLayout/report/$slug": {
       "filePath": "_dashboardLayout/report/$slug.tsx",
       "parent": "/_dashboardLayout"
+    },
+    "/_appLayout/publicdetails/": {
+      "filePath": "_appLayout/publicdetails/index.tsx",
+      "parent": "/_appLayout"
+    },
+    "/_appLayout/refund/": {
+      "filePath": "_appLayout/refund/index.tsx",
+      "parent": "/_appLayout"
+    },
+    "/_appLayout/terms-condition/": {
+      "filePath": "_appLayout/terms-condition/index.tsx",
+      "parent": "/_appLayout"
     },
     "/_dashboardLayout/customer/": {
       "filePath": "_dashboardLayout/customer/index.tsx",
