@@ -11,6 +11,7 @@ import { useUser } from "@/features/auth/hooks/useUser";
 import BrandLoader from "@/components/BrandLoader/BrandLoader";
 
 type BadgeVariant = "green" | "red" | "yellow" | "gray" | "purple";
+import dayjs from "dayjs";
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -139,26 +140,93 @@ function WorkspaceDetailsCard() {
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-md border border-slate-100 dark:border-slate-700">
                   <div className="flex items-center justify-between">
-                    <div className="text-sm text-slate-400">Usage</div>
+                    <div className="text-sm text-slate-400">Plan Name</div>
                     <div className="text-sm font-semibold">
-                      {used} / {limit}
+                      {workspace?.meta?.active_package.package_id.title}
                     </div>
                   </div>
 
-                  <div className="mt-3">
-                    <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                      <div
-                        className={clsx("h-full rounded-full transition-all", {
-                          "bg-emerald-500": percent < 70,
-                          "bg-yellow-400": percent >= 70 && percent < 90,
-                          "bg-rose-500": percent >= 90,
-                        })}
-                        style={{ width: `${percent}%` }}
-                      />
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-slate-400">Plan Validity</div>
+                    <div className="text-sm font-semibold">
+                      {
+                        workspace?.meta?.active_package.package_id
+                          .validity_in_days
+                      }
                     </div>
-                    <div className="text-xs text-slate-400 mt-2">
-                      {percent}% used
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-slate-400">Plan Status</div>
+                    <div className="text-sm font-semibold">
+                      {workspace?.meta?.active_package.package_id.status}
                     </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    {workspace?.meta?.active_package.meta.activated_features.map(
+                      (feature: any) => {
+                        const percent = Math.min(
+                          Math.round((feature.used / feature.limit) * 100),
+                          100
+                        );
+
+                        return (
+                          <div
+                            key={feature.feature_id}
+                            className="p-4 border rounded-lg bg-white dark:bg-slate-800"
+                          >
+                            {/* Feature Title */}
+                            <div className="font-medium text-slate-700 dark:text-slate-200">
+                              {feature.title}
+                            </div>
+
+                            {/* Used / Limit */}
+                            <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                              {feature.used} / {feature.limit} used
+                            </div>
+
+                            {/* Progress Bar */}
+                            <div className="mt-2">
+                              <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                <div
+                                  className={clsx(
+                                    "h-full rounded-full transition-all",
+                                    {
+                                      "bg-emerald-500": percent < 70,
+                                      "bg-yellow-400":
+                                        percent >= 70 && percent < 90,
+                                      "bg-rose-500": percent >= 90,
+                                    }
+                                  )}
+                                  style={{ width: `${percent}%` }}
+                                />
+                              </div>
+                              <div className="text-xs text-slate-400 mt-1">
+                                {percent}% used
+                              </div>
+                            </div>
+
+                            {/* Validity Info */}
+                            <div className="flex justify-between items-center mt-3 text-xs text-slate-500 dark:text-slate-400">
+                              <span>
+                                Valid Till:{" "}
+                                {dayjs(feature.validity).format(
+                                  "DD-MM-YYYY, hh:mm A"
+                                )}
+                              </span>
+
+                              {/* TODO Implement this later! */}
+                              {/* <span>
+                                {feature.validity_left_till_expiration > 0
+                                  ? `${feature.validity_left_till_expiration} days left`
+                                  : "Expired"}
+                              </span> */}
+                            </div>
+                          </div>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
 
@@ -204,6 +272,8 @@ function WorkspaceDetailsCard() {
                   </div>
                 </div>
               </div>
+
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
             </div>
 
             {/* RIGHT: meta / owner / actions card */}

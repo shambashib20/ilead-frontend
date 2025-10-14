@@ -137,8 +137,9 @@ function ComingSoonEnhanced() {
           </motion.h1>
 
           <motion.p className="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
-            We're crafting something extraordinary. Stay tuned for the big
-            reveal!
+            Say goodbye to complex systems. Our upcoming CRM is designed to help
+            you capture leads, automate follow-ups, and close deals—faster than
+            ever!
           </motion.p>
         </motion.div>
 
