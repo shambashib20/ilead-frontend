@@ -62,14 +62,14 @@ type LeadBySourcePayload = {
 };
 
 type SourceItem = { _id: string; title: string };
-type LabelItem = { _id: string; title: string };
+// type LabelItem = { _id: string; title: string };
 
-type StatusItem = {
-  _id: string;
-  title: string;
-  description?: string;
-  meta?: { is_active?: boolean; color_code?: string; is_editable?: boolean };
-};
+// type StatusItem = {
+//   _id: string;
+//   title: string;
+//   description?: string;
+//   meta?: { is_active?: boolean; color_code?: string; is_editable?: boolean };
+// };
 
 type MutateFn = (
   variables: any,
@@ -198,9 +198,9 @@ function LeadReportView({
     return allRows.reduce((acc, r) => acc + r.leads, 0);
   }, [data, allRows]);
 
-  const agentCount = useMemo(() => {
-    return allRows.filter((r) => r.type === "assigned").length;
-  }, [allRows]);
+  // const agentCount = useMemo(() => {
+  //   return allRows.filter((r) => r.type === "assigned").length;
+  // }, [allRows]);
 
   // Chart: full set top 20
   const chartData = useMemo(() => {
