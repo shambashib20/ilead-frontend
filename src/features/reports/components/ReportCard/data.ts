@@ -8,18 +8,18 @@ export const REPORTS: ReportGroup = {
       links: [
         // { label: "Status Wise Report", to: "reports-lead-status" },
         {
-          label: "Status With Time Wise Report",
-          to: "lead-status-with-time",
+          label: "Lead Status Report",
+          to: "lead-status",
         },
         {
-          label: "Third Party Source Wise Report",
-          to: "reports-lead-third-party-source",
+          label: "Lead Source Report",
+          to: "lead-source",
         },
         // { label: "Source Wise Report", to: "reports-lead-source" },
         // { label: "Label Wise Report", to: "reports-lead-label" },
         {
-          label: "Staff & Source Wise Lead Status Report",
-          to: "reports-lead-staff-source-status",
+          label: "Lead Label Report",
+          to: "lead-label",
         },
         // {
         //   label: "Staff & Label Wise Lead Status Report",

@@ -301,6 +301,13 @@ export class LeadsModule extends ApiClient {
       payload
     );
   }
+
+  async getStatusReports(payload: GetReports) {
+    return this.post<GetRepcortsResponse>(
+      "/statistics-by-label-agent",
+      payload
+    );
+  }
 }
 export const leadsServoceModule = new LeadsModule();
 export const statsService = new LeadsModule();

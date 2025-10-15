@@ -6,7 +6,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
  * Base API Client Class using Axios
  */
 export class ApiClient {
-  private static readonly BASE_URL = `http://localhost:8850/api/`;
+  private static readonly BASE_URL = `https://crm-server-tsnj.onrender.com/api/`;
   protected axiosInstance: AxiosInstance;
   private readonly modulePath: string;
 
