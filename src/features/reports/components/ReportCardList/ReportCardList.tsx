@@ -16,7 +16,7 @@ const ReportListItem = memo(function ReportListItem({
         aria-label={item.label}
         className="px-3 py-4 sm:py-5 flex items-center justify-between
                    focus:outline-none focus-visible:ring focus-visible:ring-blue-400
-                   transition-transform hover:translate-x-1 hover:text-white"
+                   transition-transform hover:translate-x-1 hover:text-black hover:font-normal dark:hover:text-white"
       >
         <span className="truncate">{item.label}</span>
         <FaAngleRight size={18} aria-hidden="true" />

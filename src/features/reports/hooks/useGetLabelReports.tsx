@@ -5,13 +5,13 @@ import {
 } from "@/features/leads/services/LeadsModule.service";
 import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
 
-export function useGetReports(
+export function useGetLabelReports(
   options?: UseMutationOptions<GetRepcortsResponse, unknown, GetReports>
 ) {
   return useMutation<GetRepcortsResponse, unknown, GetReports>({
-    mutationKey: ["lead-report", "statistics-by-source-agent"],
+    mutationKey: ["lead-report", "statistics-by-label-agent"],
     mutationFn: async (payload) => {
-      const response = await leadsServoceModule.getSourceReports(payload);
+      const response = await leadsServoceModule.getLabelReports(payload);
       return response.data;
     },
     ...options,

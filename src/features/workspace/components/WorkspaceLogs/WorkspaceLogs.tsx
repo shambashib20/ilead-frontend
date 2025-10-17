@@ -48,7 +48,7 @@ export default function WorkspaceLogs() {
   }, []);
 
   return (
-    <Card className="shadow-md max-w-full mx-auto mt-8 bg-background text-foreground">
+    <Card className="shadow-md max-w-full mx-auto mt-8 text-foreground">
       <CardHeader>
         {loading ? (
           <Skeleton className="h-6 w-1/2 mb-2" />

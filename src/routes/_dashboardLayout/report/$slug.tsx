@@ -10,6 +10,7 @@ import {
   StatusQueryOptions,
   useStatus,
 } from "@/features/leads/hooks/useStatus"; // assuming this exists
+import { useGetLabelReports } from "@/features/reports/hooks/useGetLabelReports";
 import { useGetReports } from "@/features/reports/hooks/useGetReports";
 import { useGetStatusReports } from "@/features/reports/hooks/useGetStatusReports";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -116,7 +117,9 @@ function LeadReportView({
       const payload =
         queryKey === "sourceTitle"
           ? { sourceTitle: item.title }
-          : { labelTitle: item.title };
+          : queryKey === "statusTitle"
+            ? { statusTitle: item.title }
+            : { labelTitle: item.title };
 
       mutateFn(payload, {
         onSuccess: (res) => {
@@ -256,10 +259,13 @@ function LeadReportView({
       {/* Breadcrumb */}
       <div className="page-map py-4">
         <nav
-          className="flex items-center gap-1 text-sm text-gray-400"
+          className="flex items-center gap-1 text-sm dark:text-gray-400"
           aria-label="Breadcrumb"
         >
-          <Link to="/report" className="hover:text-white transition-colors">
+          <Link
+            to="/report"
+            className="dark:hover:text-white transition-colors"
+          >
             Reports
           </Link>
           <span aria-hidden>/</span>
@@ -270,7 +276,7 @@ function LeadReportView({
       <div className="bg-primary rounded-lg p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold mb-2">{heading}</h1>
-          <p className="text-gray-300">
+          <p className="dark:text-gray-300">
             Track lead distribution across{" "}
             {queryKey === "sourceTitle" ? "sources" : "statuses"} and agents
           </p>
@@ -294,8 +300,8 @@ function LeadReportView({
                     "px-4 py-2 rounded-md text-sm font-medium transition-all",
                     "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-primary",
                     isActive
-                      ? "bg-white text-primary shadow-sm"
-                      : "text-gray-300 hover:text-white hover:bg-white/10",
+                      ? "bg-white text-foreground/70 shadow-sm"
+                      : "dark:text-gray-300 dark:hover:text-white hover:bg-white/10",
                     isPendingThis
                       ? "opacity-50 cursor-not-allowed"
                       : "cursor-pointer",
@@ -320,7 +326,7 @@ function LeadReportView({
         {/* Empty State before any selection */}
         {!data && !error && (
           <div className="text-center py-12">
-            <div className="text-gray-400 mb-2">
+            <div className="dark:text-gray-400 mb-2">
               Select a {queryKey === "sourceTitle" ? "source" : "status"} to
               view analytics
             </div>
@@ -336,7 +342,7 @@ function LeadReportView({
             {/* Header Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm text-gray-300 mb-1">
+                <div className="text-sm dark:text-gray-300 mb-1">
                   Current {queryKey === "sourceTitle" ? "Source" : "Status"}
                 </div>
                 <div className="text-xl font-semibold">
@@ -344,13 +350,15 @@ function LeadReportView({
                 </div>
               </div>
               <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm text-gray-300 mb-1">Total Leads</div>
+                <div className="text-sm dark:text-gray-300 mb-1">
+                  Total Leads
+                </div>
                 <div className="text-xl font-semibold">
                   {Number.isFinite(totalLeads) ? totalLeads : 0}
                 </div>
               </div>
               <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm text-gray-300 mb-1">Agents</div>
+                <div className="text-sm dark:text-gray-300 mb-1">Agents</div>
                 <div className="text-xl font-semibold">
                   {allRows.filter((r) => r.type === "assigned").length}
                 </div>
@@ -404,7 +412,7 @@ function LeadReportView({
 
             {/* Empty/Zero data states */}
             {(!hasAnyRows || !hasAnyLeads) && (
-              <div className="text-center py-10 text-gray-400 bg-white/5 rounded-lg">
+              <div className="text-center py-10 dark:text-gray-400 bg-white/5 rounded-lg">
                 Nothing to show. Toggle “Assigned” or “Unassigned,” or pick
                 another option.
               </div>
@@ -413,7 +421,7 @@ function LeadReportView({
             {/* Chart */}
             {hasAnyRows && hasAnyLeads && (
               <div className="bg-white/5 rounded-lg p-6">
-                <div className="mb-3 text-sm text-gray-400">
+                <div className="mb-3 text-sm dark:text-gray-400">
                   Top 20 agents by leads (all pages)
                 </div>
                 <div className="h-80">
@@ -462,19 +470,19 @@ function LeadReportView({
                       <tr>
                         <th
                           scope="col"
-                          className="py-3 px-4 text-left font-medium text-gray-300"
+                          className="py-3 px-4 text-left font-medium dark:text-gray-300"
                         >
                           Agent
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-4 text-left font-medium text-gray-300"
+                          className="py-3 px-4 text-left font-medium dark:text-gray-300"
                         >
                           Type
                         </th>
                         <th
                           scope="col"
-                          className="py-3 px-4 text-right font-medium text-gray-300"
+                          className="py-3 px-4 text-right font-medium dark:text-gray-300"
                         >
                           Leads
                         </th>
@@ -489,7 +497,7 @@ function LeadReportView({
                           <td className="py-3 px-4">
                             <div>
                               <div className="font-medium">{r.name}</div>
-                              <div className="text-xs text-gray-400">
+                              <div className="text-xs dark:text-gray-400">
                                 #{startIndex + idx + 1}
                               </div>
                             </div>
@@ -499,7 +507,7 @@ function LeadReportView({
                               className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
                                 r.type === "assigned"
                                   ? "bg-blue-500/20 text-blue-300"
-                                  : "bg-gray-500/20 text-gray-300"
+                                  : "bg-gray-500/20 dark:text-gray-300"
                               }`}
                             >
                               {r.type}
@@ -516,7 +524,7 @@ function LeadReportView({
 
                 {/* Pagination */}
                 <div className="flex items-center justify-between p-4 border-t border-white/10">
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm dark:text-gray-400">
                     Showing {allRows.length === 0 ? 0 : startIndex + 1}-
                     {endIndex} of {allRows.length}
                   </div>
@@ -560,10 +568,13 @@ function RouteComponent() {
       <section className="report-detail">
         <div className="page-map py-4">
           <nav
-            className="flex items-center gap-1 text-sm text-gray-400"
+            className="flex items-center gap-1 text-sm dark:text-gray-400"
             aria-label="Breadcrumb"
           >
-            <Link to="/report" className="hover:text-white transition-colors">
+            <Link
+              to="/report"
+              className="dark:hover:text-white transition-colors"
+            >
               Reports
             </Link>
             <span aria-hidden>/</span>
@@ -573,7 +584,7 @@ function RouteComponent() {
 
         <div className="bg-primary rounded-lg p-6">
           <h1 className="text-2xl font-semibold mb-2">Report</h1>
-          <p className="text-gray-300">No data fetching for “{slug}”.</p>
+          <p className="dark:text-gray-300">No data fetching for “{slug}”.</p>
         </div>
       </section>
     );
@@ -620,7 +631,7 @@ function RouteComponent() {
     const { allLables } = useAllLabels();
     const items = allLables.data.map((s) => ({ _id: s._id, title: s.title }));
     // correct mutation
-    const { mutate: mutateSourceReport } = useGetStatusReports();
+    const { mutate: mutateSourceReport } = useGetLabelReports();
 
     return (
       <LeadReportView

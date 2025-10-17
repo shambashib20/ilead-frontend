@@ -9,7 +9,7 @@ export function useGetStatusReports(
   options?: UseMutationOptions<GetRepcortsResponse, unknown, GetReports>
 ) {
   return useMutation<GetRepcortsResponse, unknown, GetReports>({
-    mutationKey: ["lead", "statistics-by-status-agent"],
+    mutationKey: ["lead-report", "statistics-by-status-agent"],
     mutationFn: async (payload) => {
       const response = await leadsServoceModule.getStatusReports(payload);
       return response.data;
@@ -17,26 +17,3 @@ export function useGetStatusReports(
     ...options,
   });
 }
-
-// ok see you do one thing
-
-// make me a mutaion hook
-
-// using react query
-
-// for post
-
-// create a api
-//  then use that api in the use mutation
-
-// /lead/statistics-by-source-agent
-// this is the route
-// and this is the post route
-
-// this is the params
-
-// {
-//     "sourceTitle": "Facebook"
-// }
-
-// make a api function using axios

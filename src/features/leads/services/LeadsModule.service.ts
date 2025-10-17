@@ -295,16 +295,22 @@ export class LeadsModule extends ApiClient {
     return this.get<TodaysFollowUpResponse>("/todays-followups");
   }
 
-  async getReports(payload: GetReports) {
+  async getSourceReports(payload: GetReports) {
     return this.post<GetRepcortsResponse>(
       "/statistics-by-source-agent",
       payload
     );
   }
 
-  async getStatusReports(payload: GetReports) {
+  async getLabelReports(payload: GetReports) {
     return this.post<GetRepcortsResponse>(
       "/statistics-by-label-agent",
+      payload
+    );
+  }
+  async getStatusReports(payload: GetReports) {
+    return this.post<GetRepcortsResponse>(
+      "/statistics-by-status-agent",
       payload
     );
   }
