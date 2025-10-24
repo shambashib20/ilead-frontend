@@ -37,7 +37,7 @@ function RouteComponent() {
     function tick(now: number) {
       const elapsed = now - start;
 
-      if (elapsed >= 2 * 60 * 1000) {
+      if (elapsed >= 5 * 60 * 1000) {
         // 2 min ho gaye
         setModalSize?.("lg");
         setModalTitle?.("Missed Follow ups ");

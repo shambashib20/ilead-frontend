@@ -120,7 +120,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className=" space-y-4 mt-10">
       <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
         <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
         <div className="flex items-center gap-5">
@@ -140,10 +140,10 @@ function RouteComponent() {
       {isLoading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className="bg-primary rounded-sm  ">
+        <div className=" rounded-sm overflow-hidden ">
           <Table>
             <TableHeader className="">
-              <TableRow className="hover:bg-primary">
+              <TableRow className="bg-primary hover:bg-white dark:hover:bg-primary/80">
                 <TableHead className="dark:text-gray-200">No.</TableHead>
                 <TableHead className="dark:text-gray-200 ">Title</TableHead>
 
@@ -154,11 +154,11 @@ function RouteComponent() {
                 {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
               </TableRow>
             </TableHeader>
-            <TableBody className="bg-white">
+            <TableBody className="bg-primary/60">
               {filteredLabels.length > 0 ? (
                 filteredLabels.map((label: any, ind: number) => (
                   <TableRow key={label._id}>
-                    <TableCell className="dark:text-background">
+                    <TableCell className="dark:text-white">
                       {ind + 1 + (page - 1) * limit}
                     </TableCell>
 
@@ -221,7 +221,7 @@ function RouteComponent() {
                           )}
                         </ul>
                       ) : (
-                        <p className="text-sm text-gray-500 italic">
+                        <p className="text-sm dark:text-white italic">
                           No staffs allocated
                         </p>
                       )}

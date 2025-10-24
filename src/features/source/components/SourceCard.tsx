@@ -14,9 +14,19 @@ import type { Source } from "@/features/leads/services/Source.service";
 
 import { useEffect, useState } from "react";
 import CreateSourceForm from "./CreateSourceForm";
-import { Pencil, Trash } from "lucide-react";
+import {
+  Pencil,
+  Trash,
+  Plus,
+  Search,
+  SignalHigh,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import Swal from "sweetalert2";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 function SourceCard() {
   const [sources, setSources] = useState<Source[]>([]);
@@ -25,6 +35,7 @@ function SourceCard() {
   const limit = 10;
   const [totalPages, setTotalPages] = useState(1);
   const [totalSources, setTotalSources] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   const openModal = useModalStore((state) => state.openModal);
   const closeModal = useModalStore((state) => state.closeModal);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -64,7 +75,6 @@ function SourceCard() {
           }}
         />
       ),
-      // type: "form",
     });
   };
 
@@ -80,7 +90,6 @@ function SourceCard() {
           }}
         />
       ),
-      // type: "form",
     });
   };
 
@@ -91,7 +100,7 @@ function SourceCard() {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      cancelButtonColor: "#6b7280",
       confirmButtonText: "Yes, delete it!",
     });
 
@@ -120,94 +129,247 @@ function SourceCard() {
     fetchData();
   }, [page, refreshKey]);
 
+  const filteredSources = sources.filter(
+    (source) =>
+      source.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      source.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold dark:text-white">Source List</h2>
-        <Button onClick={handleOpenCreateModal}>Add New Source</Button>
+    <div className="mt-10">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-primary px-4 py-4 rounded-lg mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <SignalHigh className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Sources
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Manage your lead sources
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <div className="text-right hidden sm:block">
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              {totalSources}
+            </div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+              Total Sources
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+            <div className="relative flex-1 sm:w-64">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search sources..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 dark:placeholder:text-gray-400 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+              />
+            </div>
+            <Button
+              onClick={handleOpenCreateModal}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+              size="sm"
+            >
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline">Add Source</span>
+            </Button>
+          </div>
+        </div>
       </div>
-      {loading ? (
-        <SkeletonTableLoader />
-      ) : (
-        <div className=" border dark:border-gray-700">
+
+      {/* Table Container */}
+      <div className="rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+        {loading ? (
+          <div className="p-8">
+            <SkeletonTableLoader />
+          </div>
+        ) : (
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="dark:text-gray-200">Title</TableHead>
-                <TableHead className="dark:text-gray-200">
+            <TableHeader className="bg-primary">
+              <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  Source
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
                   Description
                 </TableHead>
-                <TableHead className="dark:text-gray-200">Actions</TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4 w-32">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-center py-4 dark:text-gray-300"
+            <TableBody className="bg-primary/50">
+              {filteredSources.length > 0 ? (
+                filteredSources.map((source, index) => (
+                  <TableRow
+                    key={source._id}
+                    className={`border-b border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30 `}
                   >
-                    Loading...
-                  </TableCell>
-                </TableRow>
-              ) : sources.length > 0 ? (
-                sources.map((source) => (
-                  <TableRow key={source._id}>
-                    <TableCell className="dark:text-gray-100">
-                      {source.title}
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm font-medium">
+                            {source.title?.charAt(0).toUpperCase() || "S"}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-white">
+                            {source.title}
+                          </div>
+                          <Badge
+                            variant="secondary"
+                            className="bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800 text-xs mt-1"
+                          >
+                            Source
+                          </Badge>
+                        </div>
+                      </div>
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
-                      {source.description}
+                    <TableCell className="py-4">
+                      <div className="text-gray-600 dark:text-gray-300 max-w-md">
+                        {source.description || (
+                          <span className="text-gray-400 dark:text-gray-500 italic">
+                            No description provided
+                          </span>
+                        )}
+                      </div>
                     </TableCell>
-
-                    <TableCell className="flex gap-2 items-center">
-                      <Pencil
-                        size={18}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => handleEdit(source)}
-                      />
-
-                      <Trash
-                        size={18}
-                        className="cursor-pointer text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(source._id)}
-                      />
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEdit(source)}
+                          className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800"
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(source._id)}
+                          className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-800"
+                        >
+                          <Trash className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-center py-4 dark:text-gray-400"
-                  >
-                    No sources found.
+                  <TableCell colSpan={3} className="py-12 text-center">
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <SignalHigh className="h-12 w-12 text-gray-300 dark:text-gray-600" />
+                      <div>
+                        <div className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                          {searchQuery
+                            ? "No matching sources found"
+                            : "No sources found"}
+                        </div>
+                        <div className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                          {searchQuery
+                            ? "Try adjusting your search"
+                            : "Get started by creating your first source"}
+                        </div>
+                      </div>
+                      {!searchQuery && (
+                        <Button
+                          onClick={handleOpenCreateModal}
+                          className="mt-2 flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                        >
+                          <Plus className="h-4 w-4" />
+                          Add Source
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+        )}
+      </div>
+
+      {/* Pagination */}
+      {!loading && totalPages > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {filteredSources.length}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {totalSources}
+            </span>{" "}
+            sources
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+              className="flex items-center gap-2 border-gray-300 dark:border-gray-600"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+
+            <div className="flex items-center gap-1 mx-2">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (page <= 3) {
+                  pageNum = i + 1;
+                } else if (page >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = page - 2 + i;
+                }
+
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={page === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPage(pageNum)}
+                    className={`w-10 h-10 ${
+                      page === pageNum
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page + 1)}
+              disabled={page === totalPages}
+              className="flex items-center gap-2 border-gray-300 dark:border-gray-600"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
-      <div className="flex justify-between items-center">
-        <div className="text-sm text-muted-foreground dark:text-gray-300">
-          Showing {sources.length} of {totalSources} total sources
-        </div>
-        <div className="flex items-center gap-2">
-          <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
-            Prev
-          </Button>
-          <span className="text-sm dark:text-white">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            onClick={() => setPage(page + 1)}
-            disabled={page === totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

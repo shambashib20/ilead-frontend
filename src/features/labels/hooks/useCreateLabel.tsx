@@ -2,8 +2,15 @@ import { useMutation } from "@tanstack/react-query";
 import { labelService } from "../services/Label.service";
 import { toast } from "sonner";
 import { queryClient } from "@/utils/client";
+import { useModalStore } from "@/store/useModalStore";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import PaywallUi from "@/components/PaywallUi";
+import { Button } from "@/components/ui/button";
 
 export function useCreateLabel() {
+  const { openModal, closeModal, setModalTitle, setModalSize } =
+    useModalStore();
+  const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: ({
       title,
@@ -23,27 +30,60 @@ export function useCreateLabel() {
     },
 
     // onMutate: (variables) => {},
-    onError: (error: unknown) => {
+    onError: (error: {
+      response: { status: number; data: { message: string } };
+    }) => {
       console.error("Create label failed:", error);
-
+      const code = error?.response?.status;
       let message = "Something went wrong while creating the label.";
+      const isPaywall = code === 403;
 
-      if (error instanceof Error) {
-        message = error.message;
-      } else if (
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error
-      ) {
-        message = String((error as any).message);
+      if (isPaywall) {
+        setModalTitle?.("Upgrade required");
+        setModalSize?.("lg");
+
+        openModal({
+          type: "action",
+          content: (
+            <PaywallUi
+              hint="Pro feature"
+              message="Creating more than 3 labels requires the Pro plan."
+              ctaLabel="Upgrade"
+              secondaryLabel="Later"
+              onUpgrade={() => {
+                closeModal();
+                // navigate("/add-pricing");
+              }}
+              onClose={closeModal}
+            />
+          ),
+          customActions: (
+            <>
+              <Button variant="outline" onClick={closeModal}>
+                Not now
+              </Button>
+              <Button>See plans</Button>
+            </>
+          ),
+        });
+        return;
       }
-
-      toast.error(message);
+      setModalTitle?.("Something went wrong");
+      setModalSize?.("sm");
+      openModal({
+        type: "action",
+        content: (
+          <div className="p-2">
+            <p className="text-sm opacity-80">{message}</p>
+          </div>
+        ),
+        customActions: <Button onClick={closeModal}>Close</Button>,
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries();
       toast.success("Label Created SucessFully");
     },
   });
-  return { createLable: mutation.mutate };
+  return { createLable: mutation.mutateAsync };
 }

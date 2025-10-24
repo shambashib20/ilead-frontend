@@ -14,7 +14,7 @@ import { useModalStore } from "@/store/useModalStore";
 import type { Lables } from "@/features/leads/services/Lable.service";
 
 import { useState } from "react";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Tag, Trash } from "lucide-react";
 import CreateLabelForm from "./CreateLabelForm";
 import Swal from "sweetalert2";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
@@ -111,84 +111,120 @@ function LabelCard() {
       {loading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className="bg-primary rounded-sm  ">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
           <Table>
-            <TableHeader className="">
-              <TableRow className="hover:bg-primary">
-                <TableHead className="dark:text-gray-200">No.</TableHead>
-                <TableHead className="dark:text-gray-200 ">Title</TableHead>
-
-                <TableHead className="dark:text-gray-200">Actions</TableHead>
-                <TableHead className="dark:text-gray-200 ">
+            <TableHeader className="bg-gray-50 dark:bg-gray-800/50">
+              <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4 w-20">
+                  No.
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  Title
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
                   Allocated Users
                 </TableHead>
-                {/* <TableHead className="dark:text-gray-200">Actions</TableHead> */}
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4 w-32">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="bg-white">
+            <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-center py-4 text-gray-500"
-                  >
-                    Loading...
+                  <TableCell colSpan={4} className="text-center py-8">
+                    <div className="flex justify-center">
+                      <SkeletonTableLoader />
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : label.length > 0 ? (
                 label.map((label, ind) => (
-                  <TableRow key={label._id}>
-                    <TableCell className="  dark:text-background  ">
-                      {ind + 1}
+                  <TableRow
+                    key={label._id}
+                    className={`border-b border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30 ${
+                      ind % 2 === 0
+                        ? "bg-white dark:bg-gray-900"
+                        : "bg-gray-50/50 dark:bg-gray-800/20"
+                    }`}
+                  >
+                    <TableCell className="py-4">
+                      <div className="text-gray-600 dark:text-gray-300 font-medium">
+                        {ind + 1 + (page - 1) * limit}
+                      </div>
                     </TableCell>
-                    <TableCell className="dark:text-background">
-                      <span className="bg-gray-100 px-4 py-2 rounded-sm">
+                    <TableCell className="py-4">
+                      <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300 px-3 py-2 rounded-md text-sm font-medium border border-blue-200 dark:border-blue-800">
                         {label.title}
                       </span>
                     </TableCell>
-
-                    <TableCell className="flex gap-2 items-center">
-                      <Pencil
-                        size={18}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                        onClick={() => handleEdit()}
-                      />
-
-                      <Trash
-                        size={18}
-                        className="cursor-pointer text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(label._id)}
-                      />
-                    </TableCell>
-                    <TableCell className="dark:text-background">
+                    <TableCell className="py-4">
                       {label?.meta?.assigned_agents?.length > 0 ? (
-                        <ul className="flex items-center -space-x-5">
-                          {label.meta.assigned_agents.map((item, index) => (
-                            <li
-                              key={index}
-                              className="border border-gray-200 rounded-full p-1 bg-white"
-                            >
-                              <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold">
-                                {item?.agent_id?.name?.charAt(0) ?? "?"}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center -space-x-2">
+                            {label.meta.assigned_agents
+                              .slice(0, 3)
+                              .map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900"
+                                >
+                                  <span className="text-white text-xs font-medium">
+                                    {item?.agent_id?.name
+                                      ?.charAt(0)
+                                      ?.toUpperCase() || "?"}
+                                  </span>
+                                </div>
+                              ))}
+                          </div>
+                          {label.meta.assigned_agents.length > 3 && (
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              +{label.meta.assigned_agents.length - 3} more
+                            </span>
+                          )}
+                        </div>
                       ) : (
-                        <p className="text-sm text-gray-500 italic">
-                          No staffs allocated
+                        <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                          No staff allocated
                         </p>
                       )}
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEdit()}
+                          className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                        >
+                          <Pencil className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(label._id)}
+                          className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        >
+                          <Trash className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-center py-4 dark:text-gray-400"
-                  >
-                    No statuses found.
+                  <TableCell colSpan={4} className="py-12 text-center">
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <Tag className="h-12 w-12 text-gray-300 dark:text-gray-600" />
+                      <div>
+                        <div className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                          No labels found
+                        </div>
+                        <div className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                          Get started by creating your first label
+                        </div>
+                      </div>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}

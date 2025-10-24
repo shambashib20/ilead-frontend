@@ -101,40 +101,40 @@ export function LeadTab({ data }: { data: LeadTabType }) {
                     tabIndex={0}
                     onClick={onActivate}
                     onKeyDown={onKeyDown}
-                    className="border border-gray-200 dark:border-gray-700 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1 hover:cursor-pointer dark:hover:bg-amber-50/5"
+                    className="border border-gray-200 dark:border-gray-700 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1 hover:cursor-pointer dark:hover:bg-amber-50/5 mb-6"
                     aria-label={`Open lead ${leadName} details`}
                   >
-                    {/* Avatar - prefer a safe Tailwind value */}
                     <div
-                      className="h-9 w-9 rounded-full border bg-white text-black grid place-content-center absolute -left-4 -top-4"
+                      className="h-8 w-8 rounded-full border bg-white text-black grid place-content-center absolute -left-4 -top-4 text-[12px]"
                       aria-hidden
                     >
                       {leadName.charAt(0).toUpperCase()}
                     </div>
 
-                    {/* Name */}
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2 font-medium text-[14px]">
-                        <User className="w-4 h-4 text-gray-600 dark:text-gray-200" />
-                        <span>{leadName}</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2 font-medium text-[14px]">
+                          <User className="w-4 h-4 text-gray-600 dark:text-gray-200" />
+                          <span>{leadName}</span>
+                        </div>
                       </div>
+
+                      {/* Phone */}
+                      {lead.phone_number && (
+                        <div className="text-gray-600 flex items-center text-base">
+                          <Phone
+                            size={16}
+                            className="text-gray-600 dark:text-gray-200"
+                          />
+                          <p className="ml-1 font-medium text-[12px] text-gray-600 dark:text-gray-200">
+                            {lead.phone_number}
+                          </p>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Phone */}
-                    {lead.phone_number && (
-                      <div className="text-gray-600 flex items-center text-base">
-                        <Phone
-                          size={16}
-                          className="text-gray-600 dark:text-gray-200"
-                        />
-                        <p className="ml-1 font-medium text-[12px] text-gray-600 dark:text-gray-200">
-                          {lead.phone_number}
-                        </p>
-                      </div>
-                    )}
-
                     {/* Email */}
-                    {lead.email && (
+                    {/* {lead.email && (
                       <div className="text-sm flex items-center gap-1">
                         <Mail
                           size={16}
@@ -142,29 +142,29 @@ export function LeadTab({ data }: { data: LeadTabType }) {
                         />
                         <span className="text-[12px]">{lead.email}</span>
                       </div>
-                    )}
+                    )} */}
 
                     {/* Address */}
-                    {lead.address && (
+                    {/* {lead.address && (
                       <div className="text-sm flex items-center gap-1">
                         <MapPin className="w-4 h-4 text-gray-600 dark:text-gray-200" />
                         <span className="text-[12px]">{lead.address}</span>
                       </div>
-                    )}
+                    )} */}
 
                     {/* Comments */}
-                    {lead.comment && (
+                    {/* {lead.comment && (
                       <div className="text-[12px]">
                         Comments: {lead.comment}
                       </div>
-                    )}
+                    )} */}
 
                     {/* Reference */}
-                    {lead.reference && (
+                    {/* {lead.reference && (
                       <div className="text-[12px] text-gray-600 dark:text-gray-200">
                         Ref: {lead.reference}
                       </div>
-                    )}
+                    )} */}
                   </li>
                 );
               })}

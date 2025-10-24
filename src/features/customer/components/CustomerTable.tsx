@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   Table,
   TableBody,
@@ -8,14 +7,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Badge } from "@/components/ui/badge";
-
 import { customerService } from "../services/Customer.service";
 import type { Customer } from "../services/Customer.service";
-
 import { Button } from "@/components/ui/button";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Users,
+  Mail,
+  Phone,
+  MessageCircle,
+} from "lucide-react";
 
 function CustomerTable() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -45,101 +49,225 @@ function CustomerTable() {
   }, [page]);
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold dark:text-white">
-          Customers List
-        </h2>
+    <div className=" mt-10">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 bg-primary p-4 rounded-lg">
+        <div className="flex items-center gap-3 ">
+          <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-medium text-gray-900 dark:text-white">
+              Customers
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Manage your customer relationships
+            </p>
+          </div>
+        </div>
+        <div className="text-right">
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            {totalCustomers}
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Total Customers
+          </div>
+        </div>
       </div>
 
-      {/* Loader replaces the table completely */}
-      {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <SkeletonTableLoader />
-        </div>
-      ) : (
-        <div className="rounded-md border dark:border-gray-700">
+      {/* Table Container */}
+      <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-primary overflow-hidden">
+        {loading ? (
+          <div className="p-8">
+            <SkeletonTableLoader />
+          </div>
+        ) : (
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="dark:text-gray-200">Name</TableHead>
-                <TableHead className="dark:text-gray-200">Email</TableHead>
-                <TableHead className="dark:text-gray-200">
-                  Phone Number
+            <TableHeader className="bg-primary">
+              <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  Customer
                 </TableHead>
-                <TableHead className="dark:text-gray-200">
-                  Customer Status
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email
+                  </div>
                 </TableHead>
-                <TableHead className="dark:text-gray-200">
-                  Whatsapp Number
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4" />
+                    Phone
+                  </div>
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  Status
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="h-4 w-4" />
+                    WhatsApp
+                  </div>
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {customers.length > 0 ? (
-                customers.map((customer) => (
-                  <TableRow key={customer._id}>
-                    <TableCell className="dark:text-gray-100">
-                      {customer.name}
+                customers.map((customer, index) => (
+                  <TableRow
+                    key={customer._id}
+                    className={`border-b border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30 ${
+                      index % 2 === 0
+                        ? "bg-white dark:bg-primary/40"
+                        : "bg-gray-50/50 dark:bg-gray-800/20"
+                    }`}
+                  >
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm font-medium">
+                            {customer.name?.charAt(0).toUpperCase() || "C"}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-white">
+                            {customer.name}
+                          </div>
+                        </div>
+                      </div>
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
-                      {customer.email}
+                    <TableCell className="py-4">
+                      <div className="text-gray-600 dark:text-gray-300">
+                        {customer.email}
+                      </div>
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
-                      {customer.phone_number}
+                    <TableCell className="py-4">
+                      <div className="text-gray-600 dark:text-gray-300 font-mono">
+                        {customer.phone_number}
+                      </div>
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
+                    <TableCell className="py-4">
                       <Badge
                         variant={
                           customer.meta?.active ? "default" : "secondary"
                         }
-                        className={
-                          customer?.meta?.active
-                            ? "bg-green-600 hover:bg-green-700 text-white"
-                            : "bg-gray-500 hover:bg-gray-600 text-white"
-                        }
+                        className={`
+                          font-medium px-3 py-1 rounded-full
+                          ${
+                            customer.meta?.active
+                              ? "bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800"
+                              : "bg-gray-100 text-gray-800 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
+                          }
+                        `}
                       >
-                        {customer.meta?.active ? "Active" : "Inactive"}
+                        <div className="flex items-center gap-1.5">
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              customer.meta?.active
+                                ? "bg-green-500"
+                                : "bg-gray-500"
+                            }`}
+                          />
+                          {customer.meta?.active ? "Active" : "Inactive"}
+                        </div>
                       </Badge>
                     </TableCell>
-                    <TableCell className="dark:text-gray-100">
-                      {customer.meta?.whatsapp}
+                    <TableCell className="py-4">
+                      <div className="text-gray-600 dark:text-gray-300 font-mono">
+                        {customer.meta?.whatsapp || "-"}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={5}
-                    className="text-center py-4 dark:text-gray-400"
-                  >
-                    No customers found.
+                  <TableCell colSpan={5} className="py-12 text-center">
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <Users className="h-12 w-12 text-gray-300 dark:text-gray-600" />
+                      <div>
+                        <div className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                          No customers found
+                        </div>
+                        <div className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+                          Get started by adding your first customer
+                        </div>
+                      </div>
+                    </div>
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Pagination only shows when data is loaded */}
-      {!loading && (
-        <div className="flex justify-between items-center">
-          <div className="text-sm text-muted-foreground dark:text-gray-300">
-            Showing {customers.length} of {totalCustomers} total customers
+      {/* Pagination */}
+      {!loading && totalPages > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {customers.length}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {totalCustomers}
+            </span>{" "}
+            customers
           </div>
+
           <div className="flex items-center gap-2">
-            <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
-              Prev
-            </Button>
-            <span className="text-sm dark:text-white">
-              Page {page} of {totalPages}
-            </span>
             <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Previous
+            </Button>
+
+            <div className="flex items-center gap-1 mx-2">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (page <= 3) {
+                  pageNum = i + 1;
+                } else if (page >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = page - 2 + i;
+                }
+
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={page === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPage(pageNum)}
+                    className={`w-10 h-10 ${
+                      page === pageNum
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-600 dark:text-gray-400"
+                    }`}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setPage(page + 1)}
               disabled={page === totalPages}
+              className="flex items-center gap-2"
             >
               Next
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>

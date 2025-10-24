@@ -1,4 +1,4 @@
-import type { Lead } from "./HomePage.service";
+import type { Lead } from "../../dashboard/service/HomePage.service";
 import { ApiClient } from "@/services/ApiClient.service";
 
 export type ConvertToCustomerPayload = {

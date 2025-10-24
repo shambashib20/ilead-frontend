@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import { createFileRoute } from "@tanstack/react-router";
 import type { Lead } from "@/features/leads/types";
-import { dashboardLeads } from "@/features/leads/services/HomePage.service";
 import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
 import { Menu } from "lucide-react";
 import LeadSourceChart from "@/features/dashboard/components/LeadSourceChart/LeadSourceChart";
@@ -25,6 +24,7 @@ import {
 import UpcomingFollowUpsList from "@/features/dashboard/components/UpcommingFollowUpList/UpcommingFollowUpList";
 import { useOverdueFollowUps } from "@/features/dashboard/hooks/useOverdueFollowUps";
 import { useUser } from "@/features/auth/hooks/useUser";
+import { useTodaysLead } from "@/features/dashboard/hooks/useTodaysLead";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
@@ -46,6 +46,8 @@ type DashboardCardType = {
 
 function RouteComponent() {
   // const currentLeads;
+
+  const { newLeads, progressLeads } = useTodaysLead();
   const [leadData, setLeadData] = useState<{
     leads_in_new: Lead[];
     leads_in_processing: Lead[];
@@ -76,31 +78,24 @@ function RouteComponent() {
   // }, []);
 
   useEffect(() => {
-    dashboardLeads
-      .getTodayLeads()
-      .then((res) =>
-        setLeadData({
-          leads_in_new: res.data.data.leads_in_new.map((lead: any) => ({
-            ...lead,
-            title: lead.title ?? "",
-            assigned_to: lead.assigned_to ?? "",
-            status: lead.status ?? "",
-            assigned_by: lead.assigned_by ?? "",
-            labels: lead.labels ?? [],
-          })),
-          leads_in_processing: res.data.data.leads_in_processing.map(
-            (lead: any) => ({
-              ...lead,
-              title: lead.title ?? "",
-              assigned_to: lead.assigned_to ?? "",
-              status: lead.status ?? "",
-              assigned_by: lead.assigned_by ?? "",
-              labels: lead.labels ?? [],
-            })
-          ),
-        })
-      )
-      .catch((err) => console.error("Lead API Error:", err));
+    setLeadData({
+      leads_in_new: newLeads.map((lead: any) => ({
+        ...lead,
+        title: lead.title ?? "",
+        assigned_to: lead.assigned_to ?? "",
+        status: lead.status ?? "",
+        assigned_by: lead.assigned_by ?? "",
+        labels: lead.labels ?? [],
+      })),
+      leads_in_processing: progressLeads.map((lead: any) => ({
+        ...lead,
+        title: lead.title ?? "",
+        assigned_to: lead.assigned_to ?? "",
+        status: lead.status ?? "",
+        assigned_by: lead.assigned_by ?? "",
+        labels: lead.labels ?? [],
+      })),
+    });
   }, []);
 
   const cardsData: DashboardCardType[] = useMemo(
@@ -189,9 +184,6 @@ function RouteComponent() {
     [leadData, user?.data?.role]
   );
 
-  // const allowedRoles = ["Admin", "Superadmin"];
-  // const hasAccess = allowedRoles.includes(user?.role);
-
   const legendItems = useMemo(() => {
     const items = status?.data ?? [];
     return items.map((item: any) => ({
@@ -200,26 +192,6 @@ function RouteComponent() {
       color: item.meta?.color_code ?? "#444",
     }));
   }, [status?.data]);
-
-  // const legendItems = [
-  //   { label: "New", color: "#2563eb" }, // blue
-  //   { label: "Processing", color: "#10b981" }, // green
-  //   { label: "Close-by", color: "#facc15" }, // yellow
-  //   { label: "Confirm", color: "#ef4444" }, // red
-  //   { label: "Cancel", color: "#8b5cf6" }, // purple
-
-  //   { label: "Campus Visit", color: "#3b82f6" },
-  //   { label: "Seat booking", color: "#f97316" },
-  //   { label: "Male Nursing", color: "#eab308" },
-  //   { label: "Distance Issue", color: "#14b8a6" },
-  //   { label: "Fees Issue", color: "#f43f5e" },
-  //   { label: "RNR", color: "#a855f7" },
-  //   { label: "Switch Off / Out Of Service", color: "#22c55e" },
-  //   { label: "JOB Enquiry", color: "#0ea5e9" },
-  //   { label: "Others Course", color: "#6b7280" },
-  //   { label: "H.S 2025", color: "#ec4899" },
-  //   { label: "Agent", color: "#f59e0b" },
-  // ];
 
   if (!leadData)
     return (

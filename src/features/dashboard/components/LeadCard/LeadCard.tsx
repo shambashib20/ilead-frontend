@@ -10,7 +10,7 @@ export function LeadCard({
   children: ReactNode;
 }) {
   return (
-    <Card className="py-2 mt-5 bg-primary">
+    <Card className="py-2 mt-5 bg-primary min-h-[300px]">
       <CardHeader className="border-b-[1px] pt-1 border-gray-200 dark:border-gray-700 text-center">
         <CardTitle className="text-sm md:text-lg font-medium pb-0">
           {title}

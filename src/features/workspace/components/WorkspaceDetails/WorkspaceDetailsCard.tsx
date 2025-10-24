@@ -223,7 +223,7 @@ export default function WorkspaceDetailsCard() {
                   <h3 className="text-2xl font-semibold leading-tight">
                     {workspace.name}
                   </h3>
-                  <p className="text-sm text-slate-400 mt-1">
+                  <p className="text-sm text-foreground mt-1">
                     Workspace details & usage
                   </p>
                 </div>
@@ -246,110 +246,110 @@ export default function WorkspaceDetailsCard() {
                 )}
               </div>
 
-              <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
-                <strong className="text-slate-200 block mb-2">
+              <div className="text-sm text-foreground leading-relaxed whitespace-pre-line">
+                <strong className="text-foreground block mb-2">
                   Description
                 </strong>
                 <div className="text-sm leading-7">
                   {workspace.description || "No description provided."}
                 </div>
               </div>
+              {userRole !== "Chat Agent" && (
+                <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Plan Details Card */}
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
+                      <svg
+                        className="w-5 h-5 text-blue-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      Subscription Details
+                    </h3>
 
-              <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Plan Details Card */}
-                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
-                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5 text-blue-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    Subscription Details
-                  </h3>
+                    <div className="space-y-4 mb-6">
+                      <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4 text-slate-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                          <span className="text-sm text-slate-600 dark:text-slate-300">
+                            Plan Name
+                          </span>
+                        </div>
+                        <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                          {planTitle}
+                        </div>
+                      </div>
 
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <svg
-                          className="w-4 h-4 text-slate-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
-                        </svg>
-                        <span className="text-sm text-slate-600 dark:text-slate-300">
-                          Plan Name
-                        </span>
+                      <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4 text-slate-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          <span className="text-sm text-slate-600 dark:text-slate-300">
+                            Plan Validity
+                          </span>
+                        </div>
+                        <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                          {planValidityDays} days
+                        </div>
                       </div>
-                      <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                        {planTitle}
-                      </div>
-                    </div>
 
-                    <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <svg
-                          className="w-4 h-4 text-slate-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                        <span className="text-sm text-slate-600 dark:text-slate-300">
-                          Plan Validity
-                        </span>
+                      <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4 text-slate-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          <span className="text-sm text-slate-600 dark:text-slate-300">
+                            Plan Status
+                          </span>
+                        </div>
+                        <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                          {planStatus}
+                        </div>
                       </div>
-                      <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                        {planValidityDays} days
-                      </div>
-                    </div>
 
-                    <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <svg
-                          className="w-4 h-4 text-slate-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <span className="text-sm text-slate-600 dark:text-slate-300">
-                          Plan Status
-                        </span>
-                      </div>
-                      <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                        {planStatus}
-                      </div>
-                    </div>
-
-                    {/* Overall usage */}
-                    <div className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800">
+                      {/* Overall usage */}
+                      {/* <div className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800">
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-medium text-slate-800 dark:text-slate-200">
                           Overall Usage
@@ -380,14 +380,111 @@ export default function WorkspaceDetailsCard() {
                           />
                         </div>
                       </div>
+                    </div> */}
+                    </div>
+
+                    {/* Features Section */}
+                    <div className="space-y-4">
+                      <h4 className="text-md font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                        <svg
+                          className="w-4 h-4 text-blue-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                        Feature Usage
+                      </h4>
+
+                      {activePkg?.meta?.activated_features?.length ? (
+                        activePkg.meta.activated_features.map((feature) => {
+                          const fUsed = Number(feature.used ?? 0);
+                          const fLimit = Number(feature.limit ?? 0);
+                          const fPercent = safePercent(fUsed, fLimit);
+                          return (
+                            <div
+                              key={feature.feature_id}
+                              className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors duration-150"
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="font-medium text-slate-800 dark:text-slate-200">
+                                  {feature.title}
+                                </div>
+                                <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+                                  {fUsed} / {fLimit}
+                                </div>
+                              </div>
+
+                              {/* Progress Bar */}
+                              <div className="mb-3">
+                                <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+                                  <span>Usage</span>
+                                  <span>{fPercent}%</span>
+                                </div>
+                                <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                  <div
+                                    className={clsx(
+                                      "h-full rounded-full transition-all duration-500",
+                                      {
+                                        "bg-gradient-to-r from-green-400 to-emerald-500":
+                                          fPercent < 70,
+                                        "bg-gradient-to-r from-amber-400 to-orange-500":
+                                          fPercent >= 70 && fPercent < 90,
+                                        "bg-gradient-to-r from-rose-500 to-red-600":
+                                          fPercent >= 90,
+                                      }
+                                    )}
+                                    style={{ width: `${fPercent}%` }}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Validity Info */}
+                              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-600">
+                                <div className="flex items-center gap-1">
+                                  <svg
+                                    className="w-3 h-3"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                  </svg>
+                                  Valid till:{" "}
+                                  {feature.validity
+                                    ? dayjs(feature.validity).format(
+                                        "DD MMM YYYY, hh:mm A"
+                                      )
+                                    : "—"}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="text-sm text-slate-500 dark:text-slate-400">
+                          No feature usage available.
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Features Section */}
-                  <div className="space-y-4">
-                    <h4 className="text-md font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                  {/* Workspace Status Card */}
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
                       <svg
-                        className="w-4 h-4 text-blue-500"
+                        className="w-5 h-5 text-blue-500"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -396,167 +493,71 @@ export default function WorkspaceDetailsCard() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={2}
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                         />
                       </svg>
-                      Feature Usage
-                    </h4>
+                      Workspace Status
+                    </h3>
 
-                    {activePkg?.meta?.activated_features?.length ? (
-                      activePkg.meta.activated_features.map((feature) => {
-                        const fUsed = Number(feature.used ?? 0);
-                        const fLimit = Number(feature.limit ?? 0);
-                        const fPercent = safePercent(fUsed, fLimit);
-                        return (
-                          <div
-                            key={feature.feature_id}
-                            className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors duration-150"
-                          >
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="font-medium text-slate-800 dark:text-slate-200">
-                                {feature.title}
-                              </div>
-                              <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-                                {fUsed} / {fLimit}
-                              </div>
-                            </div>
-
-                            {/* Progress Bar */}
-                            <div className="mb-3">
-                              <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
-                                <span>Usage</span>
-                                <span>{fPercent}%</span>
-                              </div>
-                              <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                <div
-                                  className={clsx(
-                                    "h-full rounded-full transition-all duration-500",
-                                    {
-                                      "bg-gradient-to-r from-green-400 to-emerald-500":
-                                        fPercent < 70,
-                                      "bg-gradient-to-r from-amber-400 to-orange-500":
-                                        fPercent >= 70 && fPercent < 90,
-                                      "bg-gradient-to-r from-rose-500 to-red-600":
-                                        fPercent >= 90,
-                                    }
-                                  )}
-                                  style={{ width: `${fPercent}%` }}
-                                />
-                              </div>
-                            </div>
-
-                            {/* Validity Info */}
-                            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-600">
-                              <div className="flex items-center gap-1">
-                                <svg
-                                  className="w-3 h-3"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                                  />
-                                </svg>
-                                Valid till:{" "}
-                                {feature.validity
-                                  ? dayjs(feature.validity).format(
-                                      "DD MMM YYYY, hh:mm A"
-                                    )
-                                  : "—"}
-                              </div>
-                            </div>
+                    <div className="space-y-4">
+                      {/* Main Status */}
+                      <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <svg
+                              className="w-4 h-4 text-slate-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                            <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                              Status
+                            </span>
                           </div>
-                        );
-                      })
-                    ) : (
-                      <div className="text-sm text-slate-500 dark:text-slate-400">
-                        No feature usage available.
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Workspace Status Card */}
-                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
-                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5 text-blue-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                      />
-                    </svg>
-                    Workspace Status
-                  </h3>
-
-                  <div className="space-y-4">
-                    {/* Main Status */}
-                    <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className="w-4 h-4 text-slate-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                          <Badge
+                            variant={statusToVariant(workspace.status)}
+                            // className="px-3 py-1 text-sm"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                            Status
-                          </span>
+                            {String(workspace.status).replace(/_/g, " ")}
+                          </Badge>
                         </div>
-                        <Badge
-                          variant={statusToVariant(workspace.status)}
-                          // className="px-3 py-1 text-sm"
-                        >
-                          {String(workspace.status).replace(/_/g, " ")}
-                        </Badge>
                       </div>
-                    </div>
 
-                    {/* Status Items */}
-                    <div className="space-y-3">
-                      {renderStatusItem(
-                        "Workspace Verified",
-                        Boolean(workspace.is_verified),
-                        "green",
-                        "gray",
-                        "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      )}
-                      {renderStatusItem(
-                        "Workspace Ban Status",
-                        Boolean(workspace.is_banned),
-                        "red",
-                        "gray",
-                        "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                      )}
-                      {renderStatusItem(
-                        "Workspace Reported",
-                        Boolean(workspace.reported),
-                        "yellow",
-                        "gray",
-                        "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                      )}
+                      {/* Status Items */}
+                      <div className="space-y-3">
+                        {renderStatusItem(
+                          "Workspace Verified",
+                          Boolean(workspace.is_verified),
+                          "green",
+                          "gray",
+                          "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        )}
+                        {renderStatusItem(
+                          "Workspace Ban Status",
+                          Boolean(workspace.is_banned),
+                          "red",
+                          "gray",
+                          "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        )}
+                        {renderStatusItem(
+                          "Workspace Reported",
+                          Boolean(workspace.reported),
+                          "yellow",
+                          "gray",
+                          "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
             </div>
@@ -573,7 +574,7 @@ export default function WorkspaceDetailsCard() {
                       <div className="text-sm font-medium">
                         {userName ?? "Unknown"}
                       </div>
-                      <div className="text-xs text-slate-400">
+                      <div className="text-xs text-foreground">
                         {userRole ?? "Owner"}
                       </div>
                     </div>
@@ -582,13 +583,13 @@ export default function WorkspaceDetailsCard() {
                 <div className="text-right" />
               </div>
 
-              <div className="mt-4 text-sm text-slate-300 space-y-2">
+              <div className="mt-4 text-sm text-foreground space-y-2">
                 <div>
-                  <div className="text-xs text-slate-400">Email</div>
+                  <div className="text-xs text-foreground">Email</div>
                   <div>{userEmail ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">Phone</div>
+                  <div className="text-xs text-foreground">Phone</div>
                   <div>{userPhone ?? "—"}</div>
                 </div>
               </div>

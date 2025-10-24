@@ -62,7 +62,7 @@ export const BASE_CARD_ACTIONS: CardAction[] = [
   {
     icon: TrendingUp,
     color: "pink",
-    dark: "yellow",
+    dark: "hotpink",
     label: "Lead Assignment",
     title: "Change Lead Assign To",
     el: <LeadAssign />,
@@ -91,8 +91,8 @@ export const BASE_CARD_ACTIONS: CardAction[] = [
   },
   {
     icon: Send,
-    color: "black",
-    dark: "white",
+    color: "white",
+    dark: "black",
     label: "Lead Follow Up",
     title: "Add Lead Follow Up",
     el: <LeadFollowUp />,

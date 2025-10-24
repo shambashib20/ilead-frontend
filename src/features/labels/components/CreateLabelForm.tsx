@@ -21,16 +21,6 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
   );
 }
 
-// const defaultLables: {
-//   title: string;
-//   description: string;
-//   color: string;
-// } = {
-//   title: "",
-//   description: "",
-//   color: "",
-// };
-
 function CreateLabelForm({
   label,
 }: {
@@ -57,6 +47,7 @@ function CreateLabelForm({
         });
       } else {
         await createLable(value);
+        closeModal();
       }
 
       closeModal();

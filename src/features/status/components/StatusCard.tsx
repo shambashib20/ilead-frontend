@@ -121,7 +121,7 @@ function StatusCard() {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="mt-10 space-y-4">
       <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
         <h2 className="text-xl font-semibold dark:text-white">Status List</h2>
         <div className="flex items-center gap-5">
@@ -140,9 +140,9 @@ function StatusCard() {
       {isLoading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className="bg-primary rounded-sm ">
+        <div className=" rounded-sm ">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-primary">
               <TableRow>
                 <TableHead className="dark:text-gray-200">Title</TableHead>
                 <TableHead className="dark:text-gray-200">
@@ -152,27 +152,29 @@ function StatusCard() {
                 <TableHead className="dark:text-gray-200">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="bg-white">
+            <TableBody className="bg-primary/50">
               {filteredStatuses.length > 0 ? (
                 filteredStatuses.map((st: any) => (
                   <TableRow key={st._id}>
-                    <TableCell className="text-gray-800">
+                    <TableCell className="dark:text-white">
                       <span
                         className=" px-3 py-2 rounded-md"
                         style={{
-                          backgroundColor: st?.meta?.color_code ?? "#777",
-                          color: st?.meta?.color_code ? "#fff" : "#000",
+                          backgroundColor: st?.meta?.color_code
+                            ? st?.meta?.color_code
+                            : "#777",
+                          color: "#fff",
                         }}
                       >
                         {st.title}
                       </span>
                     </TableCell>
 
-                    <TableCell className="text-gray-800">
+                    <TableCell className="dark:text-white">
                       {st.description}
                     </TableCell>
 
-                    <TableCell className="text-gray-800">
+                    <TableCell className="dark:text-white">
                       <Badge
                         variant={st.meta?.is_active ? "default" : "secondary"}
                         className={
@@ -207,7 +209,7 @@ function StatusCard() {
                 <TableRow>
                   <TableCell
                     colSpan={4}
-                    className="text-center py-4 text-gray-800"
+                    className="text-center py-4 dark:text-white"
                   >
                     No statuses found on this page.
                   </TableCell>
