@@ -3,7 +3,7 @@ import { labelService } from "../services/Label.service";
 import { toast } from "sonner";
 import { queryClient } from "@/utils/client";
 import { useModalStore } from "@/store/useModalStore";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import PaywallUi from "@/components/PaywallUi";
 import { Button } from "@/components/ui/button";
 
@@ -52,7 +52,9 @@ export function useCreateLabel() {
               secondaryLabel="Later"
               onUpgrade={() => {
                 closeModal();
-                // navigate("/add-pricing");
+                navigate({
+                  to: "/add-package",
+                });
               }}
               onClose={closeModal}
             />
