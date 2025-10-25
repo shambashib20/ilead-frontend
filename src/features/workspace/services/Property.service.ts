@@ -1,5 +1,5 @@
 import { ApiClient } from "@/services/ApiClient.service";
-import type { RoleDto, UserDto } from "./User.service";
+import type { RoleDto, UserDto } from "../../leads/services/User.service";
 
 interface Log {
   title: string;

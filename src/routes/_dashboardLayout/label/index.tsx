@@ -77,10 +77,10 @@ function RouteComponent() {
   };
 
   const handleEdit = (label: any) => {
+    setModalTitle?.("Edit Label");
     openModal({
       content: (
         <div className="pt-6 px-4">
-          <h2 className="text-lg font-semibold mb-4">Edit Label</h2>
           <CreateLabelForm label={label} />
         </div>
       ),
@@ -89,7 +89,7 @@ function RouteComponent() {
   };
 
   const handleUserAssign = async (labelId: string, chatAgents: any) => {
-    setModalTitle?.("Create Label ");
+    setModalTitle?.("Update User's Assign  ");
     openModal({
       content: <AssignUsersForm selectedId={labelId} users={chatAgents} />,
       type: "form",

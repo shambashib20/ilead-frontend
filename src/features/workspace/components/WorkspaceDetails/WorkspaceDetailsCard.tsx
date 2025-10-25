@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type JSX } from "react";
+import React, { type JSX } from "react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 
@@ -7,9 +7,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/useModalStore";
 import { useUser } from "@/features/auth/hooks/useUser";
-import { workspaceService } from "@/features/leads/services/Property.service";
 import BrandLoader from "@/components/BrandLoader/BrandLoader";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
+import { useWorkspaceProperty } from "../../hooks/useWorkspaceProperty";
 // import { BrandLoader } from "@/components/BrandLoader";
 
 // App hooks/services — update paths as needed
@@ -146,10 +146,11 @@ function renderStatusItem(
 // -----------------------------------------------------------------------------
 
 export default function WorkspaceDetailsCard() {
-  const [workspace, setWorkspace] = useState<Property | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+  const {
+    properties: workspace,
+    isLoading: loading,
+    error,
+  } = useWorkspaceProperty();
   const { openModal, setModalTitle } = useModalStore();
   const { data } = useUser();
 
@@ -163,30 +164,6 @@ export default function WorkspaceDetailsCard() {
   const userPhone: string | undefined =
     (data as any)?.phone_number ?? (data as any)?.data?.phone_number;
 
-  useEffect(() => {
-    let mounted = true;
-    const fetchWorkspace = async () => {
-      try {
-        const response = await workspaceService.getProperty();
-        if (!mounted) return;
-        // shape: { data: { data: Property } }
-        const payload: Property | undefined =
-          response?.data?.data ?? response?.data;
-        if (payload) setWorkspace(payload);
-        else setError("No workspace data found.");
-      } catch (err) {
-        console.error("Failed to load workspace details:", err);
-        setError("Failed to load workspace details.");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-    fetchWorkspace();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
   if (loading)
     return (
       <div className="grid place-items-center min-h-full">
@@ -196,15 +173,17 @@ export default function WorkspaceDetailsCard() {
 
   if (error)
     return (
-      <div className="p-6 text-sm text-red-500 dark:text-red-400">{error}</div>
+      <div className="p-6 text-sm text-red-500 dark:text-red-400">
+        {error.message}
+      </div>
     );
 
   if (!workspace) return null;
 
   // Overall usage percentage (guard against divide by 0)
-  const used = Number(workspace.usage_count ?? 0);
-  const limit = Number(workspace.usage_limits ?? 0);
-  const percent = safePercent(used, limit);
+  // const used = Number(workspace.usage_count ?? 0);
+  // const limit = Number(workspace.usage_limits ?? 0);
+  // const percent = safePercent(used, limit);
 
   const activePkg = workspace.meta?.active_package;
   const planTitle = activePkg?.package_id?.title ?? "—";
@@ -347,40 +326,6 @@ export default function WorkspaceDetailsCard() {
                           {planStatus}
                         </div>
                       </div>
-
-                      {/* Overall usage */}
-                      {/* <div className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="font-medium text-slate-800 dark:text-slate-200">
-                          Overall Usage
-                        </div>
-                        <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-                          {used} / {limit || 0}
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
-                          <span>Usage</span>
-                          <span>{percent}%</span>
-                        </div>
-                        <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                          <div
-                            className={clsx(
-                              "h-full rounded-full transition-all duration-500",
-                              {
-                                "bg-gradient-to-r from-green-400 to-emerald-500":
-                                  percent < 70,
-                                "bg-gradient-to-r from-amber-400 to-orange-500":
-                                  percent >= 70 && percent < 90,
-                                "bg-gradient-to-r from-rose-500 to-red-600":
-                                  percent >= 90,
-                              }
-                            )}
-                            style={{ width: `${percent}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div> */}
                     </div>
 
                     {/* Features Section */}
@@ -403,75 +348,77 @@ export default function WorkspaceDetailsCard() {
                       </h4>
 
                       {activePkg?.meta?.activated_features?.length ? (
-                        activePkg.meta.activated_features.map((feature) => {
-                          const fUsed = Number(feature.used ?? 0);
-                          const fLimit = Number(feature.limit ?? 0);
-                          const fPercent = safePercent(fUsed, fLimit);
-                          return (
-                            <div
-                              key={feature.feature_id}
-                              className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors duration-150"
-                            >
-                              <div className="flex items-center justify-between mb-2">
-                                <div className="font-medium text-slate-800 dark:text-slate-200">
-                                  {feature.title}
+                        activePkg.meta.activated_features.map(
+                          (feature: any) => {
+                            const fUsed = Number(feature.used ?? 0);
+                            const fLimit = Number(feature.limit ?? 0);
+                            const fPercent = safePercent(fUsed, fLimit);
+                            return (
+                              <div
+                                key={feature.feature_id}
+                                className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors duration-150"
+                              >
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="font-medium text-slate-800 dark:text-slate-200">
+                                    {feature.title}
+                                  </div>
+                                  <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+                                    {fUsed} / {fLimit}
+                                  </div>
                                 </div>
-                                <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
-                                  {fUsed} / {fLimit}
-                                </div>
-                              </div>
 
-                              {/* Progress Bar */}
-                              <div className="mb-3">
-                                <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
-                                  <span>Usage</span>
-                                  <span>{fPercent}%</span>
-                                </div>
-                                <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                                  <div
-                                    className={clsx(
-                                      "h-full rounded-full transition-all duration-500",
-                                      {
-                                        "bg-gradient-to-r from-green-400 to-emerald-500":
-                                          fPercent < 70,
-                                        "bg-gradient-to-r from-amber-400 to-orange-500":
-                                          fPercent >= 70 && fPercent < 90,
-                                        "bg-gradient-to-r from-rose-500 to-red-600":
-                                          fPercent >= 90,
-                                      }
-                                    )}
-                                    style={{ width: `${fPercent}%` }}
-                                  />
-                                </div>
-                              </div>
-
-                              {/* Validity Info */}
-                              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-600">
-                                <div className="flex items-center gap-1">
-                                  <svg
-                                    className="w-3 h-3"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                {/* Progress Bar */}
+                                <div className="mb-3">
+                                  <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+                                    <span>Usage</span>
+                                    <span>{fPercent}%</span>
+                                  </div>
+                                  <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                    <div
+                                      className={clsx(
+                                        "h-full rounded-full transition-all duration-500",
+                                        {
+                                          "bg-gradient-to-r from-green-400 to-emerald-500":
+                                            fPercent < 70,
+                                          "bg-gradient-to-r from-amber-400 to-orange-500":
+                                            fPercent >= 70 && fPercent < 90,
+                                          "bg-gradient-to-r from-rose-500 to-red-600":
+                                            fPercent >= 90,
+                                        }
+                                      )}
+                                      style={{ width: `${fPercent}%` }}
                                     />
-                                  </svg>
-                                  Valid till:{" "}
-                                  {feature.validity
-                                    ? dayjs(feature.validity).format(
-                                        "DD MMM YYYY, hh:mm A"
-                                      )
-                                    : "—"}
+                                  </div>
+                                </div>
+
+                                {/* Validity Info */}
+                                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-600">
+                                  <div className="flex items-center gap-1">
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                      />
+                                    </svg>
+                                    Valid till:{" "}
+                                    {feature.validity
+                                      ? dayjs(feature.validity).format(
+                                          "DD MMM YYYY, hh:mm A"
+                                        )
+                                      : "—"}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })
+                            );
+                          }
+                        )
                       ) : (
                         <div className="text-sm text-slate-500 dark:text-slate-400">
                           No feature usage available.

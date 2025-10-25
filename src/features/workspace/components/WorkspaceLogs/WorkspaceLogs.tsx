@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PropertyModule } from "@/features/leads/services/Property.service";
+import { PropertyModule } from "@/features/workspace/services/Property.service";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";

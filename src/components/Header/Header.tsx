@@ -4,7 +4,7 @@ import HeaderOptionsBox from "./ui/HeaderOptions";
 import UserProfileBox from "./ui/UserProfile";
 import { Menu } from "lucide-react";
 
-import { PropertyModule } from "@/features/leads/services/Property.service";
+import { PropertyModule } from "@/features/workspace/services/Property.service";
 import { useEffect, useState } from "react";
 
 function Header() {

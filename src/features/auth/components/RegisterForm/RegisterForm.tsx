@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 
 import Swal from "sweetalert2";
-import { workspaceService } from "@/features/leads/services/Property.service";
+import { workspaceService } from "@/features/workspace/services/Property.service";
 import { useNavigate } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 

@@ -21,6 +21,7 @@ import { z } from "zod";
 import { useModalStore } from "@/store/useModalStore";
 import { X } from "lucide-react";
 import Swal from "sweetalert2";
+import PaywallUi from "@/components/PaywallUi";
 
 // ---------- Validation ----------
 const LeadSchema = z.object({
@@ -63,7 +64,8 @@ function safeGetPropertyId() {
 }
 
 export default function CreateLeadModal() {
-  const { closeModal } = useModalStore();
+  const { openModal, closeModal, setModalTitle, setModalSize } =
+    useModalStore();
   const [form, setForm] = useState<LeadForm>({
     name: "",
     company_name: "",
@@ -195,16 +197,39 @@ export default function CreateLeadModal() {
         setSelected(new Set());
         setSearch("");
         closeModal();
-      } catch (err) {
-        console.error("Create lead failed", err);
-        const message =
-          (err as any)?.response?.data?.message || "Failed to create lead";
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: message,
-          timer: 2000,
-          showConfirmButton: false,
+      } catch (err: any) {
+        const code = err?.response?.status;
+        let message = "Something went wrong while creating the label.";
+        const isPaywall = code === 400 || code === 403;
+
+        if (isPaywall) {
+          setModalTitle?.("Your Plan Has Expires");
+          setModalSize?.("lg");
+
+          openModal({
+            type: "action",
+            content: <PaywallUi />,
+            customActions: (
+              <>
+                <Button variant="outline" onClick={closeModal}>
+                  Not now
+                </Button>
+                <Button>See plans</Button>
+              </>
+            ),
+          });
+          return;
+        }
+        setModalTitle?.("Something went wrong");
+        setModalSize?.("sm");
+        openModal({
+          type: "action",
+          content: (
+            <div className="p-2">
+              <p className="text-sm opacity-80">{message}</p>
+            </div>
+          ),
+          customActions: <Button onClick={closeModal}>Close</Button>,
         });
       }
     });

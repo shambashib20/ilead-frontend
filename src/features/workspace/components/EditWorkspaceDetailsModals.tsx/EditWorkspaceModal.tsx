@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea"; // if available
-import { workspaceService } from "@/features/leads/services/Property.service";
+import { workspaceService } from "@/features/workspace/services/Property.service";
 import { useModalStore } from "@/store/useModalStore";
 import Swal from "sweetalert2";
 import { useUser } from "@/features/auth/hooks/useUser";
