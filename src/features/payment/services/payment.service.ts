@@ -63,6 +63,56 @@ export interface PricingPlansResponse {
   data: PricingPlan[];
 }
 
+export interface PaymentResponse {
+  message: string;
+  status: "SUCCESS" | "FAILED" | "PENDING";
+  data: {
+    payment_link: string;
+    payment_link_id: string;
+    raw: {
+      accept_partial: boolean;
+      amount: number;
+      amount_paid: number;
+      cancelled_at: number;
+      created_at: number;
+      currency: string;
+      customer: unknown[]; // looks like array, define properly if needed
+      description: string;
+      expire_by: number;
+      expired_at: number;
+      first_min_partial_amount: number;
+      id: string;
+      notes: {
+        package_code: string | null;
+        package_id: string;
+        property_id: string;
+        user_id: string;
+      };
+      notify: {
+        email: boolean;
+        sms: boolean;
+        whatsapp: boolean;
+      };
+      payments: unknown | null;
+      reference_id: string;
+      reminder_enable: boolean;
+      reminders: unknown[];
+      short_url: string;
+      status: string;
+      updated_at: number;
+      upi_link: boolean;
+      user_id: string;
+      whatsapp_link: boolean;
+    };
+    notes: {
+      package_id: string;
+      user_id: string;
+      property_id: string;
+      package_code: string | null;
+    };
+  };
+}
+
 class PaymentService extends ApiClient {
   constructor() {
     super("package"); // this.modulePath becomes /auth
@@ -70,6 +120,17 @@ class PaymentService extends ApiClient {
 
   async getPlans(): Promise<PricingPlansResponse> {
     const res = await this.get<PricingPlansResponse>("/pricing-plans");
+    return res.data;
+  }
+
+  async startPayment({
+    packageId,
+  }: {
+    packageId: string;
+  }): Promise<PaymentResponse> {
+    const res = await this.post<PaymentResponse>("/create-payment-link", {
+      packageId,
+    });
     return res.data;
   }
 }

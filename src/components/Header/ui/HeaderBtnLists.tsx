@@ -2,7 +2,6 @@ import HeaderActionButton from "./HeaderBtn";
 import { Funnel, Plus } from "lucide-react";
 import { useModalStore } from "@/store/useModalStore";
 import CreateLeadModal from "@/features/leads/components/HeaderBtnModals/CreateLeadModal";
-import { Button } from "@/components/ui/button";
 
 const headerButtons = [
   {

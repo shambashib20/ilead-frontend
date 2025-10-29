@@ -46,7 +46,7 @@ function ChatAgentTable() {
       setPagination(res.data.data.pagination);
       setTotalStatuses(total);
     } catch (err) {
-      console.error("Failed to fetch chat agents", err);
+      console.error("Failed to fetch Employee's", err);
     } finally {
       setLoading(false);
     }
@@ -76,10 +76,10 @@ function ChatAgentTable() {
           </div>
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Chat Agents
+              Employee's
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Manage your team of chat agents
+              Manage your team of Employee's
             </p>
           </div>
         </div>
@@ -97,7 +97,7 @@ function ChatAgentTable() {
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
           >
             <UserPlus className="h-4 w-4" />
-            Create Agent
+            Create Employee's
           </Button>
         </div>
       </div>
@@ -113,7 +113,7 @@ function ChatAgentTable() {
             <TableHeader className="bg-primary">
               <TableRow className="border-b border-gray-200 dark:border-gray-700">
                 <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
-                  Agent
+                  Employee's
                 </TableHead>
                 <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
                   <div className="flex items-center gap-2">
@@ -161,7 +161,7 @@ function ChatAgentTable() {
                             variant="secondary"
                             className="bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800 text-xs"
                           >
-                            Agent
+                            Telecaller
                           </Badge>
                         </div>
                       </div>
@@ -195,7 +195,7 @@ function ChatAgentTable() {
                       <Users className="h-12 w-12 text-gray-300 dark:text-gray-600" />
                       <div>
                         <div className="text-lg font-medium text-gray-500 dark:text-gray-400">
-                          No chat agents found
+                          No Employee's found
                         </div>
                         <div className="text-sm text-gray-400 dark:text-gray-500 mt-1">
                           Get started by creating your first chat agent
@@ -206,7 +206,7 @@ function ChatAgentTable() {
                         className="mt-2 flex items-center gap-2"
                       >
                         <UserPlus className="h-4 w-4" />
-                        Create Agent
+                        Create Employee's
                       </Button>
                     </div>
                   </TableCell>
@@ -229,7 +229,7 @@ function ChatAgentTable() {
             <span className="font-semibold text-gray-900 dark:text-white">
               {totalStatuses}
             </span>{" "}
-            chat agents
+            Employee's
           </div>
 
           <div className="flex items-center gap-2">

@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useModalStore } from "@/store/useModalStore";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDeleteLead } from "../../hooks/useDeleteLeads";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,6 +22,7 @@ import {
   Upload,
   ChevronLeft,
   ChevronRight,
+  Edit,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -69,6 +70,23 @@ import { getCardActions } from "@/utils/cardActions";
 const leadsApi = new LeadsModule();
 
 const MySwal = withReactContent(Swal);
+
+type LeadModalData = {
+  _id?: string;
+  rayId?: string;
+  labels?: any[];
+  status?: any;
+  followUp: {
+    next_followup_date: Date;
+    comment: string;
+    _id: string;
+    meta: {
+      attachment_url: string;
+      audio_attachment_url: string;
+    };
+  };
+};
+
 export interface LabelItem {
   _id: string;
   title: string;
@@ -103,9 +121,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 export function LeadDelete() {
-  const { setFormActions, data, closeModal } = useModalStore();
+  const { setFormActions, closeModal } = useModalStore();
   const { deleteLead, isDeleting, isSuccess, error } = useDeleteLead();
-  const rayId = data?.rayId;
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const rayId = data?.rayId || "";
   const form = useForm({
     defaultValues: {
       reason: "",
@@ -210,8 +229,9 @@ export function LeadDelete() {
 }
 
 export function LeadLabels() {
-  const { data, closeModal } = useModalStore();
-  const leadId = data?._id;
+  const { closeModal } = useModalStore();
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const leadId = data?._id || "";
   const [search, setSearch] = useState("");
   const { allLables, allLablesLoading } = useAllLabels();
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -227,9 +247,9 @@ export function LeadLabels() {
   };
 
   useEffect(() => {
-    const ids = new Set(data.labels.map((item: any) => item._id));
+    const ids = new Set(data?.labels?.map((item: any) => item._id));
     setSelected(ids as unknown as any);
-  }, [data.labels]);
+  }, [data?.labels]);
 
   // const assignLabels = async () => {
   //   if (!leadId || selected.size === 0) return;
@@ -333,9 +353,9 @@ export function LeadLabels() {
 export function LeadAssign() {
   const { agents } = useChatAgents();
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const { data, closeModal, setFormActions, setSubmitLabel } = useModalStore();
+  const { closeModal, setFormActions, setSubmitLabel } = useModalStore();
   const { assignToAgentAsync, isPending } = useAssignLeadToChatAgent();
-
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
   const handleAssign = async () => {
     if (!selectedAgentId) {
       Swal.fire("Error", "Please select an agent.", "error");
@@ -343,7 +363,7 @@ export function LeadAssign() {
     }
     try {
       await assignToAgentAsync({
-        leadId: data._id,
+        leadId: data?._id || "",
         chatAgentId: selectedAgentId,
       });
 
@@ -387,8 +407,8 @@ export function LeadAssign() {
 }
 
 export function LeadCreateCustomer() {
-  const { closeModal, data } = useModalStore();
-
+  const { closeModal } = useModalStore();
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
   const { convertAsync, isPending } = useConvertLeadToCustomer();
   const handleConvert = async () => {
     if (!data?._id) {
@@ -446,20 +466,58 @@ export function LeadCreateCustomer() {
 }
 
 export function LeadFollowUp() {
-  const { data, closeModal, setFormActions, setSubmitLabel } = useModalStore();
-  const leadId = data?._id;
+  const { closeModal, setFormActions, setSubmitLabel, modalTitle } =
+    useModalStore();
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const leadId = data?._id || "";
+  const initialTime = useMemo(() => {
+    const iso = data?.followUp?.next_followup_date;
+    if (!iso) return "12:00";
+    const d = new Date(iso);
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
+    return `${hh}:${mm}`;
+  }, [data?.followUp?.next_followup_date]);
 
-  const [comment, setComment] = useState("");
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [selectedTime, setSelectedTime] = useState("12:00");
+  const [comment, setComment] = useState(data?.followUp?.comment || "");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    data?.followUp?.next_followup_date
+      ? new Date(data.followUp.next_followup_date)
+      : undefined
+  );
+  const [selectedTime, setSelectedTime] = useState(initialTime);
   const [attachmentUrl, setAttachmentUrl] = useState<string | undefined>();
   const [audioAttachmentUrl, setAudioAttachmentUrl] = useState<
     string | undefined
   >();
-
+  const isEditMode = modalTitle === "Edit Follow Up";
+  const canSubmit = useMemo(
+    () => Boolean(comment && selectedDate && selectedTime),
+    [comment, selectedDate, selectedTime]
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    setComment(data?.followUp?.comment || "");
+  }, [data?.followUp?.comment]);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    setSelectedDate(
+      data?.followUp?.next_followup_date
+        ? new Date(data.followUp.next_followup_date)
+        : undefined
+    );
+  }, [data?.followUp?.next_followup_date]);
+
+  useEffect(() => {
+    setSelectedTime(initialTime);
+  }, [initialTime]);
+
+  // 4) label should reflect mode
+  useEffect(() => {
+    setSubmitLabel?.(isEditMode ? "Save Changes" : "Add Follow Up");
+  }, [isEditMode, setSubmitLabel]);
+
+  const handleSubmit = useCallback(async () => {
     if (!comment || !selectedDate || !selectedTime) {
       Swal.fire("Error", "All fields are required", "error");
       return;
@@ -471,13 +529,24 @@ export function LeadFollowUp() {
 
     setIsSubmitting(true);
     try {
-      await leadsApi.createNewFollowup({
-        leadId,
-        comment,
-        nextFollowUp: followUpDate.toISOString(),
-        attachmentUrl,
-        audioAttachmentUrl,
-      });
+      if (isEditMode) {
+        await leadsApi.updateFollowup({
+          leadId,
+          followUpId: data?.followUp?._id || "",
+          comment,
+          nextFollowUp: followUpDate.toISOString(),
+          attachmentUrl,
+          audioAttachmentUrl,
+        });
+      } else {
+        await leadsApi.createNewFollowup({
+          leadId,
+          comment,
+          nextFollowUp: followUpDate.toISOString(),
+          attachmentUrl,
+          audioAttachmentUrl,
+        });
+      }
 
       console.warn("payload", {
         leadId,
@@ -487,35 +556,40 @@ export function LeadFollowUp() {
         audioAttachmentUrl,
       });
 
-      Swal.fire("Success", "Follow-up added successfully", "success");
+      Swal.fire(
+        "Success",
+        isEditMode
+          ? "Follow-up updated successfully"
+          : "Follow-up added successfully",
+        "success"
+      );
       closeModal();
     } catch (error: any) {
       Swal.fire("Error", error.message || "Failed to add follow-up", "error");
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  useEffect(() => {
-    setSubmitLabel?.("Add Follow Up");
-  }, []);
+    // deps kept tight so ref stays stable unless inputs actually change
+  }, [
+    isEditMode,
+    leadId,
+    data?.followUp?._id,
+    comment,
+    selectedDate,
+    selectedTime,
+    attachmentUrl,
+    audioAttachmentUrl,
+    closeModal,
+  ]);
 
   useEffect(() => {
     setFormActions?.({
       onSubmit: handleSubmit,
       onCancel: () => closeModal(),
-      canSubmit: !!comment && !!selectedDate && !!selectedTime,
+      canSubmit,
       isSubmitting,
     });
-  }, [
-    comment,
-    selectedDate,
-    selectedTime,
-    isSubmitting,
-    attachmentUrl,
-    audioAttachmentUrl,
-  ]);
-
+  }, [handleSubmit, closeModal, canSubmit, isSubmitting, setFormActions]);
   return (
     <div className="space-y-4 px-5 pt-2">
       <div>
@@ -562,8 +636,15 @@ export function LeadFollowUp() {
           onChange={(e) => setComment(e.target.value)}
           disabled={isSubmitting}
           className="w-full"
+          defaultValue={data?.followUp?.comment}
         />
       </div>
+
+      {isEditMode && (
+        <div className="text-sm text-gray-500">
+          Note: Editing follow-up will create a new follow-up entry.
+        </div>
+      )}
 
       <div className="flex gap-4">
         <div className="w-1/2">
@@ -591,7 +672,8 @@ export function LeadFollowUp() {
 }
 
 export function LeadStatus() {
-  const { data, closeModal } = useModalStore();
+  const { closeModal } = useModalStore();
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
   const leadId = data?._id;
   const [search, setSearch] = useState("");
   const { status, isLoading } = useStatus();
@@ -602,7 +684,7 @@ export function LeadStatus() {
   );
 
   useEffect(() => {
-    setSelectedStatusId(data.status._id);
+    setSelectedStatusId(data?.status._id);
   }, []);
 
   const assignStatus = async () => {
@@ -673,9 +755,9 @@ export function LeadStatus() {
 }
 
 export function LeadDetail() {
-  const { data, setModalTitle, openModal, setData, setModalSize } =
-    useModalStore();
+  const { setModalTitle, openModal, setData, setModalSize } = useModalStore();
   const { theme } = useTheme();
+  const data = useModalStore((state) => state.data) as LeadModalData | null;
   const leadId = data?._id;
   const [lead, setLead] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -743,6 +825,7 @@ export function LeadDetail() {
                   rayId: lead.meta?.ray_id ?? lead.data?.meta?.ray_id,
                   labels: lead.labels ?? lead.data.labels,
                   status: lead.status ?? lead?.data?.status,
+                  FollowUps: lead.follow_ups ?? lead?.data?.follow_ups,
                 });
                 openModal({
                   content: el,
@@ -913,7 +996,7 @@ export function LeadDetail() {
         {/* Other tabs placeholder */}
         <TabsContent value="followup" className="mt-4">
           {lead.data.follow_ups && lead.data.follow_ups.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {lead.data.follow_ups
                 .sort(
                   (a: any, b: any) =>
@@ -923,66 +1006,188 @@ export function LeadDetail() {
                 .map((followup: any, index: number) => (
                   <details
                     key={followup._id || index}
-                    className="border border-gray-700 rounded bg-[#1f1f2f] text-white"
+                    className="group border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 shadow-sm hover:shadow-md dark:shadow-gray-900/30 transition-all duration-200 overflow-hidden"
                   >
-                    <summary className="cursor-pointer px-4 py-2 hover:bg-gray-800 transition-all font-medium flex justify-between items-center">
-                      <span>{lead.data.assigned_to.name}</span>
-                      <span className="text-xs text-gray-400">
-                        {new Date(followup.createdAt).toLocaleString()}
-                      </span>
-                    </summary>
-                    <div className="px-4 py-3 space-y-2">
-                      <div>
-                        <b className="text-gray-300">Next Follow-Up:</b>{" "}
-                        <span className="text-sm text-gray-400">
-                          {new Date(
-                            followup.next_followup_date
-                          ).toLocaleString()}
+                    <summary className="cursor-pointer p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150 flex justify-between items-center list-none">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 dark:text-blue-400 text-sm font-medium">
+                            {lead.data.assigned_to.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white block">
+                            {lead.data.assigned_to.name}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            Follow-up #{lead.data.follow_ups.length - index}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {new Date(followup.createdAt).toLocaleDateString()} •{" "}
+                          {new Date(followup.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </span>
-                      </div>
-                      <div>
-                        <b className="text-gray-300">Comment:</b>{" "}
-                        <p className="text-sm text-gray-200">
-                          {followup.comment}
-                        </p>
-                      </div>
-
-                      {followup.meta?.attachment_url && (
-                        <div>
-                          <b className="text-gray-300">Attachment:</b>{" "}
-                          <a
-                            href={followup.meta.attachment_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 underline text-sm"
+                        <div className="transform group-open:rotate-180 transition-transform duration-200">
+                          <svg
+                            className="w-4 h-4 text-gray-400 dark:text-gray-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                           >
-                            View File
-                          </a>
-                        </div>
-                      )}
-
-                      {followup.meta?.audio_attachment_url && (
-                        <div>
-                          <b className="text-gray-300">Audio:</b>
-                          <audio
-                            controls
-                            preload="metadata"
-                            className="mt-1 w-full rounded"
-                          >
-                            <source
-                              src={followup.meta.audio_attachment_url}
-                              type="audio/webm"
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
                             />
-                            Your browser does not support the audio element.
-                          </audio>
+                          </svg>
+                        </div>
+                      </div>
+                    </summary>
+
+                    <div className="px-4 pb-4 pt-2 border-t border-gray-100 dark:border-gray-700 space-y-3">
+                      {/* Next Follow-up */}
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="flex-1">
+                          <span className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-1">
+                            Next Follow-up
+                          </span>
+                          <span className="text-sm text-gray-900 dark:text-white">
+                            {new Date(
+                              followup.next_followup_date
+                            ).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Comment */}
+                      <div className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <div className="flex-1">
+                          <span className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-1">
+                            Comment
+                          </span>
+                          <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed bg-gray-50 dark:bg-gray-700/50 rounded-md p-3">
+                            {followup.comment}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* File Attachment */}
+                      {followup.meta?.attachment_url && (
+                        <div className="flex items-start space-x-3">
+                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <div className="flex-1">
+                            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-1">
+                              Attachment
+                            </span>
+                            <a
+                              href={followup.meta.attachment_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-150 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-md px-3 py-2"
+                            >
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                                />
+                              </svg>
+                              <span>View File</span>
+                            </a>
+                          </div>
                         </div>
                       )}
+
+                      {/* Audio Attachment */}
+                      {followup.meta?.audio_attachment_url && (
+                        <div className="flex items-start space-x-3">
+                          <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <div className="flex-1">
+                            <span className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-1">
+                              Audio Recording
+                            </span>
+                            <audio
+                              controls
+                              preload="metadata"
+                              className="w-full max-w-md rounded-lg dark:bg-gray-700 dark:border-gray-600"
+                            >
+                              <source
+                                src={followup.meta.audio_attachment_url}
+                                type="audio/webm"
+                              />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex justify-end">
+                        <Button
+                          variant={"outline"}
+                          onClick={() => {
+                            openModal({
+                              type: "form",
+
+                              content: <LeadFollowUp />,
+                            });
+                            setModalSize?.("sm");
+                            setModalTitle?.("Edit Follow Up");
+                            setData?.({
+                              _id: lead._id ?? lead?.data?._id,
+                              followUp: {
+                                _id: followup._id || "",
+                                comment: followup.comment || "",
+                                next_followup_date:
+                                  followup.next_followup_date || "",
+                                meta: followup.meta || {},
+                              },
+                            });
+                          }}
+                        >
+                          <Edit />
+                        </Button>
+                      </div>
                     </div>
                   </details>
                 ))}
             </div>
           ) : (
-            <p className="text-white text-center">No follow-ups available.</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg
+                  className="w-8 h-8 text-gray-400 dark:text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 font-medium">
+                No follow-ups available
+              </p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+                All follow-ups will appear here
+              </p>
+            </div>
           )}
         </TabsContent>
 
@@ -1034,18 +1239,6 @@ export function LeadDetail() {
     </div>
   );
 }
-
-// interface ImportLeadFormData {
-//   status: string;
-//   source: string;
-//   user: string;
-//   label: string;
-//   date: string;
-//   file: File | null;
-//   emailAutomation: boolean;
-//   whatsappAutomation: boolean;
-//   removeDuplicateRecord: boolean;
-// }
 
 export function ImportLeadForm() {
   const [fileName, setFileName] = useState<string>("No file chosen");

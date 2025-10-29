@@ -6,12 +6,10 @@ import { statusService } from "../services/Status.service";
 import { useModalStore } from "@/store/useModalStore";
 import PaywallUi from "@/components/PaywallUi";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "@tanstack/react-router";
 
 export function useCreateStatus() {
   const { openModal, closeModal, setModalTitle, setModalSize } =
     useModalStore();
-  const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: ({
       title,
@@ -45,21 +43,7 @@ export function useCreateStatus() {
 
         openModal({
           type: "action",
-          content: (
-            <PaywallUi
-              hint="Pro feature"
-              message="Creating more than 3 labels requires the Pro plan."
-              ctaLabel="Upgrade"
-              secondaryLabel="Later"
-              onUpgrade={() => {
-                closeModal();
-                navigate({
-                  to: "/add-package",
-                });
-              }}
-              onClose={closeModal}
-            />
-          ),
+          content: <PaywallUi />,
           customActions: (
             <>
               <Button variant="outline" onClick={closeModal}>

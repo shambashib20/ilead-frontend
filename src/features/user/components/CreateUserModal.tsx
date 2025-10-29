@@ -7,7 +7,7 @@ import { userService } from "@/features/leads/services/User.service";
 import Swal from "sweetalert2";
 import { useChatAgentStore } from "@/store/useChatAgentStore";
 
-const availableRoles = ["Superadmin", "Admin", "Lead Manager", "Chat Agent"];
+const availableRoles = ["Admin", "Lead Manager", "TeleCaller"];
 
 function CreateUserModal() {
   const closeModal = useModalStore((state) => state.closeModal);
@@ -69,7 +69,7 @@ function CreateUserModal() {
   }, [canSubmit, isSubmitting, formData]);
 
   return (
-    <div className="space-y-4 px-2 py-3">
+    <div className="space-y-4 px-5 py-3">
       <div>
         <Label htmlFor="name" className="mb-2">
           Name
@@ -111,7 +111,7 @@ function CreateUserModal() {
           id="roleName"
           value={formData.roleName}
           onChange={handleSelectChange}
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded px-3 py-2 bg-primary"
         >
           <option value="">Select a role</option>
           {availableRoles.map((role) => (

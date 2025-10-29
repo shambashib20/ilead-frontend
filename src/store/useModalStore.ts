@@ -1,5 +1,7 @@
-import type React from "react";
+"use client";
+
 import { create } from "zustand";
+import type { ReactNode } from "react";
 
 type FormActions = {
   onSubmit: () => void;
@@ -9,28 +11,34 @@ type FormActions = {
 };
 
 type ModalType = "info" | "action" | "form";
+type ModalSize = "sm" | "md" | "lg" | "xl" | "normal";
 
-type ModalStore = {
+type ModalStore<TData = unknown> = {
   isOpen: boolean;
-  modalContent: React.ReactNode;
-  modalTitle?: React.ReactNode;
-  modalSize?: "sm" | "md" | "lg" | "xl" | "normal";
+  modalContent: ReactNode | null;
+  modalTitle?: ReactNode;
+  modalSize: ModalSize;
   modalType: ModalType;
-  data: any;
+  data: TData | null;
   formActions?: FormActions;
-  customActions?: React.ReactNode;
-  openModal: (params: {
-    content: React.ReactNode;
-    type?: ModalType;
-    customActions?: React.ReactNode;
-  }) => void;
-  setModalSize?: (size: "sm" | "md" | "lg" | "xl" | "normal") => void;
-  setModalTitle?: (title: string | null) => void;
-  setData?: (data: any) => void;
-  setFormActions?: (actions: FormActions) => void;
-  closeModal: () => void;
+  customActions?: ReactNode;
   submitLabel?: string;
-  setSubmitLabel?: (label: string | undefined) => void;
+
+  openModal: (params: {
+    content: ReactNode;
+    type?: ModalType;
+    customActions?: ReactNode;
+  }) => void;
+  openInfo?: (content: ReactNode) => void;
+  openAction?: (content: ReactNode, actions?: ReactNode) => void;
+  openForm?: (content: ReactNode) => void;
+
+  setModalSize: (size: ModalSize) => void;
+  setModalTitle: (title: ReactNode | undefined) => void;
+  setData: (data: TData | null) => void;
+  setFormActions: (actions: FormActions | undefined) => void;
+  setSubmitLabel: (label: string | undefined) => void;
+  closeModal: () => void;
 };
 
 export const useModalStore = create<ModalStore>((set) => ({
@@ -40,8 +48,15 @@ export const useModalStore = create<ModalStore>((set) => ({
   data: null,
   formActions: undefined,
   customActions: undefined,
-  modalSize: "sm",
+  modalSize: "normal",
+  submitLabel: undefined,
+
   setData: (data) => set({ data }),
+  setModalSize: (size) => set({ modalSize: size }),
+  setModalTitle: (modalTitle) => set({ modalTitle }),
+  setFormActions: (formActions) => set({ formActions }),
+  setSubmitLabel: (submitLabel) => set({ submitLabel }),
+
   openModal: ({ content, type = "info", customActions }) =>
     set({
       isOpen: true,
@@ -49,10 +64,28 @@ export const useModalStore = create<ModalStore>((set) => ({
       modalType: type,
       customActions,
     }),
-  setModalSize: (size) => set({ modalSize: size }),
+  openInfo: (content) =>
+    set({
+      isOpen: true,
+      modalContent: content,
+      modalType: "info",
+      customActions: undefined,
+    }),
+  openAction: (content, actions) =>
+    set({
+      isOpen: true,
+      modalContent: content,
+      modalType: "action",
+      customActions: actions,
+    }),
+  openForm: (content) =>
+    set({
+      isOpen: true,
+      modalContent: content,
+      modalType: "form",
+      customActions: undefined,
+    }),
 
-  setModalTitle: (title) => set({ modalTitle: title }),
-  setFormActions: (actions) => set({ formActions: actions }),
   closeModal: () =>
     set({
       isOpen: false,
@@ -62,8 +95,6 @@ export const useModalStore = create<ModalStore>((set) => ({
       customActions: undefined,
       modalTitle: undefined,
       submitLabel: undefined,
+      data: null,
     }),
-
-  submitLabel: undefined,
-  setSubmitLabel: (label) => set({ submitLabel: label }),
 }));

@@ -6,7 +6,7 @@ interface SearchParams {
   labelIds?: string;
   assignedTo?: string;
   sourceNames?: string;
-  createdByIds?: string;
+  assignedBy?: string;
   search?: string;
   sortBy?: string;
   startDate?: Date;
@@ -23,7 +23,7 @@ export function useLeadFilters() {
       labelIds: searchParams?.labelIds?.split(",") ?? [],
       assignedTo: searchParams?.assignedTo?.split(",") ?? [],
       sourceNames: searchParams?.sourceNames?.split(",") ?? [],
-      createdByIds: searchParams?.createdByIds?.split(",") ?? [],
+      assignedBy: searchParams?.assignedBy?.split(",") ?? [],
       search: searchParams?.search ?? "",
       sortBy: searchParams?.sortBy ?? "",
       startDate: searchParams?.startDate ?? new Date(),

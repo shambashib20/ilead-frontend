@@ -36,7 +36,7 @@ export type FilterPayload = {
   sourceNames?: string[];
   search: string;
   sortBy: string;
-  createdByIds?: string[];
+  assignedBy?: string[];
   is_table_view?: boolean;
   page?: number;
   limit?: number;
@@ -70,6 +70,7 @@ class LeadsService extends ApiClient {
     const response = await this.post<LeadsResponse>("/all/leads", {
       labelIds: filters.labelIds,
       assignedTo: filters.assignedTo,
+      assignedBy: filters.assignedBy,
       sourceNames: filters.sourceNames,
       search: filters.search,
       sortBy: filters.sortBy,

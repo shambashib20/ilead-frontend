@@ -6,7 +6,7 @@ import {
   TabsTrigger,
 } from "../../../../components/ui/tabs";
 
-import { User, Mail, MapPin, Phone } from "lucide-react";
+import { User, Phone } from "lucide-react";
 import { useModalStore } from "@/store/useModalStore";
 import { LeadDetail } from "@/features/leads/components/LeadModals";
 import type { KeyboardEvent } from "react";

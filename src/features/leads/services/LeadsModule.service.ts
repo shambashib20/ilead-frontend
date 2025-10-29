@@ -10,7 +10,12 @@ export type Lead = {
   comment: string;
   reference: string;
   createdAt: string;
-  follow_ups: [];
+  follow_ups: {
+    next_followup_date: Date;
+    comment: string;
+    _id: string;
+    meta: { attachment_url: string; audio_attachment_url: string };
+  }[];
 };
 
 export type Status = {
@@ -105,6 +110,15 @@ export interface AssignLeadToResponse {
 
 export interface CreateNewFollowupPayload {
   leadId: string;
+  nextFollowUp: string;
+  comment: string;
+  attachmentUrl?: string;
+  audioAttachmentUrl?: string;
+}
+
+export interface UpdateFollowupPayload {
+  leadId: string;
+  followUpId: string;
   nextFollowUp: string;
   comment: string;
   attachmentUrl?: string;
@@ -238,6 +252,16 @@ export class LeadsModule extends ApiClient {
     payload: CreateNewFollowupPayload
   ): Promise<FolllowUpResponse> {
     const response = await this.post<FolllowUpResponse>("/follow-up", payload);
+    return response.data;
+  }
+
+  async updateFollowup(
+    payload: UpdateFollowupPayload
+  ): Promise<FolllowUpResponse> {
+    const response = await this.patch<FolllowUpResponse>(
+      "/update/follow-up",
+      payload
+    );
     return response.data;
   }
 

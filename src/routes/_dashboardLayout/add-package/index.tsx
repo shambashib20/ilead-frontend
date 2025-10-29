@@ -4,6 +4,10 @@ import { useMemo, useState } from "react";
 // 👉 Make sure this hook exists in your project as you said
 import { useWorkspaceProperty } from "@/features/workspace/hooks/useWorkspaceProperty";
 import { useTheme } from "@/contexts/ThemeProvider";
+import {
+  paymentService,
+  type PaymentResponse,
+} from "@/features/payment/services/payment.service";
 
 export const Route = createFileRoute("/_dashboardLayout/add-package/")({
   component: RouteComponent,
@@ -14,7 +18,7 @@ function RouteComponent() {
   const { theme } = useTheme();
   const conversionRate = 0.012;
   const effectiveTheme = theme === "system" ? "light" : theme;
-
+  const [subscribingId, setSubscribingId] = useState<string | null>(null);
   // pricing plans from payment API
   const { isLoading, isError, error, pricingPlans } = usePricingPlans();
 
@@ -124,6 +128,34 @@ function RouteComponent() {
 
   const loading = isLoading || propertiesLoading;
 
+  const handleSubscribe = async (planId: string) => {
+    try {
+      setSubscribingId(planId);
+
+      console.log("[subscribe:start]", {
+        planId,
+        currency,
+        when: new Date().toISOString(),
+      });
+
+      // explicitly type the response
+      const res: PaymentResponse = await paymentService.startPayment({
+        packageId: planId,
+      });
+
+      if (res?.status === "SUCCESS" && res.data?.payment_link) {
+        console.log("[subscribe:success]", res);
+        // open in new tab
+        window.open(res.data.payment_link, "_blank");
+      } else {
+        console.error("[subscribe:failure]", res);
+      }
+    } catch (err) {
+      console.error("[subscribe:error]", err);
+    } finally {
+      setSubscribingId(null);
+    }
+  };
   return (
     <div>
       <div className="p-6 mt-10 transition-colors duration-300 bg-primary rounded-sm">
@@ -181,138 +213,146 @@ function RouteComponent() {
           {/* Packages Grid */}
           {!loading && !isError && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {uiPlans.map((pkg) => (
-                <div
-                  key={pkg.id}
-                  className={`rounded-xl p-6 flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-                    pkg.highlight && !pkg.isCurrent
-                      ? `${colors.cardHighlight} text-white shadow-2xl transform scale-105 border-0`
-                      : `${colors.card} ${colors.border} border shadow-md`
-                  }`}
-                >
-                  {/* Badge for highlighted or current */}
-                  <div className="mb-4 flex gap-2">
-                    {pkg.highlight && !pkg.isCurrent && (
-                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/40 bg-opacity-20 text-xs font-medium self-start">
-                        ⭐ Most Popular
-                      </div>
-                    )}
-                    {pkg.isCurrent && (
-                      <div
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium self-start ${colors.badge}`}
-                      >
-                        ✅ Current Plan
-                      </div>
-                    )}
-                  </div>
-                  <h3
-                    className={`text-xl font-bold mb-2 ${
+              {uiPlans.map((pkg) => {
+                const isSubscribing = subscribingId === pkg.id;
+
+                return (
+                  <div
+                    key={pkg.id}
+                    className={`rounded-xl p-6 flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl ${
                       pkg.highlight && !pkg.isCurrent
-                        ? "text-white"
-                        : colors.text
+                        ? `${colors.cardHighlight} text-white shadow-2xl transform scale-105 border-0`
+                        : `${colors.card} ${colors.border} border shadow-md`
                     }`}
                   >
-                    {pkg.name}
-                  </h3>
-                  <p
-                    className={`text-sm mb-1 ${
-                      pkg.highlight && !pkg.isCurrent
-                        ? "text-blue-100"
-                        : colors.textMuted
-                    }`}
-                  >
-                    Validity: {pkg.validityLabel}
-                  </p>
-                  <div className="my-4">
-                    <span
-                      className={`text-3xl font-bold ${
+                    {/* Badge for highlighted or current */}
+                    <div className="mb-4 flex gap-2">
+                      {pkg.highlight && !pkg.isCurrent && (
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/40 bg-opacity-20 text-xs font-medium self-start">
+                          ⭐ Most Popular
+                        </div>
+                      )}
+                      {pkg.isCurrent && (
+                        <div
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium self-start ${colors.badge}`}
+                        >
+                          ✅ Current Plan
+                        </div>
+                      )}
+                    </div>
+                    <h3
+                      className={`text-xl font-bold mb-2 ${
                         pkg.highlight && !pkg.isCurrent
                           ? "text-white"
                           : colors.text
                       }`}
                     >
-                      {formatPrice(pkg.price)}
-                    </span>
-                    <span
-                      className={`text-sm ml-1 ${
+                      {pkg.name}
+                    </h3>
+                    <p
+                      className={`text-sm mb-1 ${
                         pkg.highlight && !pkg.isCurrent
                           ? "text-blue-100"
                           : colors.textMuted
                       }`}
                     >
-                      /year
-                    </span>
-                  </div>
-                  {/* Feature bullets with usage if current */}
-                  {pkg.features?.length ? (
-                    <ul
-                      className={`mt-2 mb-4 space-y-1 text-sm ${
-                        pkg.highlight && !pkg.isCurrent
-                          ? "text-blue-100"
-                          : colors.textMuted
-                      }`}
-                    >
-                      {pkg.features.slice(0, 6).map((f) => (
-                        <li key={f.id} className="flex items-center gap-2">
-                          <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />
-                          <span className="truncate">
-                            {f.title}
-                            {typeof f.limit === "number"
-                              ? pkg.isCurrent && typeof f.used === "number"
-                                ? `: ${f.used}/${f.limit}`
-                                : `: ${f.limit}`
-                              : ""}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  <div className="mt-auto space-y-3">
-                    <div className="flex flex-col gap-2">
-                      <button
-                        className={`flex-1 py-3 rounded-lg font-medium transition-all ${
-                          pkg.isCurrent
-                            ? colors.buttonDisabled
-                            : pkg.highlight && !pkg.isCurrent
-                              ? "bg-white text-blue-600 hover:bg-gray-100"
-                              : colors.buttonPrimary
-                        }`}
-                        disabled={pkg.isCurrent}
-                        onClick={() => {
-                          if (pkg.isCurrent) return;
-                          // TODO: start checkout/upgrade flow with pkg.id
-                        }}
-                      >
-                        {pkg.isCurrent ? "Current plan" : "Subscribe"}
-                      </button>
-                      <button
-                        className={`flex-1 py-3 rounded-lg font-medium transition-all ${
+                      Validity: {pkg.validityLabel}
+                    </p>
+                    <div className="my-4">
+                      <span
+                        className={`text-3xl font-bold ${
                           pkg.highlight && !pkg.isCurrent
-                            ? "border border-white border-opacity-30 text-white hover:bg-white hover:bg-opacity-10"
-                            : colors.buttonSecondary
+                            ? "text-white"
+                            : colors.text
+                        }`}
+                      >
+                        {formatPrice(pkg.price)}
+                      </span>
+                      <span
+                        className={`text-sm ml-1 ${
+                          pkg.highlight && !pkg.isCurrent
+                            ? "text-blue-100"
+                            : colors.textMuted
+                        }`}
+                      >
+                        /year
+                      </span>
+                    </div>
+                    {/* Feature bullets with usage if current */}
+                    {pkg.features?.length ? (
+                      <ul
+                        className={`mt-2 mb-4 space-y-1 text-sm ${
+                          pkg.highlight && !pkg.isCurrent
+                            ? "text-blue-100"
+                            : colors.textMuted
+                        }`}
+                      >
+                        {pkg.features.slice(0, 6).map((f) => (
+                          <li key={f.id} className="flex items-center gap-2">
+                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />
+                            <span className="truncate">
+                              {f.title}
+                              {typeof f.limit === "number"
+                                ? pkg.isCurrent && typeof f.used === "number"
+                                  ? `: ${f.used}/${f.limit}`
+                                  : `: ${f.limit}`
+                                : ""}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                    <div className="mt-auto space-y-3">
+                      <div className="flex flex-col gap-2">
+                        <button
+                          className={`flex-1 py-3 rounded-lg font-medium transition-all ${
+                            pkg.isCurrent
+                              ? colors.buttonDisabled
+                              : pkg.highlight && !pkg.isCurrent
+                                ? "bg-white text-blue-600 hover:bg-gray-100"
+                                : colors.buttonPrimary
+                          }`}
+                          disabled={pkg.isCurrent || isSubscribing}
+                          onClick={() => {
+                            if (pkg.isCurrent || isSubscribing) return;
+                            handleSubscribe(pkg.id); // <-- call your stub
+                          }}
+                        >
+                          {pkg.isCurrent ? "Current plan" : "Subscribe"}
+                        </button>
+                        <button
+                          className={`flex-1 py-3 rounded-lg font-medium transition-all ${
+                            pkg.highlight && !pkg.isCurrent
+                              ? "border border-white border-opacity-30 text-white hover:bg-white hover:bg-opacity-10"
+                              : colors.buttonSecondary
+                          }`}
+                          onClick={() => {
+                            // TODO: open plan details modal
+                          }}
+                        >
+                          {pkg.isCurrent
+                            ? "Current plan"
+                            : isSubscribing
+                              ? "Subscribing..."
+                              : "Subscribe"}
+                        </button>
+                      </div>
+                      <button
+                        className={`w-full text-center text-sm py-2 transition-all ${
+                          pkg.highlight && !pkg.isCurrent
+                            ? "text-blue-100 hover:text-white"
+                            : "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
                         }`}
                         onClick={() => {
-                          // TODO: open plan details modal
+                          // TODO: compare plans routing/modal
                         }}
                       >
-                        {pkg.isCurrent ? "Manage" : "Details"}
+                        Compare Package →
                       </button>
                     </div>
-                    <button
-                      className={`w-full text-center text-sm py-2 transition-all ${
-                        pkg.highlight && !pkg.isCurrent
-                          ? "text-blue-100 hover:text-white"
-                          : "text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
-                      }`}
-                      onClick={() => {
-                        // TODO: compare plans routing/modal
-                      }}
-                    >
-                      Compare Package →
-                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
               {!uiPlans.length && (
                 <div className={`${colors.textMuted}`}>
                   No plans available yet.

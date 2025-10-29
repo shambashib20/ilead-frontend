@@ -26,7 +26,7 @@ type OptionType = { value: string; label: string };
 
 type FormData = {
   labels: OptionType[];
-  createdBy: OptionType[];
+  assignedBy: OptionType[];
   assignTo: OptionType[];
   source: OptionType[];
   searchByDate: OptionType[];
@@ -38,7 +38,7 @@ type LeadSearchParams = {
   labelIds?: string;
   assignedTo?: string;
   sourceNames?: string;
-  createdByIds?: string;
+  assignedBy?: string;
   search?: string;
   sortBy?: string;
   startDate?: Date;
@@ -58,7 +58,7 @@ function LeadSearch() {
     labelIds?: string;
     assignedTo?: string;
     sourceNames?: string;
-    createdByIds?: string;
+    assignedBy?: string;
     search?: string;
     sortBy?: string;
     startDate?: Date;
@@ -76,8 +76,8 @@ function LeadSearch() {
       sourceNames: searchParams?.sourceNames
         ? searchParams.sourceNames.split(",")
         : [],
-      createdByIds: searchParams?.createdByIds
-        ? searchParams.createdByIds.split(",")
+      assignedBy: searchParams?.assignedBy
+        ? searchParams.assignedBy.split(",")
         : [],
       search: searchParams?.search || "",
       sortBy: searchParams?.sortBy || "",
@@ -142,9 +142,9 @@ function LeadSearch() {
                 defaultLabelOption
             )
           : [defaultLabelOption],
-      createdBy:
-        (filters.createdByIds ?? []).length > 0
-          ? (filters.createdByIds ?? []).map(
+      assignedBy:
+        (filters.assignedBy ?? []).length > 0
+          ? (filters.assignedBy ?? []).map(
               (id) =>
                 agentsOptions.find((opt) => opt.value === id) ||
                 defaultAgentsOption
@@ -185,7 +185,7 @@ function LeadSearch() {
         labelIds: value.labels.map((l) => l.value).filter((v) => v !== ""),
         assignedTo: value.assignTo.map((a) => a.value).filter((v) => v !== ""),
         sourceNames: value.source.map((s) => s.value).filter((v) => v !== ""),
-        createdByIds: value.createdBy
+        assignedBy: value.assignedBy
           .map((a) => a.value)
           .filter((v) => v !== ""),
         search: value.searchQuery,
@@ -202,8 +202,8 @@ function LeadSearch() {
         searchParams.assignedTo = (filters.assignedTo ?? []).join(",");
       if ((filters.sourceNames ?? []).length > 0)
         searchParams.sourceNames = (filters.sourceNames ?? []).join(",");
-      if ((filters.createdByIds ?? []).length > 0)
-        searchParams.createdByIds = (filters.createdByIds ?? []).join(",");
+      if ((filters.assignedBy ?? []).length > 0)
+        searchParams.assignedBy = (filters.assignedBy ?? []).join(",");
       if (filters.search) searchParams.search = filters.search;
       if (filters.sortBy) searchParams.sortBy = filters.sortBy;
       if (filters.startDate) searchParams.startDate = filters.startDate;
@@ -307,18 +307,18 @@ function LeadSearch() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Created By Field */}
           <form.Field
-            name="createdBy"
+            name="assignedBy"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="createdBy">Created By</Label>
+                <Label htmlFor="assignedBy">Created By</Label>
                 <Select
-                  id="createdBy"
+                  id="assignedBy"
                   value={field.state.value}
                   onChange={(value) =>
                     field.handleChange(Array.isArray(value) ? [...value] : [])
                   }
                   isMulti
-                  name="createdBy"
+                  name="assignedBy"
                   options={agentsOptions}
                   className="basic-multi-select"
                   classNamePrefix="select"

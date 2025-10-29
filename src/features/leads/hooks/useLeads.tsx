@@ -9,7 +9,7 @@ const DEFAULT_FILTERS: FilterPayload = {
   labelIds: [],
   assignedTo: [],
   sourceNames: [],
-  createdByIds: [],
+  assignedBy: [],
   search: "",
   sortBy: "",
   is_table_view: false,

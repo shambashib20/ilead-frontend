@@ -208,7 +208,7 @@ function SourceCard() {
             </TableHeader>
             <TableBody className="bg-primary/50">
               {filteredSources.length > 0 ? (
-                filteredSources.map((source, index) => (
+                filteredSources.map((source, _index) => (
                   <TableRow
                     key={source._id}
                     className={`border-b border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30 `}
