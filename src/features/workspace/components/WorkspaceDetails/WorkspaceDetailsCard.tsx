@@ -2,7 +2,6 @@ import React, { type JSX } from "react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 
-// UI components — update paths to match your project
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/useModalStore";
@@ -10,38 +9,29 @@ import { useUser } from "@/features/auth/hooks/useUser";
 import BrandLoader from "@/components/BrandLoader/BrandLoader";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
 import { useWorkspaceProperty } from "../../hooks/useWorkspaceProperty";
-// import { BrandLoader } from "@/components/BrandLoader";
 
-// App hooks/services — update paths as needed
-// import { useModalStore } from "@/stores/modal-store";
-// import { useUser } from "@/hooks/use-user";
-// import { workspaceService } from "@/services/workspace-service";
-// import { EditWorkspaceModal } from "@/components/modals/EditWorkspaceModal";
-
-// -----------------------------------------------------------------------------
-// Types
-// -----------------------------------------------------------------------------
-
-// Badge variants used in this UI. Extend if your Badge supports more.
 export type BadgeVariant = "green" | "gray" | "yellow" | "red";
 
 export type FeatureUsage = {
   feature_id: string | number;
   title: string;
   used: number;
-  limit: number; // 0 means unlimited? treat as 0 => show 0/0 and 0%
+  limit: number;
   validity?: string | Date;
 };
 
 export type ActivePackage = {
   package_id: {
     title: string;
+    validity?: string | Date; // ← may exist in your data
     validity_in_days?: number;
-    status?: string; // ACTIVE | INACTIVE | etc
+    status?: string;
   };
   meta: {
     activated_features: FeatureUsage[];
   };
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 };
 
 export type Property = {
@@ -54,18 +44,11 @@ export type Property = {
   is_banned: boolean;
   reported: boolean;
   meta?: {
-    active_package?: ActivePackage;
+    active_package?: ActivePackage | null;
   };
 };
 
-// -----------------------------------------------------------------------------
-// Helpers
-// -----------------------------------------------------------------------------
-
-interface BadgeProps {
-  children: React.ReactNode;
-  variant?: BadgeVariant;
-}
+type BadgeProps = { children: React.ReactNode; variant?: BadgeVariant };
 
 function Badge({ children, variant = "gray" }: BadgeProps) {
   const base =
@@ -76,8 +59,6 @@ function Badge({ children, variant = "gray" }: BadgeProps) {
     yellow:
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
     gray: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200",
-    // purple:
-    //   "bg-purple-100 text-indigo-900 dark:bg-indigo-900 dark:text-indigo-300",
   };
   return (
     <span className={clsx(base, map[variant] ?? map.gray)}>{children}</span>
@@ -103,7 +84,34 @@ function statusToVariant(status: Property["status"]): BadgeVariant {
   }
 }
 
-// Reusable boolean row with icon + badge
+// ---------- NEW: expiry helpers ----------
+function getPlanExpiryISO(activePkg?: ActivePackage | null): string | null {
+  if (!activePkg) return null;
+
+  // Prefer explicit ISO date if present
+  const explicit = activePkg.package_id?.validity as string | Date | undefined;
+  if (explicit) return dayjs(explicit).toISOString();
+
+  // Else compute from activation time + validity_in_days
+  const days = Number(activePkg.package_id?.validity_in_days ?? 0);
+  const activatedAt = activePkg.createdAt || activePkg.updatedAt;
+  if (!activatedAt || !days) return null;
+
+  return dayjs(activatedAt).add(days, "day").toISOString();
+}
+
+function isExpired(iso?: string | null): boolean {
+  if (!iso) return false;
+  return dayjs().isAfter(dayjs(iso));
+}
+
+function expiredCardClasses(expired: boolean) {
+  return expired
+    ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+    : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700";
+}
+// ---------- END new helpers ----------
+
 function renderStatusItem(
   label: string,
   value: boolean,
@@ -131,19 +139,12 @@ function renderStatusItem(
           {label}
         </span>
       </div>
-      <Badge
-        variant={value ? trueVariant : falseVariant}
-        // className="px-2 py-1 text-xs"
-      >
+      <Badge variant={value ? trueVariant : falseVariant}>
         {value ? "Yes" : "No"}
       </Badge>
     </div>
   );
 }
-
-// -----------------------------------------------------------------------------
-// Component
-// -----------------------------------------------------------------------------
 
 export default function WorkspaceDetailsCard() {
   const {
@@ -154,7 +155,6 @@ export default function WorkspaceDetailsCard() {
   const { openModal, setModalTitle } = useModalStore();
   const { data } = useUser();
 
-  // Derive user meta safely (some APIs nest user under data.data)
   const userName: string | undefined =
     (data as any)?.name ?? (data as any)?.data?.name;
   const userRole: string | undefined =
@@ -180,22 +180,24 @@ export default function WorkspaceDetailsCard() {
 
   if (!workspace) return null;
 
-  // Overall usage percentage (guard against divide by 0)
-  // const used = Number(workspace.usage_count ?? 0);
-  // const limit = Number(workspace.usage_limits ?? 0);
-  // const percent = safePercent(used, limit);
-
-  const activePkg = workspace.meta?.active_package;
+  const activePkg = workspace.meta?.active_package ?? null;
   const planTitle = activePkg?.package_id?.title ?? "—";
   const planValidityDays = activePkg?.package_id?.validity_in_days ?? 0;
   const planStatus = activePkg?.package_id?.status ?? "—";
+
+  // NEW: compute plan expiry and flags
+  const planExpiryISO = getPlanExpiryISO(activePkg);
+  const planExpired = isExpired(planExpiryISO);
+  const planExpiryLabel = planExpiryISO
+    ? dayjs(planExpiryISO).format("DD MMM YYYY, hh:mm A")
+    : "—";
 
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6">
       <div className="relative">
         <Card className="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
-            {/* LEFT: main details (span 2 cols on lg) */}
+            {/* LEFT */}
             <div className="lg:col-span-2 space-y-4">
               <div className="flex items-start justify-between">
                 <div>
@@ -233,10 +235,16 @@ export default function WorkspaceDetailsCard() {
                   {workspace.description || "No description provided."}
                 </div>
               </div>
+
               {userRole !== "Chat Agent" && (
                 <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Plan Details Card */}
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  <div
+                    className={clsx(
+                      "p-6 rounded-xl border shadow-sm hover:shadow-md transition-shadow duration-200",
+                      expiredCardClasses(planExpired)
+                    )}
+                  >
                     <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
                       <svg
                         className="w-5 h-5 text-blue-500"
@@ -252,77 +260,50 @@ export default function WorkspaceDetailsCard() {
                         />
                       </svg>
                       Subscription Details
+                      {planExpired && (
+                        <span className="ml-2 inline-flex items-center rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 px-2.5 py-0.5 text-xs font-semibold">
+                          Expired
+                        </span>
+                      )}
                     </h3>
 
                     <div className="space-y-4 mb-6">
                       <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className="w-4 h-4 text-slate-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                            />
-                          </svg>
-                          <span className="text-sm text-slate-600 dark:text-slate-300">
-                            Plan Name
-                          </span>
-                        </div>
-                        <div className="text-sm font-semibold text-slate-900 dark:text-white">
-                          {planTitle}
-                        </div>
+                        <span className="text-sm text-slate-600 dark:text-slate-300">
+                          Plan Name
+                        </span>
+                        <div className="text-sm font-semibold">{planTitle}</div>
                       </div>
 
                       <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className="w-4 h-4 text-slate-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                          <span className="text-sm text-slate-600 dark:text-slate-300">
-                            Plan Validity
-                          </span>
-                        </div>
-                        <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                        <span className="text-sm text-slate-600 dark:text-slate-300">
+                          Plan Validity
+                        </span>
+                        <div className="text-sm font-semibold">
                           {planValidityDays} days
                         </div>
                       </div>
 
+                      {/* NEW: Valid till row */}
                       <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                        <div className="flex items-center gap-2">
-                          <svg
-                            className="w-4 h-4 text-slate-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          <span className="text-sm text-slate-600 dark:text-slate-300">
-                            Plan Status
-                          </span>
+                        <span className="text-sm text-slate-600 dark:text-slate-300">
+                          Valid till
+                        </span>
+                        <div
+                          className={clsx(
+                            "text-sm font-semibold",
+                            planExpired && "text-red-600 dark:text-red-400"
+                          )}
+                        >
+                          {planExpiryLabel}
                         </div>
-                        <div className="text-sm font-semibold text-slate-900 dark:text-white">
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <span className="text-sm text-slate-600 dark:text-slate-300">
+                          Plan Status
+                        </span>
+                        <div className="text-sm font-semibold">
                           {planStatus}
                         </div>
                       </div>
@@ -353,23 +334,42 @@ export default function WorkspaceDetailsCard() {
                             const fUsed = Number(feature.used ?? 0);
                             const fLimit = Number(feature.limit ?? 0);
                             const fPercent = safePercent(fUsed, fLimit);
+
+                            // Prefer feature.validity, else inherit plan expiry
+                            const featureExpiryISO = feature.validity
+                              ? dayjs(feature.validity).toISOString()
+                              : planExpiryISO;
+                            const featureExpired = isExpired(featureExpiryISO);
+                            const featureExpiryLabel = featureExpiryISO
+                              ? dayjs(featureExpiryISO).format(
+                                  "DD MMM YYYY, hh:mm A"
+                                )
+                              : "—";
+
                             return (
                               <div
                                 key={feature.feature_id}
-                                className="p-4 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors duration-150"
+                                className={clsx(
+                                  "p-4 rounded-lg border transition-colors duration-150",
+                                  expiredCardClasses(featureExpired)
+                                )}
                               >
                                 <div className="flex items-center justify-between mb-2">
-                                  <div className="font-medium text-slate-800 dark:text-slate-200">
+                                  <div className="font-medium">
                                     {feature.title}
+                                    {featureExpired && (
+                                      <span className="ml-2 text-xs inline-flex items-center rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 px-2 py-0.5">
+                                        Expired
+                                      </span>
+                                    )}
                                   </div>
-                                  <div className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+                                  <div className="text-sm font-semibold opacity-90">
                                     {fUsed} / {fLimit}
                                   </div>
                                 </div>
 
-                                {/* Progress Bar */}
                                 <div className="mb-3">
-                                  <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+                                  <div className="flex justify-between text-xs opacity-75 mb-1">
                                     <span>Usage</span>
                                     <span>{fPercent}%</span>
                                   </div>
@@ -377,22 +377,20 @@ export default function WorkspaceDetailsCard() {
                                     <div
                                       className={clsx(
                                         "h-full rounded-full transition-all duration-500",
-                                        {
-                                          "bg-gradient-to-r from-green-400 to-emerald-500":
-                                            fPercent < 70,
-                                          "bg-gradient-to-r from-amber-400 to-orange-500":
-                                            fPercent >= 70 && fPercent < 90,
-                                          "bg-gradient-to-r from-rose-500 to-red-600":
-                                            fPercent >= 90,
-                                        }
+                                        featureExpired
+                                          ? "bg-gradient-to-r from-rose-500 to-red-600"
+                                          : fPercent < 70
+                                            ? "bg-gradient-to-r from-green-400 to-emerald-500"
+                                            : fPercent < 90
+                                              ? "bg-gradient-to-r from-amber-400 to-orange-500"
+                                              : "bg-gradient-to-r from-rose-500 to-red-600"
                                       )}
                                       style={{ width: `${fPercent}%` }}
                                     />
                                   </div>
                                 </div>
 
-                                {/* Validity Info */}
-                                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-600">
+                                <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-600">
                                   <div className="flex items-center gap-1">
                                     <svg
                                       className="w-3 h-3"
@@ -407,12 +405,15 @@ export default function WorkspaceDetailsCard() {
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                                       />
                                     </svg>
-                                    Valid till:{" "}
-                                    {feature.validity
-                                      ? dayjs(feature.validity).format(
-                                          "DD MMM YYYY, hh:mm A"
-                                        )
-                                      : "—"}
+                                    Valid till:
+                                  </div>
+                                  <div
+                                    className={clsx(
+                                      featureExpired &&
+                                        "text-red-600 dark:text-red-400 font-semibold"
+                                    )}
+                                  >
+                                    {featureExpiryLabel}
                                   </div>
                                 </div>
                               </div>
@@ -447,7 +448,6 @@ export default function WorkspaceDetailsCard() {
                     </h3>
 
                     <div className="space-y-4">
-                      {/* Main Status */}
                       <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -468,16 +468,12 @@ export default function WorkspaceDetailsCard() {
                               Status
                             </span>
                           </div>
-                          <Badge
-                            variant={statusToVariant(workspace.status)}
-                            // className="px-3 py-1 text-sm"
-                          >
+                          <Badge variant={statusToVariant(workspace.status)}>
                             {String(workspace.status).replace(/_/g, " ")}
                           </Badge>
                         </div>
                       </div>
 
-                      {/* Status Items */}
                       <div className="space-y-3">
                         {renderStatusItem(
                           "Workspace Verified",
@@ -506,10 +502,10 @@ export default function WorkspaceDetailsCard() {
                 </div>
               )}
 
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4" />
             </div>
 
-            {/* RIGHT: meta / owner / actions card */}
+            {/* RIGHT */}
             <aside className="bg-slate-50 dark:bg-slate-800 p-4 rounded-md border border-slate-100 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>

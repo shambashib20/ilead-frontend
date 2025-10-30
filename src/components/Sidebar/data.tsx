@@ -51,8 +51,8 @@ export const navItems: NavItem[] = [
     roles: ["Admin", "Superadmin"],
     subItems: [
       { name: "User List", path: "/users" },
-      { name: "Roles & Permissions", path: "/roles" },
-      { name: "Activity Log", path: "/user-activity" },
+      // { name: "Roles & Permissions", path: "/roles" },
+      // { name: "Activity Log", path: "/user-activity" },
     ],
   },
   {
@@ -67,8 +67,8 @@ export const navItems: NavItem[] = [
     roles: ["Admin", "Superadmin"],
     subItems: [
       { name: "API Connections", path: "/third-party-integration" },
-      { name: "Webhooks", path: "/integrations/webhooks" },
-      { name: "Marketplace", path: "/integrations/marketplace" },
+      // { name: "Webhooks", path: "/integrations/webhooks" },
+      // { name: "Marketplace", path: "/integrations/marketplace" },
     ],
   },
 
