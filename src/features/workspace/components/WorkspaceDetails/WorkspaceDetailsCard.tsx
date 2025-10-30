@@ -10,6 +10,7 @@ import { useModalStore } from "@/store/useModalStore";
 import { useUser } from "@/features/auth/hooks/useUser";
 import BrandLoader from "@/components/BrandLoader/BrandLoader";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
+
 import { useWorkspaceProperty } from "../../hooks/useWorkspaceProperty";
 
 export type BadgeVariant = "green" | "gray" | "yellow" | "red";
