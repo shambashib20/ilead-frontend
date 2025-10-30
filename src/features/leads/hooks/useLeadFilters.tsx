@@ -26,8 +26,8 @@ export function useLeadFilters() {
       assignedBy: searchParams?.assignedBy?.split(",") ?? [],
       search: searchParams?.search ?? "",
       sortBy: searchParams?.sortBy ?? "",
-      startDate: searchParams?.startDate ?? new Date(),
-      endDate: searchParams?.endDate ?? new Date(),
+      startDate: searchParams?.startDate ?? "",
+      endDate: searchParams?.endDate ?? "",
     }),
     [searchParams]
   );

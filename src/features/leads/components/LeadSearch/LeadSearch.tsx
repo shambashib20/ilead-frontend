@@ -31,8 +31,8 @@ type FormData = {
   source: OptionType[];
   searchByDate: OptionType[];
   searchQuery: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
 };
 type LeadSearchParams = {
   labelIds?: string;
@@ -41,17 +41,17 @@ type LeadSearchParams = {
   assignedBy?: string;
   search?: string;
   sortBy?: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | string;
+  endDate?: Date | string;
 };
 
 function LeadSearch() {
   const [date, setDate] = useState<{
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: Date | "";
+    endDate: Date | "";
   }>({
-    startDate: null,
-    endDate: null,
+    startDate: "",
+    endDate: "",
   });
   const navigate = useNavigate();
   const searchParams = useSearch({ from: "/_dashboardLayout/lead" }) as {
@@ -66,6 +66,7 @@ function LeadSearch() {
   }; // Adjust route as needed
   const { openModal, setModalTitle, closeModal, setModalSize } =
     useModalStore();
+
   // Parse filters from URL search params
   const getFiltersFromSearch = (): FilterPayload => {
     return {
@@ -173,8 +174,8 @@ function LeadSearch() {
           ]
         : [],
       searchQuery: filters.search,
-      endDate: filters?.endDate ?? new Date(),
-      startDate: filters?.startDate ?? new Date(),
+      endDate: filters?.endDate ?? "",
+      startDate: filters?.startDate ?? "",
     };
   };
 
@@ -220,6 +221,10 @@ function LeadSearch() {
 
   const handleReset = () => {
     form.reset();
+    setDate({
+      startDate: "",
+      endDate: "",
+    });
     navigate({
       search: true,
     });

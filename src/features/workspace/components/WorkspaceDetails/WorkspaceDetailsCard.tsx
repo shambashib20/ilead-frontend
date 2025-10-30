@@ -1,6 +1,8 @@
 import React, { type JSX } from "react";
 import clsx from "clsx";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -85,24 +87,53 @@ function statusToVariant(status: Property["status"]): BadgeVariant {
 }
 
 // ---------- NEW: expiry helpers ----------
+dayjs.extend(utc);
+dayjs.extend(isSameOrAfter);
+
+function parseISO(val?: string | Date | null): dayjs.Dayjs | null {
+  if (!val) return null;
+  const d = dayjs(val);
+  return d.isValid() ? d : null;
+}
+
 function getPlanExpiryISO(activePkg?: ActivePackage | null): string | null {
   if (!activePkg) return null;
 
-  // Prefer explicit ISO date if present
-  const explicit = activePkg.package_id?.validity as string | Date | undefined;
-  if (explicit) return dayjs(explicit).toISOString();
+  // 1) max feature validity
+  const features = activePkg.meta?.activated_features ?? [];
+  const featureMax = features
+    .map((f) => parseISO(f.validity as any))
+    .filter(Boolean) as dayjs.Dayjs[];
+  const latestFeature = featureMax.length
+    ? featureMax.reduce((a, b) => (a.isAfter(b) ? a : b))
+    : null;
 
-  // Else compute from activation time + validity_in_days
-  const days = Number(activePkg.package_id?.validity_in_days ?? 0);
-  const activatedAt = activePkg.createdAt || activePkg.updatedAt;
-  if (!activatedAt || !days) return null;
+  if (latestFeature) return latestFeature.toISOString();
 
-  return dayjs(activatedAt).add(days, "day").toISOString();
+  // 2) explicit package validity
+  const pkgValid = parseISO(activePkg.package_id?.validity as any);
+  if (pkgValid) return pkgValid.toISOString();
+
+  // 3) createdAt + days
+  const days = Number(activePkg.package_id?.validity_in_days ?? 0) || 0;
+  if (days > 0) {
+    const base = parseISO(activePkg.createdAt as any);
+    if (base) return base.add(days, "day").toISOString();
+  }
+
+  // 4) updatedAt + days
+  if (days > 0) {
+    const base2 = parseISO(activePkg.updatedAt as any);
+    if (base2) return base2.add(days, "day").toISOString();
+  }
+
+  return null;
 }
 
 function isExpired(iso?: string | null): boolean {
   if (!iso) return false;
-  return dayjs().isAfter(dayjs(iso));
+  const expiry = dayjs.utc(iso).endOf("day"); // grace until day ends
+  return dayjs.utc().isAfter(expiry);
 }
 
 function expiredCardClasses(expired: boolean) {
@@ -339,6 +370,7 @@ export default function WorkspaceDetailsCard() {
                             const featureExpiryISO = feature.validity
                               ? dayjs(feature.validity).toISOString()
                               : planExpiryISO;
+
                             const featureExpired = isExpired(featureExpiryISO);
                             const featureExpiryLabel = featureExpiryISO
                               ? dayjs(featureExpiryISO).format(

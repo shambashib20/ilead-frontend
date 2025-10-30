@@ -40,8 +40,8 @@ export type FilterPayload = {
   is_table_view?: boolean;
   page?: number;
   limit?: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | string;
+  endDate?: Date | string;
 };
 
 export type Pagination = {
