@@ -77,8 +77,8 @@ class LeadsService extends ApiClient {
       is_table_view: filters.is_table_view ?? false,
       page: filters.page ?? 1,
       limit: filters.limit ?? 10,
-      startDate: filters?.startDate,
-      endDate: filters?.endDate,
+      start_date: filters?.startDate,
+      end_Date: filters?.endDate,
     });
     return response.data;
   }
