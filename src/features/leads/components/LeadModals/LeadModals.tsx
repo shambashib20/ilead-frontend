@@ -852,15 +852,17 @@ export function LeadDetail() {
         <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto ">
           <TabsTrigger value="details">
             Details{" "}
-            <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+            {/* <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
               0
-            </span>
+            </span> */}
           </TabsTrigger>
           <TabsTrigger value="followup">
             Follow Up{" "}
-            <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
-              {lead.data.follow_ups?.length || 0}
-            </span>
+            {lead.data.follow_ups?.length ? (
+              <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
+                {lead.data.follow_ups?.length}
+              </span>
+            ) : null}
           </TabsTrigger>
           <TabsTrigger value="history">
             History{" "}

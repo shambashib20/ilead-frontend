@@ -6,14 +6,15 @@ import { useModalStore } from "@/store/useModalStore";
 import { userService } from "@/features/leads/services/User.service";
 import Swal from "sweetalert2";
 import { useChatAgentStore } from "@/store/useChatAgentStore";
+import { Eye, EyeOff } from "lucide-react";
 
-const availableRoles = ["Admin", "Lead Manager", "TeleCaller"];
+const availableRoles = ["Admin", "Lead Manager", "Telecaller"];
 
 function CreateUserModal() {
   const closeModal = useModalStore((state) => state.closeModal);
   const setFormActions = useModalStore((state) => state.setFormActions);
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+  const [showPassword, setShowPassword] = useState(false);
   const { fetchChatAgents } = useChatAgentStore();
   const [formData, setFormData] = useState({
     name: "",
@@ -92,16 +93,31 @@ function CreateUserModal() {
           onChange={handleChange}
         />
       </div>
-      <div>
+      <div className="relative">
         <Label htmlFor="password" className="mb-2">
           Password
         </Label>
         <Input
           id="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           value={formData.password}
           onChange={handleChange}
         />
+        <span className="absolute right-3 top-2/4 -translate-y-1/2">
+          {showPassword ? (
+            <Eye
+              size={16}
+              onClick={() => setShowPassword(false)}
+              className="cursor-pointer"
+            />
+          ) : (
+            <EyeOff
+              size={16}
+              onClick={() => setShowPassword(true)}
+              className="cursor-pointer"
+            />
+          )}
+        </span>
       </div>
       <div>
         <Label htmlFor="roleName" className="mb-2">
