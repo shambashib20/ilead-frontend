@@ -16,6 +16,7 @@ import {
   Plug,
   Trash2,
   ChartArea,
+  Package,
 } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 
@@ -113,6 +114,12 @@ export const navItems: NavItem[] = [
     icon: <ChartArea size={20} />,
     roles: ["Admin", "Superadmin"],
     path: "/report",
+  },
+  {
+    name: "Packages",
+    icon: <Package />,
+    roles: ["Admin", "Superadmin"],
+    path: "/add-package",
   },
 ];
 
