@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { useChatAgentStore } from "@/store/useChatAgentStore";
 import { Eye, EyeOff } from "lucide-react";
 
-const availableRoles = ["Admin", "Lead Manager", "TeleCaller"];
+const availableRoles = ["Admin", "Lead Manager", "Telecaller"];
 
 function CreateUserModal() {
   const closeModal = useModalStore((state) => state.closeModal);

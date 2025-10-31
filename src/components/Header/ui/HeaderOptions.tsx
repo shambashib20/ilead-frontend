@@ -69,7 +69,11 @@ export default function HeaderOptionsBox({ logs = [] }: { logs?: any[] }) {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
-                  className="w-80 max-h-96 overflow-y-auto "
+                  className="w-80 max-h-96 overflow-y-auto  [&::-webkit-scrollbar]:w-1.5 
+          [&::-webkit-scrollbar-track]:rounded-full
+          [&::-webkit-scrollbar-track]:transparent
+          [&::-webkit-scrollbar-thumb]:rounded-full
+          [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
                   align="end"
                 >
                   {logs.length > 0 ? (

@@ -48,13 +48,42 @@ function FacebookIntegration() {
       const response =
         await facebookIntegrationService.connectWithFacebookPage(selectedLabel);
 
-      // Optional: You can show response data in alert or log it
+      // optional: inspect response and show a more specific message
+      const msg = response?.message || "Facebook page connected successfully!";
+
       console.log("Facebook page connection response:", response);
 
-      Swal.fire("Success", "Facebook page connected successfully!", "success");
-    } catch (error) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: msg,
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      });
+
+      // if you need to run follow-up actions after the toast closes, do it here
+      setTimeout(() => {
+        // e.g., refresh data, close modal, navigate, etc.
+        // fetchFacebookPages();
+        // closeModal?.();
+      }, 1000);
+    } catch (error: any) {
       console.error("Failed to connect Facebook page:", error);
-      Swal.fire("Error", "Failed to connect Facebook page", "error");
+
+      const errMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to connect Facebook page";
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: errMsg,
+        showConfirmButton: false,
+        timer: 1400,
+        timerProgressBar: true,
+      });
     }
   };
 
