@@ -33,19 +33,32 @@ function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       await workspaceService.register(form);
-      Swal.fire("Success", "You have registered successfully!", "success").then(
-        () => {
-          navigate({ to: "/user-login" });
-        }
-      );
+
+      Swal.fire({
+        title: "Success",
+        text: "You have registered successfully!",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1000, // closes automatically after 1 second
+        timerProgressBar: true,
+      });
+
+      // small delay so navigation happens right after the alert closes
+      setTimeout(() => {
+        navigate({ to: "/user-login" });
+      }, 1000);
     } catch (error: any) {
-      Swal.fire(
-        "Error",
-        error?.response?.data?.message || "Registration failed",
-        "error"
-      );
+      Swal.fire({
+        title: "Error",
+        text: error?.response?.data?.message || "Registration failed",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      });
     } finally {
       setLoading(false);
     }

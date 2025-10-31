@@ -36,18 +36,46 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
 
   const handleSubmit = async () => {
     if (!canSubmit) return;
+
     setIsSubmitting(true);
     try {
       const res = await workspaceService.updateProperty(formData);
-      if (res.data.status === "CREATED") {
-        Swal.fire("Success", "Workspace updated successfully", "success");
-        closeModal();
-        window.location.reload();
+      const { status, message } = res.data || {};
+
+      if (status === "CREATED") {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Workspace updated successfully",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+        });
+
+        setTimeout(() => {
+          closeModal?.();
+          // Only reload if you absolutely must
+          window.location.reload();
+        }, 1000);
       } else {
-        Swal.fire("Error", res.data.message || "Failed to update", "error");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: message || "Failed to update",
+          showConfirmButton: false,
+          timer: 1200,
+          timerProgressBar: true,
+        });
       }
     } catch (err: any) {
-      Swal.fire("Error", err.message || "Something went wrong", "error");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: err?.message || "Something went wrong",
+        showConfirmButton: false,
+        timer: 1200,
+        timerProgressBar: true,
+      });
     } finally {
       setIsSubmitting(false);
     }

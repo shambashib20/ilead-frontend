@@ -157,6 +157,7 @@ export default function CreateLeadModal() {
         text: first?.message ?? "Fix the highlighted fields",
         timer: 1200,
         showConfirmButton: false,
+        timerProgressBar: true,
       });
 
       return;
@@ -164,39 +165,60 @@ export default function CreateLeadModal() {
 
     const property_id = safeGetPropertyId();
     if (!property_id) {
-      Swal.fire("Error", "User property ID missing", "error");
+      // make this auto-close too so user isn't forced to click
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "User property ID missing",
+        showConfirmButton: false,
+        timer: 1200,
+        timerProgressBar: true,
+      });
       return;
     }
 
+    // Note: startTransition does not await the async function inside.
+    // That's fine here — the async work still runs, but React won't treat it as blocking.
     startTransition(async () => {
       try {
         const payload = {
           ...parsed.data,
           labels: Array.from(selected),
-          email: (parsed.data.email ?? "").trim(), // ← ensure string
+          email: (parsed.data.email ?? "").trim(),
           assigned_by: "",
           property_id,
         };
 
         await createLeadFromPlatform.createLeadFromPlatform(payload);
-        await Swal.fire("Success", "Lead created successfully", "success");
 
-        // reset
-        setForm({
-          name: "",
-          company_name: "",
-          phone_number: "",
-          email: "",
-          address: "",
-          comment: "",
-          reference: "",
-          labels: [],
-          status: "",
-          assigned_to: "",
+        // show an auto-closing success toast
+        Swal.fire({
+          title: "Success",
+          text: "Lead created successfully",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
         });
-        setSelected(new Set());
-        setSearch("");
-        closeModal();
+
+        // wait for the toast to disappear, then reset UI
+        setTimeout(() => {
+          setForm({
+            name: "",
+            company_name: "",
+            phone_number: "",
+            email: "",
+            address: "",
+            comment: "",
+            reference: "",
+            labels: [],
+            status: "",
+            assigned_to: "",
+          });
+          setSelected(new Set());
+          setSearch("");
+          closeModal();
+        }, 1000);
       } catch (err: any) {
         const code = err?.response?.status;
         let message = "Something went wrong while creating the label.";

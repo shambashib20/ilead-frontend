@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { useChatAgentStore } from "@/store/useChatAgentStore";
 import { Eye, EyeOff } from "lucide-react";
 
-const availableRoles = ["Admin", "Lead Manager", "Telecaller"];
+const availableRoles = ["Admin", "Lead Manager", "TeleCaller"];
 
 function CreateUserModal() {
   const closeModal = useModalStore((state) => state.closeModal);
@@ -48,13 +48,37 @@ function CreateUserModal() {
 
       if (res.status === "SUCCESS" || res.status === "CREATED") {
         await fetchChatAgents();
-        Swal.fire("Success", res.message, "success");
-        closeModal();
+
+        Swal.fire({
+          title: "Success",
+          text: res.message,
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1000, // closes after 1 second
+          timerProgressBar: true,
+        });
+
+        // optional small delay to ensure modal doesn’t close before Swal shows
+        setTimeout(() => closeModal(), 1000);
       } else {
-        Swal.fire("Error", res.message || "Failed to create user", "error");
+        Swal.fire({
+          title: "Error",
+          text: res.message || "Failed to create user",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+        });
       }
     } catch (err: any) {
-      Swal.fire("Error", err.message || "Something went wrong", "error");
+      Swal.fire({
+        title: "Error",
+        text: err.message || "Something went wrong",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      });
     } finally {
       setIsSubmitting(false);
     }

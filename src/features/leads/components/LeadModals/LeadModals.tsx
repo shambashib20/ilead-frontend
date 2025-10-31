@@ -358,19 +358,44 @@ export function LeadAssign() {
   const data = useModalStore((state) => state.data) as LeadModalData | null;
   const handleAssign = async () => {
     if (!selectedAgentId) {
-      Swal.fire("Error", "Please select an agent.", "error");
+      Swal.fire({
+        title: "Error",
+        text: "Please select an agent.",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      });
       return;
     }
+
     try {
       await assignToAgentAsync({
         leadId: data?._id || "",
         chatAgentId: selectedAgentId,
       });
 
-      Swal.fire("Success", "Lead assigned successfully.", "success");
-      closeModal?.();
+      Swal.fire({
+        title: "Success",
+        text: "Lead assigned successfully.",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      });
+
+      setTimeout(() => {
+        closeModal?.();
+      }, 1000);
     } catch (err: any) {
-      Swal.fire("Error", err?.message || "Something went wrong", "error");
+      Swal.fire({
+        title: "Error",
+        text: err?.message || "Something went wrong",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1000,
+        timerProgressBar: true,
+      });
     }
   };
 
