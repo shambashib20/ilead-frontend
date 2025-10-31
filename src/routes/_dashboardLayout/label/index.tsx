@@ -213,7 +213,7 @@ function RouteComponent() {
                                 key={index}
                                 className="border border-gray-200 rounded-full p-1 bg-white hover:scale-130 transition hover:relative hover:z-50"
                               >
-                                <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold">
+                                <span className="bg-gray-300 h-8 w-8 rounded-full grid place-content-center font-semibold cursor-pointer">
                                   {item?.agent_id?.name?.charAt(0) ?? "?"}
                                 </span>
                               </li>

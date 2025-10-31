@@ -4,7 +4,7 @@ export interface Source {
   _id: string;
   description: string;
   title: string;
-  meta: { is_active: boolean };
+  meta: { is_active: boolean; is_editable: boolean };
 }
 
 interface SourceResponse {

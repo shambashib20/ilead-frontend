@@ -1,5 +1,5 @@
 "use client";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useRouter, useSearch } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +46,7 @@ type LeadSearchParams = {
 };
 
 function LeadSearch() {
+  const router = useRouter();
   const [date, setDate] = useState<{
     startDate: Date | "";
     endDate: Date | "";
@@ -68,24 +69,22 @@ function LeadSearch() {
     useModalStore();
 
   // Parse filters from URL search params
-  const getFiltersFromSearch = (): FilterPayload => {
-    return {
-      labelIds: searchParams?.labelIds ? searchParams.labelIds.split(",") : [],
-      assignedTo: searchParams?.assignedTo
-        ? searchParams.assignedTo.split(",")
-        : [],
-      sourceNames: searchParams?.sourceNames
-        ? searchParams.sourceNames.split(",")
-        : [],
-      assignedBy: searchParams?.assignedBy
-        ? searchParams.assignedBy.split(",")
-        : [],
-      search: searchParams?.search || "",
-      sortBy: searchParams?.sortBy || "",
-      startDate: searchParams?.startDate || new Date(),
-      endDate: searchParams?.endDate || new Date(),
-    };
-  };
+  const getFiltersFromSearch = (): FilterPayload => ({
+    labelIds: searchParams?.labelIds ? searchParams.labelIds.split(",") : [],
+    assignedTo: searchParams?.assignedTo
+      ? searchParams.assignedTo.split(",")
+      : [],
+    sourceNames: searchParams?.sourceNames
+      ? searchParams.sourceNames.split(",")
+      : [],
+    assignedBy: searchParams?.assignedBy
+      ? searchParams.assignedBy.split(",")
+      : [],
+    search: searchParams?.search || "",
+    sortBy: searchParams?.sortBy || "",
+    startDate: searchParams?.startDate || undefined,
+    endDate: searchParams?.endDate || undefined,
+  });
 
   const currentFilters = getFiltersFromSearch();
   const { theme } = useTheme();
@@ -181,60 +180,71 @@ function LeadSearch() {
 
   const form = useForm({
     defaultValues: getFormValuesFromFilters(currentFilters),
+
     onSubmit: async ({ value }: { value: FormData }) => {
+      const sortBy = value.searchByDate?.[0]?.value || "";
+
+      const startISO = date.startDate
+        ? new Date(date.startDate).toISOString()
+        : (currentFilters.startDate as string | undefined);
+
+      const endISO = date.endDate
+        ? new Date(date.endDate).toISOString()
+        : (currentFilters.endDate as string | undefined);
+
       const filters: FilterPayload = {
-        labelIds: value.labels.map((l) => l.value).filter((v) => v !== ""),
-        assignedTo: value.assignTo.map((a) => a.value).filter((v) => v !== ""),
-        sourceNames: value.source.map((s) => s.value).filter((v) => v !== ""),
-        assignedBy: value.assignedBy
-          .map((a) => a.value)
-          .filter((v) => v !== ""),
-        search: value.searchQuery,
-        sortBy: value.searchByDate[0]?.value ?? "",
-        startDate: date.startDate ?? undefined,
-        endDate: date.endDate ?? undefined,
+        labelIds: value.labels.map((l) => l.value).filter(Boolean),
+        assignedTo: value.assignTo.map((a) => a.value).filter(Boolean),
+        sourceNames: value.source.map((s) => s.value).filter(Boolean),
+        assignedBy: value.assignedBy.map((a) => a.value).filter(Boolean),
+        search: value.searchQuery.trim(),
+        sortBy,
+        startDate: startISO,
+        endDate: endISO,
       };
 
-      // Update URL search params
       const searchParams: LeadSearchParams = {};
-      if ((filters.labelIds ?? []).length > 0)
-        searchParams.labelIds = (filters.labelIds ?? []).join(",");
-      if ((filters.assignedTo ?? []).length > 0)
-        searchParams.assignedTo = (filters.assignedTo ?? []).join(",");
-      if ((filters.sourceNames ?? []).length > 0)
-        searchParams.sourceNames = (filters.sourceNames ?? []).join(",");
-      if ((filters.assignedBy ?? []).length > 0)
-        searchParams.assignedBy = (filters.assignedBy ?? []).join(",");
+      if (filters.labelIds?.length)
+        searchParams.labelIds = filters.labelIds.join(",");
+      if (filters.assignedTo?.length)
+        searchParams.assignedTo = filters.assignedTo.join(",");
+      if (filters.sourceNames?.length)
+        searchParams.sourceNames = filters.sourceNames.join(",");
+      if (filters.assignedBy?.length)
+        searchParams.assignedBy = filters.assignedBy.join(",");
       if (filters.search) searchParams.search = filters.search;
       if (filters.sortBy) searchParams.sortBy = filters.sortBy;
       if (filters.startDate) searchParams.startDate = filters.startDate;
       if (filters.endDate) searchParams.endDate = filters.endDate;
 
-      console.log(filters);
-
-      navigate({
-        // @ts-ignore: Unreachable code error
-        search: searchParams,
-      });
+      navigate({ to: ".", search: searchParams });
     },
   });
 
+  const emptyForm: FormData = {
+    labels: [defaultLabelOption],
+    assignedBy: [defaultAgentsOption],
+    assignTo: [defaultAssigneesOption],
+    source: [defaultSourcesOption],
+    searchByDate: [],
+    searchQuery: "",
+    startDate: "",
+    endDate: "",
+  };
+
   const handleReset = () => {
-    form.reset();
+    form.reset(emptyForm);
     setDate({
       startDate: "",
       endDate: "",
     });
     navigate({
-      search: true,
+      to: ".",
+      search: {} as LeadSearchParams,
+      replace: true,
     });
+    router.invalidate();
   };
-
-  // const getDateFromDateRangeModal = (startDate?: Date, endDate?: Date) =>
-  //   setDate({
-  //     startDate: startDate ?? new Date(),
-  //     endDate: endDate ?? new Date(),
-  //   });
 
   const handleCalendarAction = () => {
     setModalSize?.("lg");
