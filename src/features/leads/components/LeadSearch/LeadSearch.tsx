@@ -270,29 +270,37 @@ function LeadSearch() {
     });
     console.log("Calendar action triggered");
   };
-
+  // const isBrowser = typeof window !== "undefined";
   const colourStyles = {
     control: (styles: any) => ({
       ...styles,
       backgroundColor: theme === "dark" ? "#283046" : "white",
       borderColor: theme === "dark" ? "#555" : "#e6e6e6",
     }),
-    option: (styles: any, { isDisabled, isFocused, isSelected }: any) => ({
+    // menu: (styles: any) => ({
+    //   ...styles,
+    //   // ensures the portal'ed menu uses fixed positioning
+    //   position: "fixed",
+    //   zIndex: 9999,
+    //   boxShadow: styles.boxShadow,
+    // }),
+    menuList: (styles: any) => ({
+      ...styles,
+      maxHeight: "100px", // change height as you like
+      overflowY: "auto",
+    }),
+    option: (styles: any, state: any) => ({
       ...styles,
       fontSize: "14px",
-      backgroundColor: isDisabled
+      backgroundColor: state.isDisabled
         ? undefined
-        : isSelected
+        : state.isSelected
           ? "#3a3285"
-          : isFocused
+          : state.isFocused
             ? "#f0f0f0"
             : undefined,
-      color: isFocused || isSelected ? "#3a3285" : "#333",
-      cursor: isDisabled ? "not-allowed" : "default",
-      ":active": {
-        ...styles[":active"],
-        backgroundColor: isSelected ? "#3a3285" : "#e8e8e8",
-      },
+      color: state.isFocused || state.isSelected ? "#3a3285" : "#333",
+      cursor: state.isDisabled ? "not-allowed" : "default",
     }),
     multiValue: (styles: any) => ({
       ...styles,
