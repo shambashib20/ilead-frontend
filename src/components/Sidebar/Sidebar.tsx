@@ -65,14 +65,14 @@ function Sidebar() {
       </div>
 
       {/* Nav Section */}
-      <nav
-        className="flex-1 overflow-y-scroll [&::-webkit-scrollbar]:w-1.5 
+      <nav className="flex-1  ">
+        <ul
+          className="ps-2 pe-2 pt-4 h-[530px] overflow-y-scroll [&::-webkit-scrollbar]:w-1.5 
           [&::-webkit-scrollbar-track]:rounded-full
           [&::-webkit-scrollbar-track]:transparent
           [&::-webkit-scrollbar-thumb]:rounded-full
-          [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
-      >
-        <ul className="ps-2 pe-2 pt-4 ">
+          [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 "
+        >
           {filteredNavItems.map((item, idx) => (
             <SidebarMenuItem
               key={idx}
