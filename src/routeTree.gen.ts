@@ -10,444 +10,519 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as DashboardLayoutImport } from "./routes/_dashboardLayout";
-import { Route as AuthLayoutImport } from "./routes/_authLayout";
-import { Route as AppLayoutImport } from "./routes/_appLayout";
-import { Route as AppLayoutIndexImport } from "./routes/_appLayout/index";
-import { Route as AuthLayoutUserLoginImport } from "./routes/_authLayout/user-login";
-import { Route as AuthLayoutResetPasswordImport } from "./routes/_authLayout/reset-password";
-import { Route as AuthLayoutRegisterImport } from "./routes/_authLayout/register";
-import { Route as AuthLayoutLoginImport } from "./routes/_authLayout/login";
-import { Route as AuthLayoutForgetPasswordImport } from "./routes/_authLayout/forget-password";
-import { Route as DashboardLayoutLeadTrashRouteImport } from "./routes/_dashboardLayout/lead-trash/route";
-import { Route as DashboardLayoutLeadRouteImport } from "./routes/_dashboardLayout/lead/route";
-import { Route as DashboardLayoutWorkspaceLogsIndexImport } from "./routes/_dashboardLayout/workspace-logs/index";
-import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from "./routes/_dashboardLayout/workspace-details/index";
-import { Route as DashboardLayoutUsersIndexImport } from "./routes/_dashboardLayout/users/index";
-import { Route as DashboardLayoutUserProfileIndexImport } from "./routes/_dashboardLayout/user-profile/index";
-import { Route as DashboardLayoutThirdPartyIntegrationIndexImport } from "./routes/_dashboardLayout/third-party-integration/index";
-import { Route as DashboardLayoutStatusIndexImport } from "./routes/_dashboardLayout/status/index";
-import { Route as DashboardLayoutSourceIndexImport } from "./routes/_dashboardLayout/source/index";
-import { Route as DashboardLayoutReportIndexImport } from "./routes/_dashboardLayout/report/index";
-import { Route as DashboardLayoutLeadIndexImport } from "./routes/_dashboardLayout/lead/index";
-import { Route as DashboardLayoutLabelIndexImport } from "./routes/_dashboardLayout/label/index";
-import { Route as DashboardLayoutDashboardIndexImport } from "./routes/_dashboardLayout/dashboard/index";
-import { Route as DashboardLayoutCustomerIndexImport } from "./routes/_dashboardLayout/customer/index";
-import { Route as DashboardLayoutAddPackageIndexImport } from "./routes/_dashboardLayout/add-package/index";
-import { Route as AppLayoutTermsConditionIndexImport } from "./routes/_appLayout/terms-condition/index";
-import { Route as AppLayoutRefundIndexImport } from "./routes/_appLayout/refund/index";
-import { Route as AppLayoutPublicdetailsIndexImport } from "./routes/_appLayout/publicdetails/index";
-import { Route as AppLayoutContactIndexImport } from "./routes/_appLayout/contact/index";
-import { Route as DashboardLayoutReportSlugImport } from "./routes/_dashboardLayout/report/$slug";
+import { Route as rootRoute } from './routes/__root'
+import { Route as DashboardLayoutImport } from './routes/_dashboardLayout'
+import { Route as AuthLayoutImport } from './routes/_authLayout'
+import { Route as AppLayoutImport } from './routes/_appLayout'
+import { Route as AppLayoutIndexImport } from './routes/_appLayout/index'
+import { Route as AuthLayoutUserLoginImport } from './routes/_authLayout/user-login'
+import { Route as AuthLayoutResetPasswordImport } from './routes/_authLayout/reset-password'
+import { Route as AuthLayoutRegisterImport } from './routes/_authLayout/register'
+import { Route as AuthLayoutLoginImport } from './routes/_authLayout/login'
+import { Route as AuthLayoutForgetPasswordImport } from './routes/_authLayout/forget-password'
+import { Route as DashboardLayoutLeadTrashRouteImport } from './routes/_dashboardLayout/lead-trash/route'
+import { Route as DashboardLayoutLeadRouteImport } from './routes/_dashboardLayout/lead/route'
+import { Route as DashboardLayoutWorkspaceLogsIndexImport } from './routes/_dashboardLayout/workspace-logs/index'
+import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
+import { Route as DashboardLayoutWhatsappAutomationRulesIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/index'
+import { Route as DashboardLayoutUsersIndexImport } from './routes/_dashboardLayout/users/index'
+import { Route as DashboardLayoutUserProfileIndexImport } from './routes/_dashboardLayout/user-profile/index'
+import { Route as DashboardLayoutThirdPartyIntegrationIndexImport } from './routes/_dashboardLayout/third-party-integration/index'
+import { Route as DashboardLayoutStatusIndexImport } from './routes/_dashboardLayout/status/index'
+import { Route as DashboardLayoutSourceIndexImport } from './routes/_dashboardLayout/source/index'
+import { Route as DashboardLayoutReportIndexImport } from './routes/_dashboardLayout/report/index'
+import { Route as DashboardLayoutLeadIndexImport } from './routes/_dashboardLayout/lead/index'
+import { Route as DashboardLayoutLabelIndexImport } from './routes/_dashboardLayout/label/index'
+import { Route as DashboardLayoutGeneralTemplatesIndexImport } from './routes/_dashboardLayout/general-templates/index'
+import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboardLayout/dashboard/index'
+import { Route as DashboardLayoutCustomerIndexImport } from './routes/_dashboardLayout/customer/index'
+import { Route as DashboardLayoutAddPackageIndexImport } from './routes/_dashboardLayout/add-package/index'
+import { Route as AppLayoutTermsConditionIndexImport } from './routes/_appLayout/terms-condition/index'
+import { Route as AppLayoutRefundIndexImport } from './routes/_appLayout/refund/index'
+import { Route as AppLayoutPublicdetailsIndexImport } from './routes/_appLayout/publicdetails/index'
+import { Route as AppLayoutContactIndexImport } from './routes/_appLayout/contact/index'
+import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLayout/report/$slug'
+import { Route as DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/insert-update/index'
+import { Route as DashboardLayoutGeneralTemplatesLeadTemplateIndexImport } from './routes/_dashboardLayout/general-templates/lead-template/index'
+import { Route as DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexImport } from './routes/_dashboardLayout/general-templates/lead-template/add-template/index'
 
 // Create/Update Routes
 
 const DashboardLayoutRoute = DashboardLayoutImport.update({
-  id: "/_dashboardLayout",
+  id: '/_dashboardLayout',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AuthLayoutRoute = AuthLayoutImport.update({
-  id: "/_authLayout",
+  id: '/_authLayout',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AppLayoutRoute = AppLayoutImport.update({
-  id: "/_appLayout",
+  id: '/_appLayout',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AppLayoutIndexRoute = AppLayoutIndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => AppLayoutRoute,
-} as any);
+} as any)
 
 const AuthLayoutUserLoginRoute = AuthLayoutUserLoginImport.update({
-  id: "/user-login",
-  path: "/user-login",
+  id: '/user-login',
+  path: '/user-login',
   getParentRoute: () => AuthLayoutRoute,
-} as any);
+} as any)
 
 const AuthLayoutResetPasswordRoute = AuthLayoutResetPasswordImport.update({
-  id: "/reset-password",
-  path: "/reset-password",
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => AuthLayoutRoute,
-} as any);
+} as any)
 
 const AuthLayoutRegisterRoute = AuthLayoutRegisterImport.update({
-  id: "/register",
-  path: "/register",
+  id: '/register',
+  path: '/register',
   getParentRoute: () => AuthLayoutRoute,
-} as any);
+} as any)
 
 const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
-  id: "/login",
-  path: "/login",
+  id: '/login',
+  path: '/login',
   getParentRoute: () => AuthLayoutRoute,
-} as any);
+} as any)
 
 const AuthLayoutForgetPasswordRoute = AuthLayoutForgetPasswordImport.update({
-  id: "/forget-password",
-  path: "/forget-password",
+  id: '/forget-password',
+  path: '/forget-password',
   getParentRoute: () => AuthLayoutRoute,
-} as any);
+} as any)
 
 const DashboardLayoutLeadTrashRouteRoute =
   DashboardLayoutLeadTrashRouteImport.update({
-    id: "/lead-trash",
-    path: "/lead-trash",
+    id: '/lead-trash',
+    path: '/lead-trash',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const DashboardLayoutLeadRouteRoute = DashboardLayoutLeadRouteImport.update({
-  id: "/lead",
-  path: "/lead",
+  id: '/lead',
+  path: '/lead',
   getParentRoute: () => DashboardLayoutRoute,
-} as any);
+} as any)
 
 const DashboardLayoutWorkspaceLogsIndexRoute =
   DashboardLayoutWorkspaceLogsIndexImport.update({
-    id: "/workspace-logs/",
-    path: "/workspace-logs/",
+    id: '/workspace-logs/',
+    path: '/workspace-logs/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const DashboardLayoutWorkspaceDetailsIndexRoute =
   DashboardLayoutWorkspaceDetailsIndexImport.update({
-    id: "/workspace-details/",
-    path: "/workspace-details/",
+    id: '/workspace-details/',
+    path: '/workspace-details/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
+
+const DashboardLayoutWhatsappAutomationRulesIndexRoute =
+  DashboardLayoutWhatsappAutomationRulesIndexImport.update({
+    id: '/whatsapp-automation-rules/',
+    path: '/whatsapp-automation-rules/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 
 const DashboardLayoutUsersIndexRoute = DashboardLayoutUsersIndexImport.update({
-  id: "/users/",
-  path: "/users/",
+  id: '/users/',
+  path: '/users/',
   getParentRoute: () => DashboardLayoutRoute,
-} as any);
+} as any)
 
 const DashboardLayoutUserProfileIndexRoute =
   DashboardLayoutUserProfileIndexImport.update({
-    id: "/user-profile/",
-    path: "/user-profile/",
+    id: '/user-profile/',
+    path: '/user-profile/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const DashboardLayoutThirdPartyIntegrationIndexRoute =
   DashboardLayoutThirdPartyIntegrationIndexImport.update({
-    id: "/third-party-integration/",
-    path: "/third-party-integration/",
+    id: '/third-party-integration/',
+    path: '/third-party-integration/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const DashboardLayoutStatusIndexRoute = DashboardLayoutStatusIndexImport.update(
   {
-    id: "/status/",
-    path: "/status/",
+    id: '/status/',
+    path: '/status/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any
-);
+  } as any,
+)
 
 const DashboardLayoutSourceIndexRoute = DashboardLayoutSourceIndexImport.update(
   {
-    id: "/source/",
-    path: "/source/",
+    id: '/source/',
+    path: '/source/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any
-);
+  } as any,
+)
 
 const DashboardLayoutReportIndexRoute = DashboardLayoutReportIndexImport.update(
   {
-    id: "/report/",
-    path: "/report/",
+    id: '/report/',
+    path: '/report/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any
-);
+  } as any,
+)
 
 const DashboardLayoutLeadIndexRoute = DashboardLayoutLeadIndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => DashboardLayoutLeadRouteRoute,
-} as any);
+} as any)
 
 const DashboardLayoutLabelIndexRoute = DashboardLayoutLabelIndexImport.update({
-  id: "/label/",
-  path: "/label/",
+  id: '/label/',
+  path: '/label/',
   getParentRoute: () => DashboardLayoutRoute,
-} as any);
+} as any)
+
+const DashboardLayoutGeneralTemplatesIndexRoute =
+  DashboardLayoutGeneralTemplatesIndexImport.update({
+    id: '/general-templates/',
+    path: '/general-templates/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 
 const DashboardLayoutDashboardIndexRoute =
   DashboardLayoutDashboardIndexImport.update({
-    id: "/dashboard/",
-    path: "/dashboard/",
+    id: '/dashboard/',
+    path: '/dashboard/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const DashboardLayoutCustomerIndexRoute =
   DashboardLayoutCustomerIndexImport.update({
-    id: "/customer/",
-    path: "/customer/",
+    id: '/customer/',
+    path: '/customer/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const DashboardLayoutAddPackageIndexRoute =
   DashboardLayoutAddPackageIndexImport.update({
-    id: "/add-package/",
-    path: "/add-package/",
+    id: '/add-package/',
+    path: '/add-package/',
     getParentRoute: () => DashboardLayoutRoute,
-  } as any);
+  } as any)
 
 const AppLayoutTermsConditionIndexRoute =
   AppLayoutTermsConditionIndexImport.update({
-    id: "/terms-condition/",
-    path: "/terms-condition/",
+    id: '/terms-condition/',
+    path: '/terms-condition/',
     getParentRoute: () => AppLayoutRoute,
-  } as any);
+  } as any)
 
 const AppLayoutRefundIndexRoute = AppLayoutRefundIndexImport.update({
-  id: "/refund/",
-  path: "/refund/",
+  id: '/refund/',
+  path: '/refund/',
   getParentRoute: () => AppLayoutRoute,
-} as any);
+} as any)
 
 const AppLayoutPublicdetailsIndexRoute =
   AppLayoutPublicdetailsIndexImport.update({
-    id: "/publicdetails/",
-    path: "/publicdetails/",
+    id: '/publicdetails/',
+    path: '/publicdetails/',
     getParentRoute: () => AppLayoutRoute,
-  } as any);
+  } as any)
 
 const AppLayoutContactIndexRoute = AppLayoutContactIndexImport.update({
-  id: "/contact/",
-  path: "/contact/",
+  id: '/contact/',
+  path: '/contact/',
   getParentRoute: () => AppLayoutRoute,
-} as any);
+} as any)
 
 const DashboardLayoutReportSlugRoute = DashboardLayoutReportSlugImport.update({
-  id: "/report/$slug",
-  path: "/report/$slug",
+  id: '/report/$slug',
+  path: '/report/$slug',
   getParentRoute: () => DashboardLayoutRoute,
-} as any);
+} as any)
+
+const DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute =
+  DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport.update({
+    id: '/whatsapp-automation-rules/insert-update/',
+    path: '/whatsapp-automation-rules/insert-update/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute =
+  DashboardLayoutGeneralTemplatesLeadTemplateIndexImport.update({
+    id: '/general-templates/lead-template/',
+    path: '/general-templates/lead-template/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute =
+  DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexImport.update({
+    id: '/general-templates/lead-template/add-template/',
+    path: '/general-templates/lead-template/add-template/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/_appLayout": {
-      id: "/_appLayout";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof AppLayoutImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/_authLayout": {
-      id: "/_authLayout";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof AuthLayoutImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/_dashboardLayout": {
-      id: "/_dashboardLayout";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof DashboardLayoutImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/_dashboardLayout/lead": {
-      id: "/_dashboardLayout/lead";
-      path: "/lead";
-      fullPath: "/lead";
-      preLoaderRoute: typeof DashboardLayoutLeadRouteImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/lead-trash": {
-      id: "/_dashboardLayout/lead-trash";
-      path: "/lead-trash";
-      fullPath: "/lead-trash";
-      preLoaderRoute: typeof DashboardLayoutLeadTrashRouteImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_authLayout/forget-password": {
-      id: "/_authLayout/forget-password";
-      path: "/forget-password";
-      fullPath: "/forget-password";
-      preLoaderRoute: typeof AuthLayoutForgetPasswordImport;
-      parentRoute: typeof AuthLayoutImport;
-    };
-    "/_authLayout/login": {
-      id: "/_authLayout/login";
-      path: "/login";
-      fullPath: "/login";
-      preLoaderRoute: typeof AuthLayoutLoginImport;
-      parentRoute: typeof AuthLayoutImport;
-    };
-    "/_authLayout/register": {
-      id: "/_authLayout/register";
-      path: "/register";
-      fullPath: "/register";
-      preLoaderRoute: typeof AuthLayoutRegisterImport;
-      parentRoute: typeof AuthLayoutImport;
-    };
-    "/_authLayout/reset-password": {
-      id: "/_authLayout/reset-password";
-      path: "/reset-password";
-      fullPath: "/reset-password";
-      preLoaderRoute: typeof AuthLayoutResetPasswordImport;
-      parentRoute: typeof AuthLayoutImport;
-    };
-    "/_authLayout/user-login": {
-      id: "/_authLayout/user-login";
-      path: "/user-login";
-      fullPath: "/user-login";
-      preLoaderRoute: typeof AuthLayoutUserLoginImport;
-      parentRoute: typeof AuthLayoutImport;
-    };
-    "/_appLayout/": {
-      id: "/_appLayout/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof AppLayoutIndexImport;
-      parentRoute: typeof AppLayoutImport;
-    };
-    "/_dashboardLayout/report/$slug": {
-      id: "/_dashboardLayout/report/$slug";
-      path: "/report/$slug";
-      fullPath: "/report/$slug";
-      preLoaderRoute: typeof DashboardLayoutReportSlugImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_appLayout/contact/": {
-      id: "/_appLayout/contact/";
-      path: "/contact";
-      fullPath: "/contact";
-      preLoaderRoute: typeof AppLayoutContactIndexImport;
-      parentRoute: typeof AppLayoutImport;
-    };
-    "/_appLayout/publicdetails/": {
-      id: "/_appLayout/publicdetails/";
-      path: "/publicdetails";
-      fullPath: "/publicdetails";
-      preLoaderRoute: typeof AppLayoutPublicdetailsIndexImport;
-      parentRoute: typeof AppLayoutImport;
-    };
-    "/_appLayout/refund/": {
-      id: "/_appLayout/refund/";
-      path: "/refund";
-      fullPath: "/refund";
-      preLoaderRoute: typeof AppLayoutRefundIndexImport;
-      parentRoute: typeof AppLayoutImport;
-    };
-    "/_appLayout/terms-condition/": {
-      id: "/_appLayout/terms-condition/";
-      path: "/terms-condition";
-      fullPath: "/terms-condition";
-      preLoaderRoute: typeof AppLayoutTermsConditionIndexImport;
-      parentRoute: typeof AppLayoutImport;
-    };
-    "/_dashboardLayout/add-package/": {
-      id: "/_dashboardLayout/add-package/";
-      path: "/add-package";
-      fullPath: "/add-package";
-      preLoaderRoute: typeof DashboardLayoutAddPackageIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/customer/": {
-      id: "/_dashboardLayout/customer/";
-      path: "/customer";
-      fullPath: "/customer";
-      preLoaderRoute: typeof DashboardLayoutCustomerIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/dashboard/": {
-      id: "/_dashboardLayout/dashboard/";
-      path: "/dashboard";
-      fullPath: "/dashboard";
-      preLoaderRoute: typeof DashboardLayoutDashboardIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/label/": {
-      id: "/_dashboardLayout/label/";
-      path: "/label";
-      fullPath: "/label";
-      preLoaderRoute: typeof DashboardLayoutLabelIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/lead/": {
-      id: "/_dashboardLayout/lead/";
-      path: "/";
-      fullPath: "/lead/";
-      preLoaderRoute: typeof DashboardLayoutLeadIndexImport;
-      parentRoute: typeof DashboardLayoutLeadRouteImport;
-    };
-    "/_dashboardLayout/report/": {
-      id: "/_dashboardLayout/report/";
-      path: "/report";
-      fullPath: "/report";
-      preLoaderRoute: typeof DashboardLayoutReportIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/source/": {
-      id: "/_dashboardLayout/source/";
-      path: "/source";
-      fullPath: "/source";
-      preLoaderRoute: typeof DashboardLayoutSourceIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/status/": {
-      id: "/_dashboardLayout/status/";
-      path: "/status";
-      fullPath: "/status";
-      preLoaderRoute: typeof DashboardLayoutStatusIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/third-party-integration/": {
-      id: "/_dashboardLayout/third-party-integration/";
-      path: "/third-party-integration";
-      fullPath: "/third-party-integration";
-      preLoaderRoute: typeof DashboardLayoutThirdPartyIntegrationIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/user-profile/": {
-      id: "/_dashboardLayout/user-profile/";
-      path: "/user-profile";
-      fullPath: "/user-profile";
-      preLoaderRoute: typeof DashboardLayoutUserProfileIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/users/": {
-      id: "/_dashboardLayout/users/";
-      path: "/users";
-      fullPath: "/users";
-      preLoaderRoute: typeof DashboardLayoutUsersIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/workspace-details/": {
-      id: "/_dashboardLayout/workspace-details/";
-      path: "/workspace-details";
-      fullPath: "/workspace-details";
-      preLoaderRoute: typeof DashboardLayoutWorkspaceDetailsIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
-    "/_dashboardLayout/workspace-logs/": {
-      id: "/_dashboardLayout/workspace-logs/";
-      path: "/workspace-logs";
-      fullPath: "/workspace-logs";
-      preLoaderRoute: typeof DashboardLayoutWorkspaceLogsIndexImport;
-      parentRoute: typeof DashboardLayoutImport;
-    };
+    '/_appLayout': {
+      id: '/_appLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authLayout': {
+      id: '/_authLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_dashboardLayout': {
+      id: '/_dashboardLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof DashboardLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_dashboardLayout/lead': {
+      id: '/_dashboardLayout/lead'
+      path: '/lead'
+      fullPath: '/lead'
+      preLoaderRoute: typeof DashboardLayoutLeadRouteImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/lead-trash': {
+      id: '/_dashboardLayout/lead-trash'
+      path: '/lead-trash'
+      fullPath: '/lead-trash'
+      preLoaderRoute: typeof DashboardLayoutLeadTrashRouteImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_authLayout/forget-password': {
+      id: '/_authLayout/forget-password'
+      path: '/forget-password'
+      fullPath: '/forget-password'
+      preLoaderRoute: typeof AuthLayoutForgetPasswordImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/login': {
+      id: '/_authLayout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLayoutLoginImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/register': {
+      id: '/_authLayout/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AuthLayoutRegisterImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/reset-password': {
+      id: '/_authLayout/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthLayoutResetPasswordImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/user-login': {
+      id: '/_authLayout/user-login'
+      path: '/user-login'
+      fullPath: '/user-login'
+      preLoaderRoute: typeof AuthLayoutUserLoginImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_appLayout/': {
+      id: '/_appLayout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppLayoutIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_dashboardLayout/report/$slug': {
+      id: '/_dashboardLayout/report/$slug'
+      path: '/report/$slug'
+      fullPath: '/report/$slug'
+      preLoaderRoute: typeof DashboardLayoutReportSlugImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_appLayout/contact/': {
+      id: '/_appLayout/contact/'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof AppLayoutContactIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_appLayout/publicdetails/': {
+      id: '/_appLayout/publicdetails/'
+      path: '/publicdetails'
+      fullPath: '/publicdetails'
+      preLoaderRoute: typeof AppLayoutPublicdetailsIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_appLayout/refund/': {
+      id: '/_appLayout/refund/'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof AppLayoutRefundIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_appLayout/terms-condition/': {
+      id: '/_appLayout/terms-condition/'
+      path: '/terms-condition'
+      fullPath: '/terms-condition'
+      preLoaderRoute: typeof AppLayoutTermsConditionIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_dashboardLayout/add-package/': {
+      id: '/_dashboardLayout/add-package/'
+      path: '/add-package'
+      fullPath: '/add-package'
+      preLoaderRoute: typeof DashboardLayoutAddPackageIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/customer/': {
+      id: '/_dashboardLayout/customer/'
+      path: '/customer'
+      fullPath: '/customer'
+      preLoaderRoute: typeof DashboardLayoutCustomerIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/dashboard/': {
+      id: '/_dashboardLayout/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardLayoutDashboardIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/general-templates/': {
+      id: '/_dashboardLayout/general-templates/'
+      path: '/general-templates'
+      fullPath: '/general-templates'
+      preLoaderRoute: typeof DashboardLayoutGeneralTemplatesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/label/': {
+      id: '/_dashboardLayout/label/'
+      path: '/label'
+      fullPath: '/label'
+      preLoaderRoute: typeof DashboardLayoutLabelIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/lead/': {
+      id: '/_dashboardLayout/lead/'
+      path: '/'
+      fullPath: '/lead/'
+      preLoaderRoute: typeof DashboardLayoutLeadIndexImport
+      parentRoute: typeof DashboardLayoutLeadRouteImport
+    }
+    '/_dashboardLayout/report/': {
+      id: '/_dashboardLayout/report/'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof DashboardLayoutReportIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/source/': {
+      id: '/_dashboardLayout/source/'
+      path: '/source'
+      fullPath: '/source'
+      preLoaderRoute: typeof DashboardLayoutSourceIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/status/': {
+      id: '/_dashboardLayout/status/'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof DashboardLayoutStatusIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/third-party-integration/': {
+      id: '/_dashboardLayout/third-party-integration/'
+      path: '/third-party-integration'
+      fullPath: '/third-party-integration'
+      preLoaderRoute: typeof DashboardLayoutThirdPartyIntegrationIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/user-profile/': {
+      id: '/_dashboardLayout/user-profile/'
+      path: '/user-profile'
+      fullPath: '/user-profile'
+      preLoaderRoute: typeof DashboardLayoutUserProfileIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/users/': {
+      id: '/_dashboardLayout/users/'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof DashboardLayoutUsersIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/whatsapp-automation-rules/': {
+      id: '/_dashboardLayout/whatsapp-automation-rules/'
+      path: '/whatsapp-automation-rules'
+      fullPath: '/whatsapp-automation-rules'
+      preLoaderRoute: typeof DashboardLayoutWhatsappAutomationRulesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/workspace-details/': {
+      id: '/_dashboardLayout/workspace-details/'
+      path: '/workspace-details'
+      fullPath: '/workspace-details'
+      preLoaderRoute: typeof DashboardLayoutWorkspaceDetailsIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/workspace-logs/': {
+      id: '/_dashboardLayout/workspace-logs/'
+      path: '/workspace-logs'
+      fullPath: '/workspace-logs'
+      preLoaderRoute: typeof DashboardLayoutWorkspaceLogsIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/general-templates/lead-template/': {
+      id: '/_dashboardLayout/general-templates/lead-template/'
+      path: '/general-templates/lead-template'
+      fullPath: '/general-templates/lead-template'
+      preLoaderRoute: typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/whatsapp-automation-rules/insert-update/': {
+      id: '/_dashboardLayout/whatsapp-automation-rules/insert-update/'
+      path: '/whatsapp-automation-rules/insert-update'
+      fullPath: '/whatsapp-automation-rules/insert-update'
+      preLoaderRoute: typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/general-templates/lead-template/add-template/': {
+      id: '/_dashboardLayout/general-templates/lead-template/add-template/'
+      path: '/general-templates/lead-template/add-template'
+      fullPath: '/general-templates/lead-template/add-template'
+      preLoaderRoute: typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface AppLayoutRouteChildren {
-  AppLayoutIndexRoute: typeof AppLayoutIndexRoute;
-  AppLayoutContactIndexRoute: typeof AppLayoutContactIndexRoute;
-  AppLayoutPublicdetailsIndexRoute: typeof AppLayoutPublicdetailsIndexRoute;
-  AppLayoutRefundIndexRoute: typeof AppLayoutRefundIndexRoute;
-  AppLayoutTermsConditionIndexRoute: typeof AppLayoutTermsConditionIndexRoute;
+  AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutContactIndexRoute: typeof AppLayoutContactIndexRoute
+  AppLayoutPublicdetailsIndexRoute: typeof AppLayoutPublicdetailsIndexRoute
+  AppLayoutRefundIndexRoute: typeof AppLayoutRefundIndexRoute
+  AppLayoutTermsConditionIndexRoute: typeof AppLayoutTermsConditionIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
@@ -456,18 +531,18 @@ const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppLayoutPublicdetailsIndexRoute: AppLayoutPublicdetailsIndexRoute,
   AppLayoutRefundIndexRoute: AppLayoutRefundIndexRoute,
   AppLayoutTermsConditionIndexRoute: AppLayoutTermsConditionIndexRoute,
-};
+}
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
-  AppLayoutRouteChildren
-);
+  AppLayoutRouteChildren,
+)
 
 interface AuthLayoutRouteChildren {
-  AuthLayoutForgetPasswordRoute: typeof AuthLayoutForgetPasswordRoute;
-  AuthLayoutLoginRoute: typeof AuthLayoutLoginRoute;
-  AuthLayoutRegisterRoute: typeof AuthLayoutRegisterRoute;
-  AuthLayoutResetPasswordRoute: typeof AuthLayoutResetPasswordRoute;
-  AuthLayoutUserLoginRoute: typeof AuthLayoutUserLoginRoute;
+  AuthLayoutForgetPasswordRoute: typeof AuthLayoutForgetPasswordRoute
+  AuthLayoutLoginRoute: typeof AuthLayoutLoginRoute
+  AuthLayoutRegisterRoute: typeof AuthLayoutRegisterRoute
+  AuthLayoutResetPasswordRoute: typeof AuthLayoutResetPasswordRoute
+  AuthLayoutUserLoginRoute: typeof AuthLayoutUserLoginRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
@@ -476,42 +551,47 @@ const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutRegisterRoute: AuthLayoutRegisterRoute,
   AuthLayoutResetPasswordRoute: AuthLayoutResetPasswordRoute,
   AuthLayoutUserLoginRoute: AuthLayoutUserLoginRoute,
-};
+}
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
-  AuthLayoutRouteChildren
-);
+  AuthLayoutRouteChildren,
+)
 
 interface DashboardLayoutLeadRouteRouteChildren {
-  DashboardLayoutLeadIndexRoute: typeof DashboardLayoutLeadIndexRoute;
+  DashboardLayoutLeadIndexRoute: typeof DashboardLayoutLeadIndexRoute
 }
 
 const DashboardLayoutLeadRouteRouteChildren: DashboardLayoutLeadRouteRouteChildren =
   {
     DashboardLayoutLeadIndexRoute: DashboardLayoutLeadIndexRoute,
-  };
+  }
 
 const DashboardLayoutLeadRouteRouteWithChildren =
   DashboardLayoutLeadRouteRoute._addFileChildren(
-    DashboardLayoutLeadRouteRouteChildren
-  );
+    DashboardLayoutLeadRouteRouteChildren,
+  )
 
 interface DashboardLayoutRouteChildren {
-  DashboardLayoutLeadRouteRoute: typeof DashboardLayoutLeadRouteRouteWithChildren;
-  DashboardLayoutLeadTrashRouteRoute: typeof DashboardLayoutLeadTrashRouteRoute;
-  DashboardLayoutReportSlugRoute: typeof DashboardLayoutReportSlugRoute;
-  DashboardLayoutAddPackageIndexRoute: typeof DashboardLayoutAddPackageIndexRoute;
-  DashboardLayoutCustomerIndexRoute: typeof DashboardLayoutCustomerIndexRoute;
-  DashboardLayoutDashboardIndexRoute: typeof DashboardLayoutDashboardIndexRoute;
-  DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute;
-  DashboardLayoutReportIndexRoute: typeof DashboardLayoutReportIndexRoute;
-  DashboardLayoutSourceIndexRoute: typeof DashboardLayoutSourceIndexRoute;
-  DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute;
-  DashboardLayoutThirdPartyIntegrationIndexRoute: typeof DashboardLayoutThirdPartyIntegrationIndexRoute;
-  DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute;
-  DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute;
-  DashboardLayoutWorkspaceDetailsIndexRoute: typeof DashboardLayoutWorkspaceDetailsIndexRoute;
-  DashboardLayoutWorkspaceLogsIndexRoute: typeof DashboardLayoutWorkspaceLogsIndexRoute;
+  DashboardLayoutLeadRouteRoute: typeof DashboardLayoutLeadRouteRouteWithChildren
+  DashboardLayoutLeadTrashRouteRoute: typeof DashboardLayoutLeadTrashRouteRoute
+  DashboardLayoutReportSlugRoute: typeof DashboardLayoutReportSlugRoute
+  DashboardLayoutAddPackageIndexRoute: typeof DashboardLayoutAddPackageIndexRoute
+  DashboardLayoutCustomerIndexRoute: typeof DashboardLayoutCustomerIndexRoute
+  DashboardLayoutDashboardIndexRoute: typeof DashboardLayoutDashboardIndexRoute
+  DashboardLayoutGeneralTemplatesIndexRoute: typeof DashboardLayoutGeneralTemplatesIndexRoute
+  DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute
+  DashboardLayoutReportIndexRoute: typeof DashboardLayoutReportIndexRoute
+  DashboardLayoutSourceIndexRoute: typeof DashboardLayoutSourceIndexRoute
+  DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute
+  DashboardLayoutThirdPartyIntegrationIndexRoute: typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute
+  DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute
+  DashboardLayoutWhatsappAutomationRulesIndexRoute: typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  DashboardLayoutWorkspaceDetailsIndexRoute: typeof DashboardLayoutWorkspaceDetailsIndexRoute
+  DashboardLayoutWorkspaceLogsIndexRoute: typeof DashboardLayoutWorkspaceLogsIndexRoute
+  DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute: typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
+  DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute: typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute: typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
@@ -521,6 +601,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutAddPackageIndexRoute: DashboardLayoutAddPackageIndexRoute,
   DashboardLayoutCustomerIndexRoute: DashboardLayoutCustomerIndexRoute,
   DashboardLayoutDashboardIndexRoute: DashboardLayoutDashboardIndexRoute,
+  DashboardLayoutGeneralTemplatesIndexRoute:
+    DashboardLayoutGeneralTemplatesIndexRoute,
   DashboardLayoutLabelIndexRoute: DashboardLayoutLabelIndexRoute,
   DashboardLayoutReportIndexRoute: DashboardLayoutReportIndexRoute,
   DashboardLayoutSourceIndexRoute: DashboardLayoutSourceIndexRoute,
@@ -529,215 +611,253 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutThirdPartyIntegrationIndexRoute,
   DashboardLayoutUserProfileIndexRoute: DashboardLayoutUserProfileIndexRoute,
   DashboardLayoutUsersIndexRoute: DashboardLayoutUsersIndexRoute,
+  DashboardLayoutWhatsappAutomationRulesIndexRoute:
+    DashboardLayoutWhatsappAutomationRulesIndexRoute,
   DashboardLayoutWorkspaceDetailsIndexRoute:
     DashboardLayoutWorkspaceDetailsIndexRoute,
   DashboardLayoutWorkspaceLogsIndexRoute:
     DashboardLayoutWorkspaceLogsIndexRoute,
-};
+  DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute:
+    DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute,
+  DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute:
+    DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute,
+  DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute:
+    DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute,
+}
 
 const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
-  DashboardLayoutRouteChildren
-);
+  DashboardLayoutRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
-  "": typeof DashboardLayoutRouteWithChildren;
-  "/lead": typeof DashboardLayoutLeadRouteRouteWithChildren;
-  "/lead-trash": typeof DashboardLayoutLeadTrashRouteRoute;
-  "/forget-password": typeof AuthLayoutForgetPasswordRoute;
-  "/login": typeof AuthLayoutLoginRoute;
-  "/register": typeof AuthLayoutRegisterRoute;
-  "/reset-password": typeof AuthLayoutResetPasswordRoute;
-  "/user-login": typeof AuthLayoutUserLoginRoute;
-  "/": typeof AppLayoutIndexRoute;
-  "/report/$slug": typeof DashboardLayoutReportSlugRoute;
-  "/contact": typeof AppLayoutContactIndexRoute;
-  "/publicdetails": typeof AppLayoutPublicdetailsIndexRoute;
-  "/refund": typeof AppLayoutRefundIndexRoute;
-  "/terms-condition": typeof AppLayoutTermsConditionIndexRoute;
-  "/add-package": typeof DashboardLayoutAddPackageIndexRoute;
-  "/customer": typeof DashboardLayoutCustomerIndexRoute;
-  "/dashboard": typeof DashboardLayoutDashboardIndexRoute;
-  "/label": typeof DashboardLayoutLabelIndexRoute;
-  "/lead/": typeof DashboardLayoutLeadIndexRoute;
-  "/report": typeof DashboardLayoutReportIndexRoute;
-  "/source": typeof DashboardLayoutSourceIndexRoute;
-  "/status": typeof DashboardLayoutStatusIndexRoute;
-  "/third-party-integration": typeof DashboardLayoutThirdPartyIntegrationIndexRoute;
-  "/user-profile": typeof DashboardLayoutUserProfileIndexRoute;
-  "/users": typeof DashboardLayoutUsersIndexRoute;
-  "/workspace-details": typeof DashboardLayoutWorkspaceDetailsIndexRoute;
-  "/workspace-logs": typeof DashboardLayoutWorkspaceLogsIndexRoute;
+  '': typeof DashboardLayoutRouteWithChildren
+  '/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
+  '/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
+  '/forget-password': typeof AuthLayoutForgetPasswordRoute
+  '/login': typeof AuthLayoutLoginRoute
+  '/register': typeof AuthLayoutRegisterRoute
+  '/reset-password': typeof AuthLayoutResetPasswordRoute
+  '/user-login': typeof AuthLayoutUserLoginRoute
+  '/': typeof AppLayoutIndexRoute
+  '/report/$slug': typeof DashboardLayoutReportSlugRoute
+  '/contact': typeof AppLayoutContactIndexRoute
+  '/publicdetails': typeof AppLayoutPublicdetailsIndexRoute
+  '/refund': typeof AppLayoutRefundIndexRoute
+  '/terms-condition': typeof AppLayoutTermsConditionIndexRoute
+  '/add-package': typeof DashboardLayoutAddPackageIndexRoute
+  '/customer': typeof DashboardLayoutCustomerIndexRoute
+  '/dashboard': typeof DashboardLayoutDashboardIndexRoute
+  '/general-templates': typeof DashboardLayoutGeneralTemplatesIndexRoute
+  '/label': typeof DashboardLayoutLabelIndexRoute
+  '/lead/': typeof DashboardLayoutLeadIndexRoute
+  '/report': typeof DashboardLayoutReportIndexRoute
+  '/source': typeof DashboardLayoutSourceIndexRoute
+  '/status': typeof DashboardLayoutStatusIndexRoute
+  '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
+  '/users': typeof DashboardLayoutUsersIndexRoute
+  '/whatsapp-automation-rules': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
+  '/workspace-logs': typeof DashboardLayoutWorkspaceLogsIndexRoute
+  '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
+  '/whatsapp-automation-rules/insert-update': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
 export interface FileRoutesByTo {
-  "": typeof DashboardLayoutRouteWithChildren;
-  "/lead-trash": typeof DashboardLayoutLeadTrashRouteRoute;
-  "/forget-password": typeof AuthLayoutForgetPasswordRoute;
-  "/login": typeof AuthLayoutLoginRoute;
-  "/register": typeof AuthLayoutRegisterRoute;
-  "/reset-password": typeof AuthLayoutResetPasswordRoute;
-  "/user-login": typeof AuthLayoutUserLoginRoute;
-  "/": typeof AppLayoutIndexRoute;
-  "/report/$slug": typeof DashboardLayoutReportSlugRoute;
-  "/contact": typeof AppLayoutContactIndexRoute;
-  "/publicdetails": typeof AppLayoutPublicdetailsIndexRoute;
-  "/refund": typeof AppLayoutRefundIndexRoute;
-  "/terms-condition": typeof AppLayoutTermsConditionIndexRoute;
-  "/add-package": typeof DashboardLayoutAddPackageIndexRoute;
-  "/customer": typeof DashboardLayoutCustomerIndexRoute;
-  "/dashboard": typeof DashboardLayoutDashboardIndexRoute;
-  "/label": typeof DashboardLayoutLabelIndexRoute;
-  "/lead": typeof DashboardLayoutLeadIndexRoute;
-  "/report": typeof DashboardLayoutReportIndexRoute;
-  "/source": typeof DashboardLayoutSourceIndexRoute;
-  "/status": typeof DashboardLayoutStatusIndexRoute;
-  "/third-party-integration": typeof DashboardLayoutThirdPartyIntegrationIndexRoute;
-  "/user-profile": typeof DashboardLayoutUserProfileIndexRoute;
-  "/users": typeof DashboardLayoutUsersIndexRoute;
-  "/workspace-details": typeof DashboardLayoutWorkspaceDetailsIndexRoute;
-  "/workspace-logs": typeof DashboardLayoutWorkspaceLogsIndexRoute;
+  '': typeof DashboardLayoutRouteWithChildren
+  '/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
+  '/forget-password': typeof AuthLayoutForgetPasswordRoute
+  '/login': typeof AuthLayoutLoginRoute
+  '/register': typeof AuthLayoutRegisterRoute
+  '/reset-password': typeof AuthLayoutResetPasswordRoute
+  '/user-login': typeof AuthLayoutUserLoginRoute
+  '/': typeof AppLayoutIndexRoute
+  '/report/$slug': typeof DashboardLayoutReportSlugRoute
+  '/contact': typeof AppLayoutContactIndexRoute
+  '/publicdetails': typeof AppLayoutPublicdetailsIndexRoute
+  '/refund': typeof AppLayoutRefundIndexRoute
+  '/terms-condition': typeof AppLayoutTermsConditionIndexRoute
+  '/add-package': typeof DashboardLayoutAddPackageIndexRoute
+  '/customer': typeof DashboardLayoutCustomerIndexRoute
+  '/dashboard': typeof DashboardLayoutDashboardIndexRoute
+  '/general-templates': typeof DashboardLayoutGeneralTemplatesIndexRoute
+  '/label': typeof DashboardLayoutLabelIndexRoute
+  '/lead': typeof DashboardLayoutLeadIndexRoute
+  '/report': typeof DashboardLayoutReportIndexRoute
+  '/source': typeof DashboardLayoutSourceIndexRoute
+  '/status': typeof DashboardLayoutStatusIndexRoute
+  '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
+  '/users': typeof DashboardLayoutUsersIndexRoute
+  '/whatsapp-automation-rules': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
+  '/workspace-logs': typeof DashboardLayoutWorkspaceLogsIndexRoute
+  '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
+  '/whatsapp-automation-rules/insert-update': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/_appLayout": typeof AppLayoutRouteWithChildren;
-  "/_authLayout": typeof AuthLayoutRouteWithChildren;
-  "/_dashboardLayout": typeof DashboardLayoutRouteWithChildren;
-  "/_dashboardLayout/lead": typeof DashboardLayoutLeadRouteRouteWithChildren;
-  "/_dashboardLayout/lead-trash": typeof DashboardLayoutLeadTrashRouteRoute;
-  "/_authLayout/forget-password": typeof AuthLayoutForgetPasswordRoute;
-  "/_authLayout/login": typeof AuthLayoutLoginRoute;
-  "/_authLayout/register": typeof AuthLayoutRegisterRoute;
-  "/_authLayout/reset-password": typeof AuthLayoutResetPasswordRoute;
-  "/_authLayout/user-login": typeof AuthLayoutUserLoginRoute;
-  "/_appLayout/": typeof AppLayoutIndexRoute;
-  "/_dashboardLayout/report/$slug": typeof DashboardLayoutReportSlugRoute;
-  "/_appLayout/contact/": typeof AppLayoutContactIndexRoute;
-  "/_appLayout/publicdetails/": typeof AppLayoutPublicdetailsIndexRoute;
-  "/_appLayout/refund/": typeof AppLayoutRefundIndexRoute;
-  "/_appLayout/terms-condition/": typeof AppLayoutTermsConditionIndexRoute;
-  "/_dashboardLayout/add-package/": typeof DashboardLayoutAddPackageIndexRoute;
-  "/_dashboardLayout/customer/": typeof DashboardLayoutCustomerIndexRoute;
-  "/_dashboardLayout/dashboard/": typeof DashboardLayoutDashboardIndexRoute;
-  "/_dashboardLayout/label/": typeof DashboardLayoutLabelIndexRoute;
-  "/_dashboardLayout/lead/": typeof DashboardLayoutLeadIndexRoute;
-  "/_dashboardLayout/report/": typeof DashboardLayoutReportIndexRoute;
-  "/_dashboardLayout/source/": typeof DashboardLayoutSourceIndexRoute;
-  "/_dashboardLayout/status/": typeof DashboardLayoutStatusIndexRoute;
-  "/_dashboardLayout/third-party-integration/": typeof DashboardLayoutThirdPartyIntegrationIndexRoute;
-  "/_dashboardLayout/user-profile/": typeof DashboardLayoutUserProfileIndexRoute;
-  "/_dashboardLayout/users/": typeof DashboardLayoutUsersIndexRoute;
-  "/_dashboardLayout/workspace-details/": typeof DashboardLayoutWorkspaceDetailsIndexRoute;
-  "/_dashboardLayout/workspace-logs/": typeof DashboardLayoutWorkspaceLogsIndexRoute;
+  __root__: typeof rootRoute
+  '/_appLayout': typeof AppLayoutRouteWithChildren
+  '/_authLayout': typeof AuthLayoutRouteWithChildren
+  '/_dashboardLayout': typeof DashboardLayoutRouteWithChildren
+  '/_dashboardLayout/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
+  '/_dashboardLayout/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
+  '/_authLayout/forget-password': typeof AuthLayoutForgetPasswordRoute
+  '/_authLayout/login': typeof AuthLayoutLoginRoute
+  '/_authLayout/register': typeof AuthLayoutRegisterRoute
+  '/_authLayout/reset-password': typeof AuthLayoutResetPasswordRoute
+  '/_authLayout/user-login': typeof AuthLayoutUserLoginRoute
+  '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_dashboardLayout/report/$slug': typeof DashboardLayoutReportSlugRoute
+  '/_appLayout/contact/': typeof AppLayoutContactIndexRoute
+  '/_appLayout/publicdetails/': typeof AppLayoutPublicdetailsIndexRoute
+  '/_appLayout/refund/': typeof AppLayoutRefundIndexRoute
+  '/_appLayout/terms-condition/': typeof AppLayoutTermsConditionIndexRoute
+  '/_dashboardLayout/add-package/': typeof DashboardLayoutAddPackageIndexRoute
+  '/_dashboardLayout/customer/': typeof DashboardLayoutCustomerIndexRoute
+  '/_dashboardLayout/dashboard/': typeof DashboardLayoutDashboardIndexRoute
+  '/_dashboardLayout/general-templates/': typeof DashboardLayoutGeneralTemplatesIndexRoute
+  '/_dashboardLayout/label/': typeof DashboardLayoutLabelIndexRoute
+  '/_dashboardLayout/lead/': typeof DashboardLayoutLeadIndexRoute
+  '/_dashboardLayout/report/': typeof DashboardLayoutReportIndexRoute
+  '/_dashboardLayout/source/': typeof DashboardLayoutSourceIndexRoute
+  '/_dashboardLayout/status/': typeof DashboardLayoutStatusIndexRoute
+  '/_dashboardLayout/third-party-integration/': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  '/_dashboardLayout/user-profile/': typeof DashboardLayoutUserProfileIndexRoute
+  '/_dashboardLayout/users/': typeof DashboardLayoutUsersIndexRoute
+  '/_dashboardLayout/whatsapp-automation-rules/': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  '/_dashboardLayout/workspace-details/': typeof DashboardLayoutWorkspaceDetailsIndexRoute
+  '/_dashboardLayout/workspace-logs/': typeof DashboardLayoutWorkspaceLogsIndexRoute
+  '/_dashboardLayout/general-templates/lead-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
+  '/_dashboardLayout/whatsapp-automation-rules/insert-update/': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/_dashboardLayout/general-templates/lead-template/add-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | ""
-    | "/lead"
-    | "/lead-trash"
-    | "/forget-password"
-    | "/login"
-    | "/register"
-    | "/reset-password"
-    | "/user-login"
-    | "/"
-    | "/report/$slug"
-    | "/contact"
-    | "/publicdetails"
-    | "/refund"
-    | "/terms-condition"
-    | "/add-package"
-    | "/customer"
-    | "/dashboard"
-    | "/label"
-    | "/lead/"
-    | "/report"
-    | "/source"
-    | "/status"
-    | "/third-party-integration"
-    | "/user-profile"
-    | "/users"
-    | "/workspace-details"
-    | "/workspace-logs";
-  fileRoutesByTo: FileRoutesByTo;
+    | ''
+    | '/lead'
+    | '/lead-trash'
+    | '/forget-password'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/user-login'
+    | '/'
+    | '/report/$slug'
+    | '/contact'
+    | '/publicdetails'
+    | '/refund'
+    | '/terms-condition'
+    | '/add-package'
+    | '/customer'
+    | '/dashboard'
+    | '/general-templates'
+    | '/label'
+    | '/lead/'
+    | '/report'
+    | '/source'
+    | '/status'
+    | '/third-party-integration'
+    | '/user-profile'
+    | '/users'
+    | '/whatsapp-automation-rules'
+    | '/workspace-details'
+    | '/workspace-logs'
+    | '/general-templates/lead-template'
+    | '/whatsapp-automation-rules/insert-update'
+    | '/general-templates/lead-template/add-template'
+  fileRoutesByTo: FileRoutesByTo
   to:
-    | ""
-    | "/lead-trash"
-    | "/forget-password"
-    | "/login"
-    | "/register"
-    | "/reset-password"
-    | "/user-login"
-    | "/"
-    | "/report/$slug"
-    | "/contact"
-    | "/publicdetails"
-    | "/refund"
-    | "/terms-condition"
-    | "/add-package"
-    | "/customer"
-    | "/dashboard"
-    | "/label"
-    | "/lead"
-    | "/report"
-    | "/source"
-    | "/status"
-    | "/third-party-integration"
-    | "/user-profile"
-    | "/users"
-    | "/workspace-details"
-    | "/workspace-logs";
+    | ''
+    | '/lead-trash'
+    | '/forget-password'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/user-login'
+    | '/'
+    | '/report/$slug'
+    | '/contact'
+    | '/publicdetails'
+    | '/refund'
+    | '/terms-condition'
+    | '/add-package'
+    | '/customer'
+    | '/dashboard'
+    | '/general-templates'
+    | '/label'
+    | '/lead'
+    | '/report'
+    | '/source'
+    | '/status'
+    | '/third-party-integration'
+    | '/user-profile'
+    | '/users'
+    | '/whatsapp-automation-rules'
+    | '/workspace-details'
+    | '/workspace-logs'
+    | '/general-templates/lead-template'
+    | '/whatsapp-automation-rules/insert-update'
+    | '/general-templates/lead-template/add-template'
   id:
-    | "__root__"
-    | "/_appLayout"
-    | "/_authLayout"
-    | "/_dashboardLayout"
-    | "/_dashboardLayout/lead"
-    | "/_dashboardLayout/lead-trash"
-    | "/_authLayout/forget-password"
-    | "/_authLayout/login"
-    | "/_authLayout/register"
-    | "/_authLayout/reset-password"
-    | "/_authLayout/user-login"
-    | "/_appLayout/"
-    | "/_dashboardLayout/report/$slug"
-    | "/_appLayout/contact/"
-    | "/_appLayout/publicdetails/"
-    | "/_appLayout/refund/"
-    | "/_appLayout/terms-condition/"
-    | "/_dashboardLayout/add-package/"
-    | "/_dashboardLayout/customer/"
-    | "/_dashboardLayout/dashboard/"
-    | "/_dashboardLayout/label/"
-    | "/_dashboardLayout/lead/"
-    | "/_dashboardLayout/report/"
-    | "/_dashboardLayout/source/"
-    | "/_dashboardLayout/status/"
-    | "/_dashboardLayout/third-party-integration/"
-    | "/_dashboardLayout/user-profile/"
-    | "/_dashboardLayout/users/"
-    | "/_dashboardLayout/workspace-details/"
-    | "/_dashboardLayout/workspace-logs/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/_appLayout'
+    | '/_authLayout'
+    | '/_dashboardLayout'
+    | '/_dashboardLayout/lead'
+    | '/_dashboardLayout/lead-trash'
+    | '/_authLayout/forget-password'
+    | '/_authLayout/login'
+    | '/_authLayout/register'
+    | '/_authLayout/reset-password'
+    | '/_authLayout/user-login'
+    | '/_appLayout/'
+    | '/_dashboardLayout/report/$slug'
+    | '/_appLayout/contact/'
+    | '/_appLayout/publicdetails/'
+    | '/_appLayout/refund/'
+    | '/_appLayout/terms-condition/'
+    | '/_dashboardLayout/add-package/'
+    | '/_dashboardLayout/customer/'
+    | '/_dashboardLayout/dashboard/'
+    | '/_dashboardLayout/general-templates/'
+    | '/_dashboardLayout/label/'
+    | '/_dashboardLayout/lead/'
+    | '/_dashboardLayout/report/'
+    | '/_dashboardLayout/source/'
+    | '/_dashboardLayout/status/'
+    | '/_dashboardLayout/third-party-integration/'
+    | '/_dashboardLayout/user-profile/'
+    | '/_dashboardLayout/users/'
+    | '/_dashboardLayout/whatsapp-automation-rules/'
+    | '/_dashboardLayout/workspace-details/'
+    | '/_dashboardLayout/workspace-logs/'
+    | '/_dashboardLayout/general-templates/lead-template/'
+    | '/_dashboardLayout/whatsapp-automation-rules/insert-update/'
+    | '/_dashboardLayout/general-templates/lead-template/add-template/'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  AppLayoutRoute: typeof AppLayoutRouteWithChildren;
-  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren;
-  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren;
+  AppLayoutRoute: typeof AppLayoutRouteWithChildren
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AppLayoutRoute: AppLayoutRouteWithChildren,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
   DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -779,6 +899,7 @@ export const routeTree = rootRoute
         "/_dashboardLayout/add-package/",
         "/_dashboardLayout/customer/",
         "/_dashboardLayout/dashboard/",
+        "/_dashboardLayout/general-templates/",
         "/_dashboardLayout/label/",
         "/_dashboardLayout/report/",
         "/_dashboardLayout/source/",
@@ -786,8 +907,12 @@ export const routeTree = rootRoute
         "/_dashboardLayout/third-party-integration/",
         "/_dashboardLayout/user-profile/",
         "/_dashboardLayout/users/",
+        "/_dashboardLayout/whatsapp-automation-rules/",
         "/_dashboardLayout/workspace-details/",
-        "/_dashboardLayout/workspace-logs/"
+        "/_dashboardLayout/workspace-logs/",
+        "/_dashboardLayout/general-templates/lead-template/",
+        "/_dashboardLayout/whatsapp-automation-rules/insert-update/",
+        "/_dashboardLayout/general-templates/lead-template/add-template/"
       ]
     },
     "/_dashboardLayout/lead": {
@@ -857,6 +982,10 @@ export const routeTree = rootRoute
       "filePath": "_dashboardLayout/dashboard/index.tsx",
       "parent": "/_dashboardLayout"
     },
+    "/_dashboardLayout/general-templates/": {
+      "filePath": "_dashboardLayout/general-templates/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
     "/_dashboardLayout/label/": {
       "filePath": "_dashboardLayout/label/index.tsx",
       "parent": "/_dashboardLayout"
@@ -889,12 +1018,28 @@ export const routeTree = rootRoute
       "filePath": "_dashboardLayout/users/index.tsx",
       "parent": "/_dashboardLayout"
     },
+    "/_dashboardLayout/whatsapp-automation-rules/": {
+      "filePath": "_dashboardLayout/whatsapp-automation-rules/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
     "/_dashboardLayout/workspace-details/": {
       "filePath": "_dashboardLayout/workspace-details/index.tsx",
       "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/workspace-logs/": {
       "filePath": "_dashboardLayout/workspace-logs/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/general-templates/lead-template/": {
+      "filePath": "_dashboardLayout/general-templates/lead-template/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/whatsapp-automation-rules/insert-update/": {
+      "filePath": "_dashboardLayout/whatsapp-automation-rules/insert-update/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/general-templates/lead-template/add-template/": {
+      "filePath": "_dashboardLayout/general-templates/lead-template/add-template/index.tsx",
       "parent": "/_dashboardLayout"
     }
   }

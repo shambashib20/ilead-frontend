@@ -17,8 +17,11 @@ import {
   Trash2,
   ChartArea,
   Package,
+  LayoutTemplate,
+  LucideBookTemplate,
 } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
+import { FaEnvelope, FaSms, FaWhatsapp } from "react-icons/fa";
 
 type Role = "Admin" | "Superadmin" | "User";
 
@@ -105,6 +108,48 @@ export const navItems: NavItem[] = [
         name: "Leads Trash",
         icon: <Trash2 size={18} />,
         path: "/lead-trash",
+      },
+      {
+        name: "Automation Rules",
+        icon: <Funnel size={18} />,
+        subItems: [
+          {
+            name: "Email Automation",
+            icon: <FaEnvelope size={18} />,
+            path: "/email-automation",
+            roles: ["Admin", "Superadmin"],
+          },
+          {
+            name: "SMS Automation",
+            icon: <FaSms size={18} />,
+            path: "/sms-automation",
+            roles: ["Admin", "Superadmin"],
+          },
+          {
+            name: "Whatsapp Automation",
+            icon: <FaWhatsapp size={18} />,
+            path: "/whatsapp-automation-rules",
+            roles: ["Admin", "Superadmin"],
+          },
+        ],
+      },
+      {
+        name: "Templates",
+        icon: <LayoutTemplate size={18} />,
+        subItems: [
+          {
+            name: "General Templates",
+            icon: <LucideBookTemplate size={18} />,
+            path: "/general-templates",
+            roles: ["Admin", "Superadmin"],
+          },
+          {
+            name: "Meta Templates",
+            icon: <FaSms size={18} />,
+            path: "/sms-automation",
+            roles: ["Admin", "Superadmin"],
+          },
+        ],
       },
     ],
     roles: ["Admin", "Superadmin"],
