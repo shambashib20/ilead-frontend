@@ -40,6 +40,7 @@ import { Route as DashboardLayoutAddPackageIndexImport } from './routes/_dashboa
 import { Route as AppLayoutTermsConditionIndexImport } from './routes/_appLayout/terms-condition/index'
 import { Route as AppLayoutRefundIndexImport } from './routes/_appLayout/refund/index'
 import { Route as AppLayoutPublicdetailsIndexImport } from './routes/_appLayout/publicdetails/index'
+import { Route as AppLayoutOfflineIndexImport } from './routes/_appLayout/offline/index'
 import { Route as AppLayoutContactIndexImport } from './routes/_appLayout/contact/index'
 import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLayout/report/$slug'
 import { Route as DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/insert-update/index'
@@ -237,6 +238,12 @@ const AppLayoutPublicdetailsIndexRoute =
     getParentRoute: () => AppLayoutRoute,
   } as any)
 
+const AppLayoutOfflineIndexRoute = AppLayoutOfflineIndexImport.update({
+  id: '/offline/',
+  path: '/offline/',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
+
 const AppLayoutContactIndexRoute = AppLayoutContactIndexImport.update({
   id: '/contact/',
   path: '/contact/',
@@ -363,6 +370,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof AppLayoutContactIndexImport
+      parentRoute: typeof AppLayoutImport
+    }
+    '/_appLayout/offline/': {
+      id: '/_appLayout/offline/'
+      path: '/offline'
+      fullPath: '/offline'
+      preLoaderRoute: typeof AppLayoutOfflineIndexImport
       parentRoute: typeof AppLayoutImport
     }
     '/_appLayout/publicdetails/': {
@@ -520,6 +534,7 @@ declare module '@tanstack/react-router' {
 interface AppLayoutRouteChildren {
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
   AppLayoutContactIndexRoute: typeof AppLayoutContactIndexRoute
+  AppLayoutOfflineIndexRoute: typeof AppLayoutOfflineIndexRoute
   AppLayoutPublicdetailsIndexRoute: typeof AppLayoutPublicdetailsIndexRoute
   AppLayoutRefundIndexRoute: typeof AppLayoutRefundIndexRoute
   AppLayoutTermsConditionIndexRoute: typeof AppLayoutTermsConditionIndexRoute
@@ -528,6 +543,7 @@ interface AppLayoutRouteChildren {
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppLayoutIndexRoute: AppLayoutIndexRoute,
   AppLayoutContactIndexRoute: AppLayoutContactIndexRoute,
+  AppLayoutOfflineIndexRoute: AppLayoutOfflineIndexRoute,
   AppLayoutPublicdetailsIndexRoute: AppLayoutPublicdetailsIndexRoute,
   AppLayoutRefundIndexRoute: AppLayoutRefundIndexRoute,
   AppLayoutTermsConditionIndexRoute: AppLayoutTermsConditionIndexRoute,
@@ -641,6 +657,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AppLayoutIndexRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/contact': typeof AppLayoutContactIndexRoute
+  '/offline': typeof AppLayoutOfflineIndexRoute
   '/publicdetails': typeof AppLayoutPublicdetailsIndexRoute
   '/refund': typeof AppLayoutRefundIndexRoute
   '/terms-condition': typeof AppLayoutTermsConditionIndexRoute
@@ -675,6 +692,7 @@ export interface FileRoutesByTo {
   '/': typeof AppLayoutIndexRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/contact': typeof AppLayoutContactIndexRoute
+  '/offline': typeof AppLayoutOfflineIndexRoute
   '/publicdetails': typeof AppLayoutPublicdetailsIndexRoute
   '/refund': typeof AppLayoutRefundIndexRoute
   '/terms-condition': typeof AppLayoutTermsConditionIndexRoute
@@ -713,6 +731,7 @@ export interface FileRoutesById {
   '/_appLayout/': typeof AppLayoutIndexRoute
   '/_dashboardLayout/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/_appLayout/contact/': typeof AppLayoutContactIndexRoute
+  '/_appLayout/offline/': typeof AppLayoutOfflineIndexRoute
   '/_appLayout/publicdetails/': typeof AppLayoutPublicdetailsIndexRoute
   '/_appLayout/refund/': typeof AppLayoutRefundIndexRoute
   '/_appLayout/terms-condition/': typeof AppLayoutTermsConditionIndexRoute
@@ -750,6 +769,7 @@ export interface FileRouteTypes {
     | '/'
     | '/report/$slug'
     | '/contact'
+    | '/offline'
     | '/publicdetails'
     | '/refund'
     | '/terms-condition'
@@ -783,6 +803,7 @@ export interface FileRouteTypes {
     | '/'
     | '/report/$slug'
     | '/contact'
+    | '/offline'
     | '/publicdetails'
     | '/refund'
     | '/terms-condition'
@@ -819,6 +840,7 @@ export interface FileRouteTypes {
     | '/_appLayout/'
     | '/_dashboardLayout/report/$slug'
     | '/_appLayout/contact/'
+    | '/_appLayout/offline/'
     | '/_appLayout/publicdetails/'
     | '/_appLayout/refund/'
     | '/_appLayout/terms-condition/'
@@ -875,6 +897,7 @@ export const routeTree = rootRoute
       "children": [
         "/_appLayout/",
         "/_appLayout/contact/",
+        "/_appLayout/offline/",
         "/_appLayout/publicdetails/",
         "/_appLayout/refund/",
         "/_appLayout/terms-condition/"
@@ -956,6 +979,10 @@ export const routeTree = rootRoute
     },
     "/_appLayout/contact/": {
       "filePath": "_appLayout/contact/index.tsx",
+      "parent": "/_appLayout"
+    },
+    "/_appLayout/offline/": {
+      "filePath": "_appLayout/offline/index.tsx",
       "parent": "/_appLayout"
     },
     "/_appLayout/publicdetails/": {

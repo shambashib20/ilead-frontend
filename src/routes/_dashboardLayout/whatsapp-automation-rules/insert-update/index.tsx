@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import FirstMessageForm from "@/features/automations/components/FirstMessageForm";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -71,19 +72,19 @@ function RouteComponent() {
                       value="account"
                       className="flex-1 rounded-md py-3 text-sm font-semibold border-2 border-gray-200 data-[state=active]:border-transparent data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 hover:bg-purple-100 transitsion-all duration-200 data-[state=active]:[border-image:[none]"
                     >
-                      Account
+                      First Message
                     </TabsTrigger>
                     <TabsTrigger
                       value="password"
                       className="flex-1 rounded-md py-3 text-sm font-semibold border-2 border-gray-200 data-[state=active]:border-transparent data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 hover:bg-purple-100 transitsion-all duration-200 data-[state=active]:[border-image:[none]"
                     >
-                      Password
+                      Next Followup
                     </TabsTrigger>
                   </TabsList>
                   <div className="px-6 mt-3">
                     <div className=" w-full border-t border-gray-200  ">
                       <TabsContent value="account">
-                        Make changes to your account here.
+                        <FirstMessageForm />
                       </TabsContent>
                       <TabsContent value="password">
                         Change your password here.

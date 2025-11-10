@@ -10,6 +10,7 @@ import { CircleCheck, CircleX, Info, Loader, ShieldAlert } from "lucide-react";
 
 import { useTheme } from "./contexts/ThemeProvider";
 import BrandLoader from "./components/BrandLoader/BrandLoader";
+import { setLogoutHandler } from "./lib/utils";
 
 const router = createRouter({
   routeTree,
@@ -68,10 +69,33 @@ function App() {
           },
         }}
       />
+
       <TanStackRouterDevtools router={router} />
       <ReactQueryDevtools initialIsOpen={false} />
     </>
   );
 }
+
+const handleLogout = async () => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+      method: "GET", // usually logout should be POST, but keep GET if your API says so
+      credentials: "include", // if you use cookies
+    });
+
+    const data = await res.json();
+    console.log("Logout response:", data);
+
+    // clear local storage before redirect
+    localStorage.clear();
+
+    // redirect to login
+    window.location.href = "/login";
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
+
+setLogoutHandler(handleLogout);
 
 export default App;

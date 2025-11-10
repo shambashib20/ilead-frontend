@@ -2,13 +2,7 @@ import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { z } from "zod";
 
 // shadcn/ui components (assumes you scaffolded shadcn and generated these components)
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 
 import {
@@ -19,6 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 const FormSchema = z.object({
   template: z.string().min(1, "Select a template"),
@@ -58,6 +54,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function WhatsappAutomationFilter() {
+  const navigate = useNavigate();
   const form = useForm({
     defaultValues: {
       template: "all-automation",
@@ -67,8 +64,8 @@ function WhatsappAutomationFilter() {
       automationStatus: "Active Status",
       leadStatus: "New",
       whatsappType: "Normal Type",
-    },
-    onSubmit: async ({ value }) => {
+    } as Values,
+    onSubmit: async ({ value }: { value: Values }) => {
       // replace this with your API call
       console.log("SUBMIT ->", value);
       // Example:
@@ -83,9 +80,21 @@ function WhatsappAutomationFilter() {
 
   return (
     <Card className="bg-primary shadow rounded-lg p-6">
-      <h2 className="text-2xl font-medium mb-4 mt-4">
-        Whatsapp Automation Rules
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-medium mb-4 mt-4">
+          Whatsapp Automation Rules
+        </h2>
+        <Button
+          variant={"outline"}
+          onClick={() =>
+            navigate({
+              to: "/whatsapp-automation-rules/insert-update",
+            })
+          }
+        >
+          <Plus />
+        </Button>
+      </div>
 
       <form
         onSubmit={(e) => {
