@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronRight, Plus, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import templateBgImg from "@/assets/templates.png";
 export const Route = createFileRoute("/_dashboardLayout/general-templates/")({
   component: RouteComponent,
@@ -58,7 +57,6 @@ function RouteComponent() {
 function LinkRow({
   title,
   href,
-  active,
 }: {
   title: string;
   href: string;

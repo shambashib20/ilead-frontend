@@ -176,23 +176,15 @@ export class ApiClient {
 
   /* ---------- Thin HTTP method wrappers (return unwrapped data) ---------- */
   protected get<T>(endpoint: string, config?: AxiosRequestConfig) {
-    return this.axiosInstance.get<T>(this.url(endpoint), config) as Promise<T>;
+    return this.axiosInstance.get<T>(this.url(endpoint), config);
   }
 
   protected post<T>(endpoint: string, data?: any, config?: AxiosRequestConfig) {
-    return this.axiosInstance.post<T>(
-      this.url(endpoint),
-      data,
-      config
-    ) as Promise<T>;
+    return this.axiosInstance.post<T>(this.url(endpoint), data, config);
   }
 
   protected put<T>(endpoint: string, data?: any, config?: AxiosRequestConfig) {
-    return this.axiosInstance.put<T>(
-      this.url(endpoint),
-      data,
-      config
-    ) as Promise<T>;
+    return this.axiosInstance.put<T>(this.url(endpoint), data, config);
   }
 
   protected patch<T>(
@@ -200,11 +192,7 @@ export class ApiClient {
     data?: any,
     config?: AxiosRequestConfig
   ) {
-    return this.axiosInstance.patch<T>(
-      this.url(endpoint),
-      data,
-      config
-    ) as Promise<T>;
+    return this.axiosInstance.patch<T>(this.url(endpoint), data, config);
   }
 
   protected delete<T>(
@@ -212,10 +200,7 @@ export class ApiClient {
     config?: AxiosRequestConfig & { data?: any }
   ) {
     // Axios supports a body on DELETE via config.data
-    return this.axiosInstance.delete<T>(
-      this.url(endpoint),
-      config
-    ) as Promise<T>;
+    return this.axiosInstance.delete<T>(this.url(endpoint), config);
   }
 }
 

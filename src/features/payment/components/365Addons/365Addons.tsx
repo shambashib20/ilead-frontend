@@ -85,13 +85,13 @@ function AddonsPackages() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uiAddons.length]);
 
-  const changeQty = (id: string, delta: number) => {
-    setQuantities((prev) => {
-      const current = prev[id] ?? 1;
-      const next = Math.max(1, current + delta);
-      return { ...prev, [id]: next };
-    });
-  };
+  // const changeQty = (id: string, delta: number) => {
+  //   setQuantities((prev) => {
+  //     const current = prev[id] ?? 1;
+  //     const next = Math.max(1, current + delta);
+  //     return { ...prev, [id]: next };
+  //   });
+  // };
 
   const formatPrice = (value: number, currency: "INR" | "USD") => {
     if (currency === "INR") {
@@ -206,7 +206,7 @@ function AddonsPackages() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {uiAddons.map((pkg) => {
                 const isSubscribing = subscribingId === pkg.id;
-                const qty = quantities[pkg.id] ?? 1;
+                // const qty = quantities[pkg.id] ?? 1;
                 return (
                   <div
                     key={pkg.id}
