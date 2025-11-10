@@ -40,7 +40,7 @@ function LabelCard() {
       setTotalPages(Math.ceil(total / limit));
       setTotalLables(total);
     } catch (err) {
-      console.error("Error fetching statuses:", err);
+      //console.error("Error fetching statuses:", err);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ function LabelCard() {
         await fetchData();
         Swal.fire("Deleted!", "The status has been deleted!", "success");
       } catch (error) {
-        console.error("Delete failed:", error);
+        //console.error("Delete failed:", error);
         Swal.fire("Error!", "Failed to delete the status.", "error");
       }
     }

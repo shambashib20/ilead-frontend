@@ -41,7 +41,7 @@ function AssignUsersForm({
     },
 
     onSubmit: async ({ value }) => {
-      console.log("Form submitted with:", value);
+      //console.log("Form submitted with:", value);
       await updateLabel({
         id: selectedId,
         chatAgentIds: value.selectedUsers.map((item) => {
@@ -88,7 +88,7 @@ function AssignUsersForm({
     }
   }, [users]);
 
-  console.log(users);
+  //console.log(users);
 
   return (
     <div className="w-full ">

@@ -71,7 +71,7 @@ export default function UserProfileDetailsCard() {
         const res = await userService.getUserDetails();
         setUser(res.data.data);
       } catch (err) {
-        console.error("Error fetching user details:", err);
+        //console.error("Error fetching user details:", err);
         setError("Failed to load user details.");
       } finally {
         setLoading(false);

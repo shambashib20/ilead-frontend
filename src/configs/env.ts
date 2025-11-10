@@ -16,7 +16,7 @@ const envSchema = z.object({
 const parsedEnv = envSchema.safeParse(import.meta.env);
 
 if (!parsedEnv.success) {
-  console.error(
+  //console.error(
     "%c❌ Invalid environment variables:",
     "color: red; font-weight: bold;",
     parsedEnv.error.flatten().fieldErrors

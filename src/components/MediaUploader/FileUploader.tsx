@@ -26,7 +26,7 @@ export function FileUploader({ onUploadSuccess, disabled }: FileUploaderProps) {
       setPreviewUrl(url);
       onUploadSuccess(url);
     } catch (error) {
-      console.error("Upload failed", error);
+      //console.error("Upload failed", error);
     } finally {
       setUploading(false);
     }

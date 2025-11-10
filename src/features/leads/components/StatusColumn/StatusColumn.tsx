@@ -28,9 +28,9 @@ export const StatusColumn = memo(
       };
     });
 
-    console.log(updatedLeads);
+    //console.log(updatedLeads);
 
-    console.log(missedFollowUps.data);
+    //console.log(missedFollowUps.data);
     // const updatedLeads=
     return (
       <div className="flex-shrink-0 w-[280px] rounded-lg bg-transparent">

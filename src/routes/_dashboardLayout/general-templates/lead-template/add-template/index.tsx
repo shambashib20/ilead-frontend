@@ -53,7 +53,7 @@ export default function TemplateBuilderPage() {
         attachments: value.attachments ?? [],
       };
 
-      console.log("EMAIL payload →", payload);
+      //console.log("EMAIL payload →", payload);
     },
   });
 
@@ -72,7 +72,7 @@ export default function TemplateBuilderPage() {
         attachments: value.attachments ?? [],
       };
 
-      console.log("WHATSAPP payload →", payload);
+      //console.log("WHATSAPP payload →", payload);
     },
   });
 
@@ -86,7 +86,7 @@ export default function TemplateBuilderPage() {
         sms_template_id: value.templateId, // ✅ rename as required
       };
 
-      console.log("SMS payload →", payload);
+      //console.log("SMS payload →", payload);
     },
   });
 

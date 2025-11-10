@@ -65,7 +65,7 @@ function WhatsappAutomationFilter() {
       leadStatus: "New",
       whatsappType: "Normal Type",
     } as Values,
-    onSubmit: async () => {
+    onSubmit: async ({ value }: { value: Values }) => {
       // replace this with your API call
       console.log("SUBMIT ->", value);
       // Example:

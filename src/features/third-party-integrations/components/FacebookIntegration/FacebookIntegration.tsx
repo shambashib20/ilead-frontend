@@ -38,7 +38,7 @@ function FacebookIntegration() {
         }
       }, 1000);
     } catch (error) {
-      console.error("Failed to initiate Facebook login:", error);
+      //console.error("Failed to initiate Facebook login:", error);
       Swal.fire("Error", "Failed to connect to Facebook", "error");
     }
   };
@@ -51,7 +51,7 @@ function FacebookIntegration() {
       // optional: inspect response and show a more specific message
       const msg = response?.message || "Facebook page connected successfully!";
 
-      console.log("Facebook page connection response:", response);
+      //console.log("Facebook page connection response:", response);
 
       Swal.fire({
         icon: "success",
@@ -69,7 +69,7 @@ function FacebookIntegration() {
         // closeModal?.();
       }, 1000);
     } catch (error: any) {
-      console.error("Failed to connect Facebook page:", error);
+      //console.error("Failed to connect Facebook page:", error);
 
       const errMsg =
         error?.response?.data?.message ||
@@ -93,7 +93,7 @@ function FacebookIntegration() {
         const response = await labelService.labels();
         setLabels(response?.data?.data);
       } catch (error) {
-        console.error("Error fetching labels:", error);
+        //console.error("Error fetching labels:", error);
       }
     };
 

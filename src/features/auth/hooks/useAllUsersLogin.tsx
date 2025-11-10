@@ -17,10 +17,10 @@ export function useAllUsersLogin() {
       return authService.loginForAll({ email, password });
     },
     onSuccess: (data) => {
-      console.log(data);
+      //console.log(data);
 
       if (data.status === "SUCCESS") {
-        console.log("Login successful:", data.message, data.data.user);
+        //console.log("Login successful:", data.message, data.data.user);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         queryClient.setQueryData(["user"], data);
         setTimeout(() => {
@@ -29,11 +29,11 @@ export function useAllUsersLogin() {
         // Redirect to dashboard or another pages
       }
       if (!data.status || data.status !== "SUCCESS") {
-        console.log("Login successful:", data.message, data.data.user);
+        //console.log("Login successful:", data.message, data.data.user);
       }
     },
     onError: (error) => {
-      console.error("Login failed:", error.name, error.message);
+      //console.error("Login failed:", error.name, error.message);
     },
   });
 
