@@ -18,7 +18,7 @@ function Header() {
         const logList = res?.data?.data?.logs || [];
         setLogs(logList);
       } catch (error) {
-        console.error("Failed to fetch property logs:", error);
+        //console.error("Failed to fetch property logs:", error);
       }
     };
     fetchLogs();

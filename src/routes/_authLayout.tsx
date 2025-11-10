@@ -10,7 +10,7 @@ import { useMedia } from "@/hooks/useMedia";
 
 export const Route = createFileRoute("/_authLayout")({
   beforeLoad: async ({ context }) => {
-    console.log(context.user);
+    //console.log(context.user);
 
     if (context.isAuthenticated) {
       throw redirect({

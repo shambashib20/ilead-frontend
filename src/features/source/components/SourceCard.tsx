@@ -49,7 +49,7 @@ function SourceCard() {
       setTotalPages(Math.ceil(total / limit));
       setTotalSources(total);
     } catch (err) {
-      console.error("Error fetching sources:", err);
+      //console.error("Error fetching sources:", err);
       Swal.fire({
         icon: "error",
         title: "Error",

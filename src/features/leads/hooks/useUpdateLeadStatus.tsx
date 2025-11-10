@@ -18,7 +18,7 @@ export function useUpdateLeadStatus() {
     },
 
     onError: (err) => {
-      console.error("updateLeadStatus failed", err);
+      //console.error("updateLeadStatus failed", err);
     },
   });
 

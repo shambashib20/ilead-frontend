@@ -68,7 +68,7 @@ export default function LeadsTable({
         const res = await statusService.status();
         setStatuses(res.data.data);
       } catch (err) {
-        console.error("Failed to load statuses:", err);
+        //console.error("Failed to load statuses:", err);
       }
     };
 
@@ -90,7 +90,7 @@ export default function LeadsTable({
       // Optionally: refetch leads if needed
       // await fetchLeads();
     } catch (err) {
-      console.error(err);
+      //console.error(err);
 
       Swal.fire({
         icon: "error",

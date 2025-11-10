@@ -38,7 +38,7 @@ function CustomerTable() {
       setTotalPages(Math.ceil(total / limit));
       setTotalCustomers(total);
     } catch (err) {
-      console.error("Error fetching customers:", err);
+      //console.error("Error fetching customers:", err);
     } finally {
       setLoading(false);
     }

@@ -84,7 +84,7 @@ const handleLogout = async () => {
     });
 
     const data = await res.json();
-    console.log("Logout response:", data);
+    //console.log("Logout response:", data);
 
     // clear local storage before redirect
     localStorage.clear();
@@ -92,7 +92,7 @@ const handleLogout = async () => {
     // redirect to login
     window.location.href = "/login";
   } catch (err) {
-    console.error("Logout failed:", err);
+    //console.error("Logout failed:", err);
   }
 };
 

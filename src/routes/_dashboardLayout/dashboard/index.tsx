@@ -74,7 +74,7 @@ function RouteComponent() {
   const { overdueFollowups } = useOverdueFollowUps();
 
   // useEffect(() => {
-  //   leadsServoceModule.overdueFollowUps().then((data) => console.log(data));
+  //   leadsServoceModule.overdueFollowUps().then((data) => //console.log(data));
   // }, []);
 
   useEffect(() => {

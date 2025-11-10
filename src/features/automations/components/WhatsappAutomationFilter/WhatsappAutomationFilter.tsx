@@ -26,7 +26,7 @@ const FormSchema = z.object({
   whatsappType: z.string().min(1),
 });
 
-type FormValues = z.infer<typeof FormSchema>;
+// type FormValues = z.infer<typeof FormSchema>;
 
 type Values = {
   template: string;
@@ -67,7 +67,7 @@ function WhatsappAutomationFilter() {
     } as Values,
     onSubmit: async ({ value }: { value: Values }) => {
       // replace this with your API call
-      console.log("SUBMIT ->", value);
+      //console.log("SUBMIT ->", value);
       // Example:
       // await fetch('/api/filters', { method: 'POST', body: JSON.stringify(value) })
     },

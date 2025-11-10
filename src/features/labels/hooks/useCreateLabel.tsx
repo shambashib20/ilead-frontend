@@ -19,7 +19,7 @@ export function useCreateLabel() {
       description: string;
       color: string;
     }) => {
-      console.log(title, description, color);
+      //console.log(title, description, color);
       return labelService.createLabel({
         title,
         description,
@@ -31,7 +31,7 @@ export function useCreateLabel() {
     onError: (error: {
       response: { status: number; data: { message: string } };
     }) => {
-      console.error("Create label failed:", error);
+      //console.error("Create label failed:", error);
       const code = error?.response?.status;
       let message = "Something went wrong while creating the label.";
       const isPaywall = code === 403;

@@ -38,7 +38,7 @@ export default function WorkspaceLogs() {
         setLogs(sortedLogs);
         setPropertyName(name);
       } catch (error) {
-        console.error("Failed to fetch logs:", error);
+        //console.error("Failed to fetch logs:", error);
       } finally {
         setLoading(false);
       }

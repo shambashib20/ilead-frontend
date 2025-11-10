@@ -28,7 +28,7 @@ function RouteComponent() {
   const { theme } = useTheme();
   const { openModal, setModalTitle, setModalSize, closeModal } =
     useModalStore();
-  console.log(filteredNavItems);
+  //console.log(filteredNavItems);
 
   useEffect(() => {
     let start = performance.now();

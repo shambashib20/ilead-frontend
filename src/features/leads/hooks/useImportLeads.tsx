@@ -30,7 +30,7 @@ export function useImportLeads() {
     },
 
     onError: (error: unknown) => {
-      console.error("Import leads failed:", error);
+      //console.error("Import leads failed:", error);
 
       let message = "Something went wrong while importing leads.";
 
