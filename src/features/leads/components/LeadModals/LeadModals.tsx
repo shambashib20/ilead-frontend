@@ -134,7 +134,7 @@ export function LeadDelete() {
         rayId,
         deleteReason: value.reason,
       });
-      //console.log("Deleting lead with reason:", {
+      console.log("Deleting lead with reason:", {
         reason: value.reason,
         rayId: data,
       });
@@ -458,7 +458,7 @@ export function LeadCreateCustomer() {
 
       closeModal();
     } catch (error: any) {
-      //console.error("Conversion error:", error);
+      console.error("Conversion error:", error);
       await MySwal.fire({
         icon: "error",
         title: "Conversion Failed",
@@ -573,7 +573,7 @@ export function LeadFollowUp() {
         });
       }
 
-      //console.warn("payload", {
+      console.warn("payload", {
         leadId,
         comment,
         nextFollowUp: followUpDate.toISOString(),
@@ -722,7 +722,7 @@ export function LeadStatus() {
     }
   };
 
-  //console.log(data?.status);
+  console.log(data?.status);
 
   return (
     <div className="space-y-4 px-5 pt-2">
@@ -799,7 +799,7 @@ export function LeadDetail() {
         const response = await leadsApi.getLeadInfo({ leadId });
         setLead(response.data);
       } catch (error) {
-        //console.error("Failed to fetch lead info", error);
+        console.error("Failed to fetch lead info", error);
       } finally {
         setLoading(false);
       }
@@ -821,7 +821,7 @@ export function LeadDetail() {
   }
 
   // Extract fields
-  //console.log(lead);
+  console.log(lead);
 
   return (
     <div className="min-h-[400px] max-h-[450px] overflow-y-auto px-3 ">
@@ -1291,7 +1291,7 @@ export function ImportLeadForm() {
       removeDuplicateRecord: false,
     },
     onSubmit: async ({ value }) => {
-      //console.log("Form submitted:", value);
+      console.log("Form submitted:", value);
       // Handle form submission here
       await importLeadsAsync({
         assigned_to: value?.user,
@@ -1317,7 +1317,7 @@ export function ImportLeadForm() {
 
   // const handleDownloadFormat = () => {
   //   // Handle download format logic
-  //   //console.log("Download format clicked");
+  //   console.log("Download format clicked");
   // };
 
   useEffect(() => {
@@ -1747,7 +1747,7 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
   };
 
   // const handleSubmit = () => {
-  //   //console.log(startDate, endDate);
+  //   console.log(startDate, endDate);
   // };
 
   const CalendarMonth = ({

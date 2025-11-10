@@ -25,7 +25,7 @@ function FacebookCallback() {
         setData(response.data);
         setStatus("success");
       } catch (error) {
-        //console.error("Facebook connection failed", error);
+        console.error("Facebook connection failed", error);
         setStatus("error");
       }
     };

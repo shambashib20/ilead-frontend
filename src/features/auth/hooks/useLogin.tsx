@@ -21,10 +21,10 @@ export function useLogin() {
     },
 
     onSuccess: (data) => {
-      //console.log(data);
+      console.log(data);
 
       if (data.status === "SUCCESS") {
-        //console.log("Login successful:", data.message, data.data.user);
+        console.log("Login successful:", data.message, data.data.user);
         localStorage.setItem("user", JSON.stringify(data.data.user));
         queryClient.setQueryData(["user"], data);
         setTimeout(() => {
@@ -47,11 +47,11 @@ export function useLogin() {
         });
       }
       if (!data.status || data.status !== "SUCCESS") {
-        //console.log("Login successful:", data.message, data.data.user);
+        console.log("Login successful:", data.message, data.data.user);
       }
     },
     onError: (error, variables) => {
-      //console.log(variables);
+      console.log(variables);
 
       toast("Login Failed", {
         description: error.message || "An error occurred during login.",

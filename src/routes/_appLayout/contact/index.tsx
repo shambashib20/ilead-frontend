@@ -97,8 +97,8 @@ export default function ContactUsSection({
     // Hook this to your API call
     // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(cleaned) })
     // For demo:
-    // eslint-disable-next-line no-//console
-    //console.log("Contact form submitted:", cleaned);
+    // eslint-disable-next-line no-console
+    console.log("Contact form submitted:", cleaned);
     alert("Thanks! We’ll get back to you soon.");
     e.currentTarget.reset();
   };

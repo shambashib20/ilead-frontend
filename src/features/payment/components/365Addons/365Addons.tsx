@@ -120,14 +120,14 @@ function AddonsPackages() {
 
       // Temporary stub simulation:
       await new Promise((r) => setTimeout(r, 900)); // simulate network
-      //console.log(
+      console.log(
         `[STUB] Checkout created for addon=${addonId} qty=${qty} total=${totalAmount} currency=${currency}`
       );
 
       // success handling: show toast, refresh list, etc.
       // e.g. refetch query or optimistic UI update
     } catch (err: any) {
-      //console.error("Payment start failed:", err);
+      console.error("Payment start failed:", err);
       // show toast / UI error
     } finally {
       setSubscribingId(null);
@@ -320,7 +320,7 @@ function AddonsPackages() {
                         }`}
                         onClick={() => {
                           // TODO: open compare modal / navigate to details
-                          //console.log("Compare addon:", pkg.id);
+                          console.log("Compare addon:", pkg.id);
                         }}
                       >
                         Compare Addon →

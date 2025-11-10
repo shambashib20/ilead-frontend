@@ -58,7 +58,7 @@ const LeadSourceChart: React.FC<Props> = ({
       setSeries(Array.isArray(response.data) ? response.data : []);
       setHasFetched(true);
     } catch (err) {
-      //console.error("Failed to fetch chart data:", err);
+      console.error("Failed to fetch chart data:", err);
       setHasFetched(true);
     } finally {
       setIsLoading(false);
@@ -71,7 +71,7 @@ const LeadSourceChart: React.FC<Props> = ({
       const res = await chatAgentService.chatAgents();
       setAgents(res.data.data);
     } catch (err) {
-      //console.error("Failed to fetch agents:", err);
+      console.error("Failed to fetch agents:", err);
     }
   };
 

@@ -19,7 +19,7 @@ export function useUpdateLabel() {
       color?: string;
       chatAgentIds?: { id: string }[];
     }) => {
-      //console.log(id);
+      console.log(id);
       return labelService.editLabel(id, {
         title,
         description,

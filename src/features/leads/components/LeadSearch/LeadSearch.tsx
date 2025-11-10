@@ -268,7 +268,7 @@ function LeadSearch() {
         </div>
       ),
     });
-    //console.log("Calendar action triggered");
+    console.log("Calendar action triggered");
   };
   // const isBrowser = typeof window !== "undefined";
   const colourStyles = {
