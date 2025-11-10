@@ -46,7 +46,7 @@ function ChatAgentTable() {
       setPagination(res.data.data.pagination);
       setTotalStatuses(total);
     } catch (err) {
-      //console.error("Failed to fetch Employee's", err);
+      console.error("Failed to fetch Employee's", err);
     } finally {
       setLoading(false);
     }

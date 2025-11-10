@@ -48,7 +48,7 @@ export default function CreateStatusForm({
       color: status?.meta.color_code ?? "",
     },
     onSubmit: async ({ value }) => {
-      //console.log(value);
+      console.log(value);
 
       if (status) {
         await updateStatus({

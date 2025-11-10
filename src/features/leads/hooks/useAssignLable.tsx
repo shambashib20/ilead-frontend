@@ -19,7 +19,7 @@ export function useAssignLabels() {
     },
 
     onError: (err) => {
-      //console.error("Assign labels failed", err);
+      console.error("Assign labels failed", err);
     },
   });
 

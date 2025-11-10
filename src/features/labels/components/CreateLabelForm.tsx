@@ -36,7 +36,7 @@ function CreateLabelForm({
       color: label?.color ?? "",
     },
     onSubmit: async ({ value }) => {
-      //console.log(value);
+      console.log(value);
 
       if (label) {
         await updateLabel({
@@ -63,7 +63,7 @@ function CreateLabelForm({
     });
   }, [form.state.canSubmit, form.state.isSubmitting]);
 
-  //console.log(label);
+  console.log(label);
   return (
     <form
       className="space-y-4 px-4"

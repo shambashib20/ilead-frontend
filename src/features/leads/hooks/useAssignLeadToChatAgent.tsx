@@ -21,7 +21,7 @@ export function useAssignLeadToChatAgent() {
 
     onError: (err) => {
       // Optional: logging or toast. Do not swallow errors here if you want caller to handle.
-      //console.error("Assign to agent failed", err);
+      console.error("Assign to agent failed", err);
     },
   });
 

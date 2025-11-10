@@ -25,7 +25,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const actions = getCardActions(user.role);
   const { theme } = useTheme();
 
-  //console.log(user.role);
+  console.log(user.role);
 
   return (
     <div

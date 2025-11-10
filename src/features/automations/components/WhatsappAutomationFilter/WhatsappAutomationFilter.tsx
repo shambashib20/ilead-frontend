@@ -1,5 +1,5 @@
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
-import { z } from "zod";
+// import { z } from "zod";
 
 // shadcn/ui components (assumes you scaffolded shadcn and generated these components)
 import { Card } from "@/components/ui/card";
@@ -16,15 +16,15 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
-const FormSchema = z.object({
-  template: z.string().min(1, "Select a template"),
-  automationType: z.string().min(1),
-  deviceType: z.string().min(1),
-  leadLabel: z.string().optional(),
-  automationStatus: z.string().min(1),
-  leadStatus: z.string().min(1),
-  whatsappType: z.string().min(1),
-});
+// const FormSchema = z.object({
+//   template: z.string().min(1, "Select a template"),
+//   automationType: z.string().min(1),
+//   deviceType: z.string().min(1),
+//   leadLabel: z.string().optional(),
+//   automationStatus: z.string().min(1),
+//   leadStatus: z.string().min(1),
+//   whatsappType: z.string().min(1),
+// });
 
 // type FormValues = z.infer<typeof FormSchema>;
 
@@ -65,9 +65,9 @@ function WhatsappAutomationFilter() {
       leadStatus: "New",
       whatsappType: "Normal Type",
     } as Values,
-    onSubmit: async ({ value }: { value: Values }) => {
+    onSubmit: async () => {
       // replace this with your API call
-      //console.log("SUBMIT ->", value);
+      console.log("SUBMIT ->", value);
       // Example:
       // await fetch('/api/filters', { method: 'POST', body: JSON.stringify(value) })
     },

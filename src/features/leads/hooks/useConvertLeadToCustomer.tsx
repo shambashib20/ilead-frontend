@@ -23,7 +23,7 @@ export function useConvertLeadToCustomer() {
 
     onError: (err) => {
       // keep minimal logging here; UI handles toasts/alerts
-      //console.error("convertToCustomer failed", err);
+      console.error("convertToCustomer failed", err);
     },
   });
 

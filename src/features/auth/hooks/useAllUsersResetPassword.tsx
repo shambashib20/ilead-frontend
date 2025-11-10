@@ -17,10 +17,10 @@ export function useAllUsersResetPassword() {
       return authService.resetPasswordForAll({ otp, newPassword });
     },
     onSuccess: (data) => {
-      //console.log(data);
+      console.log(data);
 
       if (data.status === "SUCCESS") {
-        //console.log("Reset successful:", data.message);
+        console.log("Reset successful:", data.message);
 
         setTimeout(() => {
           router.history.push("/login");
@@ -28,11 +28,11 @@ export function useAllUsersResetPassword() {
         // Redirect to dashboard or another pages
       }
       if (!data.status || data.status !== "SUCCESS") {
-        //console.log("Login successful:", data.message);
+        console.log("Login successful:", data.message);
       }
     },
     onError: (error) => {
-      //console.error("Login failed:", error.name, error.message);
+      console.error("Login failed:", error.name, error.message);
     },
   });
 

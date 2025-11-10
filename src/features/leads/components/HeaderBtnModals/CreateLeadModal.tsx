@@ -104,7 +104,7 @@ export default function CreateLeadModal() {
         setStatuses(statusesRes?.data?.data ?? []);
         setChatAgents(agentsRes?.data?.data ?? []);
       } catch (err) {
-        //console.error("Error fetching dropdown data", err);
+        console.error("Error fetching dropdown data", err);
         toast.error("Failed to fetch labels/statuses/agents");
       } finally {
         setLoading(false);

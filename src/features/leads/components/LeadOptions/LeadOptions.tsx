@@ -28,7 +28,7 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   // const { exportLead } = useExportLeads();
 
   // function get
-  // //console.log(exportLead);
+  // console.log(exportLead);
 
   async function handleExport() {
     try {
@@ -50,7 +50,7 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
       link.remove();
       closeModal();
     } catch (err) {
-      //console.error("Export failed:", err);
+      console.error("Export failed:", err);
     }
   }
 

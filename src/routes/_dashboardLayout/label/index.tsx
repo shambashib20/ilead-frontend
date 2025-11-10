@@ -97,7 +97,7 @@ function RouteComponent() {
   };
 
   const handleDelete = async (labelId: string) => {
-    // //console.log(labelId);
+    // console.log(labelId);
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "This will permanently delete the label (hard delete)!.",
@@ -113,7 +113,7 @@ function RouteComponent() {
         // await fetchData();
         // Swal.fire("Deleted!", "The status has been deleted!", "success");
       } catch (error) {
-        // //console.error("Delete failed:", error);
+        // console.error("Delete failed:", error);
         Swal.fire("Error!", "Failed to delete the status.", "error");
       }
     }

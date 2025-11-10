@@ -38,7 +38,7 @@ export function AudioRecorderUploader({
         mediaRecorderRef.current = recorder;
       })
       .catch((err) => {
-        //console.error("Microphone permission denied", err);
+        console.error("Microphone permission denied", err);
         setRecording(false);
       });
   }, [recording]);
@@ -63,7 +63,7 @@ export function AudioRecorderUploader({
       setPreviewUrl(url);
       onUploadSuccess(url);
     } catch (error) {
-      //console.error("Audio upload failed", error);
+      console.error("Audio upload failed", error);
     } finally {
       setUploading(false);
     }

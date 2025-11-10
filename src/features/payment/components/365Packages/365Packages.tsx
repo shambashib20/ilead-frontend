@@ -129,7 +129,7 @@ function Packages365() {
     try {
       setSubscribingId(planId);
 
-      //console.log("[subscribe:start]", {
+      console.log("[subscribe:start]", {
         planId,
         currency,
         when: new Date().toISOString(),
@@ -140,14 +140,14 @@ function Packages365() {
       });
 
       if (res?.status === "SUCCESS" && res.data?.payment_link) {
-        //console.log("[subscribe:success]", res);
+        console.log("[subscribe:success]", res);
         window.open(res.data.payment_link, "_blank");
       } else {
-        //console.error("[subscribe:failure]", res);
+        console.error("[subscribe:failure]", res);
         // You might want to show a user-friendly error message here
       }
     } catch (err) {
-      //console.error("[subscribe:error]", err);
+      console.error("[subscribe:error]", err);
       // You might want to show a user-friendly error message here
     } finally {
       setSubscribingId(null);
@@ -354,7 +354,7 @@ function Packages365() {
                           }`}
                           onClick={() => {
                             // TODO: compare plans routing/modal
-                            //console.log("Compare package:", pkg.id);
+                            console.log("Compare package:", pkg.id);
                           }}
                         >
                           Compare Package →

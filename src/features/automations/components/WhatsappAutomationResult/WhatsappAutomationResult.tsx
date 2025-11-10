@@ -180,7 +180,7 @@ export default function WhatsappAutomationResult(): JSX.Element {
           const r = row.original;
           const onEdit = () => {
             // open drawer/modal or navigate to edit page
-            //console.log("edit", r.id);
+            console.log("edit", r.id);
             // placeholder: show dialog? navigate? implement per your app
           };
           const onClone = () => {
