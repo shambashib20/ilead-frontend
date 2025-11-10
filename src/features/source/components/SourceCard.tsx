@@ -196,6 +196,9 @@ function SourceCard() {
             <TableHeader className="bg-primary">
               <TableRow className="border-b border-gray-200 dark:border-gray-700">
                 <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  No.
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
                   Source
                 </TableHead>
                 <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
@@ -213,6 +216,9 @@ function SourceCard() {
                     key={source._id}
                     className={`border-b border-gray-100 dark:border-gray-800 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/30 `}
                   >
+                    <TableCell className="dark:text-white ps-6 py-6 ">
+                      {_index + 1 + (page - 1)}
+                    </TableCell>
                     <TableCell className="py-4">
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">

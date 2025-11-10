@@ -144,7 +144,7 @@ function RouteComponent() {
           <Table>
             <TableHeader className="">
               <TableRow className="bg-primary hover:bg-white dark:hover:bg-primary/80">
-                <TableHead className="dark:text-gray-200">No.</TableHead>
+                <TableHead className="dark:text-gray-200 px-5">No.</TableHead>
                 <TableHead className="dark:text-gray-200 ">Title</TableHead>
 
                 <TableHead className="dark:text-gray-200">Actions</TableHead>
@@ -157,12 +157,11 @@ function RouteComponent() {
             <TableBody className="bg-primary/60">
               {filteredLabels.length > 0 ? (
                 filteredLabels.map((label: any, ind: number) => (
-                  <TableRow key={label._id}>
-                    <TableCell className="dark:text-white">
+                  <TableRow key={label._id} className="py-2">
+                    <TableCell className="dark:text-white px-5 py-6 ">
                       {ind + 1 + (page - 1) * limit}
                     </TableCell>
-
-                    <TableCell className="dark:text-background">
+                    <TableCell className="dark:text-background py-6">
                       <span
                         style={{
                           background: label.meta?.color_code,
@@ -174,7 +173,7 @@ function RouteComponent() {
                       </span>
                     </TableCell>
 
-                    <TableCell className="flex gap-2 items-center">
+                    <TableCell className="flex gap-2 items-center py-6">
                       {label?.meta?.is_editable && (
                         <Pencil
                           size={18}

@@ -144,7 +144,9 @@ function StatusCard() {
           <Table>
             <TableHeader className="bg-primary">
               <TableRow>
+                <TableHead className="dark:text-gray-200 ps-4">No</TableHead>
                 <TableHead className="dark:text-gray-200">Title</TableHead>
+
                 <TableHead className="dark:text-gray-200">
                   Description
                 </TableHead>
@@ -154,9 +156,12 @@ function StatusCard() {
             </TableHeader>
             <TableBody className="bg-primary/50">
               {filteredStatuses.length > 0 ? (
-                filteredStatuses.map((st: any) => (
+                filteredStatuses.map((st: any, ind: any) => (
                   <TableRow key={st._id}>
-                    <TableCell className="dark:text-white">
+                    <TableCell className="dark:text-white ps-6 py-6 ">
+                      {ind + 1 + (page - 1)}
+                    </TableCell>
+                    <TableCell className="dark:text-white py-6">
                       <span
                         className=" px-3 py-2 rounded-md"
                         style={{
@@ -170,11 +175,11 @@ function StatusCard() {
                       </span>
                     </TableCell>
 
-                    <TableCell className="dark:text-white">
+                    <TableCell className="dark:text-white py-6">
                       {st.description}
                     </TableCell>
 
-                    <TableCell className="dark:text-white">
+                    <TableCell className="dark:text-white py-6">
                       <Badge
                         variant={st.meta?.is_active ? "default" : "secondary"}
                         className={
@@ -209,7 +214,7 @@ function StatusCard() {
                 <TableRow>
                   <TableCell
                     colSpan={4}
-                    className="text-center py-4 dark:text-white"
+                    className="text-center  dark:text-white py-6"
                   >
                     No statuses found on this page.
                   </TableCell>

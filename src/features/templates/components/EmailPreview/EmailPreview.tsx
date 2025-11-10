@@ -27,20 +27,20 @@ export default function EmailPreview({
 
   return (
     <div className="">
-      <div className="w-full  bg-gray-100 px-6 py-5 ">
+      <div className="w-full  bg-primary px-6 py-5 ">
         {/* Subject */}
-        <h2 className="mb-4 text-[20px] font-semibold tracking-tight text-gray-800">
+        <h2 className="mb-4 text-[20px] font-semibold tracking-tight text-foreground">
           {subject || "—"}
         </h2>
 
         {/* Sender */}
         <div className="mb-4 flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-gray-300" />
+          <div className="h-9 w-9 rounded-full bg-gray-300 dark:bg-gray-700" />
           <div className="leading-tight">
-            <div className="text-[15px] font-semibold text-gray-800">
+            <div className="text-[15px] font-semibold text-foreground">
               {fromName}
             </div>
-            <div className="text-[13px] text-gray-500">{toLabel}</div>
+            <div className="text-[13px] text-foreground">{toLabel}</div>
           </div>
         </div>
 
