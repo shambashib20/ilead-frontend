@@ -35,7 +35,7 @@ export default function RichTextEditor({
   return (
     <div className="border border-gray-300 rounded-md overflow-hidden">
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-1 p-3 bg-gray-50 border-b border-gray-300">
+      <div className="flex flex-wrap gap-1 p-3 bg-primary border-b border-gray-300">
         <button
           type="button"
           onClick={() => applyFormat("bold")}
@@ -85,7 +85,7 @@ export default function RichTextEditor({
         contentEditable
         onInput={handleInput}
         onBlur={onBlur}
-        className="w-full p-4 min-h-48 focus:outline-none bg-white text-gray-700"
+        className="w-full p-4 min-h-48 focus:outline-none bg-primary text-foreground"
         suppressContentEditableWarning
       />
     </div>
