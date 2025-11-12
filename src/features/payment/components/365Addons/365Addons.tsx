@@ -93,12 +93,28 @@ function AddonsPackages() {
   //   });
   // };
 
-  const formatPrice = (value: number, currency: "INR" | "USD") => {
-    if (currency === "INR") {
-      return `₹${value.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
-    }
-    return `$${value.toFixed(2)}`;
-  };
+const formatPrice = (
+  value: number,
+  currency: "INR" | "USD",
+  baseCurrency: "INR" | "USD" = "INR"
+) => {
+  const USD_RATE = 83.2; // 1 USD = 83.2 INR
+
+  let convertedValue = value;
+
+  // Convert base currency to target currency
+  if (baseCurrency === "INR" && currency === "USD") {
+    convertedValue = value / USD_RATE;
+  } else if (baseCurrency === "USD" && currency === "INR") {
+    convertedValue = value * USD_RATE;
+  }
+
+  return new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: currency === "INR" ? 0 : 2,
+  }).format(convertedValue);
+};
 
   // SINGLE Pay now handler (stub). Replace the inner block with actual payment/checkout logic.
   const handlePayNow = async (addonId: string) => {

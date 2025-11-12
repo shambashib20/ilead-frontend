@@ -29,6 +29,11 @@ function Packages365() {
 
   // Extract current plan identifiers and usage
   const activePackage = property?.meta?.active_package;
+  const activePackageValidity = activePackage?.package_id?.validity;
+  // const hasActiveSubscription = !!activePackage;
+  // const isCurrentPlan = !!subscribingId && pkg.id === subscribingId;
+  // const isExpired =
+  //   activePackageValidity && new Date(activePackageValidity) < new Date();
   const currentPlanId: string | undefined = activePackage?.package_id?._id;
   const currentPlanTitle: string | undefined = activePackage?.package_id?.title;
 
@@ -153,6 +158,8 @@ function Packages365() {
       setSubscribingId(null);
     }
   };
+
+  console.log(properties.meta?.active_package.package_id.validity);
 
   // Render loading state
   if (loading) {
@@ -328,23 +335,52 @@ function Packages365() {
                       ) : null}
 
                       <div className="mt-auto space-y-3">
-                        <button
-                          className={`w-full py-3 rounded-lg font-medium transition-all ${
-                            isCurrent
-                              ? colors.buttonDisabled
-                              : pkg.highlight && !isCurrent
+                        {(() => {
+                          const activeValidity =
+                            property?.meta?.active_package?.package_id
+                              ?.validity;
+                          const isExpired =
+                            activeValidity &&
+                            new Date(activeValidity) < new Date();
+                          const isSubscribed =
+                            !!property?.meta?.active_package &&
+                            property.meta.active_package.package_id?._id ===
+                              pkg.id;
+
+                          let label = "Subscribe";
+                          let disabled = false;
+                          let buttonStyle = colors.buttonPrimary;
+
+                          if (isSubscribed && !isExpired) {
+                            label = "Subscribed";
+                            disabled = true;
+                            buttonStyle = colors.buttonDisabled;
+                          } else if (isSubscribed && isExpired) {
+                            label = "Upgrade";
+                            disabled = false;
+                            buttonStyle =
+                              pkg.highlight && !isSubscribed
                                 ? "bg-white text-blue-600 hover:bg-gray-100"
-                                : colors.buttonPrimary
-                          }`}
-                          disabled={isCurrent || isSubscribing}
-                          onClick={() => handleSubscribe(pkg.id)}
-                        >
-                          {isCurrent
-                            ? "Current Plan"
-                            : isSubscribing
-                              ? "Subscribing..."
-                              : "Subscribe"}
-                        </button>
+                                : colors.buttonPrimary;
+                          } else if (!isSubscribed) {
+                            label = "Subscribe";
+                            disabled = false;
+                            buttonStyle =
+                              pkg.highlight && !isSubscribed
+                                ? "bg-white text-blue-600 hover:bg-gray-100"
+                                : colors.buttonPrimary;
+                          }
+
+                          return (
+                            <button
+                              className={`w-full py-3 rounded-lg font-medium transition-all ${buttonStyle}`}
+                              disabled={disabled || isSubscribing}
+                              onClick={() => handleSubscribe(pkg.id)}
+                            >
+                              {isSubscribing ? "Subscribing..." : label}
+                            </button>
+                          );
+                        })()}
 
                         <button
                           className={`w-full text-center text-sm py-2 transition-all ${
