@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Mail, MessageCircle, MessageSquare, ArrowLeft } from "lucide-react";
 import EmailPreview from "@/features/templates/components/EmailPreview";
 import WhatsAppPreview from "@/features/templates/components/WhatsappPreview";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAppForm } from "@/features/templates/hooks/useTemplateForm";
 import EmailTemplateForm from "@/features/templates/components/EmailTemplateForm";
 import WhatsappTemplateForm from "@/features/templates/components/WhatsappTemplateForm/WhatsappTemplateForm";
@@ -37,6 +37,7 @@ type SmsValues = {
 
 export default function TemplateBuilderPage() {
   const [activeTab, setActiveTab] = useState("email");
+  const navigate = useNavigate();
   const emailForm = useAppForm({
     defaultValues: {
       title: "",
@@ -99,6 +100,9 @@ export default function TemplateBuilderPage() {
         </h1>
         <Button
           variant="outline"
+          onClick={()=>navigate({
+            to: "/general-templates/lead-template"
+          })}
           className="gap-2 w-fit bg-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -124,17 +128,17 @@ export default function TemplateBuilderPage() {
             <TabsList className="flex gap-3 items-center justify-start bg-transparent p-0 mb-1">
               <TabsTrigger
                 value="email"
-                className="flex-none w-[160px] rounded-sm py-2 px-3 text-sm font-semibold border-2 border-gray-200 dark:border-gray-600 data-[state=active]:border-transparent data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-200 dark:data-[state=inactive]:bg-blue-500 dark:data-[state=inactive]:text-gray-300 hover:bg-purple-100 dark:hover:bg-gray-600 transition-all duration-200 data-[state=active]:[border-image:[none] flex items-center gap-3"
+                className="flex-none w-[160px] rounded-sm py-2 px-3 text-sm font-semibold border-2 border-gray-200 dark:border-gray-600 data-[state=active]:border-transparent data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 dark:data-[state=inactive]:bg-blue-500 dark:data-[state=inactive]:text-gray-300 hover:bg-purple-100 dark:hover:bg-gray-600 transition-all duration-200 data-[state=active]:[border-image:[none] flex items-center gap-3"
               >
                 <Mail size={18} className="dark:text-white" />
-                <span className="hidden sm:inline text-foreground">Email</span>
+                <span className="hidden sm:inline dark:text-white ">Email</span>
               </TabsTrigger>
               <TabsTrigger
                 value="whatsapp"
                 className="flex-none w-[160px] rounded-sm py-2 px-3 text-sm font-semibold border-2 border-gray-200 dark:border-gray-600 data-[state=active]:border-transparent data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 dark:data-[state=inactive]:bg-blue-500 dark:data-[state=inactive]:text-gray-300 hover:bg-purple-100 dark:hover:bg-gray-600 transition-all duration-200 data-[state=active]:[border-image:[none] flex items-center gap-3"
               >
                 <MessageCircle size={18} className="dark:text-white" />
-                <span className="hidden sm:inline text-foreground">
+                <span className="hidden sm:inline dark:text-white ">
                   WhatsApp
                 </span>
               </TabsTrigger>
@@ -143,7 +147,7 @@ export default function TemplateBuilderPage() {
                 className="flex-none w-[160px] rounded-sm py-2 px-3 text-sm font-semibold border-2 border-gray-200 dark:border-gray-600 data-[state=active]:border-transparent data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 dark:data-[state=inactive]:bg-blue-500 dark:data-[state=inactive]:text-gray-300 hover:bg-purple-100 dark:hover:bg-gray-600 transition-all duration-200 data-[state=active]:[border-image:[none] flex items-center gap-3"
               >
                 <MessageSquare size={18} className="dark:text-white" />
-                <span className="hidden sm:inline text-foreground">SMS</span>
+                <span className="hidden sm:inline dark:text-white">SMS</span>
               </TabsTrigger>
             </TabsList>
 

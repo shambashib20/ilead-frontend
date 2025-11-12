@@ -16,7 +16,7 @@ export default function TextAreaField({
 
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-light ">
+      <label className="block text-sm font-light text-gray-600 dark:text-gray-200">
         {label}
         <span className="text-red-500">*</span>
       </label>
