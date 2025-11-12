@@ -224,6 +224,8 @@ export default function WorkspaceDetailsCard() {
     ? dayjs(planExpiryISO).format("DD MMM YYYY, hh:mm A")
     : "—";
 
+  console.log(workspace);
+
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6">
       <div className="relative">
