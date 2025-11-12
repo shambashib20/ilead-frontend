@@ -29,7 +29,6 @@ function Packages365() {
 
   // Extract current plan identifiers and usage
   const activePackage = property?.meta?.active_package;
-  const activePackageValidity = activePackage?.package_id?.validity;
   // const hasActiveSubscription = !!activePackage;
   // const isCurrentPlan = !!subscribingId && pkg.id === subscribingId;
   // const isExpired =
@@ -337,8 +336,8 @@ function Packages365() {
                       <div className="mt-auto space-y-3">
                         {(() => {
                           const activeValidity =
-                            property?.meta?.active_package?.package_id
-                              ?.validity;
+                            property?.meta?.active_package?.meta
+                              ?.activated_features[0]?.validity;
                           const isExpired =
                             activeValidity &&
                             new Date(activeValidity) < new Date();
