@@ -14,8 +14,8 @@ export default function RichTextField({ label }: { label: string }) {
   const errors = useStore(field.store, (s) => s.meta.errors);
 
   return (
-    <div className="space-y-1">
-      <label className="block text-sm font-light">
+    <div className="space-y-2">
+      <label className="block text-sm font-light text-gray-600 dark:text-gray-200">
         {label} <span className="text-red-500">*</span>{" "}
       </label>
       <RichTextEditor

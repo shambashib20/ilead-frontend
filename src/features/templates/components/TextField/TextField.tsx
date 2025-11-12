@@ -7,8 +7,8 @@ export default function TextField({ label }: { label: string }) {
   const errors = useStore(field.store, (s) => s.meta.errors);
 
   return (
-    <div>
-      <label className="text-sm font-light">
+    <div >
+      <label className="text-sm font-light text-gray-600 dark:text-gray-50 space-y-2">
         <div>
           {label} <span className="text-red-500">*</span>
         </div>
@@ -16,7 +16,7 @@ export default function TextField({ label }: { label: string }) {
           value={field.state.value ?? ""}
           onChange={(e) => field.handleChange(e.target.value)}
           onBlur={field.handleBlur}
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2 border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </label>
       {errors.map((msg, i) => (

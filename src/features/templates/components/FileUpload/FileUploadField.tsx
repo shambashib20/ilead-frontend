@@ -36,7 +36,7 @@ export default function FileUploadField({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-sm font-medium text-gray-600 dark:text-gray-200">{label}</label>
 
       <div
         className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center cursor-pointer hover:border-purple-400"
@@ -50,7 +50,7 @@ export default function FileUploadField({
           field.handleBlur();
         }}
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-200">
           Drop files here or click to upload
         </p>
         <p className="text-xs text-gray-400">
