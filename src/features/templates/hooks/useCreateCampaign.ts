@@ -12,7 +12,7 @@ export function useCreateCampaign() {
   const mutation = useMutation<Campaign, unknown, CreateCampaignPayload>({
     mutationFn: (payload: CreateCampaignPayload) =>
       templateService.createCampaign(payload),
-    onSuccess: (created) => {
+    onSuccess: () => {
       qc.invalidateQueries();
       toast.success("Status Created SucessFully");
       // Invalidate list queries so they refetch fresh data
