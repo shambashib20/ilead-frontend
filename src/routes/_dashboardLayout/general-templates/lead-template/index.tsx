@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,57 +10,75 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, ArrowLeft, Pencil, Trash2, Eye, Paperclip } from "lucide-react";
+import {
+  Plus,
+  ArrowLeft,
+  Pencil,
+  Trash2,
+  Eye,
+  Paperclip,
+} from "lucide-react";
+import {
+  campaignQueryOptions,
+  useCampaigns,
+} from "@/features/templates/hooks/useCampaigns";
 
+// Define the route
 export const Route = createFileRoute(
   "/_dashboardLayout/general-templates/lead-template/"
 )({
   component: RouteComponent,
-});
-
-const rows = [
-  { id: 1, title: "Test Campaign!", type: "Whatsapp", notes: 0 },
-  { id: 2, title: "Nursing Leads 22025", type: "Whatsapp", notes: 2 },
-  { id: 3, title: "GNM 1L 25K Discount", type: "Whatsapp", notes: 1 },
-  { id: 4, title: "B.sc Nursing 1L 25K Discount", type: "Whatsapp", notes: 1 },
-  { id: 5, title: "Gnm Nursing 30% Scholarship", type: "Whatsapp", notes: 1 },
-  {
-    id: 6,
-    title: "B.Pharm Upto 50K For Scholarship",
-    type: "Whatsapp",
-    notes: 0,
+  loader: (opts) => {
+    opts.context.queryClient.ensureQueryData(campaignQueryOptions());
   },
-  { id: 7, title: "Gnm Nursing 1L Scholarship", type: "Whatsapp", notes: 1 },
-  { id: 8, title: "B.sc Nursing 2L 25k", type: "Whatsapp", notes: 1 },
-  { id: 9, title: "Associate", type: "Whatsapp", notes: 0 },
-  { id: 10, title: "B.Pharm For WBJEE Students", type: "Whatsapp", notes: 1 },
-];
+});
 
 function RouteComponent() {
   const navigate = useNavigate();
+
+  // pagination states
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  // fetch campaigns
+  const { campaigns, isLoading, pagination } = useCampaigns(page, limit);
+
+  // handlers
+  const handlePrev = () => {
+    if (pagination?.hasPrevPage) setPage((p) => p - 1);
+  };
+
+  const handleNext = () => {
+    if (pagination?.hasNextPage) setPage((p) => p + 1);
+  };
+
+  const handleLimitChange = (value: string) => {
+    setLimit(Number(value));
+    setPage(1);
+  };
+console.log(campaigns)
   return (
     <section className="mt-7">
       {/* Title + controls */}
-      <div className="rounded-xl   ">
+      <div className="rounded-xl">
         <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between bg-primary shadow-lead rounded-sm">
           <h1 className="text-2xl font-semibold tracking-tight">
             Lead Template
           </h1>
+
           <div className="flex items-center gap-2">
             <div className="relative w-72 max-w-full">
               <Input placeholder="Search..." className="pl-3" />
             </div>
+
             <Button
               variant="outline"
               className="gap-2"
-              onClick={() => {
-                navigate({
-                  to: "..",
-                });
-              }}
+              onClick={() => navigate({ to: ".." })}
             >
               <ArrowLeft className="h-4 w-4" /> Back
             </Button>
+
             <Button
               className="gap-2"
               onClick={() =>
@@ -69,7 +87,7 @@ function RouteComponent() {
                 })
               }
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4" /> Add
             </Button>
           </div>
         </div>
@@ -77,9 +95,9 @@ function RouteComponent() {
         <div className="bg-primary mt-5 shadow-lead rounded-sm">
           {/* Table */}
           <div className="overflow-hidden rounded-b-xl">
-            <table className="w-full  text-sm">
+            <table className="w-full text-sm">
               <thead>
-                <tr className=" text-foreground">
+                <tr className="text-foreground">
                   <Th className="w-16">No.</Th>
                   <Th>Title</Th>
                   <Th className="w-40">Type</Th>
@@ -87,44 +105,74 @@ function RouteComponent() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map((r, idx) => (
-                  <tr
-                    key={r.id}
-                    className="border-b border-gray-300 dark:border-gray-600 last:border-0"
-                  >
-                    <Td className="text-foreground">{idx + 1}</Td>
-                    <Td>
-                      <a
-                        href="#"
-                        className="text-forground font-medium hover:underline"
-                      >
-                        {r.title}
-                      </a>
-                    </Td>
-                    <Td>
-                      <Badge className="bg-emerald-700 hover:bg-emerald-700 dark:text-white">
-                        {r.type}
-                      </Badge>
-                    </Td>
-                    <Td className="pr-6">
-                      <div className="flex items-center justify-end gap-3">
-                        <IconPill color="text-amber-500" title="Edit">
-                          <Pencil className="h-4 w-4" />
-                        </IconPill>
-                        <IconPill color="text-rose-600" title="Delete">
-                          <Trash2 className="h-4 w-4" />
-                        </IconPill>
-                        <IconPill color="text-emerald-600" title="Preview">
-                          <Eye className="h-4 w-4" />
-                        </IconPill>
-                        <IconPill color="text-violet-600" title="Attachments">
-                          <Paperclip className="h-4 w-4" />
-                        </IconPill>
-                        <CountBubble value={r.notes} />
-                      </div>
-                    </Td>
+                {isLoading ? (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="text-center py-8 text-muted-foreground"
+                    >
+                      Loading campaigns...
+                    </td>
                   </tr>
-                ))}
+                ) : campaigns?.length ? (
+                  campaigns.map((r, idx) => (
+                    <tr
+                      key={r._id}
+                      className="border-b border-gray-300 dark:border-gray-600 last:border-0"
+                    >
+                      <Td className="text-foreground">
+                        {(page - 1) * limit + (idx + 1)}
+                      </Td>
+
+                      <Td>
+                        <span className="font-medium text-foreground hover:underline cursor-pointer">
+                          {r.title}
+                        </span>
+                      </Td>
+
+                      <Td>
+                        <Badge className="bg-emerald-700 hover:bg-emerald-700 dark:text-white">
+                          {r.type}
+                        </Badge>
+                      </Td>
+
+                      <Td className="pr-6">
+                        <div className="flex items-center justify-end gap-3">
+                          <IconPill color="text-amber-500" title="Edit">
+                            <Pencil className="h-4 w-4" />
+                          </IconPill>
+
+                          <IconPill color="text-rose-600" title="Delete">
+                            <Trash2 className="h-4 w-4" />
+                          </IconPill>
+
+                          <IconPill color="text-emerald-600" title="Preview">
+                            <Eye className="h-4 w-4" />
+                          </IconPill>
+
+                          <IconPill color="text-violet-600" title="Attachments">
+                            <Paperclip className="h-4 w-4" />
+                          </IconPill>
+
+                          <CountBubble
+                            value={
+                              Object.keys(r.meta.variable_map || {}).length
+                            }
+                          />
+                        </div>
+                      </Td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="text-center py-8 text-muted-foreground"
+                    >
+                      No campaigns found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -132,8 +180,12 @@ function RouteComponent() {
           {/* Footer pagination */}
           <div className="flex flex-col gap-3 border-t bg-background/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-end">
             <div className="text-sm text-muted-foreground">Rows per page:</div>
+
             <div className="flex items-center gap-3">
-              <Select defaultValue="10">
+              <Select
+                defaultValue={String(limit)}
+                onValueChange={handleLimitChange}
+              >
                 <SelectTrigger className="h-8 w-20 border-transparent shadow-none">
                   <SelectValue />
                 </SelectTrigger>
@@ -144,23 +196,48 @@ function RouteComponent() {
                 </SelectContent>
               </Select>
 
-              <div className="text-sm text-muted-foreground">1 - 10 of 10</div>
+              <div className="text-sm text-muted-foreground">
+                {pagination
+                  ? `${(page - 1) * limit + 1} - ${Math.min(
+                      page * limit,
+                      pagination.totalItems
+                    )} of ${pagination.totalItems}`
+                  : "—"}
+              </div>
 
               <div className="ml-2 inline-flex items-center gap-1">
-                <PageBtn disabled>{"⏮"}</PageBtn>
-                <PageBtn disabled>{"◀"}</PageBtn>
+                <PageBtn onClick={() => setPage(1)} disabled={page === 1}>
+                  ⏮
+                </PageBtn>
+
+                <PageBtn onClick={handlePrev} disabled={!pagination?.hasPrevPage}>
+                  ◀
+                </PageBtn>
 
                 <Button
                   variant="outline"
                   size="sm"
                   className="h-8 w-14 justify-center border-none"
                 >
-                  1
+                  {page}
                 </Button>
-                <div className="px-1 text-sm text-muted-foreground">of 1</div>
 
-                <PageBtn disabled>{"▶"}</PageBtn>
-                <PageBtn disabled>{"⏭"}</PageBtn>
+                <div className="px-1 text-sm text-muted-foreground">
+                  of {pagination?.totalPages || 1}
+                </div>
+
+                <PageBtn onClick={handleNext} disabled={!pagination?.hasNextPage}>
+                  ▶
+                </PageBtn>
+
+                <PageBtn
+                  onClick={() =>
+                    pagination && setPage(pagination.totalPages)
+                  }
+                  disabled={page === pagination?.totalPages}
+                >
+                  ⏭
+                </PageBtn>
               </div>
             </div>
           </div>
@@ -169,6 +246,8 @@ function RouteComponent() {
     </section>
   );
 }
+
+/* ------------------- Reusable UI Components ------------------- */
 
 function Th({
   children,
@@ -189,7 +268,7 @@ function Td({
 }: React.PropsWithChildren<{ className?: string }>) {
   return (
     <td
-      className={`border-b  border-gray-300 dark:border-gray-500 px-4 py-4 align-middle ${className}`}
+      className={`border-b border-gray-300 dark:border-gray-500 px-4 py-4 align-middle ${className}`}
     >
       {children}
     </td>
@@ -202,7 +281,10 @@ function IconPill({
   title,
 }: React.PropsWithChildren<{ color: string; title?: string }>) {
   return (
-    <span title={title} className={`${color}`}>
+    <span
+      title={title}
+      className={`cursor-pointer hover:opacity-80 transition-colors duration-150 ${color}`}
+    >
       {children}
     </span>
   );
@@ -219,12 +301,14 @@ function CountBubble({ value }: { value: number }) {
 function PageBtn({
   children,
   disabled,
-}: React.PropsWithChildren<{ disabled?: boolean }>) {
+  onClick,
+}: React.PropsWithChildren<{ disabled?: boolean; onClick?: () => void }>) {
   return (
     <Button
       variant="outline"
       size="sm"
       disabled={disabled}
+      onClick={onClick}
       className="h-8 w-8 p-0 border-none"
     >
       {children}

@@ -9,6 +9,7 @@ import { useAppForm } from "@/features/templates/hooks/useTemplateForm";
 import EmailTemplateForm from "@/features/templates/components/EmailTemplateForm";
 import WhatsappTemplateForm from "@/features/templates/components/WhatsappTemplateForm/WhatsappTemplateForm";
 import SmsTemplateForm from "@/features/templates/components/SmsTemplateForm/SmsTemplateForm";
+import { useCreateCampaign } from "@/features/templates/hooks/useCreateCampaign";
 
 export const Route = createFileRoute(
   "/_dashboardLayout/general-templates/lead-template/add-template/"
@@ -38,59 +39,78 @@ type SmsValues = {
 export default function TemplateBuilderPage() {
   const [activeTab, setActiveTab] = useState("email");
   const navigate = useNavigate();
+  const createCampaign = useCreateCampaign();
   const emailForm = useAppForm({
-    defaultValues: {
-      title: "",
-      subject: "",
-      message: "",
-      attachments: [],
-    } as EmailValues,
-    onSubmit: async ({ value }: { value: EmailValues }) => {
-      const payload = {
-        type: "EMAIL",
-        title: value.title,
-        subject: value.subject,
-        email_message: value.message, // ✅ rename as required
-        attachments: value.attachments ?? [],
-      };
+  defaultValues: {
+    title: "",
+    subject: "",
+    message: "",
+    attachments: [],
+  } as EmailValues,
+  onSubmit: async ({ value }: { value: EmailValues }) => {
+    const payload = {
+      type: "EMAIL",
+      title: value.title,
+      subject: value.subject,
+      email_message: value.message, // ✅ rename as required by backend
+      attachments: value.attachments ?? [],
+    };
 
-      console.log("EMAIL payload →", payload);
-    },
-  });
+    try {
+      await createCampaign.mutateAsync(payload as any);
+      console.log("✅ Email campaign created successfully!");
+       emailForm.reset();
+    } catch (err) {
+      console.error("❌ Failed to create email campaign:", err);
+    }
+  },
+});
 
-  const whatsappForm = useAppForm({
-    defaultValues: {
-      title: "",
-      message: "",
-      attachments: [],
-    } as WhatsappValues,
+const whatsappForm = useAppForm({
+  defaultValues: {
+    title: "",
+    message: "",
+    attachments: [],
+  } as WhatsappValues,
 
-    onSubmit: async ({ value }: { value: WhatsappValues }) => {
-      const payload = {
-        type: "WHATSAPP",
-        title: value.title,
-        message: value.message,
-        attachments: value.attachments ?? [],
-      };
+  onSubmit: async ({ value }: { value: WhatsappValues }) => {
+    const payload = {
+      type: "WHATSAPP",
+      title: value.title,
+      message: value.message,
+      attachments: value.attachments ?? [],
+    };
 
-      console.log("WHATSAPP payload →", payload);
-    },
-  });
+    try {
+      await createCampaign.mutateAsync(payload as any);
+      console.log("✅ WhatsApp campaign created successfully!");
+      whatsappForm.reset();
+   
+    } catch (err) {
+      console.error("❌ Failed to create WhatsApp campaign:", err);
+    }
+  },
+});
 
-  const smsForm = useAppForm({
-    defaultValues: { title: "", templateId: "" } as SmsValues,
-    onSubmit: async ({ value }: { value: SmsValues }) => {
-      const payload = {
-        type: "SMS",
-        title: value.title,
-        message: value.message,
-        sms_template_id: value.templateId, // ✅ rename as required
-      };
+const smsForm = useAppForm({
+  defaultValues: { title: "", templateId: "" } as SmsValues,
+  onSubmit: async ({ value }: { value: SmsValues }) => {
+    const payload = {
+      type: "SMS",
+      title: value.title,
+      message: value.message,
+      sms_template_id: value.templateId,
+    };
 
-      console.log("SMS payload →", payload);
-    },
-  });
-
+    try {
+      await createCampaign.mutateAsync(payload as any);
+      console.log("✅ SMS campaign created successfully!");
+      smsForm.reset();
+    } catch (err) {
+      console.error("❌ Failed to create SMS campaign:", err);
+    }
+  },
+});
   return (
     <section className="min-h-screen mt-7">
       {/* Header */}
