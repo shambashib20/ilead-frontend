@@ -24,16 +24,18 @@ const defaultValues: FormValues = {
   rules: [], // start empty; rows only via "Add Rules"
 };
 
-export default function FirstMessageForm() {
+export default function FirstMessageForm({ type }: { type: any }) {
   const form = useForm({
     defaultValues,
     onSubmit({ value }) {
       alert(JSON.stringify(value, null, 2));
+
+      console.log(type, value);
     },
   });
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 space-y-4">
+    <div className="w-full  p-4 space-y-4">
       <h2 className="text-xl font-semibold">First Message</h2>
 
       <form
@@ -49,24 +51,20 @@ export default function FirstMessageForm() {
           {(field) => (
             <div className="space-y-4">
               {/* Toolbar */}
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium">Add Rules</div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    field.pushValue({
-                      deviceType: "",
-                      status: "",
-                      label: "",
-                      template: "",
-                    })
-                  }
-                  className="px-3 py-2 rounded border"
-                >
-                  + Add Rule
-                </button>
-              </div>
-
+              <button
+                type="button"
+                onClick={() =>
+                  field.pushValue({
+                    deviceType: "",
+                    status: "",
+                    label: "",
+                    template: "",
+                  })
+                }
+                className="px-3 py-2 rounded border w-full"
+              >
+                + Add Rule
+              </button>
               {/* Rows */}
               {field.state.value.length === 0 ? (
                 <p className="text-sm opacity-70">
@@ -77,7 +75,7 @@ export default function FirstMessageForm() {
               {field.state.value.map((_, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border p-3 grid gap-3 md:grid-cols-5"
+                  className="rounded-lg border p-3 grid gap-3 md:grid-cols-4"
                 >
                   <div className="md:col-span-5 flex items-center justify-between">
                     <span className="text-sm font-semibold">Rules {i + 1}</span>
