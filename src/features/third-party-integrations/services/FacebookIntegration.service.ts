@@ -25,6 +25,11 @@ class FacebookIntegrationService extends ApiClient {
     });
     return response.data;
   }
+
+  async fetchFacebookLeads(payload: { formId: string; labelTitle: string }) {
+    const response = await this.post("/leads", payload);
+    return response.data;
+  }
 }
 
 export const facebookIntegrationService = new FacebookIntegrationService();

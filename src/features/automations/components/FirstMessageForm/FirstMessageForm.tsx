@@ -1,19 +1,20 @@
 "use client";
 import { useForm } from "@tanstack/react-form";
+import type { CreateAutomationPayload } from "../../services/automation.service";
+// import { useCreateAutomation } from "../../hooks/createAutomation";
+import { useStatus } from "@/features/leads/hooks/useStatus";
+import { useAllLabels } from "@/features/leads/hooks/useAllLabels";
+import { useCampaigns } from "@/features/templates/hooks/useCampaigns";
+import { useCreateAutomation } from "../../hooks/createAutomation";
 // Optional: devtools
 // import { TanStackDevtools } from '@tanstack/react-devtools'
 // import { FormDevtoolsPlugin } from '@tanstack/react-form-devtools'
 
-type DeviceType = "Staff Device" | "Meta Device";
-type Status = "New" | "Open" | "In Progress" | "Closed";
-type Label = "Hot" | "Warm" | "Cold";
-type Template = "Welcome" | "Follow Up" | "Reminder";
-
 interface Rule {
-  deviceType: DeviceType | "";
-  status: Status | "";
-  label: Label | "";
-  template: Template | "";
+  deviceType: string | "";
+  status: string | "";
+  label: string | "";
+  template: string | "";
 }
 
 interface FormValues {
@@ -24,15 +25,48 @@ const defaultValues: FormValues = {
   rules: [], // start empty; rows only via "Add Rules"
 };
 
+function buildAutomationPayload(
+  typeObj: { type: string; lead_type: string },
+  formValue: FormValues
+): CreateAutomationPayload {
+  return {
+    type: typeObj.type,
+    lead_type: typeObj.lead_type,
+    rules: formValue.rules.map((r) => ({
+      device_type: r.deviceType,
+      status_id: r.status,
+      label_id: r.label,
+      template_id: r.template,
+    })),
+    meta: {
+      created_by: "Admin",
+      trigger_source: "Dashboard",
+    },
+  };
+}
+
 export default function FirstMessageForm({ type }: { type: any }) {
+  const { mutateAsync, isPending } = useCreateAutomation();
+  const { status } = useStatus();
+  const { allLables } = useAllLabels();
+  const { campaigns } = useCampaigns();
   const form = useForm({
     defaultValues,
     onSubmit({ value }) {
-      alert(JSON.stringify(value, null, 2));
+      // Build payload from `type` prop + form values
+      const payload = buildAutomationPayload(type, value);
 
-      console.log(type, value);
+      // Logging to inspect final payload
+      console.log("TYPE PROP:", type);
+      console.log("FORM VALUE:", value);
+      console.log("FINAL PAYLOAD:", payload);
+
+      // Fire the mutation
+      mutateAsync(payload);
     },
   });
+
+  console.log(campaigns);
 
   return (
     <div className="w-full  p-4 space-y-4">
@@ -95,9 +129,7 @@ export default function FirstMessageForm({ type }: { type: any }) {
                         <label className="text-sm mb-1">Device Type *</label>
                         <select
                           value={fDev.state.value}
-                          onChange={(e) =>
-                            fDev.handleChange(e.target.value as DeviceType)
-                          }
+                          onChange={(e) => fDev.handleChange(e.target.value)}
                           onBlur={fDev.handleBlur}
                           className="border rounded p-2"
                           required
@@ -117,18 +149,15 @@ export default function FirstMessageForm({ type }: { type: any }) {
                         <label className="text-sm mb-1">Status *</label>
                         <select
                           value={fStatus.state.value}
-                          onChange={(e) =>
-                            fStatus.handleChange(e.target.value as Status)
-                          }
+                          onChange={(e) => fStatus.handleChange(e.target.value)}
                           onBlur={fStatus.handleBlur}
                           className="border rounded p-2"
                           required
                         >
                           <option value="">Select Status...</option>
-                          <option value="New">New</option>
-                          <option value="Open">Open</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Closed">Closed</option>
+                          {status.data.map((stat) => (
+                            <option value={stat._id}>{stat.title}</option>
+                          ))}
                         </select>
                       </div>
                     )}
@@ -141,17 +170,15 @@ export default function FirstMessageForm({ type }: { type: any }) {
                         <label className="text-sm mb-1">Label *</label>
                         <select
                           value={fLabel.state.value}
-                          onChange={(e) =>
-                            fLabel.handleChange(e.target.value as Label)
-                          }
+                          onChange={(e) => fLabel.handleChange(e.target.value)}
                           onBlur={fLabel.handleBlur}
                           className="border rounded p-2"
                           required
                         >
                           <option value="">Select Label...</option>
-                          <option value="Hot">Hot</option>
-                          <option value="Warm">Warm</option>
-                          <option value="Cold">Cold</option>
+                          {allLables.data.map((stat) => (
+                            <option value={stat._id}>{stat.title}</option>
+                          ))}
                         </select>
                       </div>
                     )}
@@ -164,17 +191,15 @@ export default function FirstMessageForm({ type }: { type: any }) {
                         <label className="text-sm mb-1">Template *</label>
                         <select
                           value={fTpl.state.value}
-                          onChange={(e) =>
-                            fTpl.handleChange(e.target.value as Template)
-                          }
+                          onChange={(e) => fTpl.handleChange(e.target.value)}
                           onBlur={fTpl.handleBlur}
                           className="border rounded p-2"
                           required
                         >
                           <option value="">Select Template...</option>
-                          <option value="Welcome">Welcome</option>
-                          <option value="Follow Up">Follow Up</option>
-                          <option value="Reminder">Reminder</option>
+                          {campaigns.map((stat) => (
+                            <option value={stat._id}>{stat.title}</option>
+                          ))}
                         </select>
                       </div>
                     )}

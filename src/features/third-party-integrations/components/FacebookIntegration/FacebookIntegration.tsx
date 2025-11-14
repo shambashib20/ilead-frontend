@@ -13,6 +13,8 @@ import {
 import type { Label } from "@/features/leads/types";
 import { facebookIntegrationService } from "../../services/FacebookIntegration.service";
 import Swal from "sweetalert2";
+import ImportFacebookLeadsSection from "../ImportFacebookLeadSection";
+import { Card, CardContent } from "@/components/ui/card";
 
 function FacebookIntegration() {
   const [selectedLabel, setSelectedLabel] = useState("");
@@ -102,39 +104,49 @@ function FacebookIntegration() {
 
   return (
     <div className="leads-sec mt-7">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h2 className="text-lg font-semibold">FaceBook Lead Integration</h2>
-          <p className="text-sm text-gray-300">Login With FaceBook</p>
-        </div>
-      </div>
+      <Card>
+        <CardContent>
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h2 className="text-lg font-semibold">
+                FaceBook Lead Integration
+              </h2>
+              <p className="text-sm text-foreground">Login With FaceBook</p>
+            </div>
+          </div>
 
-      <div className="flex flex-col md:flex-row items-center gap-4">
-        <Button
-          onClick={handleLogin}
-          className="text-white w-full md:w-[320px]"
-        >
-          <FaFacebookF className="mr-2" /> Connect To Facebook
-        </Button>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <Button
+              onClick={handleLogin}
+              className="text-white w-full md:w-[320px]"
+            >
+              <FaFacebookF className="mr-2" /> Connect To Facebook
+            </Button>
 
-        <div className="flex flex-col w-full md:w-[320px]">
-          <Select value={selectedLabel} onValueChange={setSelectedLabel}>
-            <SelectTrigger className="w-full bg-[#2f3658] text-white border border-[#444c6b]">
-              <SelectValue placeholder="Select label" />
-            </SelectTrigger>
-            <SelectContent>
-              {labels.map((label) => (
-                <SelectItem key={label._id} value={label._id}>
-                  {label.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+            <div className="flex flex-col w-full md:w-[320px]">
+              <Select value={selectedLabel} onValueChange={setSelectedLabel}>
+                <SelectTrigger className="w-full bg-primary text-white border border-[#444c6b]">
+                  <SelectValue placeholder="Select label" />
+                </SelectTrigger>
+                <SelectContent>
+                  {labels.map((label) => (
+                    <SelectItem key={label._id} value={label._id}>
+                      {label.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-        <Button onClick={handleSave} className="text-white w-[80px]">
-          Save
-        </Button>
+            <Button onClick={handleSave} className="text-white w-[80px]">
+              Save
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div>
+        <ImportFacebookLeadsSection />
       </div>
     </div>
   );
