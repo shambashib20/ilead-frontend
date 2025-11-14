@@ -16,7 +16,7 @@ export function useCreateAutomation() {
   const mutation = useMutation<any, unknown, CreateAutomationPayload>({
     mutationFn: (payload: CreateAutomationPayload) =>
       automationService.createAutomation(payload),
-    onSuccess: (resp) => {
+    onSuccess: (_resp) => {
       // Invalidate relevant queries so UI refreshes
       qc.invalidateQueries(); // broad; change to specific keys if you have them, e.g. ["automations"]
       toast.success("Automation created successfully!");

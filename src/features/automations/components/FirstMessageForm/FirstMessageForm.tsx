@@ -46,7 +46,7 @@ function buildAutomationPayload(
 }
 
 export default function FirstMessageForm({ type }: { type: any }) {
-  const { mutateAsync, isPending } = useCreateAutomation();
+  const { mutateAsync } = useCreateAutomation();
   const { status } = useStatus();
   const { allLables } = useAllLabels();
   const { campaigns } = useCampaigns();
