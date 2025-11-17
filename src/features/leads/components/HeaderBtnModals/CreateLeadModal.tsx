@@ -220,9 +220,12 @@ export default function CreateLeadModal() {
           closeModal();
         }, 1000);
       } catch (err: any) {
-        const code = err?.response?.status;
+        const code = err?.status;
+        console.log(err);
+
         let message = "Something went wrong while creating the label.";
         const isPaywall = code === 400 || code === 403;
+        console.log(isPaywall);
 
         if (isPaywall) {
           setModalTitle?.("Your Plan Has Expires");

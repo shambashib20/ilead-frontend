@@ -1,15 +1,10 @@
 import { usePricingPlans } from "@/features/payment/hooks/usePricingPlans";
-import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useWorkspaceProperty } from "@/features/workspace/hooks/useWorkspaceProperty";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { Crown, Check } from "lucide-react";
 
-export const Route = createFileRoute("/_dashboardLayout/add-package/")({
-  component: RouteComponent,
-});
-
-function RouteComponent() {
+function PaywallUi() {
   const [currency, setCurrency] = useState<"INR" | "USD">("INR");
   const { theme } = useTheme();
   const conversionRate = 0.012;
@@ -132,7 +127,9 @@ function RouteComponent() {
   // const popularPlan = uiPlans.find((p) => p.popular);s
 
   return (
-    <div className={`min-h-fit ${colors.bg} transition-colors duration-300`}>
+    <div
+      className={`h-[500px] ${colors.bg} transition-colors duration-300 overflow-y-scroll`}
+    >
       <div className="max-w-7xl mx-auto px-3 py-6">
         {/* Header */}
 
@@ -348,4 +345,4 @@ function RouteComponent() {
   );
 }
 
-export default RouteComponent;
+export default PaywallUi;

@@ -12,6 +12,7 @@ import BrandLoader from "@/components/BrandLoader/BrandLoader";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
 
 import { useWorkspaceProperty } from "../../hooks/useWorkspaceProperty";
+import { useUserProfile } from "@/features/leads/hooks/useUserProfile";
 
 export type BadgeVariant = "green" | "gray" | "yellow" | "red";
 
@@ -186,6 +187,7 @@ export default function WorkspaceDetailsCard() {
   } = useWorkspaceProperty();
   const { openModal, setModalTitle } = useModalStore();
   const { data } = useUser();
+  const { user: userDetail } = useUserProfile();
 
   const userName: string | undefined =
     (data as any)?.name ?? (data as any)?.data?.name;
@@ -227,7 +229,7 @@ export default function WorkspaceDetailsCard() {
   console.log(workspace);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6">
+    <div className="max-w-full mx-auto px-4 md:px-6 mt-6">
       <div className="relative">
         <Card className="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
@@ -546,7 +548,11 @@ export default function WorkspaceDetailsCard() {
                 <div>
                   <div className="flex items-center gap-3 mt-2">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-yellow-400 flex items-center justify-center text-black font-bold">
-                      {(userName?.charAt(0) ?? "M").toUpperCase()}
+                      <img
+                        src={userDetail?.meta?.profile_picture_data?.file_url}
+                        alt=""
+                        className="rounded-full w-10 h-10"
+                      />
                     </div>
                     <div>
                       <div className="text-sm font-medium">

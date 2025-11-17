@@ -28,11 +28,9 @@ export function useCreateLabel() {
     },
 
     // onMutate: (variables) => {},
-    onError: (error: {
-      response: { status: number; data: { message: string } };
-    }) => {
+    onError: (error: { status: number; data: { message: string } }) => {
       console.error("Create label failed:", error);
-      const code = error?.response?.status;
+      const code = error?.status;
       let message = "Something went wrong while creating the label.";
       const isPaywall = code === 403;
 

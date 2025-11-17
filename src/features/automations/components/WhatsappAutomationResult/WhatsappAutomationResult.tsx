@@ -1,4 +1,4 @@
-import { useMemo, useState, type JSX } from "react";
+import { useMemo, useState, type JSX, useEffect } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -6,16 +6,15 @@ import {
   flexRender,
   type ColumnDef,
 } from "@tanstack/react-table";
-
 import { Edit, Trash2, Copy } from "lucide-react";
 
-/* shadcn UI components - adjust import paths if you scaffolded differently */
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { useAutomations } from "../../hooks/useAutomation";
 
 /**
- * Mock data type and rows - replace with your API data
+ * Table row type
  */
 type Row = {
   id: number;
@@ -27,98 +26,42 @@ type Row = {
   enabled: boolean;
 };
 
-const MOCK_DATA: Row[] = [
-  {
-    id: 1,
-    automationType: "Lead",
-    status: "New",
-    label: "Nursing Leads 2025",
-    deviceType: "Staff Device",
-    template: "Nursing Leads 22025",
-    enabled: true,
-  },
-  {
-    id: 2,
-    automationType: "Lead",
-    status: "New",
-    label: "GNM 1L 25K Discount",
-    deviceType: "Staff Device",
-    template: "GNM 1L 25K Discount",
-    enabled: true,
-  },
-  {
-    id: 3,
-    automationType: "Lead",
-    status: "New",
-    label: "B.sc Nursing 1L 25K Discount",
-    deviceType: "Staff Device",
-    template: "B.sc Nursing 1L 25K Discount",
-    enabled: true,
-  },
-  {
-    id: 4,
-    automationType: "Lead",
-    status: "New",
-    label: "Gnm Nursing 30% Scholarship",
-    deviceType: "Staff Device",
-    template: "Gnm Nursing 30% Scholarship",
-    enabled: true,
-  },
-  {
-    id: 5,
-    automationType: "Lead",
-    status: "New",
-    label: "B.Pharm Upto 50K",
-    deviceType: "Staff Device",
-    template: "B.Pharm Upto 50K For ...",
-    enabled: true,
-  },
-  {
-    id: 6,
-    automationType: "Lead",
-    status: "New",
-    label: "Gnm Nursing 1L Scholarship",
-    deviceType: "Staff Device",
-    template: "Gnm Nursing 1L Scholarship",
-    enabled: true,
-  },
-  {
-    id: 7,
-    automationType: "Lead",
-    status: "New",
-    label: "B.sc Nursing 2L 25k",
-    deviceType: "Staff Device",
-    template: "B.sc Nursing 2L 25k",
-    enabled: true,
-  },
-  {
-    id: 8,
-    automationType: "Lead",
-    status: "New",
-    label: "B.Pharm For WBJEE Students",
-    deviceType: "Staff Device",
-    template: "B.Pharm For WBJEE Students",
-    enabled: true,
-  },
-  {
-    id: 9,
-    automationType: "Lead",
-    status: "New",
-    label: "Associate",
-    deviceType: "Staff Device",
-    template: "Associate",
-    enabled: true,
-  },
-];
-
-/**
- * Form filter shape
- */
-
 const columnHelper = createColumnHelper<Row>();
 
 export default function WhatsappAutomationResult(): JSX.Element {
-  const [data, setData] = useState<Row[]>(MOCK_DATA);
+  // 👉 fetch from API
+  const page = 1;
+  const limit = 10;
+  const { automations, pagination, isLoading } = useAutomations(page, limit);
+
+  // Map API data → table rows
+  const apiRows: Row[] = useMemo(
+    () =>
+      automations.map((a, index) => {
+        const firstRule = a.rules?.[0];
+
+        return {
+          id:
+            (pagination?.currentPage ?? 1 - 1) * (pagination?.limit ?? limit) +
+            (index + 1),
+          automationType: "Lead", // or derive from a.type / a.lead_type if you want
+          status: firstRule?.status_id ?? "-",
+          label: firstRule?.label_id ?? "-",
+          deviceType: firstRule?.device_type ?? "-",
+          template: firstRule?.template_id ?? "-",
+          enabled: !!a.meta?.is_active,
+        };
+      }),
+    [automations, pagination, limit]
+  );
+
+  // Local state for optimistic changes / clone / delete
+  const [data, setData] = useState<Row[]>([]);
+
+  // sync when API data changes
+  useEffect(() => {
+    setData(apiRows);
+  }, [apiRows]);
 
   const columns = useMemo<ColumnDef<Row, any>[]>(
     () => [
@@ -162,10 +105,11 @@ export default function WhatsappAutomationResult(): JSX.Element {
               <Switch
                 checked={val}
                 onCheckedChange={(v) => {
-                  // optimistic local toggle - replace with API call
+                  // still local optimistic toggle for now
                   setData((d) =>
                     d.map((r) => (r.id === row.id ? { ...r, enabled: !!v } : r))
                   );
+                  // later: call API to enable/disable automation
                 }}
                 aria-label={`Toggle automation for ${row.template}`}
               />
@@ -179,13 +123,11 @@ export default function WhatsappAutomationResult(): JSX.Element {
         cell: ({ row }) => {
           const r = row.original;
           const onEdit = () => {
-            // open drawer/modal or navigate to edit page
             console.log("edit", r.id);
-            // placeholder: show dialog? navigate? implement per your app
           };
           const onClone = () => {
-            // clone locally for demo
-            const nextId = Math.max(...data.map((x) => x.id)) + 1;
+            const nextId =
+              data.length > 0 ? Math.max(...data.map((x) => x.id)) + 1 : 1;
             const cloned = {
               ...r,
               id: nextId,
@@ -235,7 +177,6 @@ export default function WhatsappAutomationResult(): JSX.Element {
         },
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [data]
   );
 
@@ -245,7 +186,13 @@ export default function WhatsappAutomationResult(): JSX.Element {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Watch form changes: whenever a filter changes, auto-apply (debounced)
+  if (isLoading) {
+    return (
+      <Card className="bg-primary shadow rounded-md p-4">
+        <span className="text-sm text-gray-500">Loading automations...</span>
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-primary shadow rounded-md p-0 overflow-hidden">
@@ -313,14 +260,18 @@ export default function WhatsappAutomationResult(): JSX.Element {
 
       <div className="p-4 border-t dark:border-gray-700 flex items-center justify-between">
         <div className="text-sm text-gray-500">
-          1 - {data.length} of {data.length}
+          {pagination
+            ? `${(pagination.currentPage - 1) * pagination.limit + 1} - ${
+                (pagination.currentPage - 1) * pagination.limit + data.length
+              } of ${pagination.totalItems}`
+            : `1 - ${data.length} of ${data.length}`}
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost">{"<<"}</Button>
           <Button variant="ghost">{"<"}</Button>
           <input
             className="w-12 text-center rounded border px-2 py-1 bg-transparent text-sm text-gray-700 dark:text-gray-200"
-            value={1}
+            value={pagination?.currentPage ?? 1}
             readOnly
           />
           <Button variant="ghost">{">"}</Button>

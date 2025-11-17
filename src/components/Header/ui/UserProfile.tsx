@@ -31,6 +31,7 @@ export default function UserProfileBox() {
             <img
               src={userProfile?.meta?.profile_picture_data?.file_url}
               alt=""
+              className="h-9 w-9 rounded-full object-cover"
             />
           </span>
         </div>
