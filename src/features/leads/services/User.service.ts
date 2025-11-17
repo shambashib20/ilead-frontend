@@ -58,6 +58,16 @@ interface CreateUserResponse {
   data?: UserDto;
 }
 
+export interface ProfileImagePayload {
+  fileUrl: string;
+}
+
+export interface ProfileImageResponse {
+  message: string;
+  status: string;
+  data: UserDto;
+}
+
 export class UserModule extends ApiClient {
   constructor() {
     super("user");
@@ -71,6 +81,17 @@ export class UserModule extends ApiClient {
     payload: CreateUserResponsePayload
   ): Promise<CreateUserResponse> {
     const res = await this.post<CreateUserResponse>("/create-user", payload);
+    return res.data;
+  }
+
+  async profileImgUpdate(
+    payload: ProfileImagePayload
+  ): Promise<ProfileImageResponse> {
+    const res = await this.post<ProfileImageResponse>(
+      "/profile-details/profile-image",
+      payload
+    );
+
     return res.data;
   }
 }
