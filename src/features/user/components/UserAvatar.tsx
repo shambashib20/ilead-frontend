@@ -16,6 +16,7 @@ function UserAvatar({ img, name }: UserAvatarProps) {
   const { mutate: updateProfileImage, isPending: isUpdating } =
     useUpdateProfileImage();
 
+  // sync from server when we don't already have a local preview
   useEffect(() => {
     if (img && !preview) {
       setPreview(img);
@@ -47,12 +48,26 @@ function UserAvatar({ img, name }: UserAvatarProps) {
     });
   }
 
+  //   function handleRemove() {
+  //     // Backend must agree that "" means "remove image"
+  //     updateProfileImage("", {
+  //       onSuccess: () => {
+  //         setPreview(null);
+  //       },
+  //       onError: (err) => {
+  //         console.error("Remove image failed:", err);
+  //       },
+  //     });
+  //   }
+
   const isBusy = isUploading || isUpdating;
 
   const firstLetter =
     name && typeof name === "string" && name.trim().length > 0
       ? name.trim().charAt(0).toUpperCase()
       : null;
+
+  //   const hasImage = Boolean(preview || img);
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -77,16 +92,30 @@ function UserAvatar({ img, name }: UserAvatarProps) {
         )}
       </div>
 
-      {/* Pencil button */}
-      <button
-        type="button"
-        onClick={handleButtonClick}
-        disabled={isBusy}
-        className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <Pencil className="h-3 w-3" />
-        {isBusy ? "Saving..." : "Change photo"}
-      </button>
+      {/* Actions */}
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={handleButtonClick}
+          disabled={isBusy}
+          className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Pencil className="h-3 w-3" />
+          {isBusy ? "Saving..." : "Change photo"}
+        </button>
+
+        {/* {hasImage && (
+          <button
+            type="button"
+            onClick={handleRemove}
+            disabled={isBusy}
+            className="inline-flex items-center gap-1 rounded-md border border-red-300 px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <X className="h-3 w-3" />
+            Remove
+          </button>
+        )} */}
+      </div>
 
       {/* Hidden input */}
       <input

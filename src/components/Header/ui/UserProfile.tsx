@@ -9,9 +9,11 @@ import {
 import { User, Building2, LogOut } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { fireLogoutOnce } from "@/lib/utils";
+import { useUserProfile } from "@/features/leads/hooks/useUserProfile";
 
 export default function UserProfileBox() {
   const { data: user } = useUser();
+  const { user: userProfile } = useUserProfile();
 
   const handleLogout = async () => {
     fireLogoutOnce();
@@ -26,7 +28,10 @@ export default function UserProfileBox() {
             <span className="font-light text-[12px]">{user.role}</span>
           </h3>
           <span className="h-9 w-9 text-white font-semibold grid place-items-center bg-btn-bg rounded-full">
-            {user.name?.split("")?.[0]}
+            <img
+              src={userProfile?.meta?.profile_picture_data?.file_url}
+              alt=""
+            />
           </span>
         </div>
       </DropdownMenuTrigger>

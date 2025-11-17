@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,8 +10,8 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import { userService } from "@/features/leads/services/User.service";
 import UserAvatar from "./UserAvatar";
+import { useUserProfile } from "@/features/leads/hooks/useUserProfile";
 
 // Skeleton Loader Component
 function UserProfileSkeleton() {
@@ -59,27 +58,7 @@ function UserProfileSkeleton() {
 }
 
 export default function UserProfileDetailsCard() {
-  const [user, setUser] = useState<
-    | null
-    | Awaited<ReturnType<typeof userService.getUserDetails>>["data"]["data"]
-  >(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const res = await userService.getUserDetails();
-        setUser(res.data.data);
-      } catch (err) {
-        console.error("Error fetching user details:", err);
-        setError("Failed to load user details.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+  const { user, isLoading, error } = useUserProfile();
 
   console.log(user?.meta?.profile_picture_data?.file_url);
 
@@ -112,13 +91,13 @@ export default function UserProfileDetailsCard() {
     </div>
   );
 
-  if (loading) return <UserProfileSkeleton />;
+  if (isLoading) return <UserProfileSkeleton />;
 
   if (error) {
     return (
       <div className="max-w-full w-[1000px] mx-auto mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3 text-red-800 dark:text-red-400">
         <AlertCircle className="h-5 w-5" />
-        <p>{error}</p>
+        <p>{error.message}</p>
       </div>
     );
   }
@@ -127,27 +106,35 @@ export default function UserProfileDetailsCard() {
 
   return (
     <Card className="max-w-full w-full mx-auto mt-6 overflow-hidden">
-      <CardHeader className="flex items-center justify-between gap-6 pb-6">
-        {/* Left: title & description */}
-        <div className="space-y-1">
-          <CardTitle className="flex items-baseline gap-2 text-2xl font-bold text-gray-800 dark:text-white">
-            <h3>User Profile</h3>
-            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
-              Super admin
-            </span>
-          </CardTitle>
-
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Detailed information about the user account
-          </p>
-        </div>
-
-        {/* Right: avatar + change photo */}
-        <div className="flex flex-col items-center">
+      <CardHeader className="flex items-start gap-4 pb-6">
+        {/* Left: Avatar */}
+        <div className="flex-shrink-0">
           <UserAvatar
             img={user?.meta?.profile_picture_data?.file_url}
             name={user.name}
           />
+        </div>
+
+        {/* Right: Title & description */}
+        <div className="flex-1 space-y-2">
+          <div className="flex items-baseline gap-3">
+            <CardTitle className="text-2xl font-bold text-gray-800 dark:text-white">
+              Profile
+            </CardTitle>
+            <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
+              Super admin
+            </span>
+          </div>
+
+          {/* User name */}
+          <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+            {user.name}
+          </h4>
+
+          {/* Description */}
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Detailed information about the user account
+          </p>
         </div>
       </CardHeader>
 

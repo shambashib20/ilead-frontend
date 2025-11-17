@@ -7,7 +7,7 @@ export function useUploadFile() {
 
   return useMutation({
     mutationFn: (file: File) => fileUploadService.uploadFile(file),
-    onSuccess: (data) => {
+    onSuccess: (_data) => {
       toast.success("Profile photo updated successfully!");
 
       // Refresh anything that depends on user profile image
