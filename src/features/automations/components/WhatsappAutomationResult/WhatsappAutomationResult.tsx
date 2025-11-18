@@ -29,7 +29,6 @@ type Row = {
 const columnHelper = createColumnHelper<Row>();
 
 export default function WhatsappAutomationResult(): JSX.Element {
-  // 👉 fetch from API
   const page = 1;
   const limit = 10;
   const { automations, pagination, isLoading } = useAutomations(page, limit);
@@ -42,23 +41,37 @@ export default function WhatsappAutomationResult(): JSX.Element {
 
         return {
           id:
-            (pagination?.currentPage ?? 1 - 1) * (pagination?.limit ?? limit) +
+            ((pagination?.currentPage ?? 1) - 1) *
+              (pagination?.limit ?? limit) +
             (index + 1),
-          automationType: "Lead", // or derive from a.type / a.lead_type if you want
-          status: firstRule?.status_id ?? "-",
-          label: firstRule?.label_id ?? "-",
-          deviceType: firstRule?.device_type ?? "-",
-          template: firstRule?.template_id ?? "-",
+          automationType: a.type === "LEAD_AUTOMATION" ? "Lead" : a.type,
+          status:
+            firstRule?.status_id == null
+              ? "-"
+              : typeof firstRule.status_id === "string"
+                ? firstRule.status_id
+                : (firstRule.status_id.title ?? "-"),
+          label:
+            firstRule?.label_id == null
+              ? "-"
+              : typeof firstRule.label_id === "string"
+                ? firstRule.label_id
+                : (firstRule.label_id.title ?? "-"),
+          deviceType: firstRule?.device_type?.replace(/_/g, " ") ?? "-",
+          template:
+            firstRule?.template_id == null
+              ? "-"
+              : typeof firstRule.template_id === "string"
+                ? firstRule.template_id
+                : (firstRule.template_id.title ?? "-"),
           enabled: !!a.meta?.is_active,
         };
       }),
     [automations, pagination, limit]
   );
 
-  // Local state for optimistic changes / clone / delete
   const [data, setData] = useState<Row[]>([]);
 
-  // sync when API data changes
   useEffect(() => {
     setData(apiRows);
   }, [apiRows]);
@@ -67,64 +80,42 @@ export default function WhatsappAutomationResult(): JSX.Element {
     () => [
       columnHelper.accessor("id", {
         header: "No.",
-        cell: (c) => <span className="block w-[70px]">{c.getValue()}</span>,
+        cell: (c) => <span className="block w-[50px]">{c.getValue()}</span>,
       }),
       columnHelper.accessor("automationType", {
-        header: "Automation Type",
-        cell: (c) => <span className="block w-[150px]">{c.getValue()}</span>,
+        header: "Type",
+        cell: (c) => <span className="block w-[90px]">{c.getValue()}</span>,
       }),
       columnHelper.accessor("status", {
         header: "Status",
-        cell: (c) => <span className="block w-[100px]">{c.getValue()}</span>,
+        cell: (c) => <span className="block w-[120px]">{c.getValue()}</span>,
       }),
       columnHelper.accessor("label", {
         header: "Label",
         cell: (c) => (
-          <span className="truncate block w-[220px]">{c.getValue()}</span>
+          <span className="truncate block w-[180px]">{c.getValue()}</span>
         ),
       }),
       columnHelper.accessor("deviceType", {
-        header: "Device Type",
-        cell: (c) => <span className="block w-[170px]">{c.getValue()}</span>,
+        header: "Device",
+        cell: (c) => <span className="block w-[120px]">{c.getValue()}</span>,
       }),
       columnHelper.accessor("template", {
         header: "Template",
         cell: (c) => (
-          <a className="text-purple-600 hover:underline cursor-pointer block w-[200px] truncate ">
+          <span className="text-purple-600 hover:underline cursor-pointer block w-[200px] truncate">
             {c.getValue()}
-          </a>
+          </span>
         ),
-      }),
-      columnHelper.accessor("enabled", {
-        header: "Automation Status",
-        cell: (info) => {
-          const val = info.getValue() as boolean;
-          const row = info.row.original;
-          return (
-            <div className="block w-[150px]">
-              <Switch
-                checked={val}
-                onCheckedChange={(v) => {
-                  // still local optimistic toggle for now
-                  setData((d) =>
-                    d.map((r) => (r.id === row.id ? { ...r, enabled: !!v } : r))
-                  );
-                  // later: call API to enable/disable automation
-                }}
-                aria-label={`Toggle automation for ${row.template}`}
-              />
-            </div>
-          );
-        },
       }),
       {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
           const r = row.original;
-          const onEdit = () => {
-            console.log("edit", r.id);
-          };
+
+          const onEdit = () => console.log("edit", r.id);
+
           const onClone = () => {
             const nextId =
               data.length > 0 ? Math.max(...data.map((x) => x.id)) + 1 : 1;
@@ -135,22 +126,20 @@ export default function WhatsappAutomationResult(): JSX.Element {
             };
             setData((d) => [cloned, ...d]);
           };
+
           const onDelete = () => {
-            if (
-              !confirm("Are you sure you want to delete this automation rule?")
-            )
+            if (!confirm("Are you sure you want to delete this automation?"))
               return;
             setData((d) => d.filter((x) => x.id !== r.id));
           };
 
           return (
-            <div className="flex items-center ">
+            <div className="flex items-center">
               <Button
                 size="sm"
                 variant="ghost"
                 className="p-1"
                 onClick={onEdit}
-                title="Edit"
               >
                 <Edit size={14} />
               </Button>
@@ -159,7 +148,6 @@ export default function WhatsappAutomationResult(): JSX.Element {
                 variant="ghost"
                 className="p-1"
                 onClick={onClone}
-                title="Clone"
               >
                 <Copy size={14} />
               </Button>
@@ -168,7 +156,6 @@ export default function WhatsappAutomationResult(): JSX.Element {
                 variant="ghost"
                 className="p-1 text-red-500 hover:bg-red-50"
                 onClick={onDelete}
-                title="Delete"
               >
                 <Trash2 size={14} />
               </Button>
@@ -196,13 +183,7 @@ export default function WhatsappAutomationResult(): JSX.Element {
 
   return (
     <Card className="bg-primary shadow rounded-md p-0 overflow-hidden">
-      <div
-        className="overflow-auto    [&::-webkit-scrollbar]:w-1.5
-        [&::-webkit-scrollbar-track]:rounded-full
-        [&::-webkit-scrollbar-track]:bg-[#fff]
-        [&::-webkit-scrollbar-thumb]:rounded-full
-        [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]"
-      >
+      <div className="overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
         <table className="min-w-full divide-y">
           <thead className="bg-primary">
             {table.getHeaderGroups().map((hg) => (
@@ -265,17 +246,6 @@ export default function WhatsappAutomationResult(): JSX.Element {
                 (pagination.currentPage - 1) * pagination.limit + data.length
               } of ${pagination.totalItems}`
             : `1 - ${data.length} of ${data.length}`}
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost">{"<<"}</Button>
-          <Button variant="ghost">{"<"}</Button>
-          <input
-            className="w-12 text-center rounded border px-2 py-1 bg-transparent text-sm text-gray-700 dark:text-gray-200"
-            value={pagination?.currentPage ?? 1}
-            readOnly
-          />
-          <Button variant="ghost">{">"}</Button>
-          <Button variant="ghost">{">>"}</Button>
         </div>
       </div>
     </Card>

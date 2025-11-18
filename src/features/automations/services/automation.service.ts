@@ -5,9 +5,11 @@ import { ApiClient } from "@/services/ApiClient.service";
 
 export interface AutomationRule {
   device_type: string;
-  status_id: string;
-  label_id: string;
-  template_id: string;
+  status_id: { _id: string; title: string } | string;
+  label_id: { _id: string; title: string } | string;
+  template_id:
+    | { _id: string; title: string; message?: string; meta?: any }
+    | string;
   _id?: string;
 }
 

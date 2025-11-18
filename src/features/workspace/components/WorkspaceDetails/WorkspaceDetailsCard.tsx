@@ -12,6 +12,7 @@ import BrandLoader from "@/components/BrandLoader/BrandLoader";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
 
 import { useWorkspaceProperty } from "../../hooks/useWorkspaceProperty";
+import { format } from "date-fns";
 
 export type BadgeVariant = "green" | "gray" | "yellow" | "red";
 
@@ -194,24 +195,24 @@ export default function WorkspaceDetailsCard() {
   const planTitle = activePkg?.package_id?.title ?? "—";
   const planStatus = activePkg?.package_id?.status ?? "—";
 
-  const rayId = workspace.meta?.ray_id ?? "—";
+  // const rayId = workspace.meta?.ray_id ?? "—";
 
-  const usageCount = Number(workspace.usage_count ?? 0);
-  const usageLimit = Number(workspace.usage_limits ?? 0);
-  const usagePercent = safePercent(usageCount, usageLimit);
+  // const usageCount = Number(workspace.usage_count ?? 0);
+  // const usageLimit = Number(workspace.usage_limits ?? 0);
+  // const usagePercent = safePercent(usageCount, usageLimit);
 
-  const createdAtLabel = workspace.createdAt
-    ? dayjs(workspace.createdAt).format("DD MMM YYYY, hh:mm A")
-    : "—";
+  // const createdAtLabel = workspace.createdAt
+  //   ? dayjs(workspace.createdAt).format("DD MMM YYYY, hh:mm A")
+  //   : "—";
 
-  const updatedAtLabel = workspace.updatedAt
-    ? dayjs(workspace.updatedAt).format("DD MMM YYYY, hh:mm A")
-    : "—";
+  // const updatedAtLabel = workspace.updatedAt
+  //   ? dayjs(workspace.updatedAt).format("DD MMM YYYY, hh:mm A")
+  //   : "—";
 
-  const latestLog =
-    Array.isArray(workspace.logs) && workspace.logs.length > 0
-      ? workspace.logs[workspace.logs.length - 1]
-      : null;
+  // const latestLog =
+  //   Array.isArray(workspace.logs) && workspace.logs.length > 0
+  //     ? workspace.logs[workspace.logs.length - 1]
+  //     : null;
 
   if (loading)
     return (
@@ -556,122 +557,51 @@ export default function WorkspaceDetailsCard() {
 
             {/* RIGHT */}
             {/* RIGHT – Workspace Summary instead of user card */}
-            <aside className="bg-slate-50/50 dark:bg-slate-800/50 p-5 rounded-lg border border-slate-200/80 dark:border-slate-700/60 backdrop-blur-sm flex flex-col gap-5 shadow-sm">
-              {/* Workspace header */}
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
-                    Workspace Summary
-                  </div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Key details about this workspace
-                  </div>
-                </div>
-                <Badge variant={statusToVariant(workspace.status as any)}>
-                  {String(workspace.status).replace(/_/g, " ")}
-                </Badge>
-              </div>
-
-              {/* Name + Ray ID */}
-              <div className="space-y-3 text-sm">
-                <div>
-                  <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
-                    Workspace Name
-                  </div>
-                  <div className="font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
-                    {workspace.name}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
-                    Ray ID
-                  </div>
-                  <div className="font-mono text-xs break-all text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700/30 px-2 py-1.5 rounded border border-slate-200 dark:border-slate-600">
-                    {rayId}
-                  </div>
-                </div>
-              </div>
-
-              {/* Usage */}
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-slate-500 dark:text-slate-400">
-                    Usage
-                  </span>
-                  <span className="text-slate-700 dark:text-slate-200">
-                    {usageCount} / {usageLimit}{" "}
-                    <span className="text-slate-500 dark:text-slate-400">
-                      ({usagePercent}%)
-                    </span>
-                  </span>
-                </div>
-                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div
-                    className={clsx(
-                      "h-full rounded-full transition-all duration-500",
-                      usagePercent < 70
-                        ? "bg-gradient-to-r from-green-400 to-emerald-500"
-                        : usagePercent < 90
-                          ? "bg-gradient-to-r from-amber-400 to-orange-500"
-                          : "bg-gradient-to-r from-rose-500 to-red-600"
-                    )}
-                    style={{ width: `${usagePercent}%` }}
+            <aside className="bg-slate-50/50 dark:bg-slate-800/50 p-5 rounded-lg border border-slate-200/80 dark:border-slate-700/60 backdrop-blur-sm flex flex-col gap-4 shadow-sm">
+              {/* Avatar */}
+              <div className="h-18 w-full  overflow-hidden border border-slate-300 dark:border-slate-600 grid place-items-center bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-lg">
+                {workspace?.meta?.profile_picture_data?.file_url ? (
+                  <img
+                    src={workspace?.meta?.profile_picture_data?.file_url}
+                    alt={workspace?.name}
+                    className="h-full w-full object-cover"
                   />
-                </div>
+                ) : workspace.name ? (
+                  workspace.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()
+                ) : (
+                  "W"
+                )}
               </div>
 
-              {/* Active package mini-summary */}
-              <div className="space-y-2 text-sm">
-                <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                  Active Package
+              {/* Info */}
+              <div className="flex flex-col gap-1">
+                {/* <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm leading-tight">
+                  {workspace?.name}
+                </div> */}
+                <div className="text-xs text-slate-600 dark:text-slate-400">
+                  {workspace.role?.name}
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
-                    {planTitle}
-                  </span>
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-slate-900/5 dark:bg-slate-100/5 text-slate-700 dark:text-slate-200 border border-slate-300/50 dark:border-slate-600/50">
-                    {planStatus}
-                  </span>
-                </div>
-              </div>
 
-              {/* Created / updated */}
-              <div className="space-y-2.5 text-xs border-t border-slate-200 dark:border-slate-700 pt-3.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">
-                    Created at
-                  </span>
-                  <span className="text-right font-medium text-slate-700 dark:text-slate-200">
-                    {createdAtLabel}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500 dark:text-slate-400">
-                    Last updated
-                  </span>
-                  <span className="text-right font-medium text-slate-700 dark:text-slate-200">
-                    {updatedAtLabel}
-                  </span>
-                </div>
-              </div>
-
-              {/* Latest log preview */}
-              {latestLog && (
-                <div className="mt-1 pt-3.5 border-t border-slate-200 dark:border-slate-700">
-                  <div className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">
-                    Latest Activity
+                <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400 space-y-0.5">
+                  <div>
+                    Created:{" "}
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      {format(new Date(workspace?.createdAt), "dd MMM yyyy")}
+                    </span>
                   </div>
-                  <div className="text-xs bg-slate-100/50 dark:bg-slate-700/30 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
-                    <div className="font-medium text-slate-900 dark:text-slate-100 mb-1">
-                      {latestLog.title}
-                    </div>
-                    <div className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                      {latestLog.description}
-                    </div>
+                  <div>
+                    Updated:{" "}
+                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                      {format(new Date(workspace?.updatedAt), "dd MMM yyyy")}
+                    </span>
                   </div>
                 </div>
-              )}
+              </div>
             </aside>
           </div>
         </Card>
