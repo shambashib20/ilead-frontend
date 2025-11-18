@@ -92,37 +92,43 @@ export class ApiClient {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError<any>) => {
-        // No response: network down, DNS failure, CORS rejection, or timeout
+        // No response => timeout, DNS fail, CORS block, network down, etc.
         if (!error.response) {
-          // Axios sets code: 'ERR_NETWORK' for many of these scenarios
-          if (!isOfflineRouting) {
-            isOfflineRouting = true;
-            // Don’t loop if you’re already on offline page
-            try {
-              // Give it a tick so multiple concurrent failures don’t stampede
-              await sleep(50);
-            } finally {
-              // Navigate away; SPA should have a route guard to reset this flag on enter
-              window.location.href = OFFLINE_ROUTE;
+          const code = error.code;
+
+          const isTimeout = code === "ECONNABORTED" || code === "ETIMEDOUT";
+
+          if (!isTimeout) {
+            // Network down or unreachable server
+            if (!isOfflineRouting) {
+              isOfflineRouting = true;
+              try {
+                await sleep(50);
+              } finally {
+                window.location.href = OFFLINE_ROUTE;
+              }
             }
           }
+
           return Promise.reject(
-            normalizeError(error, undefined, (error.config as any)?._requestId)
+            normalizeError(
+              error,
+              isTimeout ? "TIMEOUT" : undefined,
+              (error.config as any)?._requestId
+            )
           );
         }
 
         const { status, headers, config } = error.response;
         const requestId = (config as any)?._requestId;
 
-        // 401: force logout (single shot)
+        // 401 Unauthorized → logout
         if (status === 401) {
           if (!isLoggingOut) {
             isLoggingOut = true;
             try {
-              // Hard navigation so cookies clear without CORS drama
               fireLogoutOnce();
             } finally {
-              // Nothing else to do; the page will unload
             }
           }
           return Promise.reject(
@@ -130,26 +136,26 @@ export class ApiClient {
           );
         }
 
-        // 403: route to a forbidden page if you have one (optional)
+        // 403 Forbidden
         if (status === 403) {
           return Promise.reject(normalizeError(error, "FORBIDDEN", requestId));
         }
 
-        // 429: back off if GET
+        // 429 Too many requests (GET only) → retry
         if (status === 429 && isGet(config?.method)) {
           const attempt = ((config as any)._retryCount ?? 0) + 1;
           if (attempt <= 2) {
             (config as any)._retryCount = attempt;
             const delay = computeRetryDelay(
               attempt,
-              headers?.["retry-after"] as string | undefined
+              headers?.["retry-after"] as string
             );
             await sleep(delay);
             return this.axiosInstance.request(config);
           }
         }
 
-        // Retry transient server errors for idempotent GET
+        // Retry transient server errors for GET
         if (
           isGet(config?.method) &&
           (status === 502 || status === 503 || status === 504)
@@ -163,7 +169,7 @@ export class ApiClient {
           }
         }
 
-        // Fall-through: normalize and reject
+        // Final normalized rejection
         return Promise.reject(normalizeError(error, undefined, requestId));
       }
     );

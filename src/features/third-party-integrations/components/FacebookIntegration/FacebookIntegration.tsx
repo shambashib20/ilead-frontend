@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaFacebookF } from "react-icons/fa";
 import { labelService } from "@/features/leads/services/Lable.service";
-
+import { redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -81,6 +81,8 @@ function FacebookIntegration() {
         timer: 1200,
         timerProgressBar: true,
       });
+
+      redirect({ to: "/lead" });
     } catch (error: any) {
       console.error("Failed to connect Facebook page:", error);
 
