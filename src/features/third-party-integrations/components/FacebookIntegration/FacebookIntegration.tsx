@@ -19,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 function FacebookIntegration() {
   const [selectedLabel, setSelectedLabel] = useState("");
   const [labels, setLabels] = useState<Label[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -46,11 +47,28 @@ function FacebookIntegration() {
   };
 
   const handleSave = async () => {
+    if (!selectedLabel) {
+      Swal.fire("Warning", "Please select a label first", "warning");
+      return;
+    }
+
     try {
+      setIsSaving(true);
+
+      // Show loading modal
+      Swal.fire({
+        title: "Connecting Facebook page...",
+        text: "This may take a few minutes. Please do not close this tab.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       const response =
         await facebookIntegrationService.connectWithFacebookPage(selectedLabel);
 
-      // optional: inspect response and show a more specific message
       const msg = response?.message || "Facebook page connected successfully!";
 
       console.log("Facebook page connection response:", response);
@@ -60,16 +78,9 @@ function FacebookIntegration() {
         title: "Success",
         text: msg,
         showConfirmButton: false,
-        timer: 1000,
+        timer: 1200,
         timerProgressBar: true,
       });
-
-      // if you need to run follow-up actions after the toast closes, do it here
-      setTimeout(() => {
-        // e.g., refresh data, close modal, navigate, etc.
-        // fetchFacebookPages();
-        // closeModal?.();
-      }, 1000);
     } catch (error: any) {
       console.error("Failed to connect Facebook page:", error);
 
@@ -83,9 +94,11 @@ function FacebookIntegration() {
         title: "Error",
         text: errMsg,
         showConfirmButton: false,
-        timer: 1400,
+        timer: 1500,
         timerProgressBar: true,
       });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -138,8 +151,12 @@ function FacebookIntegration() {
               </Select>
             </div>
 
-            <Button onClick={handleSave} className="text-white w-[80px]">
-              Save
+            <Button
+              onClick={handleSave}
+              className="text-white w-[80px]"
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save"}
             </Button>
           </div>
         </CardContent>

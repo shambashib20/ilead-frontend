@@ -12,7 +12,7 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
   const [formData, setFormData] = useState({
     propId: initialData._id,
     name: initialData.name,
-    description: initialData.description,
+    description: initialData.description ?? "",
   });
 
   const { data } = useUser(); // user data with role
@@ -21,11 +21,24 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
   const closeModal = useModalStore((state) => state.closeModal);
   const setFormActions = useModalStore((state) => state.setFormActions);
 
-  const isSuperAdmin = data?.role === "Superadmin";
+  const role = (data as any)?.role ?? (data as any)?.data?.role ?? "";
+  const isSuperAdmin = role === "Superadmin";
 
-  const canSubmit = isSuperAdmin
-    ? formData.description.trim() !== ""
-    : formData.name.trim() !== "" && formData.description.trim() !== "";
+  // lock name if it contains "mr group" (case-insensitive)
+  const isMrGroupLocked =
+    typeof initialData.name === "string" &&
+    initialData.name.toLowerCase().includes("mr group");
+
+  // overall edit permission: only superadmin
+  const canEdit = isSuperAdmin;
+
+  // can edit name only if superadmin AND not MR Group workspace
+  const canEditName = canEdit && !isMrGroupLocked;
+
+  const canSubmit =
+    canEdit &&
+    formData.description.trim() !== "" &&
+    (canEditName ? formData.name.trim() !== "" : true);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -54,7 +67,6 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
 
         setTimeout(() => {
           closeModal?.();
-          // Only reload if you absolutely must
           window.location.reload();
         }, 1000);
       } else {
@@ -88,7 +100,7 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
       canSubmit,
       isSubmitting,
     });
-  }, [formData, canSubmit, isSubmitting]);
+  }, [formData, canSubmit, isSubmitting, closeModal, setFormActions]);
 
   return (
     <div className="space-y-4 px-2 py-3">
@@ -101,8 +113,19 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
           id="name"
           value={formData.name}
           onChange={handleChange}
-          disabled={isSuperAdmin} // disable for superadmin
+          disabled={!canEditName}
         />
+        {!isSuperAdmin && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            Only Superadmin can edit workspace details.
+          </p>
+        )}
+        {isSuperAdmin && isMrGroupLocked && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            Workspaces containing <strong>“MR Group”</strong> in the name cannot
+            be renamed.
+          </p>
+        )}
       </div>
 
       {/* Description field */}
@@ -115,7 +138,13 @@ export function EditWorkspaceModal({ initialData }: { initialData: any }) {
           rows={4}
           value={formData.description}
           onChange={handleChange}
+          disabled={!canEdit}
         />
+        {!isSuperAdmin && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            Only Superadmin can edit the workspace description.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -12,7 +12,6 @@ import BrandLoader from "@/components/BrandLoader/BrandLoader";
 import { EditWorkspaceModal } from "../EditWorkspaceDetailsModals.tsx/EditWorkspaceModal";
 
 import { useWorkspaceProperty } from "../../hooks/useWorkspaceProperty";
-import { useUserProfile } from "@/features/leads/hooks/useUserProfile";
 
 export type BadgeVariant = "green" | "gray" | "yellow" | "red";
 
@@ -187,16 +186,32 @@ export default function WorkspaceDetailsCard() {
   } = useWorkspaceProperty();
   const { openModal, setModalTitle } = useModalStore();
   const { data } = useUser();
-  const { user: userDetail } = useUserProfile();
+  // const { user: userDetail } = useUserProfile();
 
-  const userName: string | undefined =
-    (data as any)?.name ?? (data as any)?.data?.name;
   const userRole: string | undefined =
     (data as any)?.role ?? (data as any)?.data?.role;
-  const userEmail: string | undefined =
-    (data as any)?.email ?? (data as any)?.data?.email;
-  const userPhone: string | undefined =
-    (data as any)?.phone_number ?? (data as any)?.data?.phone_number;
+  const activePkg = workspace.meta?.active_package ?? null;
+  const planTitle = activePkg?.package_id?.title ?? "—";
+  const planStatus = activePkg?.package_id?.status ?? "—";
+
+  const rayId = workspace.meta?.ray_id ?? "—";
+
+  const usageCount = Number(workspace.usage_count ?? 0);
+  const usageLimit = Number(workspace.usage_limits ?? 0);
+  const usagePercent = safePercent(usageCount, usageLimit);
+
+  const createdAtLabel = workspace.createdAt
+    ? dayjs(workspace.createdAt).format("DD MMM YYYY, hh:mm A")
+    : "—";
+
+  const updatedAtLabel = workspace.updatedAt
+    ? dayjs(workspace.updatedAt).format("DD MMM YYYY, hh:mm A")
+    : "—";
+
+  const latestLog =
+    Array.isArray(workspace.logs) && workspace.logs.length > 0
+      ? workspace.logs[workspace.logs.length - 1]
+      : null;
 
   if (loading)
     return (
@@ -214,10 +229,7 @@ export default function WorkspaceDetailsCard() {
 
   if (!workspace) return null;
 
-  const activePkg = workspace.meta?.active_package ?? null;
-  const planTitle = activePkg?.package_id?.title ?? "—";
   const planValidityDays = activePkg?.package_id?.validity_in_days ?? 0;
-  const planStatus = activePkg?.package_id?.status ?? "—";
 
   // NEW: compute plan expiry and flags
   const planExpiryISO = getPlanExpiryISO(activePkg);
@@ -229,7 +241,7 @@ export default function WorkspaceDetailsCard() {
   console.log(workspace);
 
   return (
-    <div className="max-w-full mx-auto px-4 md:px-6 mt-6">
+    <div className="max-w-full mx-auto  mt-6">
       <div className="relative">
         <Card className="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
@@ -244,7 +256,7 @@ export default function WorkspaceDetailsCard() {
                     Workspace details & usage
                   </p>
                 </div>
-                {userRole !== "Superadmin" && (
+                {userRole === "Superadmin" && (
                   <div className="hidden sm:flex items-center gap-2">
                     <Button
                       onClick={() => {
@@ -543,55 +555,123 @@ export default function WorkspaceDetailsCard() {
             </div>
 
             {/* RIGHT */}
-            <aside className="bg-slate-50 dark:bg-slate-800 p-4 rounded-md border border-slate-100 dark:border-slate-700">
-              <div className="flex items-center justify-between">
+            {/* RIGHT – Workspace Summary instead of user card */}
+            <aside className="bg-slate-50/50 dark:bg-slate-800/50 p-5 rounded-lg border border-slate-200/80 dark:border-slate-700/60 backdrop-blur-sm flex flex-col gap-5 shadow-sm">
+              {/* Workspace header */}
+              <div className="flex items-start justify-between">
                 <div>
-                  <div className="flex items-center gap-3 mt-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-yellow-400 flex items-center justify-center text-black font-bold">
-                      <img
-                        src={userDetail?.meta?.profile_picture_data?.file_url}
-                        alt=""
-                        className="rounded-full w-10 h-10"
-                      />
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
+                    Workspace Summary
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Key details about this workspace
+                  </div>
+                </div>
+                <Badge variant={statusToVariant(workspace.status as any)}>
+                  {String(workspace.status).replace(/_/g, " ")}
+                </Badge>
+              </div>
+
+              {/* Name + Ray ID */}
+              <div className="space-y-3 text-sm">
+                <div>
+                  <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                    Workspace Name
+                  </div>
+                  <div className="font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
+                    {workspace.name}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">
+                    Ray ID
+                  </div>
+                  <div className="font-mono text-xs break-all text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-700/30 px-2 py-1.5 rounded border border-slate-200 dark:border-slate-600">
+                    {rayId}
+                  </div>
+                </div>
+              </div>
+
+              {/* Usage */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-medium text-slate-500 dark:text-slate-400">
+                    Usage
+                  </span>
+                  <span className="text-slate-700 dark:text-slate-200">
+                    {usageCount} / {usageLimit}{" "}
+                    <span className="text-slate-500 dark:text-slate-400">
+                      ({usagePercent}%)
+                    </span>
+                  </span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div
+                    className={clsx(
+                      "h-full rounded-full transition-all duration-500",
+                      usagePercent < 70
+                        ? "bg-gradient-to-r from-green-400 to-emerald-500"
+                        : usagePercent < 90
+                          ? "bg-gradient-to-r from-amber-400 to-orange-500"
+                          : "bg-gradient-to-r from-rose-500 to-red-600"
+                    )}
+                    style={{ width: `${usagePercent}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Active package mini-summary */}
+              <div className="space-y-2 text-sm">
+                <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  Active Package
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-slate-900 dark:text-slate-100 tracking-tight">
+                    {planTitle}
+                  </span>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-slate-900/5 dark:bg-slate-100/5 text-slate-700 dark:text-slate-200 border border-slate-300/50 dark:border-slate-600/50">
+                    {planStatus}
+                  </span>
+                </div>
+              </div>
+
+              {/* Created / updated */}
+              <div className="space-y-2.5 text-xs border-t border-slate-200 dark:border-slate-700 pt-3.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Created at
+                  </span>
+                  <span className="text-right font-medium text-slate-700 dark:text-slate-200">
+                    {createdAtLabel}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Last updated
+                  </span>
+                  <span className="text-right font-medium text-slate-700 dark:text-slate-200">
+                    {updatedAtLabel}
+                  </span>
+                </div>
+              </div>
+
+              {/* Latest log preview */}
+              {latestLog && (
+                <div className="mt-1 pt-3.5 border-t border-slate-200 dark:border-slate-700">
+                  <div className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">
+                    Latest Activity
+                  </div>
+                  <div className="text-xs bg-slate-100/50 dark:bg-slate-700/30 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
+                    <div className="font-medium text-slate-900 dark:text-slate-100 mb-1">
+                      {latestLog.title}
                     </div>
-                    <div>
-                      <div className="text-sm font-medium">
-                        {userName ?? "Unknown"}
-                      </div>
-                      <div className="text-xs text-foreground">
-                        {userRole ?? "Owner"}
-                      </div>
+                    <div className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {latestLog.description}
                     </div>
                   </div>
                 </div>
-                <div className="text-right" />
-              </div>
-
-              <div className="mt-4 text-sm text-foreground space-y-2">
-                <div>
-                  <div className="text-xs text-foreground">Email</div>
-                  <div>{userEmail ?? "—"}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-foreground">Phone</div>
-                  <div>{userPhone ?? "—"}</div>
-                </div>
-              </div>
-
-              <div className="mt-3 sm:hidden">
-                <button
-                  onClick={() => {
-                    setModalTitle?.("Edit Workspace Details!");
-                    openModal({
-                      content: <EditWorkspaceModal initialData={workspace} />,
-                      type: "form",
-                    });
-                  }}
-                  className="w-full px-3 py-2 bg-indigo-600 text-white rounded-md"
-                >
-                  Edit
-                </button>
-              </div>
+              )}
             </aside>
           </div>
         </Card>

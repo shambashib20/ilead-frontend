@@ -46,6 +46,8 @@ export type Property = {
   is_banned: boolean;
   status: "ACTIVE" | "INACTIVE" | "USAGE_LIMIT_EXCEEDED";
   keys: KeyAccess[];
+  updatedAt: Date;
+  createdAt: Date;
 };
 
 export interface PropertyResponse {
