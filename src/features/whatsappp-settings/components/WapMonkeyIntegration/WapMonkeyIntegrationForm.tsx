@@ -1,33 +1,47 @@
 import { useForm } from "@tanstack/react-form";
-import { useState } from "react";
-import { Trash2, RotateCcw } from "lucide-react";
+
+import { Trash2, RotateCcw, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/features/auth/hooks/useUser";
 
+import { useCreateWapmonkey } from "../../hooks/useCreateWapmonkey";
+import { useEffect } from "react";
+
 function WapMonkeyIntegration() {
-  const [apiKey, setApiKey] = useState("");
+  const { data: user } = useUser();
+  const { saveApiKey, isSaving } = useCreateWapmonkey();
 
-const {data}=useUser()
-  console.log(data, "hook data");
-
+  const existingKey =
+    user?.property?.meta?.wapmonkey_api_key ||
+    user?.property?.meta?.get?.("wapmonkey_api_key") ||
+    "";
   const form = useForm({
     defaultValues: {
-      key: apiKey || "",
+      wapmonkey_key: "",
     },
+
     onSubmit: async ({ value }) => {
-      console.log("Saving API key:", value.key);
-      // TODO → API call to save key
+      saveApiKey(
+        { wapmonkey_key: value.wapmonkey_key },
+        {
+          onSuccess: () => console.log("API key saved"),
+        }
+      );
     },
   });
 
+  useEffect(() => {
+    if (existingKey) {
+      form.setFieldValue("wapmonkey_key", existingKey);
+    }
+  }, [existingKey]);
+
   const handleDelete = () => {
-    setApiKey("");
-    form.setFieldValue("key", "");
+    form.setFieldValue("wapmonkey_key", "");
   };
 
   const handleRefreshCredit = () => {
     console.log("Refreshing credit...");
-    // TODO → API call for credit refresh
   };
 
   return (
@@ -44,7 +58,7 @@ const {data}=useUser()
         className="flex items-center gap-3"
       >
         <form.Field
-          name="key"
+          name="wapmonkey_key"
           children={(field) => (
             <input
               type="text"
@@ -64,6 +78,10 @@ const {data}=useUser()
           size={"icon"}
         >
           <Trash2 size={18} />
+        </Button>
+
+        <Button type="submit" disabled={isSaving} variant="default" size="icon">
+          <Save size={18} />
         </Button>
 
         <Button
