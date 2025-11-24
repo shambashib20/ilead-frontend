@@ -249,12 +249,6 @@ function LeadReportView({
     return allRows.reduce((acc, r) => acc + r.leads, 0);
   }, [data, allRows]);
 
-  const totalMissedFollowUpsLeads = useMemo(() => {
-    if (data?.data.missed_followups.telecallers != null)
-      return data?.data.missed_followups.telecallers;
-    return allRows.reduce((acc, r) => acc + r.leads, 0);
-  }, [data, allRows]);
-
   // const agentCount = useMemo(() => {
   //   return allRows.filter((r) => r.type === "assigned").length;
   // }, [allRows]);
@@ -327,8 +321,6 @@ function LeadReportView({
 
   const hasAnyRows = allRows.length > 0;
   const hasAnyLeads = Number(totalLeads) > 0;
-
-  const hasAnyMissedFollowUps = Number(totalMissedFollowups > 0);
 
   return (
     <section className="report-detail">
