@@ -23,7 +23,7 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 import { FaEnvelope, FaSms, FaWhatsapp } from "react-icons/fa";
 
-type Role = "Admin" | "Superadmin" | "User";
+type Role = "Admin" | "Superadmin" | "User" | "Telecaller";
 
 export type NavItem = {
   name: string;
@@ -64,6 +64,13 @@ export const navItems: NavItem[] = [
     icon: <UserCircle size={20} />,
     path: "/customer",
     roles: ["Admin", "Superadmin"],
+  },
+
+  {
+    name: "Telecaller Analytics",
+    icon: <UserCircle size={20} />,
+    path: "/telecaller-analytics",
+    roles: ["Admin", "Superadmin", "Telecaller"],
   },
   {
     name: "Integrations",

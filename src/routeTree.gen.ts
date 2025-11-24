@@ -29,6 +29,7 @@ import { Route as DashboardLayoutWhatsappAutomationRulesIndexImport } from './ro
 import { Route as DashboardLayoutUsersIndexImport } from './routes/_dashboardLayout/users/index'
 import { Route as DashboardLayoutUserProfileIndexImport } from './routes/_dashboardLayout/user-profile/index'
 import { Route as DashboardLayoutThirdPartyIntegrationIndexImport } from './routes/_dashboardLayout/third-party-integration/index'
+import { Route as DashboardLayoutTelecallerAnalyticsIndexImport } from './routes/_dashboardLayout/telecaller-analytics/index'
 import { Route as DashboardLayoutStatusIndexImport } from './routes/_dashboardLayout/status/index'
 import { Route as DashboardLayoutSourceIndexImport } from './routes/_dashboardLayout/source/index'
 import { Route as DashboardLayoutReportIndexImport } from './routes/_dashboardLayout/report/index'
@@ -159,6 +160,13 @@ const DashboardLayoutThirdPartyIntegrationIndexRoute =
   DashboardLayoutThirdPartyIntegrationIndexImport.update({
     id: '/third-party-integration/',
     path: '/third-party-integration/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutTelecallerAnalyticsIndexRoute =
+  DashboardLayoutTelecallerAnalyticsIndexImport.update({
+    id: '/telecaller-analytics/',
+    path: '/telecaller-analytics/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -471,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutStatusIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboardLayout/telecaller-analytics/': {
+      id: '/_dashboardLayout/telecaller-analytics/'
+      path: '/telecaller-analytics'
+      fullPath: '/telecaller-analytics'
+      preLoaderRoute: typeof DashboardLayoutTelecallerAnalyticsIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboardLayout/third-party-integration/': {
       id: '/_dashboardLayout/third-party-integration/'
       path: '/third-party-integration'
@@ -614,6 +629,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutReportIndexRoute: typeof DashboardLayoutReportIndexRoute
   DashboardLayoutSourceIndexRoute: typeof DashboardLayoutSourceIndexRoute
   DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute
+  DashboardLayoutTelecallerAnalyticsIndexRoute: typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   DashboardLayoutThirdPartyIntegrationIndexRoute: typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute
   DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute
@@ -639,6 +655,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutReportIndexRoute: DashboardLayoutReportIndexRoute,
   DashboardLayoutSourceIndexRoute: DashboardLayoutSourceIndexRoute,
   DashboardLayoutStatusIndexRoute: DashboardLayoutStatusIndexRoute,
+  DashboardLayoutTelecallerAnalyticsIndexRoute:
+    DashboardLayoutTelecallerAnalyticsIndexRoute,
   DashboardLayoutThirdPartyIntegrationIndexRoute:
     DashboardLayoutThirdPartyIntegrationIndexRoute,
   DashboardLayoutUserProfileIndexRoute: DashboardLayoutUserProfileIndexRoute,
@@ -688,6 +706,7 @@ export interface FileRoutesByFullPath {
   '/report': typeof DashboardLayoutReportIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
+  '/telecaller-analytics': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
@@ -724,6 +743,7 @@ export interface FileRoutesByTo {
   '/report': typeof DashboardLayoutReportIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
+  '/telecaller-analytics': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
@@ -764,6 +784,7 @@ export interface FileRoutesById {
   '/_dashboardLayout/report/': typeof DashboardLayoutReportIndexRoute
   '/_dashboardLayout/source/': typeof DashboardLayoutSourceIndexRoute
   '/_dashboardLayout/status/': typeof DashboardLayoutStatusIndexRoute
+  '/_dashboardLayout/telecaller-analytics/': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/_dashboardLayout/third-party-integration/': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/_dashboardLayout/user-profile/': typeof DashboardLayoutUserProfileIndexRoute
   '/_dashboardLayout/users/': typeof DashboardLayoutUsersIndexRoute
@@ -803,6 +824,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/source'
     | '/status'
+    | '/telecaller-analytics'
     | '/third-party-integration'
     | '/user-profile'
     | '/users'
@@ -838,6 +860,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/source'
     | '/status'
+    | '/telecaller-analytics'
     | '/third-party-integration'
     | '/user-profile'
     | '/users'
@@ -876,6 +899,7 @@ export interface FileRouteTypes {
     | '/_dashboardLayout/report/'
     | '/_dashboardLayout/source/'
     | '/_dashboardLayout/status/'
+    | '/_dashboardLayout/telecaller-analytics/'
     | '/_dashboardLayout/third-party-integration/'
     | '/_dashboardLayout/user-profile/'
     | '/_dashboardLayout/users/'
@@ -951,6 +975,7 @@ export const routeTree = rootRoute
         "/_dashboardLayout/report/",
         "/_dashboardLayout/source/",
         "/_dashboardLayout/status/",
+        "/_dashboardLayout/telecaller-analytics/",
         "/_dashboardLayout/third-party-integration/",
         "/_dashboardLayout/user-profile/",
         "/_dashboardLayout/users/",
@@ -1056,6 +1081,10 @@ export const routeTree = rootRoute
     },
     "/_dashboardLayout/status/": {
       "filePath": "_dashboardLayout/status/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/telecaller-analytics/": {
+      "filePath": "_dashboardLayout/telecaller-analytics/index.tsx",
       "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/third-party-integration/": {
