@@ -67,7 +67,7 @@ export const navItems: NavItem[] = [
   },
 
   {
-    name: "Telecaller Analytics",
+    name: "Analytics",
     icon: <UserCircle size={20} />,
     path: "/telecaller-analytics",
     roles: ["Admin", "Superadmin", "Telecaller"],
@@ -86,6 +86,7 @@ export const navItems: NavItem[] = [
   {
     name: "General Settings",
     icon: <Settings size={20} />,
+    roles: ["Admin", "Superadmin"],
     subItems: [
       {
         name: "Attributes",
@@ -171,7 +172,6 @@ export const navItems: NavItem[] = [
         ],
       },
     ],
-    roles: ["Admin", "Superadmin"],
   },
   {
     name: "Reports",
