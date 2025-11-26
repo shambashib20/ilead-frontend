@@ -197,6 +197,51 @@ export interface TodaysFollowUpResponse {
   data: Lead[];
 }
 
+
+
+
+
+
+export interface TelecallerAnalyticsPayload {
+  startDate?: string;
+  endDate?: string;
+}
+
+
+type AgentDatum = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+
+
+type LeadTrendDatum = {
+  count: number;
+  date: string;
+};
+
+type StatsDatum = {
+  totalAssignedLeads: number;
+  convertedLeads: number;
+  conversionRate: number;
+  missedFollowups: number;
+  leadTrend: LeadTrendDatum[];
+};
+export interface TelecallerAnalyticsResponse {
+
+  message: string;
+  status: string;
+  data: {
+    agent: AgentDatum;
+    stats: StatsDatum
+  }
+}
+
+
+
+
+
 export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
@@ -339,6 +384,14 @@ export class LeadsModule extends ApiClient {
   async getStatusReports(payload: GetReports) {
     return this.post<GetRepcortsResponse>(
       "/statistics-by-status-agent",
+      payload
+    );
+  }
+
+
+  async getTelecallerAnayltics(payload: TelecallerAnalyticsPayload) {
+    return this.post<TelecallerAnalyticsResponse>(
+      "/telecaller-statistics",
       payload
     );
   }

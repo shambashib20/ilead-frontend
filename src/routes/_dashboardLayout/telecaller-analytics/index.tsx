@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { WorkInProgress } from "@/components/WorkInProgress";
+
+import TelecallerAnalyticsScreen from "@/features/telecaller-analytics/components/TelecallerDataCard";
 export const Route = createFileRoute("/_dashboardLayout/telecaller-analytics/")(
   {
     component: RouteComponent,
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/_dashboardLayout/telecaller-analytics/")(
 function RouteComponent() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-6">
-      <WorkInProgress />
+      <TelecallerAnalyticsScreen />
     </div>
   );
 }
