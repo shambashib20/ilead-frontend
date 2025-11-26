@@ -57,12 +57,6 @@ export default function TelecallerAnalyticsScreen() {
       </div>
 
       {/* Agent Card */}
-      <div className="bg-primary rounded-lg p-5 flex items-center gap-4 border border-white/10">
-        <div>
-          <p className="text-lg font-semibold">{agent.name}</p>
-          <p className="text-gray-400 text-sm">{agent.email}</p>
-        </div>
-      </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -74,7 +68,7 @@ export default function TelecallerAnalyticsScreen() {
         <StatCard title="Converted Leads" value={stats.convertedLeads} />
 
         <StatCard
-          title="Conversion Rate (%)"
+          title="Customer Conversion (%)"
           value={`${stats.conversionRate}%`}
         />
 
