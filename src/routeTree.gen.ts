@@ -24,10 +24,12 @@ import { Route as DashboardLayoutLeadTrashRouteImport } from './routes/_dashboar
 import { Route as DashboardLayoutLeadRouteImport } from './routes/_dashboardLayout/lead/route'
 import { Route as DashboardLayoutWorkspaceLogsIndexImport } from './routes/_dashboardLayout/workspace-logs/index'
 import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
+import { Route as DashboardLayoutWhatsappSettingsIndexImport } from './routes/_dashboardLayout/whatsapp-settings/index'
 import { Route as DashboardLayoutWhatsappAutomationRulesIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/index'
 import { Route as DashboardLayoutUsersIndexImport } from './routes/_dashboardLayout/users/index'
 import { Route as DashboardLayoutUserProfileIndexImport } from './routes/_dashboardLayout/user-profile/index'
 import { Route as DashboardLayoutThirdPartyIntegrationIndexImport } from './routes/_dashboardLayout/third-party-integration/index'
+import { Route as DashboardLayoutTelecallerAnalyticsIndexImport } from './routes/_dashboardLayout/telecaller-analytics/index'
 import { Route as DashboardLayoutStatusIndexImport } from './routes/_dashboardLayout/status/index'
 import { Route as DashboardLayoutSourceIndexImport } from './routes/_dashboardLayout/source/index'
 import { Route as DashboardLayoutReportIndexImport } from './routes/_dashboardLayout/report/index'
@@ -127,6 +129,13 @@ const DashboardLayoutWorkspaceDetailsIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutWhatsappSettingsIndexRoute =
+  DashboardLayoutWhatsappSettingsIndexImport.update({
+    id: '/whatsapp-settings/',
+    path: '/whatsapp-settings/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutWhatsappAutomationRulesIndexRoute =
   DashboardLayoutWhatsappAutomationRulesIndexImport.update({
     id: '/whatsapp-automation-rules/',
@@ -151,6 +160,13 @@ const DashboardLayoutThirdPartyIntegrationIndexRoute =
   DashboardLayoutThirdPartyIntegrationIndexImport.update({
     id: '/third-party-integration/',
     path: '/third-party-integration/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutTelecallerAnalyticsIndexRoute =
+  DashboardLayoutTelecallerAnalyticsIndexImport.update({
+    id: '/telecaller-analytics/',
+    path: '/telecaller-analytics/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -463,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutStatusIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboardLayout/telecaller-analytics/': {
+      id: '/_dashboardLayout/telecaller-analytics/'
+      path: '/telecaller-analytics'
+      fullPath: '/telecaller-analytics'
+      preLoaderRoute: typeof DashboardLayoutTelecallerAnalyticsIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboardLayout/third-party-integration/': {
       id: '/_dashboardLayout/third-party-integration/'
       path: '/third-party-integration'
@@ -489,6 +512,13 @@ declare module '@tanstack/react-router' {
       path: '/whatsapp-automation-rules'
       fullPath: '/whatsapp-automation-rules'
       preLoaderRoute: typeof DashboardLayoutWhatsappAutomationRulesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboardLayout/whatsapp-settings/': {
+      id: '/_dashboardLayout/whatsapp-settings/'
+      path: '/whatsapp-settings'
+      fullPath: '/whatsapp-settings'
+      preLoaderRoute: typeof DashboardLayoutWhatsappSettingsIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboardLayout/workspace-details/': {
@@ -599,10 +629,12 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutReportIndexRoute: typeof DashboardLayoutReportIndexRoute
   DashboardLayoutSourceIndexRoute: typeof DashboardLayoutSourceIndexRoute
   DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute
+  DashboardLayoutTelecallerAnalyticsIndexRoute: typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   DashboardLayoutThirdPartyIntegrationIndexRoute: typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute
   DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute
   DashboardLayoutWhatsappAutomationRulesIndexRoute: typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  DashboardLayoutWhatsappSettingsIndexRoute: typeof DashboardLayoutWhatsappSettingsIndexRoute
   DashboardLayoutWorkspaceDetailsIndexRoute: typeof DashboardLayoutWorkspaceDetailsIndexRoute
   DashboardLayoutWorkspaceLogsIndexRoute: typeof DashboardLayoutWorkspaceLogsIndexRoute
   DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute: typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
@@ -623,12 +655,16 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutReportIndexRoute: DashboardLayoutReportIndexRoute,
   DashboardLayoutSourceIndexRoute: DashboardLayoutSourceIndexRoute,
   DashboardLayoutStatusIndexRoute: DashboardLayoutStatusIndexRoute,
+  DashboardLayoutTelecallerAnalyticsIndexRoute:
+    DashboardLayoutTelecallerAnalyticsIndexRoute,
   DashboardLayoutThirdPartyIntegrationIndexRoute:
     DashboardLayoutThirdPartyIntegrationIndexRoute,
   DashboardLayoutUserProfileIndexRoute: DashboardLayoutUserProfileIndexRoute,
   DashboardLayoutUsersIndexRoute: DashboardLayoutUsersIndexRoute,
   DashboardLayoutWhatsappAutomationRulesIndexRoute:
     DashboardLayoutWhatsappAutomationRulesIndexRoute,
+  DashboardLayoutWhatsappSettingsIndexRoute:
+    DashboardLayoutWhatsappSettingsIndexRoute,
   DashboardLayoutWorkspaceDetailsIndexRoute:
     DashboardLayoutWorkspaceDetailsIndexRoute,
   DashboardLayoutWorkspaceLogsIndexRoute:
@@ -670,10 +706,12 @@ export interface FileRoutesByFullPath {
   '/report': typeof DashboardLayoutReportIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
+  '/telecaller-analytics': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
   '/whatsapp-automation-rules': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  '/whatsapp-settings': typeof DashboardLayoutWhatsappSettingsIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
   '/workspace-logs': typeof DashboardLayoutWorkspaceLogsIndexRoute
   '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
@@ -705,10 +743,12 @@ export interface FileRoutesByTo {
   '/report': typeof DashboardLayoutReportIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
+  '/telecaller-analytics': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
   '/whatsapp-automation-rules': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  '/whatsapp-settings': typeof DashboardLayoutWhatsappSettingsIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
   '/workspace-logs': typeof DashboardLayoutWorkspaceLogsIndexRoute
   '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
@@ -744,10 +784,12 @@ export interface FileRoutesById {
   '/_dashboardLayout/report/': typeof DashboardLayoutReportIndexRoute
   '/_dashboardLayout/source/': typeof DashboardLayoutSourceIndexRoute
   '/_dashboardLayout/status/': typeof DashboardLayoutStatusIndexRoute
+  '/_dashboardLayout/telecaller-analytics/': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/_dashboardLayout/third-party-integration/': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
   '/_dashboardLayout/user-profile/': typeof DashboardLayoutUserProfileIndexRoute
   '/_dashboardLayout/users/': typeof DashboardLayoutUsersIndexRoute
   '/_dashboardLayout/whatsapp-automation-rules/': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
+  '/_dashboardLayout/whatsapp-settings/': typeof DashboardLayoutWhatsappSettingsIndexRoute
   '/_dashboardLayout/workspace-details/': typeof DashboardLayoutWorkspaceDetailsIndexRoute
   '/_dashboardLayout/workspace-logs/': typeof DashboardLayoutWorkspaceLogsIndexRoute
   '/_dashboardLayout/general-templates/lead-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
@@ -782,10 +824,12 @@ export interface FileRouteTypes {
     | '/report'
     | '/source'
     | '/status'
+    | '/telecaller-analytics'
     | '/third-party-integration'
     | '/user-profile'
     | '/users'
     | '/whatsapp-automation-rules'
+    | '/whatsapp-settings'
     | '/workspace-details'
     | '/workspace-logs'
     | '/general-templates/lead-template'
@@ -816,10 +860,12 @@ export interface FileRouteTypes {
     | '/report'
     | '/source'
     | '/status'
+    | '/telecaller-analytics'
     | '/third-party-integration'
     | '/user-profile'
     | '/users'
     | '/whatsapp-automation-rules'
+    | '/whatsapp-settings'
     | '/workspace-details'
     | '/workspace-logs'
     | '/general-templates/lead-template'
@@ -853,10 +899,12 @@ export interface FileRouteTypes {
     | '/_dashboardLayout/report/'
     | '/_dashboardLayout/source/'
     | '/_dashboardLayout/status/'
+    | '/_dashboardLayout/telecaller-analytics/'
     | '/_dashboardLayout/third-party-integration/'
     | '/_dashboardLayout/user-profile/'
     | '/_dashboardLayout/users/'
     | '/_dashboardLayout/whatsapp-automation-rules/'
+    | '/_dashboardLayout/whatsapp-settings/'
     | '/_dashboardLayout/workspace-details/'
     | '/_dashboardLayout/workspace-logs/'
     | '/_dashboardLayout/general-templates/lead-template/'
@@ -927,10 +975,12 @@ export const routeTree = rootRoute
         "/_dashboardLayout/report/",
         "/_dashboardLayout/source/",
         "/_dashboardLayout/status/",
+        "/_dashboardLayout/telecaller-analytics/",
         "/_dashboardLayout/third-party-integration/",
         "/_dashboardLayout/user-profile/",
         "/_dashboardLayout/users/",
         "/_dashboardLayout/whatsapp-automation-rules/",
+        "/_dashboardLayout/whatsapp-settings/",
         "/_dashboardLayout/workspace-details/",
         "/_dashboardLayout/workspace-logs/",
         "/_dashboardLayout/general-templates/lead-template/",
@@ -1033,6 +1083,10 @@ export const routeTree = rootRoute
       "filePath": "_dashboardLayout/status/index.tsx",
       "parent": "/_dashboardLayout"
     },
+    "/_dashboardLayout/telecaller-analytics/": {
+      "filePath": "_dashboardLayout/telecaller-analytics/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
     "/_dashboardLayout/third-party-integration/": {
       "filePath": "_dashboardLayout/third-party-integration/index.tsx",
       "parent": "/_dashboardLayout"
@@ -1047,6 +1101,10 @@ export const routeTree = rootRoute
     },
     "/_dashboardLayout/whatsapp-automation-rules/": {
       "filePath": "_dashboardLayout/whatsapp-automation-rules/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/whatsapp-settings/": {
+      "filePath": "_dashboardLayout/whatsapp-settings/index.tsx",
       "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/workspace-details/": {

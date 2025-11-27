@@ -23,7 +23,7 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 import { FaEnvelope, FaSms, FaWhatsapp } from "react-icons/fa";
 
-type Role = "Admin" | "Superadmin" | "User";
+type Role = "Admin" | "Superadmin" | "User" | "Telecaller";
 
 export type NavItem = {
   name: string;
@@ -65,6 +65,13 @@ export const navItems: NavItem[] = [
     path: "/customer",
     roles: ["Admin", "Superadmin"],
   },
+
+  {
+    name: "Analytics",
+    icon: <UserCircle size={20} />,
+    path: "/telecaller-analytics",
+    roles: ["Admin", "Superadmin", "Telecaller"],
+  },
   {
     name: "Integrations",
     icon: <Plug size={20} />,
@@ -79,6 +86,7 @@ export const navItems: NavItem[] = [
   {
     name: "General Settings",
     icon: <Settings size={20} />,
+    roles: ["Admin", "Superadmin"],
     subItems: [
       {
         name: "Attributes",
@@ -100,6 +108,18 @@ export const navItems: NavItem[] = [
             name: "Sources",
             icon: <Activity size={18} />,
             path: "/source",
+            roles: ["Admin", "Superadmin"],
+          },
+        ],
+      },
+      {
+        name: "Web Settings",
+        icon: <Settings size={18} />,
+        subItems: [
+          {
+            name: "Whatsapp Integration",
+            icon: <Settings size={18} />,
+            path: "/whatsapp-settings",
             roles: ["Admin", "Superadmin"],
           },
         ],
@@ -152,7 +172,6 @@ export const navItems: NavItem[] = [
         ],
       },
     ],
-    roles: ["Admin", "Superadmin"],
   },
   {
     name: "Reports",

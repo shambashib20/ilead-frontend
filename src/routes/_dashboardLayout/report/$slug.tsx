@@ -50,6 +50,31 @@ type AgentDatum = {
   lead_count: number;
 };
 
+const tooltipStyles = () => {
+  const isDark = document.documentElement.classList.contains("dark");
+
+  return {
+    wrapper: {
+      zIndex: 999999,
+    },
+    content: {
+      backgroundColor: isDark
+        ? "rgba(40,40,40,0.85)" // dark mode background
+        : "rgba(255,255,255,0.9)", // light mode background
+      border: isDark
+        ? "1px solid rgba(255,255,255,0.15)"
+        : "1px solid rgba(0,0,0,0.15)",
+      borderRadius: "6px",
+      color: isDark ? "white" : "black",
+      fontSize: 12,
+      backdropFilter: "blur(6px)",
+    },
+    label: {
+      color: isDark ? "#e5e7eb" : "#111827", // light fade for label
+    },
+  };
+};
+
 type LeadBySourcePayload = {
   message: string;
   status: "SUCCESS" | "ERROR";
@@ -59,6 +84,23 @@ type LeadBySourcePayload = {
     totalLeads: number;
     agents: AgentDatum[];
     unassigned: { lead_count: number };
+    missed_followups: {
+      total: number;
+      telecallers: {
+        agent_id: string;
+        agent_name: string;
+        missed_count: number;
+      }[];
+    };
+    conversion_rates: {
+      totalConverted: number;
+      telecallers: {
+        agent_id: string;
+        agent_name: string;
+        converted: number;
+        conversion_rate: number;
+      }[];
+    };
   };
 };
 
@@ -201,6 +243,12 @@ function LeadReportView({
     return allRows.reduce((acc, r) => acc + r.leads, 0);
   }, [data, allRows]);
 
+  const totalMissedFollowups = useMemo(() => {
+    if (data?.data?.missed_followups?.total != null)
+      return data.data.missed_followups.total;
+    return allRows.reduce((acc, r) => acc + r.leads, 0);
+  }, [data, allRows]);
+
   // const agentCount = useMemo(() => {
   //   return allRows.filter((r) => r.type === "assigned").length;
   // }, [allRows]);
@@ -209,6 +257,26 @@ function LeadReportView({
   const chartData = useMemo(() => {
     return allRows.slice(0, 20).map((r) => ({ name: r.name, Leads: r.leads }));
   }, [allRows]);
+
+  const missedChartData = useMemo(() => {
+    if (!data?.data?.missed_followups?.telecallers) return [];
+
+    return data.data.missed_followups.telecallers.map((t) => ({
+      name: t.agent_name,
+      Missed: t.missed_count,
+    }));
+  }, [data]);
+
+  // Chart: Conversion Rate dataset
+  const conversionChartData = useMemo(() => {
+    if (!data?.data?.conversion_rates?.telecallers) return [];
+
+    return data.data.conversion_rates.telecallers.map((t) => ({
+      name: t.agent_name,
+      Converted: t.converted,
+      Rate: Number(t.conversion_rate.toFixed(1)),
+    }));
+  }, [data]);
 
   // Controls
   const handlePrev = useCallback(() => {
@@ -363,6 +431,17 @@ function LeadReportView({
                   {allRows.filter((r) => r.type === "assigned").length}
                 </div>
               </div>
+
+              <div className="bg-white/5 rounded-lg p-4">
+                <div className="text-sm dark:text-gray-300 mb-1">
+                  Missed Followups
+                </div>
+                <div className="text-xl font-semibold">
+                  {Number.isFinite(totalMissedFollowups)
+                    ? totalMissedFollowups
+                    : 0}
+                </div>
+              </div>
             </div>
 
             {/* Controls */}
@@ -441,18 +520,88 @@ function LeadReportView({
                         fontSize={12}
                       />
                       <Tooltip
-                        contentStyle={{
-                          backgroundColor: "rgba(255, 255, 255, 0.1)",
-                          border: "1px solid rgba(255, 255, 255, 0.2)",
-                          borderRadius: "8px",
-                          backdropFilter: "blur(8px)",
-                          color: "white",
-                          fontSize: 12,
-                        }}
+                        wrapperStyle={tooltipStyles().wrapper}
+                        contentStyle={tooltipStyles().content}
+                        labelStyle={tooltipStyles().label}
                       />
                       <Bar
                         dataKey="Leads"
                         fill="#4f72bd"
+                        radius={[0, 4, 4, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
+
+            {missedChartData.length > 0 && (
+              <div className="bg-white/5 rounded-lg p-6">
+                <div className="mb-3 text-sm dark:text-gray-400">
+                  Missed Follow-ups by Agents
+                </div>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={missedChartData}
+                      layout="vertical"
+                      margin={{ top: 8, right: 24, bottom: 8, left: 24 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                      <XAxis type="number" stroke="#9CA3AF" />
+                      <YAxis
+                        type="category"
+                        dataKey="name"
+                        width={160}
+                        stroke="#9CA3AF"
+                        fontSize={12}
+                      />
+                      <Tooltip
+                        wrapperStyle={tooltipStyles().wrapper}
+                        contentStyle={tooltipStyles().content}
+                        labelStyle={tooltipStyles().label}
+                      />
+                      <Bar
+                        dataKey="Missed"
+                        fill="#e57373"
+                        radius={[0, 4, 4, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
+
+            {conversionChartData.length > 0 && (
+              <div className="bg-white/5 rounded-lg p-6">
+                <div className="mb-3 text-sm dark:text-gray-400">
+                  Conversion Rates by Agents (%)
+                </div>
+                <div className="h-80">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={conversionChartData}
+                      layout="vertical"
+                      margin={{ top: 8, right: 24, bottom: 8, left: 24 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                      <XAxis type="number" stroke="#9CA3AF" />
+                      <YAxis
+                        type="category"
+                        dataKey="name"
+                        width={160}
+                        stroke="#9CA3AF"
+                        fontSize={12}
+                      />
+                      <Tooltip
+                        wrapperStyle={tooltipStyles().wrapper}
+                        contentStyle={tooltipStyles().content}
+                        labelStyle={tooltipStyles().label}
+                      />
+
+                      <Bar
+                        dataKey="Rate"
+                        fill="#81c784"
                         radius={[0, 4, 4, 0]}
                       />
                     </BarChart>
