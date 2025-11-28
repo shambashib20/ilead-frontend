@@ -1,8 +1,8 @@
 "use client";
 import { memo, useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import LeadCard from "../LeadCard";
 import type { Lead, Status } from "@/features/leads/types";
+import LeadCard from "../LeadCard";
 import { useMissedFollowUps } from "../../hooks/useMissedFollowUp";
 
 interface StatusColumnProps {
@@ -44,8 +44,8 @@ export const StatusColumn = memo(
     const rowVirtualizer = useVirtualizer({
       count: hasMore ? statusLeads.length + 1 : statusLeads.length,
       getScrollElement: () => scrollRef.current,
-      estimateSize: () => 140, // Approximate height of each lead card
-      overscan: 3, // Render 3 items outside visible range
+      estimateSize: () => 230, // increased from 170 to 190 to properly account for card height + margin
+      overscan: 3,
     });
 
     useEffect(() => {
@@ -67,8 +67,6 @@ export const StatusColumn = memo(
       isLoadingMore,
       rowVirtualizer.getVirtualItems(),
     ]);
-
-    console.log(updatedLeads);
 
     return (
       <div className="flex-shrink-0 w-[280px] rounded-lg bg-transparent">
@@ -113,7 +111,7 @@ export const StatusColumn = memo(
                     height: `${virtualRow.size}px`,
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
-                  className="px-2"
+                  className="flex flex-col justify-start pb-3" // added pb-3 to provide bottom padding within the virtual item
                 >
                   {isLoaderRow ? (
                     hasMore ? (
