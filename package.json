@@ -28,6 +28,7 @@
     "@tanstack/react-router": "^1.120.9",
     "@tanstack/react-router-devtools": "^1.120.9",
     "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.13.12",
     "@tanstack/router-plugin": "^1.120.9",
     "@tanstack/zod-form-adapter": "^0.42.1",
     "alova": "^3.3.3",
