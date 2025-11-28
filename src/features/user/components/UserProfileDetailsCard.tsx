@@ -122,7 +122,7 @@ export default function UserProfileDetailsCard() {
               Profile
             </CardTitle>
             <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
-              Super admin
+              {user.role?.name}
             </span>
           </div>
 
