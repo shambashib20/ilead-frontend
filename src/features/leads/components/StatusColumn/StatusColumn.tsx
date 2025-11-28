@@ -116,9 +116,7 @@ export const StatusColumn = memo(
                   {isLoaderRow ? (
                     hasMore ? (
                       <div className="flex items-center justify-center py-4">
-                        <div className="text-sm text-gray-400">
-                          Loading more...
-                        </div>
+                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"></div>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center py-4">

@@ -177,8 +177,6 @@ function RouteComponent() {
       : [],
   }));
 
-  console.log(normalizedLeads2);
-
   return isTableView ? (
     <LeadsTable
       leads={normalizedLeads}

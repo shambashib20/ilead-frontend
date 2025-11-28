@@ -119,7 +119,6 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
     </>
   );
 }
-
 export function LeadDelete() {
   const { setFormActions, closeModal } = useModalStore();
   const { deleteLead, isDeleting, isSuccess, error } = useDeleteLead();
@@ -779,6 +778,48 @@ export function LeadStatus() {
   );
 }
 
+function parseKeyValueLines(raw?: string) {
+  if (!raw) return [];
+  return (
+    raw
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const [rawKey, ...rest] = line.split("::");
+        const key = (rawKey ?? "").trim();
+        const value = (rest ?? []).join("::").trim(); // join back if value contains ::
+        return { key, value };
+      })
+      // skip label lines
+      .filter(({ key }) => {
+        const k = key.toLowerCase();
+        return k !== "label" && k !== "labels";
+      })
+  );
+}
+
+function humanizeKey(key: string) {
+  // remove trailing question marks, replace underscores, title-case
+  return key
+    .replace(/\?/g, "")
+    .replace(/_/g, " ")
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function cleanMeta(raw: string) {
+  if (!raw) return "";
+
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !line.toLowerCase().startsWith("label::"))
+    .join("\n");
+}
+// render block (replace your comment <p> block with this)
+
 export function LeadDetail() {
   const { setModalTitle, openModal, setData, setModalSize } = useModalStore();
   const { theme } = useTheme();
@@ -807,6 +848,10 @@ export function LeadDetail() {
 
     fetchLeadInfo();
   }, [leadId]);
+
+  const commentEntries = parseKeyValueLines(lead?.data?.comment);
+
+  // console.log(lead.data.comment);
 
   if (loading) {
     return (
@@ -931,7 +976,7 @@ export function LeadDetail() {
 
                 <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
                   <b className="flex flex-col gap-1">Comment:</b>{" "}
-                  {lead.data.comment || "-"}
+                  {cleanMeta(lead?.data?.comment) || "-"}
                 </p>
                 <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col">
                   <b className="flex flex-col gap-1">Reference:</b>{" "}
@@ -989,6 +1034,30 @@ export function LeadDetail() {
                 </p>
                 <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
                   <b>Assign To:</b> {lead.data.assigned_to?.name || "N/A"}
+                </p>
+
+                <p className="text-sm text-foreground mb-2 py-2 border-b border-gray-300 dark:border-gray-700 flex flex-col gap-1">
+                  <b className="flex flex-col gap-1 mb-4 border-b pb-3  border-gray-300 dark:border-gray-700">
+                    Dynamic Form Data:
+                  </b>
+                  <div className="mt-1 ">
+                    {commentEntries.length === 0 ? (
+                      "-"
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {commentEntries.map(({ key, value }) => (
+                          <div key={key} className="flex flex-col">
+                            <div className="text-xs font-bold text-gray-300">
+                              {humanizeKey(key)}
+                            </div>
+                            <div className="text-sm text-foreground mb-2 py-2  flex flex-col gap-1">
+                              {value || "-"}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </p>
               </div>
             </div>
