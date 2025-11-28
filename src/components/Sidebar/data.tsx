@@ -40,9 +40,21 @@ interface SidebarMenuItemProps {
   currentUserRole?: Role;
 }
 
+
+
 export const navItems: NavItem[] = [
-  { name: "Dashboard", icon: <House size={20} />, path: "/dashboard" },
-  { name: "Lead", icon: <Filter size={20} />, path: "/lead" },
+  {
+    name: "Dashboard",
+    icon: <House size={20} />,
+    path: "/dashboard",
+    roles: ["Admin", "Superadmin", "User", "Telecaller"],
+  },
+  {
+    name: "Lead",
+    icon: <Filter size={20} />,
+    path: "/lead",
+    roles: ["Admin", "Superadmin", "User", "Telecaller"],
+  },
   {
     name: "Workspace Logs",
     icon: <MessageSquare size={20} />,
@@ -70,7 +82,7 @@ export const navItems: NavItem[] = [
     name: "Analytics",
     icon: <UserCircle size={20} />,
     path: "/telecaller-analytics",
-    roles: ["Admin", "Superadmin", "Telecaller"],
+    roles: ["Telecaller"],
   },
   {
     name: "Integrations",
