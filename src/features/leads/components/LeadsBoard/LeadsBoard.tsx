@@ -19,7 +19,7 @@ export const LeadsBoard = memo(
   ({
     leads,
     statuses,
-    setIsTableView,
+    // setIsTableView,
     onFetchNextPage,
     hasNextPage = false,
     isFetchingNextPage = false,
