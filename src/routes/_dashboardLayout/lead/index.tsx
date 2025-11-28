@@ -121,7 +121,7 @@ function RouteComponent() {
           <h3 className="text-lg font-medium text-red-600">
             Error loading leads
           </h3>
-          <p className="text-sm text-gray-500">{error.message}</p>
+          <p className="text-sm text-gray-500">{error?.message}</p>
         </div>
       </div>
     );
