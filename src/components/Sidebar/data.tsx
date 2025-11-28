@@ -70,7 +70,7 @@ export const navItems: NavItem[] = [
     name: "Analytics",
     icon: <UserCircle size={20} />,
     path: "/telecaller-analytics",
-    roles: ["Admin", "Superadmin", "Telecaller"],
+    roles: ["Telecaller"],
   },
   {
     name: "Integrations",
