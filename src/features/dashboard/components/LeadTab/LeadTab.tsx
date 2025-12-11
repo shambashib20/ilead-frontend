@@ -68,7 +68,7 @@ export function LeadTab({ data }: { data: LeadTabType }) {
       </TabsList>
 
       {data.content.map((item) => (
-        <TabsContent key={item.label} value={item.label} className="px-4 py-0">
+        <TabsContent key={item.label} value={item.label} className="ps-2  py-0">
           {item.leads && item.leads.length > 0 ? (
             <ul
               className="space-y-2 max-h-[300px] overflow-y-auto pt-4
@@ -101,20 +101,20 @@ export function LeadTab({ data }: { data: LeadTabType }) {
                     tabIndex={0}
                     onClick={onActivate}
                     onKeyDown={onKeyDown}
-                    className="border border-gray-200 dark:border-gray-700 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1 hover:cursor-pointer dark:hover:bg-amber-50/5 mb-6"
+                    className="border bg-primary hover:bg-gray-50 border-gray-200 dark:border-gray-700 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1 hover:cursor-pointer dark:hover:bg-amber-50/5 mb-6  me-4"
                     aria-label={`Open lead ${leadName} details`}
                   >
                     <div
-                      className="h-8 w-8 rounded-full border bg-white text-black grid place-content-center absolute -left-4 -top-4 text-[12px]"
+                      className="h-8 w-8 rounded-full border-2 border-primary-foreground bg-primary-foreground/10 text-primary-foreground font-bold grid place-content-center absolute -left-4 -top-4 text-[12px]"
                       aria-hidden
                     >
                       {leadName.charAt(0).toUpperCase()}
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between ">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2 font-medium text-[14px]">
-                          <User className="w-4 h-4 text-gray-600 dark:text-gray-200" />
+                          <User className="w-4 h-4  text-gray-600 dark:text-gray-200" />
                           <span>{leadName}</span>
                         </div>
                       </div>

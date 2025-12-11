@@ -112,7 +112,7 @@ const LeadStatusChart: React.FC<Props> = ({
   flex flex-col gap-5 mt-4 mb-6 p-4 
   border border-gray-100 dark:border-border rounded-lg shadow-md 
   w-[90%] max-w-full md:w-[350px]
-  bg-white dark:bg-background 
+  bg-white dark:bg-[#142a4f]
   mx-auto 
   absolute
   left-2/4

@@ -235,14 +235,14 @@ function RouteComponent() {
           <div className="col">
             <Card className="pt-3 sm:pt-5 relative ">
               <div className="flex justify-between items-center px-3 sm:px-6">
-                <CardTitle className="text-[16px] sm:text-lg">
+                <CardTitle className=" font-medium text-[22px] text-primary-foreground ">
                   Lead Status
                 </CardTitle>
                 <button
                   className="p-2 rounded-md hover:bg-primary transition"
                   onClick={() => setShowMenu((prev) => !prev)}
                 >
-                  <Menu className="w-6 h-6" />
+                  <Menu className="w-6 h-6 cursor-pointer" />
                 </button>
               </div>
               <div className="px-3 sm:px-6">
@@ -252,7 +252,7 @@ function RouteComponent() {
                     `  FROM ${startDate} to ${endDate}`}
                 </h3>
                 {agent !== "" && (
-                  <h4 className="bg-blue-300/20 p-1 px-2 text-[10px] text-puple-300 dark:text-blue-50  font-semibold rounded w-fit">
+                  <h4 className="bg-primary-foreground/10 p-1 px-2 text-[10px] text-primary-foreground dark:text-blue-200  font-semibold rounded w-fit">
                     {agent}
                   </h4>
                 )}
@@ -291,14 +291,14 @@ function RouteComponent() {
           <div className="col">
             <Card className="pt-3 sm:pt-5">
               <div className="flex justify-between items-center px-3 sm:px-6">
-                <CardTitle className="text-[16px] sm:text-base">
+                <CardTitle className="font-medium text-[22px] text-primary-foreground">
                   Lead Source
                 </CardTitle>
                 <button
                   className="p-2 rounded-md hover:bg-primary transition"
                   onClick={() => setShowSourceMenu((prev) => !prev)}
                 >
-                  <Menu className="w-6 h-6" />
+                  <Menu className="w-6 h-6 cursor-pointer" />
                 </button>
               </div>
               <div className="px-3 sm:px-6">
@@ -308,8 +308,8 @@ function RouteComponent() {
                     `  FROM ${sourceStartDate} to ${sourceEndDate}`}
                 </h3>
                 {agent2 !== "" && (
-                  <h4 className="bg-blue-300/20 p-1 px-2 text-[10px] text-puple-300 dark:text-blue-50  font-semibold rounded w-fit">
-                    {agent2}
+                  <h4 className="bg-primary-foreground/10 p-1 px-2 text-[10px] text-primary-foreground dark:text-blue-200  font-semibold rounded w-fit">
+                    {agent}
                   </h4>
                 )}
               </div>
