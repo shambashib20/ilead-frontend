@@ -135,25 +135,31 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-3">
         <div className="views">
-          <ul className="flex items-center rounded-sm border border-bg-btn text-btn-bg">
+          <ul className="flex items-center rounded-[4px] border border-primary-foreground text-btn-bg">
             <li>
               <button
-                className={`p-2.5 border-e border-bg-btn cursor-pointer ${
-                  !isTableView ? "bg-btn-bg/20" : ""
+                className={`p-1.5 border-e border-bg-btn cursor-pointer ${
+                  !isTableView ? "bg-primary-foreground/20" : ""
                 }`}
                 onClick={() => setIsTableView(false)}
               >
-                <ChartColumnBig size={isMobile ? 14 : 20} />
+                <ChartColumnBig
+                  size={isMobile ? 14 : 20}
+                  className="text-primary-foreground"
+                />
               </button>
             </li>
             <li>
               <button
-                className={`p-2.5 cursor-pointer ${
-                  isTableView ? "bg-btn-bg/20" : ""
+                className={`p-1.5 cursor-pointer ${
+                  isTableView ? "bg-primary-foreground/20" : ""
                 }`}
                 onClick={() => setIsTableView(true)}
               >
-                <List size={isMobile ? 14 : 20} />
+                <List
+                  size={isMobile ? 14 : 20}
+                  className="text-primary-foreground"
+                />
               </button>
             </li>
           </ul>

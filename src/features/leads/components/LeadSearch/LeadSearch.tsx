@@ -308,12 +308,12 @@ function LeadSearch() {
     }),
     multiValueLabel: (styles: any) => ({
       ...styles,
-      color: theme === "dark" ? "#9089d5" : "#333",
+      color: theme === "dark" ? "#e6e4ff" : "#333",
       fontSize: "12px",
     }),
     multiValueRemove: (styles: any) => ({
       ...styles,
-      color: theme === "dark" ? "#9089d5" : "#333",
+      color: theme === "dark" ? "#e6e4ff" : "#333",
     }),
   };
 
@@ -327,12 +327,12 @@ function LeadSearch() {
         }}
         className="space-y-6"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-7   mt-5">
           {/* Created By Field */}
           <form.Field
             name="assignedBy"
             children={(field) => (
-              <div className="space-y-2">
+              <div className="space-y-3 mb-5">
                 <Label htmlFor="assignedBy">Created By</Label>
                 <Select
                   id="assignedBy"
@@ -435,7 +435,7 @@ function LeadSearch() {
                   isMulti
                   name="searchByDate"
                   options={followUpOptions}
-                  className="basic-multi-select"
+                  className="basic-multi-select "
                   classNamePrefix="select"
                   styles={colourStyles}
                   placeholder="Select date range..."
@@ -455,7 +455,7 @@ function LeadSearch() {
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Enter search terms..."
-                    className="flex-1"
+                    className="flex-1  placeholder:text-[#333] dark:bg-[#283046] dark:placeholder:text-[#e6e4ff]"
                   />
                 </div>
               </div>

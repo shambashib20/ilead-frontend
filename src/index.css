@@ -110,6 +110,7 @@
 
   /* Gradient */
   --primary-gradient: linear-gradient(118deg, #432ee5 0%, #e43e2b 100%);
+  --placeholder-clr: #333;
 }
 
 .dark {
@@ -126,7 +127,7 @@
 
   /* Brand / primary */
   --primary: #11213d; /* denser blue for dark surfaces */
-  --primary-foreground: #ffffff;
+  --primary-foreground: #7a8fc9;
 
   /* Secondary / muted */
   --secondary: #8fa3bd;
@@ -174,6 +175,8 @@
 
   /* Gradient */
   --primary-gradient: linear-gradient(118deg, #3722b8 0%, #c33a2a 100%);
+
+  --placeholder-clr: #e6e4ff;
 }
 
 @layer base {
@@ -289,4 +292,9 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1) sepia(1) saturate(5) hue-rotate(200deg);
   cursor: pointer;
+}
+
+.css-1jqq78o-placeholder {
+  color: var(--placeholder-clr) !important;
+  font-size: 12px !important;
 }
