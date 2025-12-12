@@ -20,7 +20,7 @@ function FollowUp() {
   return (
     <Table className="">
       {/* <TableCaption>Missed Follow-ups</TableCaption> */}
-      <TableHeader className="bg-violet-900 dark:bg-violet-950">
+      <TableHeader className="bg-[#3062be] dark:bg-[#203e74] rounded-none">
         <TableRow>
           <TableHead className=" text-white">No.</TableHead>
           <TableHead className=" text-white">Customer Name</TableHead>
@@ -39,7 +39,7 @@ function FollowUp() {
             <>
               <TableRow
                 key={item.leadId}
-                className="cursor-pointer bg-blue-900/20 text-bg-blue-900 font-semibold hover:bg-blue-700/50 dark:text-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50"
+                className="cursor-pointer bg-blue-900/20 hover:bg-blue-900/30 text-bg-blue-900 font-semibold  dark:text-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50"
                 onClick={() => setExpandedRow(isExpanded ? null : item.leadId)}
               >
                 <TableCell>{index + 1}</TableCell>
@@ -60,8 +60,8 @@ function FollowUp() {
               {isExpanded && (
                 <TableRow className="bg-primary">
                   <TableCell colSpan={5}>
-                    <div className="p-1 text-sm space-y-2">
-                      <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+                    <div className="p-4 text-sm space-y-2 bg-gray-200 dark:bg-gray-50/5 m-2 rounded-[5px]">
+                      <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                         <div className="flex">
                           <span className="font-semibold w-32">
                             Customer Name:

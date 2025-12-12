@@ -43,7 +43,7 @@ function RouteComponent() {
         setModalTitle?.("Missed Follow ups ");
         openModal?.({
           content: (
-            <div className="mx-3 border-1 border-gray-600 rounded-2xl overflow-hidden">
+            <div className="mx-3 border-1 border-gray-600  overflow-hidden">
               <FollowUp />
             </div>
           ),

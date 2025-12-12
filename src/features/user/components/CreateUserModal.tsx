@@ -127,7 +127,7 @@ function CreateUserModal() {
           value={formData.password}
           onChange={handleChange}
         />
-        <span className="absolute right-3 top-2/4 -translate-y-1/2">
+        <span className="absolute right-3 top-1/2 ">
           {showPassword ? (
             <Eye
               size={16}
@@ -161,7 +161,7 @@ function CreateUserModal() {
           ))}
         </select>
       </div>
-      <div>
+      {/* <div>
         <Label htmlFor="property_id" className="mb-2">
           Property ID
         </Label>
@@ -171,7 +171,7 @@ function CreateUserModal() {
           disabled
           className="bg-gray-100"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

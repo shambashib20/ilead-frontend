@@ -181,8 +181,8 @@ function Packages365() {
 
   return (
     <div>
-      <div className="p-6 mt-10 transition-colors duration-300 bg-primary rounded-sm">
-        <div>
+      <div className="p-6 mt-10 transition-colors duration-300 shadow-lead  bg-primary rounded-sm">
+        <div className="bg-primary ">
           <h1 className={`text-2xl font-bold ${colors.text} mb-2`}>
             ETC Packages
           </h1>

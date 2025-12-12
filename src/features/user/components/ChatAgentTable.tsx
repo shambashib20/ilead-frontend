@@ -69,9 +69,9 @@ function ChatAgentTable() {
   return (
     <div className=" mt-10">
       {/* Header */}
-      <div className="flex items-center justify-between bg-primary p-4 mb-6 rounded-lg">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+      <div className="flex items-center justify-between border dark:border-transparent border-gray-200 bg-white dark:bg-primary  p-4 mb-6 rounded-lg">
+        <div className="flex items-center gap-3 ">
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
             <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
