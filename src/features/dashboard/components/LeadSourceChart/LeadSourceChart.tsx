@@ -114,7 +114,7 @@ const LeadSourceChart: React.FC<Props> = ({
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="bg-transparent dark:bg-transparent "
+                className="bg-transparent dark:bg-transparent cursor-pointer"
               />
             </div>
 
@@ -126,7 +126,7 @@ const LeadSourceChart: React.FC<Props> = ({
                 type="date"
                 value={endDate}
                 onChange={(e) => onEndDateChange(e.target.value)}
-                className="bg-transparent dark:bg-transparent "
+                className="bg-transparent dark:bg-transparent cursor-pointer "
               />
             </div>
           </div>
@@ -185,6 +185,7 @@ const LeadSourceChart: React.FC<Props> = ({
                   input: (base) => ({
                     ...base,
                     color: "rgb(243 244 246)",
+                    cursor: "pointer",
                   }),
                 }}
               />

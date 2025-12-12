@@ -48,6 +48,7 @@
   --color-skeleton-base-foreground: var(--skeleton-base-foreground);
   --color-primary-gradient: var(--primary-gradient);
 }
+
 :root {
   --font-primary: "Montserrat", "sans-serif";
   --radius: 0.625rem;
@@ -71,8 +72,8 @@
   --muted: #e6eef8;
   --muted-foreground: #6b7a90;
 
-  --accent: #e43e2b;
-  --accent-foreground: #ffffff;
+  --accent: #f1f1f1;
+  --accent-foreground: #1a2e4d;
 
   /* Functional states */
   --destructive: #d6453b;
@@ -136,8 +137,8 @@
   --muted: #0f2030;
   --muted-foreground: #9fb2c9;
 
-  --accent: #ff6b55;
-  --accent-foreground: #071028;
+  --accent: #22395f;
+  --accent-foreground: #d8e2ff;
 
   /* Functional states */
   --destructive: #ff8b7a;
