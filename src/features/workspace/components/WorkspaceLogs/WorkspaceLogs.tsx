@@ -155,8 +155,9 @@ export default function WorkspaceLogs() {
               <div className="space-y-6">
                 {logs.map((log, index) => {
                   const statusConfig =
-                    STATUS_CONFIG[log.status?.toLowerCase()] ||
-                    STATUS_CONFIG.default;
+                    STATUS_CONFIG[
+                      log?.status?.toLowerCase() as keyof typeof STATUS_CONFIG
+                    ] || STATUS_CONFIG.default;
                   const StatusIcon = statusConfig.icon;
 
                   return (
