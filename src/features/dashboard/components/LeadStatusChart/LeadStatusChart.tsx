@@ -112,7 +112,7 @@ const LeadStatusChart: React.FC<Props> = ({
   flex flex-col gap-5 mt-4 mb-6 p-4 
   border border-gray-100 dark:border-border rounded-lg shadow-md 
   w-[90%] max-w-full md:w-[350px]
-  bg-white dark:bg-[#142a4f]
+  bg-white dark:bg-[#1a2e4f]
   mx-auto 
   absolute
   left-2/4
@@ -132,7 +132,7 @@ const LeadStatusChart: React.FC<Props> = ({
                 type="date"
                 value={startDate}
                 onChange={(e) => onStartDateChange(e.target.value)}
-                className="bg-transparent dark:bg-transparent   "
+                className="bg-transparent dark:bg-transparent cursor-pointer  "
               />
             </div>
 
@@ -144,7 +144,7 @@ const LeadStatusChart: React.FC<Props> = ({
                 type="date"
                 value={endDate}
                 onChange={(e) => onEndDateChange(e.target.value)}
-                className="bg-transparent dark:bg-transparent "
+                className="bg-transparent dark:bg-transparent cursor-pointer"
               />
             </div>
           </div>
@@ -180,7 +180,7 @@ const LeadStatusChart: React.FC<Props> = ({
                   control: (base) => ({
                     ...base,
                     backgroundColor: theme === "dark" ? "#1a2e4f" : "#fff",
-                    borderColor: theme === "dark" ? "#3a3285" : "#ddd",
+                    borderColor: theme === "dark" ? "#284678" : "#ddd",
                   }),
                   menu: (base) => ({
                     ...base,
@@ -204,6 +204,7 @@ const LeadStatusChart: React.FC<Props> = ({
                   input: (base) => ({
                     ...base,
                     color: "rgb(243 244 246)",
+                    cursor: "pointer",
                   }),
                 }}
               />
