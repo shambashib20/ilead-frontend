@@ -38,6 +38,7 @@ export const StatusColumn = memo(
       return {
         ...lead,
         missedFollowup: hasMissed,
+        count: 0,
       };
     });
 
@@ -67,6 +68,9 @@ export const StatusColumn = memo(
       isLoadingMore,
       rowVirtualizer.getVirtualItems(),
     ]);
+
+    console.log(updatedLeads);
+    console.log(missedFollowUps);
 
     return (
       <div className="flex-shrink-0 w-[280px] rounded-lg bg-transparent">
