@@ -39,7 +39,7 @@ function FollowUp() {
             <>
               <TableRow
                 key={item.leadId}
-                className="cursor-pointer bg-purple-900/20 text-bg-purple-900 font-semibold hover:bg-purple-700/50 dark:text-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50"
+                className="cursor-pointer bg-blue-900/20 text-bg-blue-900 font-semibold hover:bg-blue-700/50 dark:text-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50"
                 onClick={() => setExpandedRow(isExpanded ? null : item.leadId)}
               >
                 <TableCell>{index + 1}</TableCell>

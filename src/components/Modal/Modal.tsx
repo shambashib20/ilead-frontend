@@ -54,7 +54,7 @@ export function Modal() {
         className={`${MODAL_SIZE[modalSize ?? "normal"] ?? "w-[400px]"} `}
       >
         {modalTitle && (
-          <DialogHeader className="bg-[#3a3285] text-white">
+          <DialogHeader className="bg-[#2a47a7] text-white">
             <DialogTitle>{modalTitle}</DialogTitle>
           </DialogHeader>
         )}
