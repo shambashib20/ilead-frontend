@@ -94,7 +94,7 @@ const LeadSourceChart: React.FC<Props> = ({
   flex flex-col gap-5 mt-4 mb-6 p-4 
   border border-gray-100 dark:border-border rounded-lg shadow-md 
   w-[90%] max-w-full md:w-[350px]
-  bg-white dark:bg-background 
+  bg-white dark:bg-[#1a2e4f] 
   mx-auto 
   absolute
   left-2/4
@@ -161,7 +161,7 @@ const LeadSourceChart: React.FC<Props> = ({
                   control: (base) => ({
                     ...base,
                     backgroundColor: theme === "dark" ? "#1a2e4f" : "#fff",
-                    borderColor: theme === "dark" ? "#3a3285" : "#ddd",
+                    borderColor: theme === "dark" ? "#284678" : "#ddd",
                   }),
                   menu: (base) => ({
                     ...base,

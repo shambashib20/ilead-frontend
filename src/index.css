@@ -127,7 +127,7 @@
 
   /* Brand / primary */
   --primary: #11213d; /* denser blue for dark surfaces */
-  --primary-foreground: #7a8fc9;
+  --primary-foreground: #ffffff;
 
   /* Secondary / muted */
   --secondary: #8fa3bd;
