@@ -197,24 +197,16 @@ export interface TodaysFollowUpResponse {
   data: Lead[];
 }
 
-
-
-
-
-
 export interface TelecallerAnalyticsPayload {
   startDate?: string;
   endDate?: string;
 }
-
 
 type AgentDatum = {
   id: string;
   name: string;
   email: string;
 };
-
-
 
 type LeadTrendDatum = {
   count: number;
@@ -229,18 +221,13 @@ type StatsDatum = {
   leadTrend: LeadTrendDatum[];
 };
 export interface TelecallerAnalyticsResponse {
-
   message: string;
   status: string;
   data: {
     agent: AgentDatum;
-    stats: StatsDatum
-  }
+    stats: StatsDatum;
+  };
 }
-
-
-
-
 
 export class LeadsModule extends ApiClient {
   constructor() {
@@ -368,26 +355,16 @@ export class LeadsModule extends ApiClient {
     return this.get<TodaysFollowUpResponse>("/todays-followups");
   }
 
-  async getSourceReports(payload: GetReports) {
-    return this.post<GetRepcortsResponse>(
-      "/statistics-by-source-agent",
-      payload
-    );
+  async getSourceReports() {
+    return this.get<GetRepcortsResponse>("/statistics-by-source-agent");
   }
 
-  async getLabelReports(payload: GetReports) {
-    return this.post<GetRepcortsResponse>(
-      "/statistics-by-label-agent",
-      payload
-    );
+  async getLabelReports() {
+    return this.get<GetRepcortsResponse>("/statistics-by-label-agent");
   }
-  async getStatusReports(payload: GetReports) {
-    return this.post<GetRepcortsResponse>(
-      "/statistics-by-status-agent",
-      payload
-    );
+  async getStatusReports() {
+    return this.get<GetRepcortsResponse>("/statistics-by-status-agent");
   }
-
 
   async getTelecallerAnayltics(payload: TelecallerAnalyticsPayload) {
     return this.post<TelecallerAnalyticsResponse>(

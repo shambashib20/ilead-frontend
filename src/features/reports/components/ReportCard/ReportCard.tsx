@@ -9,7 +9,7 @@ export const ReportCard = memo(function ReportCard({
 }) {
   return (
     <div className="rounded-md overflow-hidden bg-primary/40 border border-white/10 shadow-sm">
-      <h4 className="text-base sm:text-lg text-center bg-blue-500 text-white py-2 font-medium">
+      <h4 className="text-xl text-center bg-blue-500/20 dark:bg-blue-500/10 text-blue-500 dark:text-blue-200 py-2 font-semibold">
         {section.title}
       </h4>
       <ReportCardList links={section.links} />
