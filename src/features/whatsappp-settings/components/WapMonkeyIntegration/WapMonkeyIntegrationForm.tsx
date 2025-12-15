@@ -2,19 +2,27 @@ import { useForm } from "@tanstack/react-form";
 
 import { Trash2, RotateCcw, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/features/auth/hooks/useUser";
+
 
 import { useCreateWapmonkey } from "../../hooks/useCreateWapmonkey";
 import { useEffect } from "react";
 
+import { useWorkspaceProperty } from "@/features/workspace/hooks/useWorkspaceProperty";
+import { useWapmonkeyCredit } from "../../hooks/useWapmonkeyCredits";
+import { useQueryClient } from "@tanstack/react-query";
+
 function WapMonkeyIntegration() {
-  const { data: user } = useUser();
   const { saveApiKey, isSaving } = useCreateWapmonkey();
 
-  const existingKey =
-    user?.property?.meta?.wapmonkey_api_key ||
-    user?.property?.meta?.get?.("wapmonkey_api_key") ||
-    "";
+  const { properties } = useWorkspaceProperty();
+
+  const queryClient = useQueryClient();
+
+  const existingKey = properties?.meta?.wapmonkey_api_key;
+
+  const { data: creditData, isLoading: isCreditLoading } =
+    useWapmonkeyCredit(existingKey);
+
   const form = useForm({
     defaultValues: {
       wapmonkey_key: "",
@@ -41,7 +49,9 @@ function WapMonkeyIntegration() {
   };
 
   const handleRefreshCredit = () => {
-    console.log("Refreshing credit...");
+    queryClient.invalidateQueries({
+      queryKey: ["wapmonkey-credit", existingKey],
+    });
   };
 
   return (
@@ -87,8 +97,8 @@ function WapMonkeyIntegration() {
         <Button
           type="button"
           onClick={handleRefreshCredit}
-          variant={"outline"}
-          size={"icon"}
+          variant="outline"
+          size="icon"
         >
           <RotateCcw size={18} />
         </Button>
@@ -97,7 +107,9 @@ function WapMonkeyIntegration() {
       {/* CREDIT DISPLAY */}
       <div className="mt-3 text-gray-300">
         <span className="text-sm">Credit</span>
-        <div className="text-lg font-semibold">3,797</div>
+        <div className="text-lg font-semibold">
+          {isCreditLoading ? "Loading..." : creditData?.data?.wallet}
+        </div>
       </div>
     </div>
   );
