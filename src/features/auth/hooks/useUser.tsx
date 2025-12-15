@@ -5,6 +5,8 @@ export const userQueryOptions = {
   queryKey: ["user"],
   queryFn: () => {
     console.log(getData, 'getet')
+
+    
     return getData("user"); 
   },
   initialData: () => {
