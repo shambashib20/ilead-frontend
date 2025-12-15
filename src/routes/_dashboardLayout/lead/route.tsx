@@ -22,7 +22,6 @@ export const Route = createFileRoute("/_dashboardLayout/lead")({
     opts.context.queryClient.ensureQueryData(AgentsQueryOptions());
     opts.context.queryClient.ensureQueryData(labelsQueryOptions());
     opts.context.queryClient.ensureQueryData(allLabelsQueryOptions());
-
     // opts.context.queryClient.ensureQueryData(exportLeadsQueryOption());
   },
 });

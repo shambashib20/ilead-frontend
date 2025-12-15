@@ -1,3 +1,4 @@
+import { useTheme } from "@/contexts/ThemeProvider";
 import { useAllLabels } from "@/features/leads/hooks/useAllLabels";
 import { useSource } from "@/features/leads/hooks/useSource";
 import {
@@ -60,6 +61,8 @@ function StatusChip({
   onMouseEnter,
   onMouseLeave,
 }: StatusChipProps) {
+  const { theme, setTheme } = useTheme();
+
   return (
     <button
       onClick={onClick}
@@ -71,8 +74,10 @@ function StatusChip({
         isHovered && "ring-2 ring-offset-2"
       )}
       style={{
-        backgroundColor: isActive ? `${color}20` : `${color}10`,
-        color: isActive ? color : `${color}80`,
+        backgroundColor: isActive ? `${color}20` : `${color}5`,
+        color: isActive
+          ? `${theme === "dark" ? "#fff" : color}`
+          : `${theme === "light" ? color : "#000"}`,
         ...(isHovered && { ringColor: color }),
       }}
     >
