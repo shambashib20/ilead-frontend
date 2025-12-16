@@ -82,7 +82,7 @@ export function LeadGridView({ leads }: { leads: any[] }) {
     <div className="w-full overflow-x-auto">
       <div className="flex gap-4 pb-4">
         {Object.entries(grouped).map(([status, items]) => (
-          <StatusColumn key={status} title={status} leads={items} />
+          <StatusColumn key={status} title={status} leads={items as any[]} />
         ))}
       </div>
     </div>
