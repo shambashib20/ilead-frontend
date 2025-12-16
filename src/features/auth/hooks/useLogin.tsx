@@ -29,12 +29,12 @@ export function useLogin() {
         queryClient.setQueryData(["user"], data);
         setTimeout(() => {
           router.history.push("/dashboard");
-        }, 2000); // Simulate a delay for the user experience
+        }, 0); // Simulate a delay for the user experience
 
         toast("Login Successful! 🎉", {
           description:
             "You have been logged in successfully. Redirecting to dashboard...",
-          duration: 2000,
+          duration: 1000,
           dismissible: true,
           style: {
             background: theme === "dark" ? "#333" : "#fff",
