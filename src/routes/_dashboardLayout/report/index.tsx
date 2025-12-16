@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <section className="reports">
       {/* Heading */}
-      <div className="report-head mt-6 sm:mt-8 rounded-md bg-primary shadow p-4 sm:p-5 border border-white/10">
+      <div className="report-head mt-6 sm:mt-8 rounded-md bg-primary shadow-lead p-4 sm:p-5 ">
         <h3 className="text-lg sm:text-xl font-semibold">{REPORTS.heading}</h3>
       </div>
 

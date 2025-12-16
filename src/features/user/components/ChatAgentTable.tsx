@@ -69,13 +69,13 @@ function ChatAgentTable() {
   return (
     <div className=" mt-10">
       {/* Header */}
-      <div className="flex items-center justify-between bg-primary p-4 mb-6 rounded-lg">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+      <div className="flex items-center justify-between  bg-white dark:bg-primary shadow-lead  p-4 mb-6 rounded-lg">
+        <div className="flex items-center gap-3 ">
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
             <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
               Employee's
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -103,7 +103,7 @@ function ChatAgentTable() {
       </div>
 
       {/* Table Container */}
-      <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-primary overflow-hidden">
+      <div className="rounded-lg shadow-lead bg-primary overflow-hidden">
         {loading ? (
           <div className="p-8">
             <SkeletonTableLoader />

@@ -16,7 +16,7 @@ const ReportListItem = memo(function ReportListItem({
         aria-label={item.label}
         className="px-3 py-4 sm:py-5 flex items-center justify-between
                    focus:outline-none focus-visible:ring focus-visible:ring-blue-400
-                   transition-transform hover:translate-x-1 hover:text-black hover:font-normal dark:hover:text-white"
+                   transition-transform hover:translate-x-1 text-blue-500 dark:text-gray-300 hover:font-normal dark:hover:text-white"
       >
         <span className="truncate">{item.label}</span>
         <FaAngleRight size={18} aria-hidden="true" />
@@ -39,7 +39,10 @@ export const ReportCardList = memo(function ReportCardList({
   }
 
   return (
-    <ul className={`divide-y divide-white/10 ${className}`} role="list">
+    <ul
+      className={`divide-y divide-blue-500/50 dark:divide-gray-600 ${className}`}
+      role="list"
+    >
       {links.map((link) => (
         <ReportListItem key={link.to} item={link} />
       ))}

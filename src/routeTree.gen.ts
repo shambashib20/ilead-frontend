@@ -28,6 +28,7 @@ import { Route as DashboardLayoutWhatsappSettingsIndexImport } from './routes/_d
 import { Route as DashboardLayoutWhatsappAutomationRulesIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/index'
 import { Route as DashboardLayoutUsersIndexImport } from './routes/_dashboardLayout/users/index'
 import { Route as DashboardLayoutUserProfileIndexImport } from './routes/_dashboardLayout/user-profile/index'
+import { Route as DashboardLayoutTodaysfollowupIndexImport } from './routes/_dashboardLayout/todaysfollowup/index'
 import { Route as DashboardLayoutThirdPartyIntegrationIndexImport } from './routes/_dashboardLayout/third-party-integration/index'
 import { Route as DashboardLayoutTelecallerAnalyticsIndexImport } from './routes/_dashboardLayout/telecaller-analytics/index'
 import { Route as DashboardLayoutStatusIndexImport } from './routes/_dashboardLayout/status/index'
@@ -153,6 +154,13 @@ const DashboardLayoutUserProfileIndexRoute =
   DashboardLayoutUserProfileIndexImport.update({
     id: '/user-profile/',
     path: '/user-profile/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutTodaysfollowupIndexRoute =
+  DashboardLayoutTodaysfollowupIndexImport.update({
+    id: '/todaysfollowup/',
+    path: '/todaysfollowup/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -493,6 +501,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutThirdPartyIntegrationIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboardLayout/todaysfollowup/': {
+      id: '/_dashboardLayout/todaysfollowup/'
+      path: '/todaysfollowup'
+      fullPath: '/todaysfollowup'
+      preLoaderRoute: typeof DashboardLayoutTodaysfollowupIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboardLayout/user-profile/': {
       id: '/_dashboardLayout/user-profile/'
       path: '/user-profile'
@@ -631,6 +646,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute
   DashboardLayoutTelecallerAnalyticsIndexRoute: typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   DashboardLayoutThirdPartyIntegrationIndexRoute: typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  DashboardLayoutTodaysfollowupIndexRoute: typeof DashboardLayoutTodaysfollowupIndexRoute
   DashboardLayoutUserProfileIndexRoute: typeof DashboardLayoutUserProfileIndexRoute
   DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute
   DashboardLayoutWhatsappAutomationRulesIndexRoute: typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
@@ -659,6 +675,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
     DashboardLayoutTelecallerAnalyticsIndexRoute,
   DashboardLayoutThirdPartyIntegrationIndexRoute:
     DashboardLayoutThirdPartyIntegrationIndexRoute,
+  DashboardLayoutTodaysfollowupIndexRoute:
+    DashboardLayoutTodaysfollowupIndexRoute,
   DashboardLayoutUserProfileIndexRoute: DashboardLayoutUserProfileIndexRoute,
   DashboardLayoutUsersIndexRoute: DashboardLayoutUsersIndexRoute,
   DashboardLayoutWhatsappAutomationRulesIndexRoute:
@@ -708,6 +726,7 @@ export interface FileRoutesByFullPath {
   '/status': typeof DashboardLayoutStatusIndexRoute
   '/telecaller-analytics': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  '/todaysfollowup': typeof DashboardLayoutTodaysfollowupIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
   '/whatsapp-automation-rules': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
@@ -745,6 +764,7 @@ export interface FileRoutesByTo {
   '/status': typeof DashboardLayoutStatusIndexRoute
   '/telecaller-analytics': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/third-party-integration': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  '/todaysfollowup': typeof DashboardLayoutTodaysfollowupIndexRoute
   '/user-profile': typeof DashboardLayoutUserProfileIndexRoute
   '/users': typeof DashboardLayoutUsersIndexRoute
   '/whatsapp-automation-rules': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
@@ -786,6 +806,7 @@ export interface FileRoutesById {
   '/_dashboardLayout/status/': typeof DashboardLayoutStatusIndexRoute
   '/_dashboardLayout/telecaller-analytics/': typeof DashboardLayoutTelecallerAnalyticsIndexRoute
   '/_dashboardLayout/third-party-integration/': typeof DashboardLayoutThirdPartyIntegrationIndexRoute
+  '/_dashboardLayout/todaysfollowup/': typeof DashboardLayoutTodaysfollowupIndexRoute
   '/_dashboardLayout/user-profile/': typeof DashboardLayoutUserProfileIndexRoute
   '/_dashboardLayout/users/': typeof DashboardLayoutUsersIndexRoute
   '/_dashboardLayout/whatsapp-automation-rules/': typeof DashboardLayoutWhatsappAutomationRulesIndexRoute
@@ -826,6 +847,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/telecaller-analytics'
     | '/third-party-integration'
+    | '/todaysfollowup'
     | '/user-profile'
     | '/users'
     | '/whatsapp-automation-rules'
@@ -862,6 +884,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/telecaller-analytics'
     | '/third-party-integration'
+    | '/todaysfollowup'
     | '/user-profile'
     | '/users'
     | '/whatsapp-automation-rules'
@@ -901,6 +924,7 @@ export interface FileRouteTypes {
     | '/_dashboardLayout/status/'
     | '/_dashboardLayout/telecaller-analytics/'
     | '/_dashboardLayout/third-party-integration/'
+    | '/_dashboardLayout/todaysfollowup/'
     | '/_dashboardLayout/user-profile/'
     | '/_dashboardLayout/users/'
     | '/_dashboardLayout/whatsapp-automation-rules/'
@@ -977,6 +1001,7 @@ export const routeTree = rootRoute
         "/_dashboardLayout/status/",
         "/_dashboardLayout/telecaller-analytics/",
         "/_dashboardLayout/third-party-integration/",
+        "/_dashboardLayout/todaysfollowup/",
         "/_dashboardLayout/user-profile/",
         "/_dashboardLayout/users/",
         "/_dashboardLayout/whatsapp-automation-rules/",
@@ -1089,6 +1114,10 @@ export const routeTree = rootRoute
     },
     "/_dashboardLayout/third-party-integration/": {
       "filePath": "_dashboardLayout/third-party-integration/index.tsx",
+      "parent": "/_dashboardLayout"
+    },
+    "/_dashboardLayout/todaysfollowup/": {
+      "filePath": "_dashboardLayout/todaysfollowup/index.tsx",
       "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/user-profile/": {

@@ -138,7 +138,7 @@ function SourceCard() {
   return (
     <div className="mt-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-primary px-4 py-4 rounded-lg mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-primary shadow-lead px-4 py-4 rounded-lg mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <SignalHigh className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -186,7 +186,7 @@ function SourceCard() {
       </div>
 
       {/* Table Container */}
-      <div className="rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div className="rounded-lg border shadow-lead dark:border-gray-800 overflow-hidden">
         {loading ? (
           <div className="p-8">
             <SkeletonTableLoader />
@@ -249,28 +249,30 @@ function SourceCard() {
                       </div>
                     </TableCell>
 
-                    {source.meta?.is_editable && (
-                      <TableCell className="py-4">
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(source)}
-                            className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800"
-                          >
-                            <Pencil className="h-3 w-3" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDelete(source._id)}
-                            className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-800"
-                          >
-                            <Trash className="h-3 w-3" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    )}
+                    <TableCell className="py-4">
+                      <div className="flex items-center gap-2">
+                        {source.meta?.is_editable && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEdit(source)}
+                              className="h-8 w-8 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800"
+                            >
+                              <Pencil className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(source._id)}
+                              className="h-8 w-8 p-0 text-red-600 hover:text-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 dark:border-red-800"
+                            >
+                              <Trash className="h-3 w-3" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (

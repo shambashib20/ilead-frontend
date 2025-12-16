@@ -86,7 +86,7 @@ export default function WorkspaceLogs() {
 
   return (
     <Card className="max-w-full mx-auto border border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300 mt-5">
-      <CardHeader className="pb-3 border-b border-border/50">
+      <CardHeader className="pb-0 border-b border-border/50">
         {loading ? (
           <div className="flex items-center space-x-3">
             <Skeleton className="h-5 w-5 rounded-md" />

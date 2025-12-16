@@ -121,7 +121,7 @@ function RouteComponent() {
 
   return (
     <div className=" space-y-4 mt-10">
-      <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
+      <div className="flex items-center justify-between shadow-lead dark:border-transparent dark:bg-primary px-3 py-3 rounded-sm">
         <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
         <div className="flex items-center gap-5">
           <Input
@@ -140,7 +140,7 @@ function RouteComponent() {
       {isLoading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className=" rounded-sm overflow-hidden ">
+        <div className="rounded-sm overflow-hidden shadow-lead">
           <Table>
             <TableHeader className="">
               <TableRow className="bg-primary hover:bg-white dark:hover:bg-primary/80">

@@ -1,705 +1,275 @@
+import { useTheme } from "@/contexts/ThemeProvider";
+import { useAllLabels } from "@/features/leads/hooks/useAllLabels";
+import { useSource } from "@/features/leads/hooks/useSource";
 import {
-  allLabelsQueryOptions,
-  useAllLabels,
-} from "@/features/leads/hooks/useAllLabels";
+  labelReportsQueryOptions,
+  useGetLabelReports,
+} from "@/features/reports/hooks/useGetLabelReports";
 import {
-  sourceQueryOptions,
-  useSource,
-} from "@/features/leads/hooks/useSource";
+  sourceReportsQueryOptions,
+  useGetReports,
+} from "@/features/reports/hooks/useGetReports";
 import {
-  StatusQueryOptions,
-  useStatus,
-} from "@/features/leads/hooks/useStatus"; // assuming this exists
-import { useGetLabelReports } from "@/features/reports/hooks/useGetLabelReports";
-import { useGetReports } from "@/features/reports/hooks/useGetReports";
-import { useGetStatusReports } from "@/features/reports/hooks/useGetStatusReports";
+  statusReportsQueryOptions,
+  useGetStatusReports,
+} from "@/features/reports/hooks/useGetStatusReports";
+import { useStatus } from "@/features/status/hooks/useStatus";
+import { cn } from "@/lib/utils";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState, useEffect, useCallback } from "react";
-
-// recharts
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { useState } from "react";
 
 export const Route = createFileRoute("/_dashboardLayout/report/$slug")({
   component: RouteComponent,
-  // Prefetch only for lead-source; for lead-status we’ll let the hook load lazily
   loader: ({ context, params }) => {
     if (params.slug === "lead-source") {
-      return context.queryClient.ensureQueryData(sourceQueryOptions());
+      return context.queryClient.ensureQueryData(
+        sourceReportsQueryOptions({ enabled: params.slug === "lead-source" })
+      );
     }
     if (params.slug === "lead-label") {
-      return context.queryClient.ensureQueryData(allLabelsQueryOptions());
+      return context.queryClient.ensureQueryData(
+        labelReportsQueryOptions({ enabled: params.slug === "lead-label" })
+      );
     }
     if (params.slug === "lead-status") {
-      return context.queryClient.ensureQueryData(StatusQueryOptions());
+      return context.queryClient.ensureQueryData(
+        statusReportsQueryOptions({ enabled: params.slug === "lead-status" })
+      );
     }
     return null;
   },
 });
 
-type AgentDatum = {
+// Reusable view that works for both lead-source and lead-status
+
+interface StatusChipProps {
+  status: string;
+  color: string;
+  isActive: boolean;
+  isHovered: boolean;
+  onClick: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}
+
+function StatusChip({
+  status,
+  color,
+  isActive,
+  isHovered,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+}: StatusChipProps) {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={cn(
+        "inline-flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium transition-all",
+        isActive ? "opacity-100" : "opacity-40 grayscale",
+        isHovered && "ring-2 ring-offset-2"
+      )}
+      style={{
+        backgroundColor: isActive ? `${color}20` : `${color}5`,
+        color: isActive
+          ? `${theme === "dark" ? "#fff" : color}`
+          : `${theme === "light" ? color : "#000"}`,
+        ...(isHovered && { ringColor: color }),
+      }}
+    >
+      <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
+      {status}
+    </button>
+  );
+}
+
+interface Agent {
   agent_id: string;
   agent_name: string;
   lead_count: number;
-};
+  leads_per_report: Array<Record<string, number>>;
+}
 
-const tooltipStyles = () => {
-  const isDark = document.documentElement.classList.contains("dark");
-
-  return {
-    wrapper: {
-      zIndex: 999999,
-    },
-    content: {
-      backgroundColor: isDark
-        ? "rgba(40,40,40,0.85)" // dark mode background
-        : "rgba(255,255,255,0.9)", // light mode background
-      border: isDark
-        ? "1px solid rgba(255,255,255,0.15)"
-        : "1px solid rgba(0,0,0,0.15)",
-      borderRadius: "6px",
-      color: isDark ? "white" : "black",
-      fontSize: 12,
-      backdropFilter: "blur(6px)",
-    },
-    label: {
-      color: isDark ? "#e5e7eb" : "#111827", // light fade for label
-    },
-  };
-};
-
-type LeadBySourcePayload = {
-  message: string;
-  status: "SUCCESS" | "ERROR";
+interface LeadReportProps {
+  items: Array<{ _id: string; title: string; color?: string }>;
+  heading: string;
   data: {
-    source: string; // when querying by source
-    status?: string; // when querying by status (optional if your API returns it)
     totalLeads: number;
-    agents: AgentDatum[];
-    unassigned: { lead_count: number };
-    missed_followups: {
-      total: number;
-      telecallers: {
-        agent_id: string;
-        agent_name: string;
-        missed_count: number;
-      }[];
-    };
-    conversion_rates: {
-      totalConverted: number;
-      telecallers: {
-        agent_id: string;
-        agent_name: string;
-        converted: number;
-        conversion_rate: number;
-      }[];
-    };
+    agents: Agent[];
   };
-};
+  slug: string;
+  queryKey: string;
+}
 
-type SourceItem = { _id: string; title: string };
-// type LabelItem = { _id: string; title: string };
-
-// type StatusItem = {
-//   _id: string;
-//   title: string;
-//   description?: string;
-//   meta?: { is_active?: boolean; color_code?: string; is_editable?: boolean };
-// };
-
-type MutateFn = (
-  variables: any,
-  options: {
-    onSuccess?: (res: unknown) => void;
-    onError?: (err: unknown) => void;
-    onSettled?: () => void;
-  }
-) => void;
-
-// Reusable view that works for both lead-source and lead-status
-function LeadReportView({
+export function LeadReport({
+  data,
   slug,
   items,
-  queryKey, // "sourceTitle" | "statusTitle"
   heading,
-  mutateFn, // <-- inject the correct mutate
-}: {
-  slug: string;
-  items: Array<{ _id: string; title: string }>;
-  queryKey: "sourceTitle" | "statusTitle" | "labelTitle";
-  heading: string;
-  mutateFn: MutateFn;
-}) {
-  // UI state
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [pendingId, setPendingId] = useState<string | null>(null);
-  const [data, setData] = useState<LeadBySourcePayload | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+  queryKey,
+}: LeadReportProps) {
+  console.log(data.agents);
+  console.log(items);
 
-  // Visualization controls
-  const [showAssigned, setShowAssigned] = useState(true);
-  const [showUnassigned, setShowUnassigned] = useState(true);
-  const [pageSize, setPageSize] = useState(10);
-  const [startIndex, setStartIndex] = useState(0);
+  const colorMapping: Record<string, string> = {};
+  items.forEach((item) => {
+    if (item.color) {
+      colorMapping[item.title] = item.color;
+    }
+  });
 
-  // No auto-fetching; click-only
-  const handleClick = useCallback(
-    (item: { _id: string; title: string }) => {
-      if (pendingId === item._id) return;
-      setError(null);
-      setPendingId(item._id);
+  const allStatuses =
+    items.length > 0
+      ? items.map((item) => item.title)
+      : Array.from(
+          new Set(
+            data.agents.flatMap((agent) =>
+              agent.leads_per_report.flatMap((statusObj) =>
+                Object.keys(statusObj)
+              )
+            )
+          )
+        );
 
-      const payload =
-        queryKey === "sourceTitle"
-          ? { sourceTitle: item.title }
-          : queryKey === "statusTitle"
-            ? { statusTitle: item.title }
-            : { labelTitle: item.title };
-
-      mutateFn(payload, {
-        onSuccess: (res) => {
-          setData(res as LeadBySourcePayload);
-          setActiveId(item._id);
-          setStartIndex(0);
-        },
-        onError: (err) => {
-          setError(err instanceof Error ? err : new Error("Request failed"));
-        },
-        onSettled: () => {
-          setPendingId(null);
-        },
-      });
-    },
-    [mutateFn, pendingId, queryKey]
+  const [activeStatuses, setActiveStatuses] = useState<Set<string>>(
+    new Set(allStatuses)
   );
+  const [hoveredStatus, setHoveredStatus] = useState<string | null>(null);
 
-  // Build rows from API payload + filters
-  const allRows = useMemo(() => {
-    if (!data)
-      return [] as Array<{
-        id: string;
-        name: string;
-        leads: number;
-        type: "assigned" | "unassigned";
-      }>;
-
-    const rows: Array<{
-      id: string;
-      name: string;
-      leads: number;
-      type: "assigned" | "unassigned";
-    }> = [];
-
-    if (showAssigned) {
-      for (const a of data.data.agents ?? []) {
-        rows.push({
-          id: a.agent_id,
-          name: a.agent_name || "Unnamed",
-          leads: a.lead_count ?? 0,
-          type: "assigned",
-        });
+  const toggleStatus = (status: string) => {
+    setActiveStatuses((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(status)) {
+        newSet.delete(status);
+      } else {
+        newSet.add(status);
       }
-    }
+      return newSet;
+    });
+  };
 
-    if (showUnassigned) {
-      rows.push({
-        id: "__unassigned__",
-        name: "Unassigned",
-        leads: data.data.unassigned?.lead_count ?? 0,
-        type: "unassigned",
-      });
-    }
-
-    rows.sort((a, b) => b.leads - a.leads);
-    return rows;
-  }, [data, showAssigned, showUnassigned]);
-
-  // Clamp pagination if dataset shrinks or page size changes
-  useEffect(() => {
-    const lastStart = Math.max(0, allRows.length - pageSize);
-    if (startIndex > lastStart) setStartIndex(lastStart);
-  }, [allRows.length, pageSize, startIndex]);
-
-  // Reset pagination on filter or page size change
-  useEffect(() => {
-    setStartIndex(0);
-  }, [showAssigned, showUnassigned, pageSize]);
-
-  const endIndex = Math.min(startIndex + pageSize, allRows.length);
-  const windowRows = useMemo(
-    () => allRows.slice(startIndex, endIndex),
-    [allRows, startIndex, endIndex]
-  );
-
-  const totalLeads = useMemo(() => {
-    if (data?.data.totalLeads != null) return data.data.totalLeads;
-    return allRows.reduce((acc, r) => acc + r.leads, 0);
-  }, [data, allRows]);
-
-  const totalMissedFollowups = useMemo(() => {
-    if (data?.data?.missed_followups?.total != null)
-      return data.data.missed_followups.total;
-    return allRows.reduce((acc, r) => acc + r.leads, 0);
-  }, [data, allRows]);
-
-  // const agentCount = useMemo(() => {
-  //   return allRows.filter((r) => r.type === "assigned").length;
-  // }, [allRows]);
-
-  // Chart: full set top 20
-  const chartData = useMemo(() => {
-    return allRows.slice(0, 20).map((r) => ({ name: r.name, Leads: r.leads }));
-  }, [allRows]);
-
-  const missedChartData = useMemo(() => {
-    if (!data?.data?.missed_followups?.telecallers) return [];
-
-    return data.data.missed_followups.telecallers.map((t) => ({
-      name: t.agent_name,
-      Missed: t.missed_count,
-    }));
-  }, [data]);
-
-  // Chart: Conversion Rate dataset
-  const conversionChartData = useMemo(() => {
-    if (!data?.data?.conversion_rates?.telecallers) return [];
-
-    return data.data.conversion_rates.telecallers.map((t) => ({
-      name: t.agent_name,
-      Converted: t.converted,
-      Rate: Number(t.conversion_rate.toFixed(1)),
-    }));
-  }, [data]);
-
-  // Controls
-  const handlePrev = useCallback(() => {
-    setStartIndex((s) => Math.max(0, s - pageSize));
-  }, [pageSize]);
-
-  const handleNext = useCallback(() => {
-    setStartIndex((s) =>
-      Math.min(Math.max(0, allRows.length - pageSize), s + pageSize)
-    );
-  }, [allRows.length, pageSize]);
-
-  const handleDownloadCSV = useCallback(() => {
-    if (allRows.length === 0) return;
-    const header = ["Agent", "Leads", "Type", "Context"];
-    const contextLabel =
-      data?.data.source ?? data?.data.status ?? slug ?? "unknown";
-
-    const body = allRows.map((r) => [
-      r.name,
-      String(r.leads),
-      r.type,
-      String(contextLabel),
-    ]);
-    const lines = [header, ...body]
-      .map((cols) =>
-        cols.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")
-      )
-      .join("\n");
-
-    const safeLabel = String(contextLabel).replace(/\s+/g, "-").toLowerCase();
-    const blob = new Blob([lines], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `leads-by-agent-${safeLabel}-${new Date()
-      .toISOString()
-      .slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [allRows, data?.data.source, data?.data.status, slug]);
-
-  const hasAnyRows = allRows.length > 0;
-  const hasAnyLeads = Number(totalLeads) > 0;
+  // Calculate the total count for each agent (only active statuses)
+  const getAgentTotal = (agent: Agent) => {
+    return agent.leads_per_report.reduce((sum, statusObj) => {
+      const status = Object.keys(statusObj)[0];
+      const count = Object.values(statusObj)[0];
+      return activeStatuses.has(status) ? sum + count : sum;
+    }, 0);
+  };
 
   return (
     <section className="report-detail">
-      {/* Breadcrumb */}
-      <div className="page-map py-4">
-        <nav
-          className="flex items-center gap-1 text-sm dark:text-gray-400"
-          aria-label="Breadcrumb"
-        >
-          <Link
-            to="/report"
-            className="dark:hover:text-white transition-colors"
-          >
-            Reports
-          </Link>
-          <span aria-hidden>/</span>
-          <span className="text-white font-medium">{slug}</span>
+      <div className="page-map py-4 px-4 my-6 bg-primary shadow-lead rounded-[6px]">
+        <nav className="flex items-center gap-3 text-sm dark:text-gray-400">
+          <Link to="/report">Reports</Link>
+          <span>{">"}</span>
+          <span className="capitalize font-medium">{slug}</span>
         </nav>
       </div>
 
-      <div className="bg-primary rounded-lg p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-semibold mb-2">{heading}</h1>
-          <p className="dark:text-gray-300">
-            Track lead distribution across{" "}
-            {queryKey === "sourceTitle" ? "sources" : "statuses"} and agents
-          </p>
-        </div>
+      <div className="bg-primary shadow-lead rounded-lg p-6">
+        <h1 className="text-2xl text-blue-500 font-medium mb-2">{heading}</h1>
 
-        {/* Selector pills */}
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-1 p-2 bg-white/5 rounded-lg w-fit">
-            {items.map((item) => {
-              const isActive = activeId === item._id;
-              const isPendingThis = pendingId === item._id;
+        <p className="dark:text-gray-300 text-sm">
+          Track lead distribution across{" "}
+          {queryKey === "sourceTitle"
+            ? "sources"
+            : queryKey === "labelTitle"
+              ? "labels"
+              : "statuses"}{" "}
+          and agents
+        </p>
+
+        <div className="w-full p-6 space-y-6 mt-5">
+          {/* Status Chips */}
+          <div className="flex flex-wrap gap-2">
+            {allStatuses.map((status) => (
+              <StatusChip
+                key={status}
+                status={status}
+                color={colorMapping[status] || "#6b7280"}
+                isActive={activeStatuses.has(status)}
+                isHovered={hoveredStatus === status}
+                onClick={() => toggleStatus(status)}
+                onMouseEnter={() => setHoveredStatus(status)}
+                onMouseLeave={() => setHoveredStatus(null)}
+              />
+            ))}
+          </div>
+
+          {/* Chart */}
+          <div className="space-y-3">
+            {data.agents.map((agent) => {
+              const total = getAgentTotal(agent);
+
               return (
-                <button
-                  key={item._id}
-                  type="button"
-                  onClick={() => handleClick(item)}
-                  disabled={isPendingThis}
-                  aria-pressed={isActive}
-                  aria-busy={isPendingThis}
-                  className={[
-                    "px-4 py-2 rounded-md text-sm font-medium transition-all",
-                    "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-primary",
-                    isActive
-                      ? "bg-white text-foreground/70 shadow-sm"
-                      : "dark:text-gray-300 dark:hover:text-white hover:bg-white/10",
-                    isPendingThis
-                      ? "opacity-50 cursor-not-allowed"
-                      : "cursor-pointer",
-                  ].join(" ")}
-                >
-                  {isPendingThis ? "Loading…" : item.title}
-                </button>
+                <div key={agent.agent_id} className="space-y-1">
+                  {/* Agent Name */}
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground font-medium w-48 truncate">
+                      {agent.agent_name}
+                    </span>
+                    <span className="text-muted-foreground">{total}</span>
+                  </div>
+
+                  {/* Horizontal Stacked Bar */}
+                  <div className="flex items-center gap-1">
+                    <div className="flex-1 flex h-7 rounded overflow-hidden bg-muted/30">
+                      {total > 0 ? (
+                        agent.leads_per_report.map((statusObj, idx) => {
+                          const status = Object.keys(statusObj)[0];
+                          const count = Object.values(statusObj)[0];
+
+                          if (!activeStatuses.has(status) || count === 0) {
+                            return null;
+                          }
+
+                          const percentage = (count / total) * 100;
+                          const isHighlighted = hoveredStatus === status;
+
+                          return (
+                            <div
+                              key={`${agent.agent_id}-${status}-${idx}`}
+                              className={cn(
+                                "flex items-center justify-center text-[11px] font-semibold text-white transition-all relative group",
+                                isHighlighted &&
+                                  "ring-2 ring-white ring-inset z-10 brightness-110"
+                              )}
+                              style={{
+                                width: `${percentage}%`,
+                                backgroundColor:
+                                  colorMapping[status] || "#6b7280",
+                                opacity:
+                                  hoveredStatus && !isHighlighted ? 0.3 : 1,
+                              }}
+                            >
+                              {percentage > 5 && count}
+
+                              {/* Tooltip */}
+                              {isHighlighted && (
+                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-2 py-1 rounded text-xs whitespace-nowrap z-20">
+                                  {status}: {count}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="w-full flex items-center justify-center text-xs text-muted-foreground">
+                          0
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>
-
-          {error && (
-            <div
-              className="mt-3 p-3 bg-red-500/10 border border-red-500/20 rounded-lg"
-              role="alert"
-            >
-              <p className="text-red-300 text-sm">{error.message}</p>
-            </div>
-          )}
         </div>
-
-        {/* Empty State before any selection */}
-        {!data && !error && (
-          <div className="text-center py-12">
-            <div className="dark:text-gray-400 mb-2">
-              Select a {queryKey === "sourceTitle" ? "source" : "status"} to
-              view analytics
-            </div>
-            <div className="text-sm text-gray-500">
-              Choose from the options above
-            </div>
-          </div>
-        )}
-
-        {/* Analytics Dashboard */}
-        {data && (
-          <div className="space-y-6">
-            {/* Header Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm dark:text-gray-300 mb-1">
-                  Current {queryKey === "sourceTitle" ? "Source" : "Status"}
-                </div>
-                <div className="text-xl font-semibold">
-                  {data?.data?.source ?? data?.data?.status ?? slug ?? "—"}
-                </div>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm dark:text-gray-300 mb-1">
-                  Total Leads
-                </div>
-                <div className="text-xl font-semibold">
-                  {Number.isFinite(totalLeads) ? totalLeads : 0}
-                </div>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm dark:text-gray-300 mb-1">Agents</div>
-                <div className="text-xl font-semibold">
-                  {allRows.filter((r) => r.type === "assigned").length}
-                </div>
-              </div>
-
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-sm dark:text-gray-300 mb-1">
-                  Missed Followups
-                </div>
-                <div className="text-xl font-semibold">
-                  {Number.isFinite(totalMissedFollowups)
-                    ? totalMissedFollowups
-                    : 0}
-                </div>
-              </div>
-            </div>
-
-            {/* Controls */}
-            <div className="flex flex-wrap items-center gap-4 p-4 bg-white/5 rounded-lg">
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={showAssigned}
-                    onChange={(e) => setShowAssigned(e.target.checked)}
-                    className="rounded border-white/20 bg-white/10"
-                  />
-                  Assigned
-                </label>
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={showUnassigned}
-                    onChange={(e) => setShowUnassigned(e.target.checked)}
-                    className="rounded border-white/20 bg-white/10"
-                  />
-                  Unassigned
-                </label>
-              </div>
-
-              <div className="flex items-center gap-3 ml-auto">
-                <select
-                  className="bg-white/10 border border-white/20 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={pageSize}
-                  onChange={(e) => setPageSize(parseInt(e.target.value, 10))}
-                  aria-label="Rows per page"
-                >
-                  <option value={5}>5 per page</option>
-                  <option value={10}>10 per page</option>
-                  <option value={20}>20 per page</option>
-                  <option value={50}>50 per page</option>
-                </select>
-
-                <button
-                  onClick={handleDownloadCSV}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-sm transition-colors"
-                >
-                  Export CSV
-                </button>
-              </div>
-            </div>
-
-            {/* Empty/Zero data states */}
-            {(!hasAnyRows || !hasAnyLeads) && (
-              <div className="text-center py-10 dark:text-gray-400 bg-white/5 rounded-lg">
-                Nothing to show. Toggle “Assigned” or “Unassigned,” or pick
-                another option.
-              </div>
-            )}
-
-            {/* Chart */}
-            {hasAnyRows && hasAnyLeads && (
-              <div className="bg-white/5 rounded-lg p-6">
-                <div className="mb-3 text-sm dark:text-gray-400">
-                  Top 20 agents by leads (all pages)
-                </div>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={chartData}
-                      layout="vertical"
-                      margin={{ top: 8, right: 24, bottom: 8, left: 24 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                      <XAxis type="number" stroke="#9CA3AF" />
-                      <YAxis
-                        type="category"
-                        dataKey="name"
-                        width={160}
-                        stroke="#9CA3AF"
-                        fontSize={12}
-                      />
-                      <Tooltip
-                        wrapperStyle={tooltipStyles().wrapper}
-                        contentStyle={tooltipStyles().content}
-                        labelStyle={tooltipStyles().label}
-                      />
-                      <Bar
-                        dataKey="Leads"
-                        fill="#4f72bd"
-                        radius={[0, 4, 4, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
-
-            {missedChartData.length > 0 && (
-              <div className="bg-white/5 rounded-lg p-6">
-                <div className="mb-3 text-sm dark:text-gray-400">
-                  Missed Follow-ups by Agents
-                </div>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={missedChartData}
-                      layout="vertical"
-                      margin={{ top: 8, right: 24, bottom: 8, left: 24 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                      <XAxis type="number" stroke="#9CA3AF" />
-                      <YAxis
-                        type="category"
-                        dataKey="name"
-                        width={160}
-                        stroke="#9CA3AF"
-                        fontSize={12}
-                      />
-                      <Tooltip
-                        wrapperStyle={tooltipStyles().wrapper}
-                        contentStyle={tooltipStyles().content}
-                        labelStyle={tooltipStyles().label}
-                      />
-                      <Bar
-                        dataKey="Missed"
-                        fill="#e57373"
-                        radius={[0, 4, 4, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
-
-            {conversionChartData.length > 0 && (
-              <div className="bg-white/5 rounded-lg p-6">
-                <div className="mb-3 text-sm dark:text-gray-400">
-                  Conversion Rates by Agents (%)
-                </div>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={conversionChartData}
-                      layout="vertical"
-                      margin={{ top: 8, right: 24, bottom: 8, left: 24 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                      <XAxis type="number" stroke="#9CA3AF" />
-                      <YAxis
-                        type="category"
-                        dataKey="name"
-                        width={160}
-                        stroke="#9CA3AF"
-                        fontSize={12}
-                      />
-                      <Tooltip
-                        wrapperStyle={tooltipStyles().wrapper}
-                        contentStyle={tooltipStyles().content}
-                        labelStyle={tooltipStyles().label}
-                      />
-
-                      <Bar
-                        dataKey="Rate"
-                        fill="#81c784"
-                        radius={[0, 4, 4, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
-
-            {/* Table with Pagination */}
-            {hasAnyRows && (
-              <div className="bg-white/5 rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="bg-white/10">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="py-3 px-4 text-left font-medium dark:text-gray-300"
-                        >
-                          Agent
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-4 text-left font-medium dark:text-gray-300"
-                        >
-                          Type
-                        </th>
-                        <th
-                          scope="col"
-                          className="py-3 px-4 text-right font-medium dark:text-gray-300"
-                        >
-                          Leads
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {windowRows.map((r, idx) => (
-                        <tr
-                          key={r.id}
-                          className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                        >
-                          <td className="py-3 px-4">
-                            <div>
-                              <div className="font-medium">{r.name}</div>
-                              <div className="text-xs dark:text-gray-400">
-                                #{startIndex + idx + 1}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="py-3 px-4">
-                            <span
-                              className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
-                                r.type === "assigned"
-                                  ? "bg-blue-500/20 text-blue-300"
-                                  : "bg-gray-500/20 dark:text-gray-300"
-                              }`}
-                            >
-                              {r.type}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 text-right font-semibold">
-                            {r.leads}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination */}
-                <div className="flex items-center justify-between p-4 border-t border-white/10">
-                  <div className="text-sm dark:text-gray-400">
-                    Showing {allRows.length === 0 ? 0 : startIndex + 1}-
-                    {endIndex} of {allRows.length}
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={handlePrev}
-                      disabled={startIndex === 0}
-                      aria-label="Previous page"
-                      className="px-3 py-2 rounded border border-white/20 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={handleNext}
-                      disabled={endIndex >= allRows.length}
-                      aria-label="Next page"
-                      className="px-3 py-2 rounded border border-white/20 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </section>
   );
@@ -707,98 +277,76 @@ function LeadReportView({
 
 function RouteComponent() {
   const { slug } = Route.useParams();
+
   const isLeadSource = slug === "lead-source";
-  const isLeadStatus = slug === "lead-status";
   const isLeadLabel = slug === "lead-label";
+  const isLeadStatus = slug === "lead-status";
 
-  // When slug doesn't match either, render a dead-simple static page without mounting data hooks
-  if (!isLeadSource && !isLeadStatus && !isLeadLabel) {
-    return (
-      <section className="report-detail">
-        <div className="page-map py-4">
-          <nav
-            className="flex items-center gap-1 text-sm dark:text-gray-400"
-            aria-label="Breadcrumb"
-          >
-            <Link
-              to="/report"
-              className="dark:hover:text-white transition-colors"
-            >
-              Reports
-            </Link>
-            <span aria-hidden>/</span>
-            <span className="text-white font-medium">{slug}</span>
-          </nav>
-        </div>
+  // Queries (sirf enabled wali fire hongi)
+  const sourceQuery = useGetReports(isLeadSource);
+  const labelQuery = useGetLabelReports(isLeadLabel);
+  const statusQuery = useGetStatusReports(isLeadStatus);
 
-        <div className="bg-primary rounded-lg p-6">
-          <h1 className="text-2xl font-semibold mb-2">Report</h1>
-          <p className="dark:text-gray-300">No data fetching for “{slug}”.</p>
-        </div>
-      </section>
-    );
-  }
+  // Meta lists
+  const { status } = useStatus();
+  const { allLables } = useAllLabels();
+  const { sources } = useSource();
 
+  let items: Array<{ _id: string; title: string; color?: string }> = [];
+  let data: any;
+  let heading = "";
+
+  let queryKey = "sourceTitle";
+
+  /* -------- Lead Source -------- */
   if (isLeadSource) {
-    // data list
-    const { sources = [] as SourceItem[] } = useSource();
-    const items = sources.map((s) => ({ _id: s._id, title: s.title }));
-    // correct mutation
-    const { mutate: mutateSourceReport } = useGetReports();
+    items =
+      sources?.map((source) => ({
+        _id: source._id,
+        title: source.title,
+        color: source.meta?.colorCode,
+      })) ?? [];
 
-    return (
-      <LeadReportView
-        slug={slug}
-        items={items}
-        queryKey="sourceTitle"
-        heading="Lead Source Analytics"
-        mutateFn={mutateSourceReport}
-      />
-    );
+    data = sourceQuery.reports ? sourceQuery.reports : [];
+    heading = "Lead Source Analytics";
+    queryKey = "sourceTitle";
   }
 
-  if (isLeadStatus) {
-    // data list
-    const { status } = useStatus();
-    const items = status.data.map((s) => ({ _id: s._id, title: s.title }));
-    // correct mutation
-    const { mutate: mutateStatusReport } = useGetStatusReports();
-
-    return (
-      <LeadReportView
-        slug={slug}
-        items={items}
-        queryKey="statusTitle"
-        heading="Lead Status Analytics"
-        mutateFn={mutateStatusReport}
-      />
-    );
-  }
-
+  /* -------- Lead Label -------- */
   if (isLeadLabel) {
-    // data list
-    const { allLables } = useAllLabels();
-    const items = allLables.data.map((s) => ({ _id: s._id, title: s.title }));
-    // correct mutation
-    const { mutate: mutateSourceReport } = useGetLabelReports();
+    items =
+      allLables?.data?.map((label) => ({
+        _id: label._id,
+        title: label.title,
+        color: label.meta?.color_code,
+      })) ?? [];
 
-    return (
-      <LeadReportView
-        slug={slug}
-        items={items}
-        queryKey="labelTitle"
-        heading="Lead Label Analytics"
-        mutateFn={mutateSourceReport}
-      />
-    );
+    data = labelQuery.reports ? labelQuery.reports : [];
+    heading = "Lead Label Analytics";
+    queryKey = "labelTitle";
   }
 
-  // // lead-status
-  // const { status } = useStatus();
-  // const statusItems: StatusItem[] = (status?.data ?? []) as StatusItem[];
-  // const items = statusItems.map((s) => ({ _id: s._id, title: s.title }));
-  // // correct mutation
-  // const { mutate: mutateStatusReport } = useGetStatusReports();
+  /* -------- Lead Status -------- */
+  if (isLeadStatus) {
+    items =
+      status?.statuses?.map((s) => ({
+        _id: s._id,
+        title: s.title,
+        color: s.meta?.color_code,
+      })) ?? [];
 
-  return <h3>No</h3>;
+    data = statusQuery.status.data ? statusQuery.status.data : [];
+    heading = "Lead Status Analytics";
+    queryKey = "statusTitle";
+  }
+
+  return (
+    <LeadReport
+      data={data}
+      items={items}
+      heading={heading}
+      slug={slug}
+      queryKey={queryKey}
+    />
+  );
 }

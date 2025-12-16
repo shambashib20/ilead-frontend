@@ -122,7 +122,7 @@ function StatusCard() {
 
   return (
     <div className="mt-10 space-y-4">
-      <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm">
+      <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm shadow-lead">
         <h2 className="text-xl font-semibold dark:text-white">Status List</h2>
         <div className="flex items-center gap-5">
           <Input
@@ -140,7 +140,7 @@ function StatusCard() {
       {isLoading ? (
         <SkeletonTableLoader />
       ) : (
-        <div className=" rounded-sm ">
+        <div className="rounded-sm shadow-lead ">
           <Table>
             <TableHeader className="bg-primary">
               <TableRow>

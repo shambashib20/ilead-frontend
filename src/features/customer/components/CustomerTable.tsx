@@ -51,8 +51,8 @@ function CustomerTable() {
   return (
     <div className=" mt-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 bg-primary p-4 rounded-lg">
-        <div className="flex items-center gap-3 ">
+      <div className="flex items-center justify-between mb-6 shadow-lead bg-primary p-4 rounded-lg">
+        <div className="flex items-center gap-3  ">
           <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           </div>
@@ -76,7 +76,7 @@ function CustomerTable() {
       </div>
 
       {/* Table Container */}
-      <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-primary overflow-hidden">
+      <div className="rounded-lg shadow-lead bg-primary overflow-hidden">
         {loading ? (
           <div className="p-8">
             <SkeletonTableLoader />
