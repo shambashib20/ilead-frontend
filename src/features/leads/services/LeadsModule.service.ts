@@ -218,7 +218,10 @@ type StatsDatum = {
   convertedLeads: number;
   conversionRate: number;
   missedFollowups: number;
+  missedFollowupsForCards: any;
+  todaysFollowupsForCards: any;
   leadTrend: LeadTrendDatum[];
+  todaysFollowups: number;
 };
 export interface TelecallerAnalyticsResponse {
   message: string;

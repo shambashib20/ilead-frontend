@@ -19,6 +19,8 @@ export interface Lead {
   comment: string;
   assigned_by: { name: string };
   labels: Label[];
+  next_followup_date: any;
+  leadId: string;
 }
 
 export interface Status {

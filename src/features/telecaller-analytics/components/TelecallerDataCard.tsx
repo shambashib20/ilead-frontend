@@ -13,6 +13,8 @@ import {
   Tooltip,
 } from "recharts";
 
+import type { Lead } from "@/features/leads/types";
+
 export default function TelecallerAnalyticsScreen() {
   const { data: user } = useUser();
 
@@ -73,6 +75,11 @@ export default function TelecallerAnalyticsScreen() {
         />
 
         <StatCard title="Missed Follow-ups" value={stats.missedFollowups} />
+
+        <StatCard
+          title="Today's Upcoming Followups"
+          value={`${stats.todaysFollowups}`}
+        />
       </div>
 
       {/* Lead Trend Chart */}
@@ -110,6 +117,126 @@ export default function TelecallerAnalyticsScreen() {
           </div>
         )}
       </div>
+
+      <div className="bg-primary rounded-lg p-6 border border-white/10">
+        <h2 className="text-lg font-semibold mb-4">Missed Followups</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {stats.missedFollowupsForCards.leads.length === 0 ? (
+            <p className="text-gray-400">No followups for today.</p>
+          ) : (
+            stats.missedFollowupsForCards.leads.map((lead: Lead) => (
+              <div
+                key={lead.leadId}
+                className="bg-[#0f1f3d] border border-white/10 rounded-lg p-4"
+              >
+                {/* Name */}
+                <h3 className="text-white font-semibold text-sm">
+                  {lead.name}
+                </h3>
+
+                {/* Phone */}
+                <p className="text-xs text-gray-400 mt-1">
+                  {lead.phone_number}
+                </p>
+
+                {/* Followup time */}
+                <p className="text-xs text-blue-400 mt-2">
+                  Follow-up at{" "}
+                  {new Date(lead.next_followup_date).toLocaleTimeString(
+                    "en-IN",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </p>
+
+                {/* Comment */}
+                {lead.comment && (
+                  <p className="text-xs text-gray-300 mt-2 line-clamp-2">
+                    {lead.comment}
+                  </p>
+                )}
+
+                {/* Label */}
+                {lead.labels?.length > 0 && (
+                  <span
+                    className="inline-block mt-3 px-2 py-1 text-xs rounded"
+                    style={{
+                      backgroundColor:
+                        lead.labels[0]?.meta?.color_code || "#334155",
+                      color: "#fff",
+                    }}
+                  >
+                    {lead.labels[0].title}
+                  </span>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <div className="bg-primary rounded-lg p-6 border border-white/10">
+        <h2 className="text-lg font-semibold mb-4">Today's Followups</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {stats.todaysFollowupsForCards.leads.length === 0 ? (
+            <p className="text-gray-400">No followups for today.</p>
+          ) : (
+            stats.todaysFollowupsForCards.leads.map((lead: Lead) => (
+              <div
+                key={lead.leadId}
+                className="bg-[#0f1f3d] border border-white/10 rounded-lg p-4"
+              >
+                {/* Name */}
+                <h3 className="text-white font-semibold text-sm">
+                  {lead.name}
+                </h3>
+
+                {/* Phone */}
+                <p className="text-xs text-gray-400 mt-1">
+                  {lead.phone_number}
+                </p>
+
+                {/* Followup time */}
+                <p className="text-xs text-blue-400 mt-2">
+                  Follow-up at{" "}
+                  {new Date(lead.next_followup_date).toLocaleTimeString(
+                    "en-IN",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}
+                </p>
+
+                {/* Comment */}
+                {lead.comment && (
+                  <p className="text-xs text-gray-300 mt-2 line-clamp-2">
+                    {lead.comment}
+                  </p>
+                )}
+
+                {/* Label */}
+                {lead.labels?.length > 0 && (
+                  <span
+                    className="inline-block mt-3 px-2 py-1 text-xs rounded"
+                    style={{
+                      backgroundColor:
+                        lead.labels[0]?.meta?.color_code || "#334155",
+                      color: "#fff",
+                    }}
+                  >
+                    {lead.labels[0].title}
+                  </span>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -120,6 +247,58 @@ function StatCard({ title, value }: { title: string; value: any }) {
     <div className="bg-primary border border-white/10 rounded-lg p-5">
       <p className="text-gray-400 text-sm">{title}</p>
       <p className="text-2xl font-semibold mt-1">{value}</p>
+    </div>
+  );
+}
+
+function LeadMiniCard({ lead }: { lead: Lead }) {
+  return (
+    <div className="bg-[#0f1f3d] border border-[#1e335c] rounded-lg p-4 hover:shadow-lg transition">
+      {/* Header */}
+      <div className="flex justify-between items-start">
+        <div>
+          <h3 className="text-white font-semibold text-sm">{lead.name}</h3>
+          <p className="text-xs text-gray-400">{lead.phone_number}</p>
+        </div>
+
+        {lead?.next_followup_date && (
+          <span className="text-xs bg-[#1e3a8a] text-blue-200 px-2 py-1 rounded">
+            {new Date(lead?.next_followup_date).toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        )}
+      </div>
+
+      {/* Label */}
+      {lead.labels?.length > 0 && (
+        <div className="mt-2">
+          <span
+            className="text-xs px-2 py-1 rounded"
+            style={{
+              backgroundColor: lead.labels[0]?.meta?.color_code || "#334155",
+              color: "#fff",
+            }}
+          >
+            {lead.labels[0]?.title}
+          </span>
+        </div>
+      )}
+
+      {/* Comment */}
+      {lead.comment && (
+        <p className="text-xs text-gray-300 mt-2 line-clamp-2">
+          {lead.comment}
+        </p>
+      )}
+
+      {/* Footer */}
+      <div className="flex justify-between items-center mt-3 text-xs text-gray-400">
+        <span>Agent: {lead.assigned_to?.name}</span>
+
+        <button className="text-blue-400 hover:underline">View</button>
+      </div>
     </div>
   );
 }
