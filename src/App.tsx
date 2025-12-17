@@ -11,6 +11,7 @@ import { CircleCheck, CircleX, Info, Loader, ShieldAlert } from "lucide-react";
 import { useTheme } from "./contexts/ThemeProvider";
 import BrandLoader from "./components/BrandLoader/BrandLoader";
 import { setLogoutHandler } from "./lib/utils";
+import { useAdmin } from "./features/masterAdmin/hooks/useAdmin";
 
 const router = createRouter({
   routeTree,
@@ -36,7 +37,7 @@ declare module "@tanstack/react-router" {
   }
 }
 function App() {
-  const { data } = useUser();
+  const { data: user } = useUser();
   const { theme } = useTheme();
 
   return (
@@ -45,8 +46,8 @@ function App() {
         router={router}
         context={{
           queryClient,
-          user: data,
-          isAuthenticated: !!data,
+          user,
+          isAuthenticated: !!user,
         }}
       />
       <Toaster

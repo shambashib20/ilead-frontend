@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as MasterLayoutImport } from './routes/_masterLayout'
 import { Route as DashboardLayoutImport } from './routes/_dashboardLayout'
 import { Route as AuthLayoutImport } from './routes/_authLayout'
 import { Route as AppLayoutImport } from './routes/_appLayout'
@@ -22,6 +23,7 @@ import { Route as AuthLayoutLoginImport } from './routes/_authLayout/login'
 import { Route as AuthLayoutForgetPasswordImport } from './routes/_authLayout/forget-password'
 import { Route as DashboardLayoutLeadTrashRouteImport } from './routes/_dashboardLayout/lead-trash/route'
 import { Route as DashboardLayoutLeadRouteImport } from './routes/_dashboardLayout/lead/route'
+import { Route as MasterLayoutMasterpannelIndexImport } from './routes/_masterLayout/masterpannel/index'
 import { Route as DashboardLayoutWorkspaceLogsIndexImport } from './routes/_dashboardLayout/workspace-logs/index'
 import { Route as DashboardLayoutWorkspaceDetailsIndexImport } from './routes/_dashboardLayout/workspace-details/index'
 import { Route as DashboardLayoutWhatsappSettingsIndexImport } from './routes/_dashboardLayout/whatsapp-settings/index'
@@ -46,11 +48,18 @@ import { Route as AppLayoutPublicdetailsIndexImport } from './routes/_appLayout/
 import { Route as AppLayoutOfflineIndexImport } from './routes/_appLayout/offline/index'
 import { Route as AppLayoutContactIndexImport } from './routes/_appLayout/contact/index'
 import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLayout/report/$slug'
+import { Route as AuthLayoutAdminLoginImport } from './routes/_authLayout/admin/login'
+import { Route as MasterLayoutMasterpannelClientIndexImport } from './routes/_masterLayout/masterpannel/client/index'
 import { Route as DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/insert-update/index'
 import { Route as DashboardLayoutGeneralTemplatesLeadTemplateIndexImport } from './routes/_dashboardLayout/general-templates/lead-template/index'
 import { Route as DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexImport } from './routes/_dashboardLayout/general-templates/lead-template/add-template/index'
 
 // Create/Update Routes
+
+const MasterLayoutRoute = MasterLayoutImport.update({
+  id: '/_masterLayout',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const DashboardLayoutRoute = DashboardLayoutImport.update({
   id: '/_dashboardLayout',
@@ -115,6 +124,13 @@ const DashboardLayoutLeadRouteRoute = DashboardLayoutLeadRouteImport.update({
   path: '/lead',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
+
+const MasterLayoutMasterpannelIndexRoute =
+  MasterLayoutMasterpannelIndexImport.update({
+    id: '/masterpannel/',
+    path: '/masterpannel/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
 
 const DashboardLayoutWorkspaceLogsIndexRoute =
   DashboardLayoutWorkspaceLogsIndexImport.update({
@@ -280,6 +296,19 @@ const DashboardLayoutReportSlugRoute = DashboardLayoutReportSlugImport.update({
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
+const AuthLayoutAdminLoginRoute = AuthLayoutAdminLoginImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const MasterLayoutMasterpannelClientIndexRoute =
+  MasterLayoutMasterpannelClientIndexImport.update({
+    id: '/masterpannel/client/',
+    path: '/masterpannel/client/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
+
 const DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute =
   DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport.update({
     id: '/whatsapp-automation-rules/insert-update/',
@@ -324,6 +353,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof DashboardLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_masterLayout': {
+      id: '/_masterLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof MasterLayoutImport
       parentRoute: typeof rootRoute
     }
     '/_dashboardLayout/lead': {
@@ -381,6 +417,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppLayoutIndexImport
       parentRoute: typeof AppLayoutImport
+    }
+    '/_authLayout/admin/login': {
+      id: '/_authLayout/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AuthLayoutAdminLoginImport
+      parentRoute: typeof AuthLayoutImport
     }
     '/_dashboardLayout/report/$slug': {
       id: '/_dashboardLayout/report/$slug'
@@ -550,6 +593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutWorkspaceLogsIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_masterLayout/masterpannel/': {
+      id: '/_masterLayout/masterpannel/'
+      path: '/masterpannel'
+      fullPath: '/masterpannel'
+      preLoaderRoute: typeof MasterLayoutMasterpannelIndexImport
+      parentRoute: typeof MasterLayoutImport
+    }
     '/_dashboardLayout/general-templates/lead-template/': {
       id: '/_dashboardLayout/general-templates/lead-template/'
       path: '/general-templates/lead-template'
@@ -563,6 +613,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/whatsapp-automation-rules/insert-update'
       preLoaderRoute: typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport
       parentRoute: typeof DashboardLayoutImport
+    }
+    '/_masterLayout/masterpannel/client/': {
+      id: '/_masterLayout/masterpannel/client/'
+      path: '/masterpannel/client'
+      fullPath: '/masterpannel/client'
+      preLoaderRoute: typeof MasterLayoutMasterpannelClientIndexImport
+      parentRoute: typeof MasterLayoutImport
     }
     '/_dashboardLayout/general-templates/lead-template/add-template/': {
       id: '/_dashboardLayout/general-templates/lead-template/add-template/'
@@ -604,6 +661,7 @@ interface AuthLayoutRouteChildren {
   AuthLayoutRegisterRoute: typeof AuthLayoutRegisterRoute
   AuthLayoutResetPasswordRoute: typeof AuthLayoutResetPasswordRoute
   AuthLayoutUserLoginRoute: typeof AuthLayoutUserLoginRoute
+  AuthLayoutAdminLoginRoute: typeof AuthLayoutAdminLoginRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
@@ -612,6 +670,7 @@ const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutRegisterRoute: AuthLayoutRegisterRoute,
   AuthLayoutResetPasswordRoute: AuthLayoutResetPasswordRoute,
   AuthLayoutUserLoginRoute: AuthLayoutUserLoginRoute,
+  AuthLayoutAdminLoginRoute: AuthLayoutAdminLoginRoute,
 }
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
@@ -699,8 +758,23 @@ const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
   DashboardLayoutRouteChildren,
 )
 
+interface MasterLayoutRouteChildren {
+  MasterLayoutMasterpannelIndexRoute: typeof MasterLayoutMasterpannelIndexRoute
+  MasterLayoutMasterpannelClientIndexRoute: typeof MasterLayoutMasterpannelClientIndexRoute
+}
+
+const MasterLayoutRouteChildren: MasterLayoutRouteChildren = {
+  MasterLayoutMasterpannelIndexRoute: MasterLayoutMasterpannelIndexRoute,
+  MasterLayoutMasterpannelClientIndexRoute:
+    MasterLayoutMasterpannelClientIndexRoute,
+}
+
+const MasterLayoutRouteWithChildren = MasterLayoutRoute._addFileChildren(
+  MasterLayoutRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '': typeof DashboardLayoutRouteWithChildren
+  '': typeof MasterLayoutRouteWithChildren
   '/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
   '/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
   '/forget-password': typeof AuthLayoutForgetPasswordRoute
@@ -709,6 +783,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
+  '/admin/login': typeof AuthLayoutAdminLoginRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/contact': typeof AppLayoutContactIndexRoute
   '/offline': typeof AppLayoutOfflineIndexRoute
@@ -733,13 +808,15 @@ export interface FileRoutesByFullPath {
   '/whatsapp-settings': typeof DashboardLayoutWhatsappSettingsIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
   '/workspace-logs': typeof DashboardLayoutWorkspaceLogsIndexRoute
+  '/masterpannel': typeof MasterLayoutMasterpannelIndexRoute
   '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
   '/whatsapp-automation-rules/insert-update': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '': typeof DashboardLayoutRouteWithChildren
+  '': typeof MasterLayoutRouteWithChildren
   '/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
   '/forget-password': typeof AuthLayoutForgetPasswordRoute
   '/login': typeof AuthLayoutLoginRoute
@@ -747,6 +824,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
   '/': typeof AppLayoutIndexRoute
+  '/admin/login': typeof AuthLayoutAdminLoginRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/contact': typeof AppLayoutContactIndexRoute
   '/offline': typeof AppLayoutOfflineIndexRoute
@@ -771,8 +849,10 @@ export interface FileRoutesByTo {
   '/whatsapp-settings': typeof DashboardLayoutWhatsappSettingsIndexRoute
   '/workspace-details': typeof DashboardLayoutWorkspaceDetailsIndexRoute
   '/workspace-logs': typeof DashboardLayoutWorkspaceLogsIndexRoute
+  '/masterpannel': typeof MasterLayoutMasterpannelIndexRoute
   '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
   '/whatsapp-automation-rules/insert-update': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
@@ -781,6 +861,7 @@ export interface FileRoutesById {
   '/_appLayout': typeof AppLayoutRouteWithChildren
   '/_authLayout': typeof AuthLayoutRouteWithChildren
   '/_dashboardLayout': typeof DashboardLayoutRouteWithChildren
+  '/_masterLayout': typeof MasterLayoutRouteWithChildren
   '/_dashboardLayout/lead': typeof DashboardLayoutLeadRouteRouteWithChildren
   '/_dashboardLayout/lead-trash': typeof DashboardLayoutLeadTrashRouteRoute
   '/_authLayout/forget-password': typeof AuthLayoutForgetPasswordRoute
@@ -789,6 +870,7 @@ export interface FileRoutesById {
   '/_authLayout/reset-password': typeof AuthLayoutResetPasswordRoute
   '/_authLayout/user-login': typeof AuthLayoutUserLoginRoute
   '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_authLayout/admin/login': typeof AuthLayoutAdminLoginRoute
   '/_dashboardLayout/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/_appLayout/contact/': typeof AppLayoutContactIndexRoute
   '/_appLayout/offline/': typeof AppLayoutOfflineIndexRoute
@@ -813,8 +895,10 @@ export interface FileRoutesById {
   '/_dashboardLayout/whatsapp-settings/': typeof DashboardLayoutWhatsappSettingsIndexRoute
   '/_dashboardLayout/workspace-details/': typeof DashboardLayoutWorkspaceDetailsIndexRoute
   '/_dashboardLayout/workspace-logs/': typeof DashboardLayoutWorkspaceLogsIndexRoute
+  '/_masterLayout/masterpannel/': typeof MasterLayoutMasterpannelIndexRoute
   '/_dashboardLayout/general-templates/lead-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
   '/_dashboardLayout/whatsapp-automation-rules/insert-update/': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/_masterLayout/masterpannel/client/': typeof MasterLayoutMasterpannelClientIndexRoute
   '/_dashboardLayout/general-templates/lead-template/add-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
@@ -830,6 +914,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/user-login'
     | '/'
+    | '/admin/login'
     | '/report/$slug'
     | '/contact'
     | '/offline'
@@ -854,8 +939,10 @@ export interface FileRouteTypes {
     | '/whatsapp-settings'
     | '/workspace-details'
     | '/workspace-logs'
+    | '/masterpannel'
     | '/general-templates/lead-template'
     | '/whatsapp-automation-rules/insert-update'
+    | '/masterpannel/client'
     | '/general-templates/lead-template/add-template'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -867,6 +954,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/user-login'
     | '/'
+    | '/admin/login'
     | '/report/$slug'
     | '/contact'
     | '/offline'
@@ -891,14 +979,17 @@ export interface FileRouteTypes {
     | '/whatsapp-settings'
     | '/workspace-details'
     | '/workspace-logs'
+    | '/masterpannel'
     | '/general-templates/lead-template'
     | '/whatsapp-automation-rules/insert-update'
+    | '/masterpannel/client'
     | '/general-templates/lead-template/add-template'
   id:
     | '__root__'
     | '/_appLayout'
     | '/_authLayout'
     | '/_dashboardLayout'
+    | '/_masterLayout'
     | '/_dashboardLayout/lead'
     | '/_dashboardLayout/lead-trash'
     | '/_authLayout/forget-password'
@@ -907,6 +998,7 @@ export interface FileRouteTypes {
     | '/_authLayout/reset-password'
     | '/_authLayout/user-login'
     | '/_appLayout/'
+    | '/_authLayout/admin/login'
     | '/_dashboardLayout/report/$slug'
     | '/_appLayout/contact/'
     | '/_appLayout/offline/'
@@ -931,8 +1023,10 @@ export interface FileRouteTypes {
     | '/_dashboardLayout/whatsapp-settings/'
     | '/_dashboardLayout/workspace-details/'
     | '/_dashboardLayout/workspace-logs/'
+    | '/_masterLayout/masterpannel/'
     | '/_dashboardLayout/general-templates/lead-template/'
     | '/_dashboardLayout/whatsapp-automation-rules/insert-update/'
+    | '/_masterLayout/masterpannel/client/'
     | '/_dashboardLayout/general-templates/lead-template/add-template/'
   fileRoutesById: FileRoutesById
 }
@@ -941,12 +1035,14 @@ export interface RootRouteChildren {
   AppLayoutRoute: typeof AppLayoutRouteWithChildren
   AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
   DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
+  MasterLayoutRoute: typeof MasterLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AppLayoutRoute: AppLayoutRouteWithChildren,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
   DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
+  MasterLayoutRoute: MasterLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -961,7 +1057,8 @@ export const routeTree = rootRoute
       "children": [
         "/_appLayout",
         "/_authLayout",
-        "/_dashboardLayout"
+        "/_dashboardLayout",
+        "/_masterLayout"
       ]
     },
     "/_appLayout": {
@@ -982,7 +1079,8 @@ export const routeTree = rootRoute
         "/_authLayout/login",
         "/_authLayout/register",
         "/_authLayout/reset-password",
-        "/_authLayout/user-login"
+        "/_authLayout/user-login",
+        "/_authLayout/admin/login"
       ]
     },
     "/_dashboardLayout": {
@@ -1011,6 +1109,13 @@ export const routeTree = rootRoute
         "/_dashboardLayout/general-templates/lead-template/",
         "/_dashboardLayout/whatsapp-automation-rules/insert-update/",
         "/_dashboardLayout/general-templates/lead-template/add-template/"
+      ]
+    },
+    "/_masterLayout": {
+      "filePath": "_masterLayout.tsx",
+      "children": [
+        "/_masterLayout/masterpannel/",
+        "/_masterLayout/masterpannel/client/"
       ]
     },
     "/_dashboardLayout/lead": {
@@ -1047,6 +1152,10 @@ export const routeTree = rootRoute
     "/_appLayout/": {
       "filePath": "_appLayout/index.tsx",
       "parent": "/_appLayout"
+    },
+    "/_authLayout/admin/login": {
+      "filePath": "_authLayout/admin/login.tsx",
+      "parent": "/_authLayout"
     },
     "/_dashboardLayout/report/$slug": {
       "filePath": "_dashboardLayout/report/$slug.tsx",
@@ -1144,6 +1253,10 @@ export const routeTree = rootRoute
       "filePath": "_dashboardLayout/workspace-logs/index.tsx",
       "parent": "/_dashboardLayout"
     },
+    "/_masterLayout/masterpannel/": {
+      "filePath": "_masterLayout/masterpannel/index.tsx",
+      "parent": "/_masterLayout"
+    },
     "/_dashboardLayout/general-templates/lead-template/": {
       "filePath": "_dashboardLayout/general-templates/lead-template/index.tsx",
       "parent": "/_dashboardLayout"
@@ -1151,6 +1264,10 @@ export const routeTree = rootRoute
     "/_dashboardLayout/whatsapp-automation-rules/insert-update/": {
       "filePath": "_dashboardLayout/whatsapp-automation-rules/insert-update/index.tsx",
       "parent": "/_dashboardLayout"
+    },
+    "/_masterLayout/masterpannel/client/": {
+      "filePath": "_masterLayout/masterpannel/client/index.tsx",
+      "parent": "/_masterLayout"
     },
     "/_dashboardLayout/general-templates/lead-template/add-template/": {
       "filePath": "_dashboardLayout/general-templates/lead-template/add-template/index.tsx",
