@@ -19,7 +19,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function AdminLogin() {
-  const { login, isSubmitting, isPending, error, isError } = useAdminLogin();
+  const { login } = useAdminLogin();
   const form = useForm({
     defaultValues: {
       email: "",

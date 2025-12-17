@@ -61,7 +61,7 @@ function StatusChip({
   onMouseEnter,
   onMouseLeave,
 }: StatusChipProps) {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <button

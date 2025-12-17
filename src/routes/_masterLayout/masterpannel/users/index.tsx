@@ -58,7 +58,7 @@ function RouteComponent() {
     <div className="space-y-4 mt-10">
       <UserHeader search={search} setSearch={setSearch} />
       <UserTable
-        workspaces={filteredWorkspaces}
+        workspaces={filteredWorkspaces }
         page={page}
         setPage={setPage}
         limit={limit}

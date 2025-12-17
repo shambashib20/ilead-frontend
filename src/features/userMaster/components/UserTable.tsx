@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableBody,
@@ -12,7 +11,7 @@ import { Pencil, Trash, Eye, Building2 } from "lucide-react";
 import type { Workspace } from "../services/User.service";
 
 interface UserTableProps {
-  workspaces: Workspace[];
+  workspaces: (Workspace | null)[];
   page: number;
   setPage: (page: number) => void;
   limit: number;
@@ -24,7 +23,6 @@ function UserTable({
   workspaces,
   page,
   setPage,
-  limit,
   pagination,
   isLoading,
 }: UserTableProps) {
@@ -76,7 +74,7 @@ function UserTable({
           {workspaces && workspaces.length > 0 ? (
             workspaces.map((workspace) => (
               <div
-                key={workspace.property_id}
+                key={workspace?.property_id}
                 className="rounded-sm overflow-hidden shadow-lead"
               >
                 {/* Workspace Header */}
@@ -88,18 +86,18 @@ function UserTable({
                         size={20}
                       />
                       <h3 className="text-lg font-semibold dark:text-white">
-                        {workspace.property_name}
+                        {workspace?.property_name}
                       </h3>
                     </div>
                     <span className="text-sm text-muted-foreground dark:text-gray-400">
-                      {workspace.totalUsers}{" "}
-                      {workspace.totalUsers === 1 ? "User" : "Users"}
+                      {workspace?.totalUsers}{" "}
+                      {workspace?.totalUsers === 1 ? "User" : "Users"}
                     </span>
                   </div>
                 </div>
 
                 {/* Users Table */}
-                {workspace.users.length > 0 ? (
+                {(workspace?.users.length as number) > 0 ? (
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-primary/60 hover:bg-primary/80">
@@ -124,7 +122,7 @@ function UserTable({
                       </TableRow>
                     </TableHeader>
                     <TableBody className="bg-primary/40">
-                      {workspace.users.map((user, ind) => (
+                      {workspace?.users.map((user, ind) => (
                         <TableRow key={user.user_id} className="py-2">
                           <TableCell className="dark:text-white px-5 py-4">
                             {ind + 1}
