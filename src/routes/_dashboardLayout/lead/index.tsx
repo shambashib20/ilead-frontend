@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { SkeletonLoaderCol } from "@/components/SkeletonLoader/SkeletonLoader";
 import { useInfiniteLeads } from "@/features/leads/hooks/useInfinteLeads";
+import type { Lead } from "@/features/leads/types";
 
 export const Route = createFileRoute("/_dashboardLayout/lead/")({
   component: RouteComponent,
@@ -179,7 +180,7 @@ function RouteComponent() {
 
   return isTableView ? (
     <LeadsTable
-      leads={normalizedLeads}
+      leads={normalizedLeads as Lead[]}
       pagination={pagination}
       onPageChange={handlePageChange}
       onLimitChange={handleLimitChange}

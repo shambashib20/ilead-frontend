@@ -1,30 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import {
   todaysLeadQueryOptions,
   useTodaysLead,
 } from "@/features/dashboard/hooks/useTodaysLead";
 import { useStatus } from "@/features/leads/hooks/useStatus";
-import { formatDateTime } from "@/features/leads/utils/formatTime";
+import type { Lead } from "@/features/leads/types";
 import { LeadGridView } from "@/features/todaysLead/components/TodaysLeadGrid";
 import TodaysLeadTable from "@/features/todaysLead/components/TodaysLeadTable";
 import { useMedia } from "@/hooks/useMedia";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  ChartColumnBig,
-  ChevronDown,
-  ChevronsDown,
-  ChevronUp,
-  List,
-  Table,
-} from "lucide-react";
+import { ChartColumnBig, ChevronsDown, List } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_dashboardLayout/todaysfollowup/")({
@@ -35,7 +22,7 @@ export const Route = createFileRoute("/_dashboardLayout/todaysfollowup/")({
 });
 
 function RouteComponent() {
-  const { newLeads, progressLeads } = useTodaysLead();
+  const { newLeads } = useTodaysLead();
   const [expanded, setExpanded] = useState(true);
   const [isTableView, setIsTableView] = useState(false);
   const isMobile = useMedia("(max-width: 767px)");
@@ -110,7 +97,7 @@ function RouteComponent() {
             <CardContent>
               {isTableView ? (
                 <div>
-                  <TodaysLeadTable data={newLeads} />
+                  <TodaysLeadTable data={newLeads as Lead[]} />
                 </div>
               ) : (
                 <LeadGridView leads={newLeads} />
