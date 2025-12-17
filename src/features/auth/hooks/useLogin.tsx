@@ -21,33 +21,39 @@ export function useLogin() {
     },
 
     onSuccess: (data) => {
-      console.log(data);
+      console.log("[v0] Login response:", data);
 
       if (data.status === "SUCCESS") {
+        if (data.data?.user.role === "Masteradmin") {
+          console.log("[v0] Masteradmin blocked from regular login");
+
+          toast.error("Access Denied", {
+            description: "Masteradmin users must login from /admin/login",
+            duration: 3000,
+          });
+
+          return;
+        }
+
         console.log("Login successful:", data.message, data.data.user);
         localStorage.setItem("user", JSON.stringify(data.data.user));
-        queryClient.setQueryData(["user"], data);
-        setTimeout(() => {
-          router.history.push("/dashboard");
-        }, 0); // Simulate a delay for the user experience
+        if (queryClient) {
+          queryClient.setQueryData(["user"], data);
+        }
 
-        toast("Login Successful! 🎉", {
+        setTimeout(() => {
+          
+          router.navigate({ to: "/dashboard" });
+        }, 0);
+
+        toast.success("Login Successful!", {
           description:
             "You have been logged in successfully. Redirecting to dashboard...",
           duration: 1000,
-          dismissible: true,
-          style: {
-            background: theme === "dark" ? "#333" : "#fff",
-            color: theme === "dark" ? "#fff" : "#333",
-          },
-          action: {
-            label: "Close",
-            onClick: () => toast.dismiss(),
-          },
         });
       }
       if (!data.status || data.status !== "SUCCESS") {
-        console.log("Login successful:", data.message, data.data.user);
+        console.log("Login failed:", data.message);
       }
     },
     onError: (error, variables) => {

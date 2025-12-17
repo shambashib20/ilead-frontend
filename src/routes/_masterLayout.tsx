@@ -14,16 +14,16 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_masterLayout")({
   beforeLoad: async ({ context }) => {
-    console.log(context.user);
+    console.log(context.user?.role);
 
-    if (!context.isAuthenticated) {
-      if (context.user.data?.user.role !== "Masteradmin") {
-        throw redirect({
-          to: "/dashboard",
-        });
-      }
+    if (!context?.isAuthenticated) {
       throw redirect({
         to: "/admin/login",
+      });
+    }
+    if (context?.user?.role !== "Masteradmin") {
+      throw redirect({
+        to: "/dashboard",
       });
     }
   },

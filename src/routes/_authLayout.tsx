@@ -10,12 +10,19 @@ import { useMedia } from "@/hooks/useMedia";
 
 export const Route = createFileRoute("/_authLayout")({
   beforeLoad: async ({ context }) => {
-    console.log(context.user);
+    console.log(context.user?.role);
 
-    if (context.isAuthenticated) {
+    if (context.isAuthenticated && context.user?.role !== "Masteradmin") {
       throw redirect({
         to: "/dashboard",
       });
+    }
+
+    if (context.isAuthenticated && context.user?.role === "Masteradmin") {
+      console.log(
+        "[v0] Masteradmin authenticated, redirecting to master panel"
+      );
+      throw redirect({ to: "/masterpannel" });
     }
   },
   component: AuthLayout,
