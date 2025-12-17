@@ -1,7 +1,7 @@
 // src/hooks/useAdminLogin.ts
 import { useMutation } from "@tanstack/react-query";
 import { adminAuthService } from "../services/adminAuth.service";
-import { useRouter, useSearch } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { queryClient } from "@/utils/client";
 import { toast } from "sonner";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -19,33 +19,37 @@ export function useAdminLogin() {
       adminAuthService.adminLogin(payload).then((res) => res.data),
 
     onSuccess: (data) => {
+      console.log("[v0] Admin login response:", data);
+
       if (data.status === "SUCCESS") {
-        // const redirectTo = search.redirect || "/admin";
-        localStorage.setItem("user", JSON.stringify(data));
-        queryClient.setQueryData(["user"], data);
-        setTimeout(() => {
-          router.history.push("/masterpannel");
-        }, 0); // Simulate a delay for the user experience
-        console.log(data);
+        if (data.data?.user.role === "Masteradmin") {
+          localStorage.setItem("user", JSON.stringify(data.data.user));
+          if (queryClient) {
+            queryClient.setQueryData(["user"], data);
+          }
+
+          setTimeout(() => {
+            router.navigate({ to: "/masterpannel" });
+          }, 0);
+
+          toast.success("Login Successful!", {
+            description:
+              "You have been logged in successfully. Redirecting to master panel...",
+            duration: 1000,
+          });
+        } else {
+          console.log("[v0] Non-Masteradmin blocked from admin login");
+
+          toast.error("Access Denied", {
+            description:
+              "Only Masteradmin users can login here. Please use /login",
+            duration: 3000,
+          });
+        }
       }
 
-      toast("Login Successful! 🎉", {
-        description:
-          "You have been logged in successfully. Redirecting to dashboard...",
-        duration: 1000,
-        dismissible: true,
-        style: {
-          background: theme === "dark" ? "#333" : "#fff",
-          color: theme === "dark" ? "#fff" : "#333",
-        },
-        action: {
-          label: "Close",
-          onClick: () => toast.dismiss(),
-        },
-      });
-
       if (!data.status || data.status !== "SUCCESS") {
-        console.log("Login successful:", data.message, data.data.user);
+        console.log("Login failed:", data.message);
       }
     },
     onError: (error, variables) => {

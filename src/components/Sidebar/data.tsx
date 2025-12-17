@@ -23,7 +23,7 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 import { FaEnvelope, FaSms, FaWhatsapp } from "react-icons/fa";
 
-type Role = "Admin" | "Superadmin" | "User" | "Telecaller";
+type Role = "Admin" | "Superadmin" | "User" | "Telecaller" | "Masteradmin";
 
 export type NavItem = {
   name: string;
@@ -40,8 +40,6 @@ interface SidebarMenuItemProps {
   currentUserRole?: Role;
 }
 
-
-
 export const navItems: NavItem[] = [
   {
     name: "Dashboard",
@@ -49,6 +47,43 @@ export const navItems: NavItem[] = [
     path: "/dashboard",
     roles: ["Admin", "Superadmin", "User", "Telecaller"],
   },
+  {
+    name: "Dashboard",
+    icon: <House size={20} />,
+    path: "/masterpannel",
+    roles: ["Masteradmin"],
+  },
+  {
+    name: "Clients",
+    icon: <House size={20} />,
+    path: "/masterpannel/client",
+    roles: ["Masteradmin"],
+  },
+  {
+    name: "Users",
+    icon: <House size={20} />,
+    path: "/masterpannel/users",
+    roles: ["Masteradmin"],
+  },
+  {
+    name: "Workspace",
+    icon: <House size={20} />,
+    path: "/masterpannel/workspace",
+    roles: ["Masteradmin"],
+  },
+  {
+    name: "Campaigns",
+    icon: <House size={20} />,
+    path: "/masterpannel/campaigns",
+    roles: ["Masteradmin"],
+  },
+  {
+    name: "Addons",
+    icon: <House size={20} />,
+    path: "/masterpannel/addons",
+    roles: ["Masteradmin"],
+  },
+
   {
     name: "Lead",
     icon: <Filter size={20} />,

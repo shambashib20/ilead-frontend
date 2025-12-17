@@ -49,7 +49,11 @@ import { Route as AppLayoutOfflineIndexImport } from './routes/_appLayout/offlin
 import { Route as AppLayoutContactIndexImport } from './routes/_appLayout/contact/index'
 import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLayout/report/$slug'
 import { Route as AuthLayoutAdminLoginImport } from './routes/_authLayout/admin/login'
+import { Route as MasterLayoutMasterpannelWorkspaceIndexImport } from './routes/_masterLayout/masterpannel/workspace/index'
+import { Route as MasterLayoutMasterpannelUsersIndexImport } from './routes/_masterLayout/masterpannel/users/index'
 import { Route as MasterLayoutMasterpannelClientIndexImport } from './routes/_masterLayout/masterpannel/client/index'
+import { Route as MasterLayoutMasterpannelCampaignsIndexImport } from './routes/_masterLayout/masterpannel/campaigns/index'
+import { Route as MasterLayoutMasterpannelAddonsIndexImport } from './routes/_masterLayout/masterpannel/addons/index'
 import { Route as DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport } from './routes/_dashboardLayout/whatsapp-automation-rules/insert-update/index'
 import { Route as DashboardLayoutGeneralTemplatesLeadTemplateIndexImport } from './routes/_dashboardLayout/general-templates/lead-template/index'
 import { Route as DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexImport } from './routes/_dashboardLayout/general-templates/lead-template/add-template/index'
@@ -302,10 +306,38 @@ const AuthLayoutAdminLoginRoute = AuthLayoutAdminLoginImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
+const MasterLayoutMasterpannelWorkspaceIndexRoute =
+  MasterLayoutMasterpannelWorkspaceIndexImport.update({
+    id: '/masterpannel/workspace/',
+    path: '/masterpannel/workspace/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
+
+const MasterLayoutMasterpannelUsersIndexRoute =
+  MasterLayoutMasterpannelUsersIndexImport.update({
+    id: '/masterpannel/users/',
+    path: '/masterpannel/users/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
+
 const MasterLayoutMasterpannelClientIndexRoute =
   MasterLayoutMasterpannelClientIndexImport.update({
     id: '/masterpannel/client/',
     path: '/masterpannel/client/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
+
+const MasterLayoutMasterpannelCampaignsIndexRoute =
+  MasterLayoutMasterpannelCampaignsIndexImport.update({
+    id: '/masterpannel/campaigns/',
+    path: '/masterpannel/campaigns/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
+
+const MasterLayoutMasterpannelAddonsIndexRoute =
+  MasterLayoutMasterpannelAddonsIndexImport.update({
+    id: '/masterpannel/addons/',
+    path: '/masterpannel/addons/',
     getParentRoute: () => MasterLayoutRoute,
   } as any)
 
@@ -614,11 +646,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_masterLayout/masterpannel/addons/': {
+      id: '/_masterLayout/masterpannel/addons/'
+      path: '/masterpannel/addons'
+      fullPath: '/masterpannel/addons'
+      preLoaderRoute: typeof MasterLayoutMasterpannelAddonsIndexImport
+      parentRoute: typeof MasterLayoutImport
+    }
+    '/_masterLayout/masterpannel/campaigns/': {
+      id: '/_masterLayout/masterpannel/campaigns/'
+      path: '/masterpannel/campaigns'
+      fullPath: '/masterpannel/campaigns'
+      preLoaderRoute: typeof MasterLayoutMasterpannelCampaignsIndexImport
+      parentRoute: typeof MasterLayoutImport
+    }
     '/_masterLayout/masterpannel/client/': {
       id: '/_masterLayout/masterpannel/client/'
       path: '/masterpannel/client'
       fullPath: '/masterpannel/client'
       preLoaderRoute: typeof MasterLayoutMasterpannelClientIndexImport
+      parentRoute: typeof MasterLayoutImport
+    }
+    '/_masterLayout/masterpannel/users/': {
+      id: '/_masterLayout/masterpannel/users/'
+      path: '/masterpannel/users'
+      fullPath: '/masterpannel/users'
+      preLoaderRoute: typeof MasterLayoutMasterpannelUsersIndexImport
+      parentRoute: typeof MasterLayoutImport
+    }
+    '/_masterLayout/masterpannel/workspace/': {
+      id: '/_masterLayout/masterpannel/workspace/'
+      path: '/masterpannel/workspace'
+      fullPath: '/masterpannel/workspace'
+      preLoaderRoute: typeof MasterLayoutMasterpannelWorkspaceIndexImport
       parentRoute: typeof MasterLayoutImport
     }
     '/_dashboardLayout/general-templates/lead-template/add-template/': {
@@ -760,13 +820,25 @@ const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
 
 interface MasterLayoutRouteChildren {
   MasterLayoutMasterpannelIndexRoute: typeof MasterLayoutMasterpannelIndexRoute
+  MasterLayoutMasterpannelAddonsIndexRoute: typeof MasterLayoutMasterpannelAddonsIndexRoute
+  MasterLayoutMasterpannelCampaignsIndexRoute: typeof MasterLayoutMasterpannelCampaignsIndexRoute
   MasterLayoutMasterpannelClientIndexRoute: typeof MasterLayoutMasterpannelClientIndexRoute
+  MasterLayoutMasterpannelUsersIndexRoute: typeof MasterLayoutMasterpannelUsersIndexRoute
+  MasterLayoutMasterpannelWorkspaceIndexRoute: typeof MasterLayoutMasterpannelWorkspaceIndexRoute
 }
 
 const MasterLayoutRouteChildren: MasterLayoutRouteChildren = {
   MasterLayoutMasterpannelIndexRoute: MasterLayoutMasterpannelIndexRoute,
+  MasterLayoutMasterpannelAddonsIndexRoute:
+    MasterLayoutMasterpannelAddonsIndexRoute,
+  MasterLayoutMasterpannelCampaignsIndexRoute:
+    MasterLayoutMasterpannelCampaignsIndexRoute,
   MasterLayoutMasterpannelClientIndexRoute:
     MasterLayoutMasterpannelClientIndexRoute,
+  MasterLayoutMasterpannelUsersIndexRoute:
+    MasterLayoutMasterpannelUsersIndexRoute,
+  MasterLayoutMasterpannelWorkspaceIndexRoute:
+    MasterLayoutMasterpannelWorkspaceIndexRoute,
 }
 
 const MasterLayoutRouteWithChildren = MasterLayoutRoute._addFileChildren(
@@ -811,7 +883,11 @@ export interface FileRoutesByFullPath {
   '/masterpannel': typeof MasterLayoutMasterpannelIndexRoute
   '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
   '/whatsapp-automation-rules/insert-update': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/masterpannel/addons': typeof MasterLayoutMasterpannelAddonsIndexRoute
+  '/masterpannel/campaigns': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
+  '/masterpannel/users': typeof MasterLayoutMasterpannelUsersIndexRoute
+  '/masterpannel/workspace': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
@@ -852,7 +928,11 @@ export interface FileRoutesByTo {
   '/masterpannel': typeof MasterLayoutMasterpannelIndexRoute
   '/general-templates/lead-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
   '/whatsapp-automation-rules/insert-update': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/masterpannel/addons': typeof MasterLayoutMasterpannelAddonsIndexRoute
+  '/masterpannel/campaigns': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
+  '/masterpannel/users': typeof MasterLayoutMasterpannelUsersIndexRoute
+  '/masterpannel/workspace': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
@@ -898,7 +978,11 @@ export interface FileRoutesById {
   '/_masterLayout/masterpannel/': typeof MasterLayoutMasterpannelIndexRoute
   '/_dashboardLayout/general-templates/lead-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateIndexRoute
   '/_dashboardLayout/whatsapp-automation-rules/insert-update/': typeof DashboardLayoutWhatsappAutomationRulesInsertUpdateIndexRoute
+  '/_masterLayout/masterpannel/addons/': typeof MasterLayoutMasterpannelAddonsIndexRoute
+  '/_masterLayout/masterpannel/campaigns/': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/_masterLayout/masterpannel/client/': typeof MasterLayoutMasterpannelClientIndexRoute
+  '/_masterLayout/masterpannel/users/': typeof MasterLayoutMasterpannelUsersIndexRoute
+  '/_masterLayout/masterpannel/workspace/': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/_dashboardLayout/general-templates/lead-template/add-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
 }
 
@@ -942,7 +1026,11 @@ export interface FileRouteTypes {
     | '/masterpannel'
     | '/general-templates/lead-template'
     | '/whatsapp-automation-rules/insert-update'
+    | '/masterpannel/addons'
+    | '/masterpannel/campaigns'
     | '/masterpannel/client'
+    | '/masterpannel/users'
+    | '/masterpannel/workspace'
     | '/general-templates/lead-template/add-template'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -982,7 +1070,11 @@ export interface FileRouteTypes {
     | '/masterpannel'
     | '/general-templates/lead-template'
     | '/whatsapp-automation-rules/insert-update'
+    | '/masterpannel/addons'
+    | '/masterpannel/campaigns'
     | '/masterpannel/client'
+    | '/masterpannel/users'
+    | '/masterpannel/workspace'
     | '/general-templates/lead-template/add-template'
   id:
     | '__root__'
@@ -1026,7 +1118,11 @@ export interface FileRouteTypes {
     | '/_masterLayout/masterpannel/'
     | '/_dashboardLayout/general-templates/lead-template/'
     | '/_dashboardLayout/whatsapp-automation-rules/insert-update/'
+    | '/_masterLayout/masterpannel/addons/'
+    | '/_masterLayout/masterpannel/campaigns/'
     | '/_masterLayout/masterpannel/client/'
+    | '/_masterLayout/masterpannel/users/'
+    | '/_masterLayout/masterpannel/workspace/'
     | '/_dashboardLayout/general-templates/lead-template/add-template/'
   fileRoutesById: FileRoutesById
 }
@@ -1115,7 +1211,11 @@ export const routeTree = rootRoute
       "filePath": "_masterLayout.tsx",
       "children": [
         "/_masterLayout/masterpannel/",
-        "/_masterLayout/masterpannel/client/"
+        "/_masterLayout/masterpannel/addons/",
+        "/_masterLayout/masterpannel/campaigns/",
+        "/_masterLayout/masterpannel/client/",
+        "/_masterLayout/masterpannel/users/",
+        "/_masterLayout/masterpannel/workspace/"
       ]
     },
     "/_dashboardLayout/lead": {
@@ -1265,8 +1365,24 @@ export const routeTree = rootRoute
       "filePath": "_dashboardLayout/whatsapp-automation-rules/insert-update/index.tsx",
       "parent": "/_dashboardLayout"
     },
+    "/_masterLayout/masterpannel/addons/": {
+      "filePath": "_masterLayout/masterpannel/addons/index.tsx",
+      "parent": "/_masterLayout"
+    },
+    "/_masterLayout/masterpannel/campaigns/": {
+      "filePath": "_masterLayout/masterpannel/campaigns/index.tsx",
+      "parent": "/_masterLayout"
+    },
     "/_masterLayout/masterpannel/client/": {
       "filePath": "_masterLayout/masterpannel/client/index.tsx",
+      "parent": "/_masterLayout"
+    },
+    "/_masterLayout/masterpannel/users/": {
+      "filePath": "_masterLayout/masterpannel/users/index.tsx",
+      "parent": "/_masterLayout"
+    },
+    "/_masterLayout/masterpannel/workspace/": {
+      "filePath": "_masterLayout/masterpannel/workspace/index.tsx",
       "parent": "/_masterLayout"
     },
     "/_dashboardLayout/general-templates/lead-template/add-template/": {

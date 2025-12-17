@@ -34,6 +34,19 @@ export interface Client {
   updatedAt: string;
 }
 
+export interface ClientPagination {
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export interface ClientResponse {
+  clients: Client[];
+  pagination: ClientPagination;
+}
 /* ---------- service ---------- */
 
 class ClientService extends ApiClient {
@@ -42,7 +55,7 @@ class ClientService extends ApiClient {
   }
 
   getAllClients(payload: ClientListPayload) {
-    return this.post<Client[]>("/all", payload);
+    return this.post<ClientResponse>("/all", payload);
   }
 }
 
