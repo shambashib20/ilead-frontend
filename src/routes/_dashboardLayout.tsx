@@ -14,9 +14,14 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {
-    console.log(context.user);
+    console.log(context.user.data?.user.role);
 
     if (!context.isAuthenticated) {
+      if (context.user.data?.user.role === "Masteradmin") {
+        throw redirect({
+          to: "/masterpannel",
+        });
+      }
       throw redirect({
         to: "/login",
       });

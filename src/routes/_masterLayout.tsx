@@ -17,6 +17,11 @@ export const Route = createFileRoute("/_masterLayout")({
     console.log(context.user);
 
     if (!context.isAuthenticated) {
+      if (context.user.data?.user.role !== "Masteradmin") {
+        throw redirect({
+          to: "/dashboard",
+        });
+      }
       throw redirect({
         to: "/admin/login",
       });
