@@ -70,7 +70,7 @@ function UserTable({
       {isLoading ? (
         <div className="text-center py-8 dark:text-white">Loading...</div>
       ) : (
-        <div className="space-y-6 grid grid-cols-2 gap-4">
+        <div className="space-y-6 ">
           {workspaces && workspaces.length > 0 ? (
             workspaces.map((workspace) => (
               <div

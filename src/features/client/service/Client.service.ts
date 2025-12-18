@@ -44,8 +44,10 @@ export interface ClientPagination {
 }
 
 export interface ClientResponse {
-  clients: Client[];
-  pagination: ClientPagination;
+  data: {
+    clients: Client[];
+    pagination: ClientPagination;
+  };
 }
 /* ---------- service ---------- */
 

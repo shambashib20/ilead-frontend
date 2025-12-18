@@ -32,6 +32,8 @@ function RouteComponent() {
         client.status?.toLowerCase().includes(searchLower)
       );
     }) || [];
+
+    
   return (
     <div className="space-y-4 mt-10">
       <ClientHeader search={search} setSearch={setSearch} />
