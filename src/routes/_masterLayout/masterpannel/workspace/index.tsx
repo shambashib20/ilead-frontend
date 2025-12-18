@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_masterLayout/masterpannel/workspace/")({
 function RouteComponent() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [limit, setLimit] = useState(1);
+  const [limit] = useState(1);
 
   const { properties, pagination, isLoading } = useWorkspaces(page, limit);
 
