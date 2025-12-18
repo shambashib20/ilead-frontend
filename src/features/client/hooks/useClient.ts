@@ -35,8 +35,9 @@ export function useClients(page: number = 1, limit: number = 10) {
   );
   console.log(data);
   return {
-    clients: data.data.clients as Client[],
-    pagination: data.data?.pagination, // agar backend meta bhejta ho
+    clients: data.data.data.clients as Client[],
+    pagination: data.data.data.pagination, // agar backend meta bhejta ho
     isLoading,
   };
 }
+  
