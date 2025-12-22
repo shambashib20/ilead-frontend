@@ -30,11 +30,11 @@ export interface StatsResponse {
 
 class DashboardService extends ApiClient {
     constructor() {
-        super("");
+        super("master-admin");
     }
 
     async masterFetchStats() {
-        return this.get<{ data: StatsResponse["data"] }>("/stats");
+        return this.get<StatsResponse>("/server/stats");
     }
 }
 

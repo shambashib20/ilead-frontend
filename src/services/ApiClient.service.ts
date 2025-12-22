@@ -19,6 +19,7 @@ export interface NormalizedApiError {
 }
 
 const envBase = import.meta.env.VITE_API_URL as string;
+console.log("API BASE URL:", envBase);
 if (!envBase) {
   // Fail loudly during dev – you'll thank yourself later.
   console.error("VITE_API_URL is missing");

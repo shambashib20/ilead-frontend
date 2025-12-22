@@ -216,7 +216,7 @@ function WorkspaceTable({
             Prev
           </Button>
           <span className="text-sm dark:text-white">
-            Page {page} of {totalPages || 1}
+            Page {page} of {totalPages || 10}
           </span>
           <Button
             onClick={() => setPage(Math.min(totalPages, page + 1))}
