@@ -1,3 +1,4 @@
+import type { Property } from "@/features/workspace/services/Property.service";
 import { ApiClient } from "@/services/ApiClient.service";
 
 /* ---------- types ---------- */
@@ -7,13 +8,18 @@ export interface CampaignListPayload {
   limit: number;
 }
 
+interface PropertyObject {
+  _id: string;
+  name: string;
+}
+
 export interface Campaign {
   _id: string;
   type: string;
   title: string;
   message: string;
   attachments: any[];
-  property_id: string;
+  property_id: PropertyObject;
   meta?: {
     ray_id?: string;
     variable_map?: Record<string, string>;

@@ -22,6 +22,10 @@ interface AdminLoginResponse {
   status: string;
 }
 
+
+
+
+
 class AdminAuthService extends ApiClient {
   constructor() {
     super("auth");

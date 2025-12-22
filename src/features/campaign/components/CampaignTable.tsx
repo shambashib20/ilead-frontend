@@ -104,7 +104,7 @@ function CampaignTable({
                 <TableHead className="dark:text-gray-200 px-5">No.</TableHead>
                 <TableHead className="dark:text-gray-200">Title</TableHead>
                 <TableHead className="dark:text-gray-200">Type</TableHead>
-                <TableHead className="dark:text-gray-200">Message</TableHead>
+                <TableHead className="dark:text-gray-200">Org Name</TableHead>
                 <TableHead className="dark:text-gray-200">
                   Attachments
                 </TableHead>
@@ -133,8 +133,8 @@ function CampaignTable({
                       </span>
                     </TableCell>
                     <TableCell className="dark:text-white py-6 max-w-xs">
-                      <p className="truncate" title={campaign.message}>
-                        {campaign.message}
+                      <p className="truncate" title={campaign.property_id.name}>
+                        {campaign.property_id.name}
                       </p>
                     </TableCell>
                     <TableCell className="py-6">

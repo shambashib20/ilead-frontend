@@ -10,7 +10,7 @@ interface ClientHeaderProps {
 function ClientHeader({ search, setSearch }: ClientHeaderProps) {
   return (
     <div className="flex items-center justify-between shadow-lead dark:border-transparent dark:bg-primary px-3 py-3 rounded-sm mt-5">
-      <h2 className="text-2xl font-semibold dark:text-white">Client List</h2>
+      <h2 className="text-2xl font-semibold dark:text-white">CRM Leads</h2>
       <div className="flex items-center gap-5">
         <Input
           placeholder="Search by name, email, mobile..."
