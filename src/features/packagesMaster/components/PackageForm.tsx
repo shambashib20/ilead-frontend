@@ -63,8 +63,8 @@ function PackageForm({
         title: value.title,
         description: value.description,
         validity: value.validity,
-        validity_in_days: parseInt(value.validity_in_days),
-        price: parseFloat(value.price),
+        validity_in_days: String(value.validity_in_days),
+        price: String(value.price),
         features: value.features.filter((id) => id.trim() !== ""),
         status: value.status,
         meta: {

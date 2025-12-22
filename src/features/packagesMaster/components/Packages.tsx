@@ -1,4 +1,3 @@
-import React from "react";
 import { usePackages } from "../hooks/usePackages";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/useModalStore";

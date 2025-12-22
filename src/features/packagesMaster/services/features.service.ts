@@ -22,7 +22,9 @@ export interface Feature {
 export interface FeaturesResponse {
   message: string;
   status: "SUCCESS" | "FAILED" | string;
-  data: Feature[];
+  data: {
+    items: Feature[];
+  };
 }
 
 export interface CreateFeaturePayload {
@@ -48,8 +50,12 @@ class FeatureService extends ApiClient {
   }
 
   // Get all features
-  async getFeatures() {
-    return this.get<FeaturesResponse>("/features");
+  async getFeatures(payload: {
+    is_table_view: boolean;
+    page: number;
+    limit: number;
+  }) {
+    return this.post<FeaturesResponse>("/features/fetch", payload);
   }
 
   // Create new feature

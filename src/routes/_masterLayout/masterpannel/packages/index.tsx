@@ -1,4 +1,3 @@
-import { Card, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Features from "@/features/packagesMaster/components/Features";
 import Packages from "@/features/packagesMaster/components/Packages";
