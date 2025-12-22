@@ -2,6 +2,7 @@ import React from "react";
 import { usePackages } from "../hooks/usePackages";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/useModalStore";
+import PackageForm from "./PackageForm";
 
 function Packages() {
   const { packages, isLoading, isError, error } = usePackages();
@@ -12,7 +13,7 @@ function Packages() {
     setModalTitle("Add Package");
     openModal({
       type: "form",
-      content: <h3>Add packages</h3>,
+      content: <PackageForm />,
     });
   }
   if (isLoading) {
