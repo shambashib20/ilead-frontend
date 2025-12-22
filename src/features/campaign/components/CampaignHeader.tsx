@@ -1,6 +1,3 @@
-
-
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 interface CampaignHeaderProps {
@@ -9,11 +6,6 @@ interface CampaignHeaderProps {
 }
 
 function CampaignHeader({ search, setSearch }: CampaignHeaderProps) {
-  const handleAddCampaign = () => {
-    console.log("Add new campaign");
-    // Add your logic to open a modal or navigate to add campaign page
-  };
-
   return (
     <div className="flex items-center justify-between shadow-lead dark:border-transparent dark:bg-primary px-3 py-3 rounded-sm mt-5">
       <h2 className="text-xl font-semibold dark:text-white">Campaign List</h2>
@@ -27,7 +19,7 @@ function CampaignHeader({ search, setSearch }: CampaignHeaderProps) {
             if (e.key === "Escape") setSearch("");
           }}
         />
-        <Button onClick={handleAddCampaign}>+ Add Campaign</Button>
+        {/* <Button onClick={handleAddCampaign}>+ Add Campaign</Button> */}
       </div>
     </div>
   );
