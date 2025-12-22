@@ -51,6 +51,7 @@ import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLay
 import { Route as AuthLayoutAdminLoginImport } from './routes/_authLayout/admin/login'
 import { Route as MasterLayoutMasterpannelWorkspaceIndexImport } from './routes/_masterLayout/masterpannel/workspace/index'
 import { Route as MasterLayoutMasterpannelUsersIndexImport } from './routes/_masterLayout/masterpannel/users/index'
+import { Route as MasterLayoutMasterpannelPackagesIndexImport } from './routes/_masterLayout/masterpannel/packages/index'
 import { Route as MasterLayoutMasterpannelClientIndexImport } from './routes/_masterLayout/masterpannel/client/index'
 import { Route as MasterLayoutMasterpannelCampaignsIndexImport } from './routes/_masterLayout/masterpannel/campaigns/index'
 import { Route as MasterLayoutMasterpannelAddonsIndexImport } from './routes/_masterLayout/masterpannel/addons/index'
@@ -317,6 +318,13 @@ const MasterLayoutMasterpannelUsersIndexRoute =
   MasterLayoutMasterpannelUsersIndexImport.update({
     id: '/masterpannel/users/',
     path: '/masterpannel/users/',
+    getParentRoute: () => MasterLayoutRoute,
+  } as any)
+
+const MasterLayoutMasterpannelPackagesIndexRoute =
+  MasterLayoutMasterpannelPackagesIndexImport.update({
+    id: '/masterpannel/packages/',
+    path: '/masterpannel/packages/',
     getParentRoute: () => MasterLayoutRoute,
   } as any)
 
@@ -667,6 +675,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MasterLayoutMasterpannelClientIndexImport
       parentRoute: typeof MasterLayoutImport
     }
+    '/_masterLayout/masterpannel/packages/': {
+      id: '/_masterLayout/masterpannel/packages/'
+      path: '/masterpannel/packages'
+      fullPath: '/masterpannel/packages'
+      preLoaderRoute: typeof MasterLayoutMasterpannelPackagesIndexImport
+      parentRoute: typeof MasterLayoutImport
+    }
     '/_masterLayout/masterpannel/users/': {
       id: '/_masterLayout/masterpannel/users/'
       path: '/masterpannel/users'
@@ -823,6 +838,7 @@ interface MasterLayoutRouteChildren {
   MasterLayoutMasterpannelAddonsIndexRoute: typeof MasterLayoutMasterpannelAddonsIndexRoute
   MasterLayoutMasterpannelCampaignsIndexRoute: typeof MasterLayoutMasterpannelCampaignsIndexRoute
   MasterLayoutMasterpannelClientIndexRoute: typeof MasterLayoutMasterpannelClientIndexRoute
+  MasterLayoutMasterpannelPackagesIndexRoute: typeof MasterLayoutMasterpannelPackagesIndexRoute
   MasterLayoutMasterpannelUsersIndexRoute: typeof MasterLayoutMasterpannelUsersIndexRoute
   MasterLayoutMasterpannelWorkspaceIndexRoute: typeof MasterLayoutMasterpannelWorkspaceIndexRoute
 }
@@ -835,6 +851,8 @@ const MasterLayoutRouteChildren: MasterLayoutRouteChildren = {
     MasterLayoutMasterpannelCampaignsIndexRoute,
   MasterLayoutMasterpannelClientIndexRoute:
     MasterLayoutMasterpannelClientIndexRoute,
+  MasterLayoutMasterpannelPackagesIndexRoute:
+    MasterLayoutMasterpannelPackagesIndexRoute,
   MasterLayoutMasterpannelUsersIndexRoute:
     MasterLayoutMasterpannelUsersIndexRoute,
   MasterLayoutMasterpannelWorkspaceIndexRoute:
@@ -886,6 +904,7 @@ export interface FileRoutesByFullPath {
   '/masterpannel/addons': typeof MasterLayoutMasterpannelAddonsIndexRoute
   '/masterpannel/campaigns': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
+  '/masterpannel/packages': typeof MasterLayoutMasterpannelPackagesIndexRoute
   '/masterpannel/users': typeof MasterLayoutMasterpannelUsersIndexRoute
   '/masterpannel/workspace': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
@@ -931,6 +950,7 @@ export interface FileRoutesByTo {
   '/masterpannel/addons': typeof MasterLayoutMasterpannelAddonsIndexRoute
   '/masterpannel/campaigns': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
+  '/masterpannel/packages': typeof MasterLayoutMasterpannelPackagesIndexRoute
   '/masterpannel/users': typeof MasterLayoutMasterpannelUsersIndexRoute
   '/masterpannel/workspace': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
@@ -981,6 +1001,7 @@ export interface FileRoutesById {
   '/_masterLayout/masterpannel/addons/': typeof MasterLayoutMasterpannelAddonsIndexRoute
   '/_masterLayout/masterpannel/campaigns/': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/_masterLayout/masterpannel/client/': typeof MasterLayoutMasterpannelClientIndexRoute
+  '/_masterLayout/masterpannel/packages/': typeof MasterLayoutMasterpannelPackagesIndexRoute
   '/_masterLayout/masterpannel/users/': typeof MasterLayoutMasterpannelUsersIndexRoute
   '/_masterLayout/masterpannel/workspace/': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/_dashboardLayout/general-templates/lead-template/add-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
@@ -1029,6 +1050,7 @@ export interface FileRouteTypes {
     | '/masterpannel/addons'
     | '/masterpannel/campaigns'
     | '/masterpannel/client'
+    | '/masterpannel/packages'
     | '/masterpannel/users'
     | '/masterpannel/workspace'
     | '/general-templates/lead-template/add-template'
@@ -1073,6 +1095,7 @@ export interface FileRouteTypes {
     | '/masterpannel/addons'
     | '/masterpannel/campaigns'
     | '/masterpannel/client'
+    | '/masterpannel/packages'
     | '/masterpannel/users'
     | '/masterpannel/workspace'
     | '/general-templates/lead-template/add-template'
@@ -1121,6 +1144,7 @@ export interface FileRouteTypes {
     | '/_masterLayout/masterpannel/addons/'
     | '/_masterLayout/masterpannel/campaigns/'
     | '/_masterLayout/masterpannel/client/'
+    | '/_masterLayout/masterpannel/packages/'
     | '/_masterLayout/masterpannel/users/'
     | '/_masterLayout/masterpannel/workspace/'
     | '/_dashboardLayout/general-templates/lead-template/add-template/'
@@ -1214,6 +1238,7 @@ export const routeTree = rootRoute
         "/_masterLayout/masterpannel/addons/",
         "/_masterLayout/masterpannel/campaigns/",
         "/_masterLayout/masterpannel/client/",
+        "/_masterLayout/masterpannel/packages/",
         "/_masterLayout/masterpannel/users/",
         "/_masterLayout/masterpannel/workspace/"
       ]
@@ -1375,6 +1400,10 @@ export const routeTree = rootRoute
     },
     "/_masterLayout/masterpannel/client/": {
       "filePath": "_masterLayout/masterpannel/client/index.tsx",
+      "parent": "/_masterLayout"
+    },
+    "/_masterLayout/masterpannel/packages/": {
+      "filePath": "_masterLayout/masterpannel/packages/index.tsx",
       "parent": "/_masterLayout"
     },
     "/_masterLayout/masterpannel/users/": {
