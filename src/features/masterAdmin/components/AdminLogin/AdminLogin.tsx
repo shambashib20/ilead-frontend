@@ -30,8 +30,6 @@ function AdminLogin() {
       console.log("Submitting...", value);
 
       login({ email: value.email, password: value.password });
-
-      alert("Login successful ✅");
     },
   });
 
