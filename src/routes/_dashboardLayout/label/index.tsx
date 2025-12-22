@@ -73,7 +73,7 @@ function RouteComponent() {
     openModal({
       content: <CreateLabelForm />,
       type: "form",
-    });
+    }); 
   };
 
   const handleEdit = (label: any) => {

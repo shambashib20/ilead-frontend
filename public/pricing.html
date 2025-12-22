@@ -115,7 +115,7 @@
     <section class="pricing-sec2">
       <div class="container">
         <div class="content">
-          <div class="badge">Pricing</div>
+          <!-- <div class="badge">Pricing</div> -->
           <h2>Trusted by 14,000+ businesses</h2>
           <p>
             Leading companies across industries trust our solutions to drive
@@ -156,7 +156,7 @@
                           <div class="plan-note">(Excluding TAX)</div>
                         </th>
 
-                        <th class="plan-col plan-head">
+                        <th class="plan-col plan-head diamond">
                           <div class="plan-name">Diamond</div>
                           <div class="plan-old-price">₹ 5450</div>
                           <div class="plan-price-row">
@@ -166,7 +166,7 @@
                           <div class="plan-note">(Excluding TAX)</div>
                         </th>
 
-                        <th class="plan-col plan-head">
+                        <th class="plan-col plan-head platinum">
                           <div class="plan-name">Platinum</div>
                           <div class="plan-old-price">₹ 9750</div>
                           <div class="plan-price-row">
@@ -1014,7 +1014,101 @@
     </section>
 
     <script>
+      // Mobile Responsive Pricing Cards
+      function createMobilePlanCards() {
+        const table = document.querySelector(".pricing-table");
+        if (!table) return;
+
+        const planHeaders = table.querySelectorAll(".plan-head");
+        const featureRows = table.querySelectorAll("tbody tr:not(.buy-row)");
+
+        // Create container for mobile cards
+        const mobileContainer = document.createElement("div");
+        mobileContainer.className = "mobile-plans";
+
+        planHeaders.forEach((header, planIndex) => {
+          const planName = header.querySelector(".plan-name").textContent;
+          const planPrice = header.querySelector(".plan-price").textContent;
+          const planOldPrice =
+            header.querySelector(".plan-old-price").textContent;
+          const planNote = header.querySelector(".plan-note").textContent;
+
+          // Create plan card
+          const planCard = document.createElement("div");
+          planCard.className = `plan-card ${planName.toLowerCase()}`;
+
+          // Add header
+          const headerHTML = `
+      <div class="plan-card-header">
+        <div class="plan-card-title">${planName}</div>
+        <div class="plan-card-old-price">${planOldPrice}</div>
+        <div class="plan-card-price">${planPrice}<span class="plan-card-period">/ Year</span></div>
+        <div class="plan-card-note">${planNote}</div>
+      </div>
+      <div class="plan-features">
+    `;
+
+          // Add features
+          let featuresHTML = "";
+          featureRows.forEach((row) => {
+            const featureName = row.querySelector(".feature-name").textContent;
+            const featureCell = row.children[planIndex + 1];
+            let featureValue = "";
+
+            if (featureCell.classList.contains("icon-cell")) {
+              const icon = featureCell.querySelector(".icon");
+              if (icon.classList.contains("check")) {
+                featureValue = "✓";
+              } else {
+                featureValue = "✕";
+              }
+            } else {
+              featureValue = featureCell.textContent;
+            }
+
+            featuresHTML += `
+        <div class="feature-item">
+          <span class="feature-name">${featureName}</span>
+          <span class="feature-value ${
+            featureValue === "✕" ? "cross" : ""
+          }">${featureValue}</span>
+        </div>
+      `;
+          });
+
+          // Add buy button
+          const buyButton = table.querySelector(
+            `.buy-row td:nth-child(${planIndex + 2}) .btn-primary`
+          ).outerHTML;
+
+          planCard.innerHTML = headerHTML + featuresHTML + `</div>${buyButton}`;
+          mobileContainer.appendChild(planCard);
+        });
+
+        // Insert mobile cards before the table
+        table.parentNode.insertBefore(mobileContainer, table);
+
+        // Show/hide based on screen size
+        function toggleView() {
+          if (window.innerWidth <= 576) {
+            table.style.display = "none";
+            mobileContainer.style.display = "block";
+          } else {
+            table.style.display = "table";
+            mobileContainer.style.display = "none";
+          }
+        }
+
+        // Initial check
+        toggleView();
+
+        // Update on resize
+        window.addEventListener("resize", toggleView);
+      }
+
+      // Initialize when DOM is loaded
       document.addEventListener("DOMContentLoaded", function () {
+        // Existing tab functionality
         const tabBtns = document.querySelectorAll(".tab-btn");
         const tabPanes = document.querySelectorAll(".tab-pane");
 
@@ -1041,6 +1135,9 @@
             }
           });
         });
+
+        // Create mobile plan cards
+        createMobilePlanCards();
       });
     </script>
   </body>
