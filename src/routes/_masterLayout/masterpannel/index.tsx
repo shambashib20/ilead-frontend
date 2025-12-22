@@ -20,39 +20,32 @@ function StatCard({
 }) {
   const animations: Record<StatType, any> = {
     leads: {
-      initial: { opacity: 0, scale: 0.9 },
-      animate: { opacity: 1, scale: 1 },
-      transition: { duration: 0.4 },
+      initial: { opacity: 0 },
+      animate: { opacity: 1, x: 0 },
+      transition: { duration: 2.2, repeat: Infinity, repeatType: "loop" },
     },
 
     clients: {
-      initial: { opacity: 0, y: 30 },
-      animate: { opacity: 1, y: 0 },
-      transition: { duration: 0.5, ease: "easeOut" },
+      initial: { opacity: 0 },
+      animate: { opacity: 1, x: 0 },
+      transition: { duration: 2.2, repeat: Infinity, repeatType: "loop" },
     },
 
     customers: {
-      initial: { opacity: 0, scale: 0.95 },
-      animate: { opacity: 1, scale: 1 },
-      transition: { duration: 0.6 },
+      initial: { opacity: 0 },
+      animate: { opacity: 1, x: 0 },
+      transition: { duration: 2.2, repeat: Infinity, repeatType: "loop" },
     },
 
     vendors: {
-      initial: { opacity: 0, x: -20 },
+      initial: { opacity: 0 },
       animate: { opacity: 1, x: 0 },
-      transition: { duration: 0.5 },
+      transition: { duration: 2.2, repeat: Infinity, repeatType: "loop" },
     },
 
     activeVendors: {
       initial: { opacity: 0 },
-      animate: {
-        opacity: 1,
-        boxShadow: [
-          "0 0 0px rgba(34,197,94,0)",
-          "0 0 18px rgba(34,197,94,0.35)",
-          "0 0 0px rgba(34,197,94,0)",
-        ],
-      },
+      animate: { opacity: 1, x: 0 },
       transition: {
         duration: 2.2,
         repeat: Infinity,
