@@ -3,6 +3,7 @@ import {
   packageService,
   type CreatePackagePayload,
 } from "../services/packages.service";
+import { queryClient } from "@/utils/client";
 
 export const useCreatePackage = () => {
   const { mutate, isPending, error, isError } = useMutation({
@@ -10,6 +11,11 @@ export const useCreatePackage = () => {
       const response = await packageService.createPackage(packageData);
       return response.data;
     },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["packages"] });
+    },
+    onError: () => {},
   });
 
   return {
