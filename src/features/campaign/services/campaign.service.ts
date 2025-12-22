@@ -1,4 +1,4 @@
-import type { Property } from "@/features/workspace/services/Property.service";
+
 import { ApiClient } from "@/services/ApiClient.service";
 
 /* ---------- types ---------- */
