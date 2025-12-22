@@ -124,14 +124,18 @@ function RouteComponent() {
       <h1 className="mb-6 text-2xl font-bold">Master Dashboard</h1>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard title="Total Leads" value={stats?.totalLeads} type="leads" />
         <StatCard
-          title="Total Clients"
+          title="Leads across vendors"
+          value={stats?.totalLeads}
+          type="leads"
+        />
+        <StatCard
+          title="Client Leads"
           value={stats?.totalClients}
           type="clients"
         />
         <StatCard
-          title="Total Customers"
+          title="CRM Customers"
           value={stats?.totalCustomers}
           type="customers"
         />
