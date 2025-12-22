@@ -9,10 +9,10 @@ function WorkspaceMasterHeader({
   search,
   setSearch,
 }: WorkspaceMasterHeaderProps) {
-  const handleAddWorkspace = () => {
-    console.log("Add new workspace");
-    // Add your logic to open a modal or navigate to add workspace page
-  };
+  // const handleAddWorkspace = () => {
+  //   console.log("Add new workspace");
+  //   // Add your logic to open a modal or navigate to add workspace page
+  // };
 
   return (
     <div className="flex items-center justify-between shadow-lead dark:border-transparent dark:bg-primary px-3 py-3 rounded-sm mt-5">
