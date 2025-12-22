@@ -240,7 +240,9 @@
     updateSlider() {
       if (!this.wrapper) return;
 
-      this.wrapper.style.transform = `translateX(${-this.currentIndex * (100 / this.slidesPerView)}%)`;
+      this.wrapper.style.transform = `translateX(${
+        -this.currentIndex * (100 / this.slidesPerView)
+      }%)`;
 
       document.querySelectorAll(".dot").forEach((dot, i) => {
         dot.classList.toggle("active", i === this.currentIndex);
@@ -923,7 +925,6 @@
   // 9. Main Initialization
   // ============================================
 
-
   class MobileSidebar {
     constructor() {
       this.sidebar = document.getElementById("mobileSidebar");
@@ -991,7 +992,6 @@
       });
     }
   }
-
 
   class MainApp {
     constructor() {

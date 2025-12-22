@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ETC</title>
+    <link
+      rel="preload"
+      as="font"
+      href="/fonts/InterVariable.woff2"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      href="/fonts/Poppins-Regular.woff2"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- <div class="top_bar flex items-center justify-center">
+      <div class="container">
+        <div class="flex justify-between items-center">
+          <div class="col">
+            <h3 class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-check-icon lucide-check"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              Founded in Kolkata, We respect your privacy
+            </h3>
+          </div>
+          <div class="col">
+            <h3 class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-check-icon lucide-check"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              23,44,322 professional leads created
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <header>
+      <div class="container">
+        <div class="flex items-center">
+          <div class="logo">
+            <a href="">
+              <img src="/img/logo_dark.png" alt="" />
+            </a>
+          </div>
+          <nav>
+            <ul class="flex items-center justify-center">
+              <li class="active">
+                <a href=""> Home </a>
+              </li>
+              <li>
+                <a href="/pricing.html"> Pricing </a>
+              </li>
+
+              <li>
+                <a href="/contact.html"> Contacts </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="options">
+            <ul class="flex justify-end items-center">
+              <!-- <li>
+                <select name="" id="">
+                  <option value="">en</option>
+                </select>
+              </li> -->
+              <li>
+                <a href="" class="login">Login</a>
+              </li>
+              <li>
+                <button class="register" id="openModalBtn">
+                  <span>
+                    Get Started
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-arrow-right"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hamburger">
+            <button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-menu-icon lucide-menu"
+              >
+                <path d="M4 5h16" />
+                <path d="M4 12h16" />
+                <path d="M4 19h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <a href="">
+            <img src="/img/logo_dark.png" alt="" />
+          </a>
+        </div>
+        <button class="sidebar-close" id="sidebarClose">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active">
+            <a href="">Home</a>
+          </li>
+          <li>
+            <a href="/pricing.html">Pricing</a>
+          </li>
+          <li>
+            <a href="/contact.html">Contacts</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-options">
+        <ul>
+          <li>
+            <a href="" class="login">Login</a>
+          </li>
+          <li>
+            <button class="register">
+              <span>
+                Get Started
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="hero-sec">
+      <img src="./img/grid.png" alt="" class="img-grid" />
+      <div class="circle" data-animate data-stagger="150">
+        <span class="one"></span>
+        <span class="two"></span>
+        <span class="three"></span>
+      </div>
+
+      <!-- <div class="float-img"></div> -->
+      <div class="gradient g1"></div>
+      <div class="container">
+        <!-- <div class="gradient g1"></div>
+        <div class="gradient g2"></div>
+        <div class="gradient g3"></div> -->
+
+        <div class="content" data-stagger="100">
+          <h6 data-animate="zoom-in" data-delay="0" data-duration="1000">
+            <span>New!!!</span>Auto leads managment supports added
+          </h6>
+
+          <h2 data-animate="fade-up" data-delay="60" data-duration="1500">
+            <span class="bold">Close Deals Faster</span> Follow-ups That Never
+            <span class="color"> Missed</span>
+          </h2>
+
+          <p data-animate="fade-up" data-delay="120" data-duration="1800">
+            No more <span> lost leads</span>, <span> missed calls</span>, or
+            <span>forgotten follow-ups</span>. A simple CRM that keeps you
+            ahead—without the chaos of spreadsheets.
+          </p>
+
+          <ul data-stagger="300">
+            <li data-animate="fade-up" data-duration="1000">
+              <button class="btn btn-primary">
+                <span>
+                  Start Free Trial
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-arrow-right"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </span>
+              </button>
+            </li>
+          </ul>
+
+          <div class="box" data-animate="fade-up" data-duration="500">
+            <!-- <div class="trust" data-animate="fade-right" data-delay="0">
+              <img src="/img/trusticons.png" alt="" />
+              <h4 data-animate="zoom-in" data-delay="10">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="#00c378"
+                  stroke="#00c378"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-star-icon lucide-star"
+                >
+                  <path
+                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+                  />
+                </svg>
+                Truster
+              </h4>
+            </div> -->
+
+            <div class="user" data-animate="fade-up" data-delay="100">
+              <ul data-stagger="80">
+                <li data-animate="zoom-in">
+                  <img src="/img/user.png" alt="user_img" />
+                </li>
+                <li data-animate="zoom-in">
+                  <img src="/img/user.png" alt="user_img" />
+                </li>
+                <li data-animate="zoom-in">
+                  <img src="/img/user.png" alt="user_img" />
+                </li>
+                <li data-animate="zoom-in">
+                  <img src="/img/user.png" alt="user_img" />
+                </li>
+              </ul>
+              <h5 data-animate="fade-up" data-delay="0">
+                Trusted by <span>14,000+</span> bof SDRs,Sales Ops,Team Leads &
+                more
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="collapse-sec">
+      <div class="container">
+        <img src="./img/application-img.png" alt="" />
+      </div>
+    </div>
+
+    <div class="companies">
+      <div class="content">
+        <div class="container">
+          <div class="slider-container">
+            <div class="logos-slider">
+              <div class="logos-wrapper" id="logosWrapper">
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/7/76/Slack_Icon.png"
+                    alt="Slack"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+                    alt="Amazon"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+                    alt="Microsoft"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+                    alt="Google"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+                    alt="IBM"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+                    alt="Netflix"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/0/02/Stack_Overflow_logo.svg"
+                    alt="Stack Overflow"
+                  />
+                </div>
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                    alt="Spotify"
+                  />
+                </div>
+
+                <div class="logo-slide">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+                    alt="Instagram"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="btn-slider" id="prevBtn">❮</button>
+            <div class="dots" id="dotsContainer"></div>
+            <button class="btn-slider" id="nextBtn">❯</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section
+      class="lose-details"
+      data-animate="fade-in"
+      data-duration="1000"
+      data-delay="0"
+    >
+      <div class="container">
+        <div class="g1 gradient"></div>
+        <div class="g2 gradient"></div>
+        <div class="g5 gradient"></div>
+
+        <div class="content text-center" data-stagger="120">
+          <h6 class="badge" data-animate="fade-up" data-duration="1000">
+            Problem
+          </h6>
+          <h3 data-animate="fade-up" data-duration="1500">
+            Why do most sales teams lose deals?
+          </h3>
+          <p data-animate="fade-up" data-duration="1700">
+            No more lost leads, missed calls, or forgotten follow-ups. A simple
+            CRM that keeps you ahead—without the chaos of spreadsheets.
+          </p>
+        </div>
+
+        <div class="vs grid">
+          <div
+            class="col before"
+            data-animate="fade-right"
+            data-duration="1000"
+          >
+            <div class="tag before">Before</div>
+            <img
+              src="/img/vs-img1.png"
+              alt=""
+              style="filter: grayscale(1)"
+              data-animate="rise-parallax"
+              data-duration="1200"
+              data-easing="cubic-bezier(.2,.9,.2,1.1)"
+            />
+            <div class="before-icons">
+              <img src="./img/before-img1.png" alt="" />
+              <img src="./img/before-img2.png" alt="" />
+              <img src="./img/before-img3.png" alt="" />
+              <img src="./img/before-img4.png" alt="" />
+            </div>
+            <ul>
+              <li>
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-chart-scatter-icon lucide-chart-scatter"
+                  >
+                    <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                    <circle cx="18.5" cy="5.5" r=".5" fill="currentColor" />
+                    <circle cx="11.5" cy="11.5" r=".5" fill="currentColor" />
+                    <circle cx="7.5" cy="16.5" r=".5" fill="currentColor" />
+                    <circle cx="17.5" cy="14.5" r=".5" fill="currentColor" />
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16" /></svg
+                ></span>
+                <div>
+                  <h5>1. Scattered Leads</h5>
+                  <p>Leads scattered across spreadsheets & WhatsApp chats</p>
+                </div>
+              </li>
+              <li>
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-spotlight-icon lucide-spotlight"
+                  >
+                    <path d="M15.295 19.562 16 22" />
+                    <path d="m17 16 3.758 2.098" />
+                    <path d="m19 12.5 3.026-.598" />
+                    <path
+                      d="M7.61 6.3a3 3 0 0 0-3.92 1.3l-1.38 2.79a3 3 0 0 0 1.3 3.91l6.89 3.597a1 1 0 0 0 1.342-.447l3.106-6.211a1 1 0 0 0-.447-1.341z"
+                    />
+                    <path d="M8 9V2" /></svg
+                ></span>
+                <div>
+                  <h5>2. Forgot Follow Up’s</h5>
+                  <p>Salespeople forget follow-ups, deals slip away</p>
+                </div>
+              </li>
+              <li>
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-eye-off-icon lucide-eye-off"
+                  >
+                    <path
+                      d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+                    />
+                    <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                    <path
+                      d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+                    />
+                    <path d="m2 2 20 20" /></svg
+                ></span>
+                <div>
+                  <h5>3. Zero Visibility</h5>
+                  <p>Managers have zero visibility into what’s happening</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bar">
+            <span>Vs</span>
+          </div>
+          <div class="col after" data-animate="fade-left" data-duration="1000">
+            <div class="tag after">After</div>
+            <img
+              src="/img/vs-img2.png"
+              alt=""
+              data-animate="rise-parallax"
+              data-duration="1350"
+            />
+            <h4><img src="/img/logo.png" alt="" /></h4>
+            <ul>
+              <li>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-scan-eye-icon lucide-scan-eye"
+                  >
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+                    <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+                    <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+                    <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+                    <circle cx="12" cy="12" r="1" />
+                    <path
+                      d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <h5>1. Capture Lead</h5>
+                  <p>One inbox to capture every lead from anywhere</p>
+                </div>
+              </li>
+              <li>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-bell-icon lucide-bell"
+                  >
+                    <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+                    <path
+                      d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+                    />
+                  </svg>
+                </span>
+                <div>
+                  <h5>2. Smart Reminders</h5>
+                  <p>Smart reminders & SLA timers keep follow-ups on track</p>
+                </div>
+              </li>
+              <li>
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-eye-icon lucide-eye"
+                  >
+                    <path
+                      d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                    />
+                    <circle cx="12" cy="12" r="3" /></svg
+                ></span>
+                <div>
+                  <h5>3. Full Visibility</h5>
+                  <p>Clear pipeline with full visibility for the entire team</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button
+          class="btn btn-primary"
+          data-animate="fade-up"
+          data-delay="250"
+          data-duration="500"
+        >
+          Know More
+        </button>
+      </div>
+    </section>
+
+    <section class="touch">
+      <div class="container">
+        <div class="content">
+          <h6 class="badge fade-up">
+            <i class="fas fa-link"></i> Connect With Us
+          </h6>
+          <h3 class="fade-up">What kind of photos do I need to upload?</h3>
+          <p class="fade-up">
+            Submit your details and our team will guide you through the photo
+            requirements for your specific needs.
+          </p>
+
+          <div class="photo-hint fade-up">
+            <i class="fas fa-info-circle"></i>
+            <span class="hint-text">View photo requirements & guidelines</span>
+          </div>
+        </div>
+
+        <div class="form">
+          <form action="">
+            <div class="grid">
+              <label class="fade-up">
+                Name
+                <i class="fas fa-user icon"></i>
+                <input type="text" placeholder="Your full name" />
+              </label>
+              <label class="fade-up">
+                Email
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" placeholder="your.email@example.com" />
+              </label>
+              <label class="fade-up">
+                Phone No.
+                <i class="fas fa-phone icon"></i>
+                <input type="tel" placeholder="+1 (123) 456-7890" />
+              </label>
+              <label class="fade-up">
+                City
+                <i class="fas fa-city icon"></i>
+                <input type="text" placeholder="Your city" />
+              </label>
+              <label class="fade-up">
+                Message
+                <i class="fas fa-comment icon"></i>
+                <textarea
+                  placeholder="Tell us about your project and photo requirements..."
+                ></textarea>
+              </label>
+            </div>
+            <div class="text-center">
+              <button class="btn btn-primary zoom-in">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="features" data-animate="fade-in" data-duration="700">
+      <div class="container">
+        <div class="g3 gradient"></div>
+        <div class="g4 gradient"></div>
+
+        <!-- Headline block: neat cascade -->
+        <div class="content text-center" data-stagger="120">
+          <h6 class="badge" data-animate="fade-up">Problem</h6>
+          <h3 data-animate="fade-up">Less chaos. More closed deals</h3>
+          <p data-animate="fade-up">
+            Eliminate lost leads, missed opportunities, and forgotten follow-ups
+            with our intelligent lead management CRM. Stay organized, track
+            every interaction, and close deals faster—without spreadsheets or
+            complicated workflows
+          </p>
+        </div>
+
+        <!-- Top row: left & right cards -->
+        <div class="feature_grid">
+          <div class="grid" data-stagger="120">
+            <!-- Card 1: Capture -->
+            <div class="col red" data-animate="fade-up" data-duration="600">
+              <div class="parallax-wrapper">
+                <div class="icon-container">
+                  <img src="./img/card1.chart.svg" alt="" />
+                </div>
+                <div class="parallax-bg"></div>
+              </div>
+              <h5>
+                Capture Every Lead from Any Channel
+                <svg
+                  class="title-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </h5>
+              <p>
+                Never lose a lead again. Automatically capture incoming leads
+                from emails, phone calls, web forms, social media, and WhatsApp
+                in one centralized location. Our lead management system ensures
+                no prospect slips through the cracks, giving your sales team a
+                complete view of every potential customer.
+              </p>
+            </div>
+
+            <!-- Card 2: Organize -->
+            <div
+              class="col blue"
+              data-animate="fade-up"
+              data-duration="650"
+              data-delay="60"
+            >
+              <div class="parallax-wrapper">
+                <div class="icon-container">
+                  <img
+                    src="./img/card3.chart.svg"
+                    alt=""
+                    style="width: 500px; height: auto"
+                  />
+                </div>
+                <div class="parallax-bg"></div>
+              </div>
+              <h5>
+                Organize Your Sales Pipeline—One Clean View
+                <svg
+                  class="title-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </h5>
+              <p>
+                See your entire lead management pipeline at a glance. All leads
+                are automatically organized by sales stage, assigned owner, and
+                priority level. Track prospects from initial contact to deal
+                closure with customizable pipeline stages that match your unique
+                sales process. No more confusion. Pure clarity.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom row: 3-up, slight stagger -->
+          <div class="flex equal-space" data-stagger="100">
+            <!-- Card 3: Follow-up -->
+            <div class="col red" data-animate="fade-up" data-duration="600">
+              <div class="parallax-wrapper">
+                <div class="icon-container">
+                  <img src="./img/card2.chart.svg" alt="" />
+                </div>
+                <div class="parallax-bg"></div>
+              </div>
+              <h5>
+                Never Miss a Follow-Up Again
+                <svg
+                  class="title-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </h5>
+              <p>
+                Automatic reminders ensure no deal slips through the cracks. Set
+                follow-up schedules, get timely notifications, and track every
+                customer interaction—emails, calls, meetings, and notes. Our
+                intelligent lead management CRM keeps your team accountable and
+                prospects engaged at every stage of the sales cycle.
+              </p>
+            </div>
+
+            <!-- Card 4: Visibility -->
+            <div class="col blue" data-animate="fade-up" data-duration="650">
+              <div class="parallax-wrapper">
+                <div class="icon-container">
+                  <img src="./img/card4.chart.svg" alt="" />
+                </div>
+                <div class="parallax-bg"></div>
+              </div>
+              <h5>
+                Identify Bottlenecks in Your Sales Process
+                <svg
+                  class="title-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </h5>
+              <p>
+                Instantly recognize which deals need attention today. Spot
+                stalled opportunities, identify pipeline bottlenecks, and
+                understand where prospects are getting stuck. Use real-time
+                analytics to make data-driven decisions and accelerate your
+                sales cycle. Know exactly where to focus your effort for maximum
+                impact
+              </p>
+            </div>
+
+            <!-- Card 5: Close -->
+            <div class="col red" data-animate="fade-up" data-duration="700">
+              <div class="parallax-wrapper">
+                <div class="icon-container">
+                  <img src="./img/card5.chart.svg" alt="" />
+                </div>
+                <div class="parallax-bg"></div>
+              </div>
+              <h5>
+                Close Deals with Data-Driven Confidence
+                <svg
+                  class="title-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </h5>
+              <p>
+                Stop guessing. Know your win probability at every stage. Our
+                lead management CRM provides actionable insights to help you
+                focus on high-probability opportunities and move deals forward
+                strategically. Close more deals, faster, with less wasted effort
+                on prospects that won't convert.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="features reviews"
+      data-animate="fade-in"
+      data-duration="700"
+    >
+      <div class="container">
+        <div class="content text-center" data-stagger="120">
+          <h6 class="badge" data-animate="fade-up">Reviews</h6>
+          <h3 data-animate="fade-up">Not just another CRM</h3>
+          <p data-animate="fade-up">
+            Real teams. Real results. Short, honest reviews from people who
+            actually use it.
+          </p>
+        </div>
+        <div>
+          <article class="featured" data-animate="fade-up" data-duration="650">
+            <div class="card top">
+              <div class="flex">
+                <img
+                  src="/img/user-dummy.png"
+                  alt="User avatar"
+                  data-animate="rise-parallax"
+                  data-duration="700"
+                />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Architect</span>
+                  <ul aria-label="Rating">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+              <p>
+                We replaced scattered sheets with one pipeline. Follow-ups
+                stopped slipping, and deals closed faster.
+              </p>
+              <button
+                class="btn btn-primary"
+                data-animate="fade-in"
+                data-duration="400"
+              >
+                Read more
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- <div class="masonry">
+          <article class="col">
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+          </article>
+          <article class="col span-2">
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+          </article>
+          <article class="col">
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+          </article>
+          <article class="col">
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+            <div class="card">
+              <div class="flex">
+                <img src="/img/user-dummy.png" alt="" />
+                <h4>
+                  Tushar Dutta
+                  <span>Software Archotecture</span>
+                  <ul class="">
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                    <li>⭐</li>
+                  </ul>
+                </h4>
+              </div>
+
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Adipisci enim, ipsam alias quos officia pariatur aspernatur, hic
+                totam fugit doloribus debitis corrupti minus laudantium eveniet
+                obcaecati non error natus nulla.
+              </p>
+              <button class="btn btn-primary">Read more</button>
+            </div>
+          </article>
+        </div> -->
+
+        <div
+          class="horizontal-scroll-container"
+          data-animate="fade-up"
+          data-duration="650"
+        >
+          <div class="scroll-wrapper" id="scrollWrapper" data-stagger="120">
+            <!-- Cards injected by JS -->
+          </div>
+        </div>
+
+        <button class="btn btn-primary" data-animate="zoom-in" data-delay="150">
+          See More
+        </button>
+      </div>
+    </section>
+    <section class="touch">
+      <div class="container">
+        <div class="content">
+          <h6 class="badge fade-up">
+            <i class="fas fa-link"></i> Connect With Us
+          </h6>
+          <h3 class="fade-up">What kind of photos do I need to upload?</h3>
+          <p class="fade-up">
+            Submit your details and our team will guide you through the photo
+            requirements for your specific needs.
+          </p>
+
+          <div class="photo-hint fade-up">
+            <i class="fas fa-info-circle"></i>
+            <span class="hint-text">View photo requirements & guidelines</span>
+          </div>
+        </div>
+
+        <div class="form">
+          <form action="">
+            <div class="grid">
+              <label class="fade-up">
+                Name
+                <i class="fas fa-user icon"></i>
+                <input type="text" placeholder="Your full name" />
+              </label>
+              <label class="fade-up">
+                Email
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" placeholder="your.email@example.com" />
+              </label>
+              <label class="fade-up">
+                Phone No.
+                <i class="fas fa-phone icon"></i>
+                <input type="tel" placeholder="+1 (123) 456-7890" />
+              </label>
+              <label class="fade-up">
+                City
+                <i class="fas fa-city icon"></i>
+                <input type="text" placeholder="Your city" />
+              </label>
+              <label class="fade-up">
+                Message
+                <i class="fas fa-comment icon"></i>
+                <textarea
+                  placeholder="Tell us about your project and photo requirements..."
+                ></textarea>
+              </label>
+            </div>
+            <div class="text-center">
+              <button class="btn btn-primary zoom-in">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="features">
+      <div class="container">
+        <div class="content text-center" data-stagger="120">
+          <h6 class="badge" data-animate="fade-up">Integrations</h6>
+          <h3 data-animate="fade-up">Integrations that make life easier.</h3>
+          <p data-animate="fade-up">
+            No switching tabs, no copy-paste chaos. etcCRM fits into your
+            workflow.
+          </p>
+        </div>
+
+        <div class="integrations">
+          <img src="/img/glassbg.jpg" alt="Glass background" />
+          <div class="cont">
+            <div class="flex">
+              <div class="item" data-animate="fade-left" data-duration="650">
+                <h6>Seamless Integrations with 365 CRM</h6>
+                <p>
+                  Effortlessly connect 365 CRM Software with your favorite tools
+                  and platforms. From lead generation platforms like IndiaMART,
+                  TradeIndia, and MagicBricks to communication tools like
+                  WhatsApp, Google Calendar, and Gmail - integrate them all to
+                  streamline your workflow. Simplify your operations and enhance
+                  productivity with powerful integrations designed for your
+                  business.
+                </p>
+                <button
+                  class="btn btn-primary"
+                  data-animate="zoom-in"
+                  data-delay="150"
+                >
+                  Get Started
+                </button>
+              </div>
+              <div class="item flex" data-stagger="200">
+                <div class="data">
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/pint.png" alt="" />
+                  </div>
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/facebook.png" alt="" />
+                  </div>
+                </div>
+                <div class="data">
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/chat.png" alt="" />
+                  </div>
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/google.png" alt="" />
+                  </div>
+                </div>
+                <div class="data">
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/pp.png" alt="" />
+                  </div>
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/youtube.png" alt="" />
+                  </div>
+                </div>
+                <div class="data">
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/magic-briks.png" alt="" />
+                  </div>
+                  <div class="int-card" data-animate="rise-parallax">
+                    <img src="/img/magic-briks.png" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing" data-animate="fade-in" data-duration="700">
+      <div class="content" data-stagger="120">
+        <h6 class="badge" data-animate="fade-up">Pricing</h6>
+        <h3 data-animate="fade-up">
+          Professional headshots for 8× less than a physical photo shoot
+        </h3>
+        <p data-animate="fade-up">
+          The average cost of professional headshots in the United States is
+          $232.50*. Our packages start from just $29.
+        </p>
+      </div>
+
+      <div class="pricing-grid" data-stagger="120">
+        <!-- Plan 1 -->
+        <div class="plan" data-animate="fade-up" data-duration="600">
+          <h4>Basic</h4>
+          <div class="price">$29</div>
+          <h5>Per Month</h5>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+          <ul>
+            <li>✔ 40 headshots</li>
+            <li>✔ 3 hours turnaround time</li>
+            <li>✔ 4 unique styles</li>
+            <li>✔ 40 headshots</li>
+            <li>✔ 3 hours turnaround time</li>
+            <li>✔ 4 unique styles</li>
+          </ul>
+          <button class="btn" data-animate="zoom-in" data-duration="400">
+            Start Free Trial
+          </button>
+        </div>
+
+        <!-- Featured -->
+        <div class="plan featured" data-animate="zoom-in" data-duration="650">
+          <h4>Professional</h4>
+          <div class="price">$39</div>
+          <h5>Per Month</h5>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+          <ul>
+            <li>✔ 40 headshots</li>
+            <li>✔ 3 hours turnaround time</li>
+            <li>✔ 4 unique styles</li>
+            <li>✔ 40 headshots</li>
+            <li>✔ 3 hours turnaround time</li>
+            <li>✔ 4 unique styles</li>
+          </ul>
+          <button
+            class="btn btn-primary"
+            data-animate="zoom-in"
+            data-delay="80"
+          >
+            Get Started
+          </button>
+        </div>
+
+        <!-- Plan 3 -->
+        <div class="plan" data-animate="fade-up" data-duration="700">
+          <h4>Executive</h4>
+          <div class="price">$59</div>
+          <h5>Per Month</h5>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+          <ul>
+            <li>✔ 40 headshots</li>
+            <li>✔ 3 hours turnaround time</li>
+            <li>✔ 4 unique styles</li>
+            <li>✔ 40 headshots</li>
+            <li>✔ 3 hours turnaround time</li>
+            <li>✔ 4 unique styles</li>
+          </ul>
+          <button class="btn" data-animate="zoom-in" data-duration="400">
+            Book a Demo
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="container">
+        <div class="content text-center" data-stagger="120">
+          <h6 class="badge" data-animate="fade-up">FAQ</h6>
+          <h3 data-animate="fade-up">Frequently Asked Questions</h3>
+          <p data-animate="fade-up">
+            No switching tabs, no copy-paste chaos. etcCRM fits into your
+            workflow.
+          </p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="accord">
+            <h3>
+              What kind of photos do I need to upload?
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-up"
+                >
+                  <path d="m18 15-6-6-6 6" />
+                </svg>
+              </span>
+            </h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus aut ullam exercitationem minus vitae. Minima
+              dignissimos, provident tempore assumenda ipsum odit consectetur
+              quis nam est exercitationem officiis libero cum sapiente!
+            </p>
+          </div>
+          <div class="accord">
+            <h3>
+              How do I integrate etcCRM with my existing tools?
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-up"
+                >
+                  <path d="m18 15-6-6-6 6" />
+                </svg>
+              </span>
+            </h3>
+            <p>
+              Our platform offers seamless integration with popular tools like
+              Slack, Google Workspace, Microsoft Office, and many more through
+              our API. Setup is straightforward with our step-by-step
+              integration guide.
+            </p>
+          </div>
+          <div class="accord">
+            <h3>
+              Is there a free trial available?
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-up"
+                >
+                  <path d="m18 15-6-6-6 6" />
+                </svg>
+              </span>
+            </h3>
+            <p>
+              Yes, we offer a 14-day free trial with full access to all
+              features. No credit card required to start. After the trial, you
+              can choose from our flexible pricing plans that scale with your
+              business needs.
+            </p>
+          </div>
+          <div class="accord">
+            <h3>
+              What kind of customer support do you provide?
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-up"
+                >
+                  <path d="m18 15-6-6-6 6" />
+                </svg>
+              </span>
+            </h3>
+            <p>
+              We provide 24/7 customer support through multiple channels
+              including live chat, email, and phone. All our customers also get
+              access to comprehensive documentation and video tutorials.
+            </p>
+          </div>
+          <div class="accord">
+            <h3>
+              Can I customize etcCRM for my specific business needs?
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-up"
+                >
+                  <path d="m18 15-6-6-6 6" />
+                </svg>
+              </span>
+            </h3>
+            <p>
+              Absolutely! etcCRM is highly customizable. You can create custom
+              fields, workflows, reports, and dashboards tailored to your
+              specific business processes. Our enterprise plans even include
+              custom development options.
+            </p>
+          </div>
+          <div class="accord">
+            <h3>
+              How secure is my data with etcCRM?
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-chevron-up"
+                >
+                  <path d="m18 15-6-6-6 6" />
+                </svg>
+              </span>
+            </h3>
+            <p>
+              We take data security seriously. Our platform uses
+              enterprise-grade encryption, regular security audits, and complies
+              with GDPR and other privacy regulations. We also offer advanced
+              security features like two-factor authentication and role-based
+              access control.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="tech-stack-section"
+      data-animate="fade-in"
+      data-duration="700"
+    >
+      <div class="content" data-stagger="120">
+        <h6 class="badge" data-animate="fade-up">Tech Stack</h6>
+
+        <h2 class="section-heading" data-animate="fade-up">
+          Tech Stack We Used
+        </h2>
+        <p class="section-subtitle" data-animate="fade-up">
+          Our technology ecosystem revolves around robust, scalable solutions
+          that power your success.
+        </p>
+      </div>
+
+      <div class="solar-system">
+        <!-- lines layer -->
+        <div id="connectionLines" class="connection-lines-layer"></div>
+
+        <!-- center -->
+        <div class="center-logo">
+          <img src="/img/logo_small.png" alt="" />
+        </div>
+
+        <!-- React on its own orbit -->
+        <div class="orbit orbit-1a">
+          <div class="tech-planet">
+            <img src="/img/react.png" />
+            <div class="tech-label">React</div>
+          </div>
+        </div>
+
+        <!-- Node on another orbit (same radius, diff motion) -->
+        <div class="orbit orbit-1b">
+          <div class="tech-planet">
+            <img src="/img/node.png" />
+            <div class="tech-label">Node.js</div>
+          </div>
+        </div>
+
+        <!-- extra examples -->
+        <div class="orbit orbit-2">
+          <div class="tech-planet">
+            <img src="/img/nextjs.png" alt="" />
+            <div class="tech-label">Vue</div>
+          </div>
+        </div>
+
+        <div class="orbit orbit-3">
+          <div class="tech-planet">
+            <img src="/img/tailwind.png" alt="" />
+            <div class="tech-label">tailwind</div>
+          </div>
+        </div>
+
+        <div class="orbit orbit-4">
+          <div class="tech-planet">
+            <img src="/img/razor.png" alt="" />
+            <div class="tech-label">Angular</div>
+          </div>
+        </div>
+
+        <!-- Orbit 5 -->
+        <div class="orbit orbit-5">
+          <div class="tech-planet">
+            <img src="/img/aws.png" alt="" />
+            <div class="tech-label">Python</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="touch">
+      <div class="container">
+        <div class="content">
+          <h6 class="badge fade-up">
+            <i class="fas fa-link"></i> Connect With Us
+          </h6>
+          <h3 class="fade-up">What kind of photos do I need to upload?</h3>
+          <p class="fade-up">
+            Submit your details and our team will guide you through the photo
+            requirements for your specific needs.
+          </p>
+
+          <div class="photo-hint fade-up">
+            <i class="fas fa-info-circle"></i>
+            <span class="hint-text">View photo requirements & guidelines</span>
+          </div>
+        </div>
+
+        <div class="form">
+          <form action="">
+            <div class="grid">
+              <label class="fade-up">
+                Name
+                <i class="fas fa-user icon"></i>
+                <input type="text" placeholder="Your full name" />
+              </label>
+              <label class="fade-up">
+                Email
+                <i class="fas fa-envelope icon"></i>
+                <input type="email" placeholder="your.email@example.com" />
+              </label>
+              <label class="fade-up">
+                Phone No.
+                <i class="fas fa-phone icon"></i>
+                <input type="tel" placeholder="+1 (123) 456-7890" />
+              </label>
+              <label class="fade-up">
+                City
+                <i class="fas fa-city icon"></i>
+                <input type="text" placeholder="Your city" />
+              </label>
+              <label class="fade-up">
+                Message
+                <i class="fas fa-comment icon"></i>
+                <textarea
+                  placeholder="Tell us about your project and photo requirements..."
+                ></textarea>
+              </label>
+            </div>
+            <div class="text-center">
+              <button class="btn btn-primary zoom-in">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <div class="container">
+        <div class="footer-main">
+          <!-- Brand Column -->
+          <div class="footer-brand">
+            <a href="/" class="logo">
+              <img src="./img/logo_dark.png" alt="" />
+            </a>
+            <p class="brand-description">
+              A systematic CRM platform that qualifies, analyzes, and nurtures
+              all your business opportunities.
+            </p>
+
+            <!-- <div class="newsletter">
+              <h4>Stay updated</h4>
+              <div class="newsletter-form">
+                <input type="email" placeholder="Enter your email" />
+                <button class="btn btn-primary" type="submit">Subscribe</button>
+              </div>
+            </div> -->
+          </div>
+
+          <!-- Links Grid -->
+          <div class="footer-links">
+            <div class="link-group">
+              <h5>Product</h5>
+              <ul>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">Integrations</a></li>
+                <li><a href="#">API</a></li>
+                <li><a href="#">Status</a></li>
+              </ul>
+            </div>
+
+            <div class="link-group">
+              <h5>Company</h5>
+              <ul>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+                <li><a href="#">Partners</a></li>
+              </ul>
+            </div>
+
+            <div class="link-group">
+              <h5>Resources</h5>
+              <ul>
+                <li><a href="#">Documentation</a></li>
+                <li><a href="#">Tutorials</a></li>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Community</a></li>
+                <li><a href="#">Contact</a></li>
+              </ul>
+            </div>
+
+            <div class="link-group">
+              <h5>Legal</h5>
+              <ul>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Security</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+                <li><a href="#">GDPR</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <!-- <div class="contact-info">
+          <div class="contact-item">
+            <svg
+              class="contact-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="M4 21h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="m4 7 8 5 8-5"
+              />
+            </svg>
+            <a href="mailto:contact@365leadmanagement.com"
+              >contact@365leadmanagement.com</a
+            >
+          </div>
+
+          <div class="contact-item">
+            <svg
+              class="contact-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="M8.892 5.143A1 1 0 0 1 9.89 4.5h4.22a1 1 0 0 1 .998.643l.333 1a1 1 0 0 1-.997 1.357H9.556a1 1 0 0 1-.998-1.357l.334-1Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="M15.25 19.25h-6.5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h6.5a2 2 0 0 1 2 2v8.25a2 2 0 0 1-2 2Z"
+              />
+            </svg>
+            <a href="tel:+919913299890">+91 9913299890</a>
+          </div>
+
+          <div class="contact-item">
+            <svg
+              class="contact-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="1.5"
+                d="M19 10c0 3.866-7 9-7 9s-7-5.134-7-9a7 7 0 1 1 14 0Z"
+              />
+            </svg>
+            <span
+              >2047, Silver Business Point, Near VIP Circle, Uttran, Surat -
+              394105</span
+            >
+          </div>
+        </div> -->
+
+        <!-- Divider -->
+        <div class="footer-divider"></div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+          <div class="copyright">© 2025 ETC CRM. All rights reserved.</div>
+
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Twitter">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M23.953 4.57a10 10 0 0 1-2.825.775 4.958 4.958 0 0 0 2.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 0 0-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 0 0-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 0 1-2.228-.616v.06a4.923 4.923 0 0 0 3.946 4.827 4.996 4.996 0 0 1-2.212.085 4.936 4.936 0 0 0 4.604 3.417 9.867 9.867 0 0 1-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 0 0 7.557 2.213c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0 0 24 4.59z"
+                />
+              </svg>
+            </a>
+
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </a>
+
+            <a href="#" class="social-link" aria-label="GitHub">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                />
+              </svg>
+            </a>
+
+            <a href="#" class="social-link" aria-label="Facebook">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div id="floating-actions"></div>
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <button class="modal-close" id="modalCloseBtn">&times;</button>
+
+        <div class="modal-inner">
+          <!-- LEFT: FORM -->
+          <div class="modal-left">
+            <div>
+              <h2>Try our Demo</h2>
+              <p class="subtitle">
+                Fill in your details and we’ll get in touch shortly.
+              </p>
+            </div>
+
+            <form id="demoForm">
+              <div class="form-group">
+                <div class="form-control">
+                  <label for="fullName">Full Name</label>
+                  <input
+                    id="fullName"
+                    name="fullName"
+                    type="text"
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+
+                <div class="form-control">
+                  <label for="email">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+
+                <div class="form-control">
+                  <label for="phone">Phone Number</label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="+91 98765 43210"
+                  />
+                </div>
+
+                <div class="form-control">
+                  <label for="company">Company</label>
+                  <input
+                    id="company"
+                    name="company"
+                    type="text"
+                    placeholder="Company name"
+                  />
+                </div>
+
+                <div class="form-control">
+                  <label for="jobTitle">Job Title</label>
+                  <input
+                    id="jobTitle"
+                    name="jobTitle"
+                    type="text"
+                    placeholder="Product Manager"
+                  />
+                </div>
+              </div>
+
+              <button type="submit" class="submit-btn">Request Demo</button>
+
+              <p class="small-text">
+                By submitting this demo request form, you agree to our
+                <a href="#">Terms of Service</a>.
+              </p>
+            </form>
+          </div>
+
+          <!-- RIGHT: IMAGE -->
+          <div class="modal-right"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const hamburger = document.querySelector(".hamburger button");
+        const sidebar = document.getElementById("sidebar");
+        const sidebarClose = document.getElementById("sidebarClose");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+        // Open sidebar
+        hamburger.addEventListener("click", function () {
+          sidebar.classList.add("active");
+          sidebarOverlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        });
+
+        // Close sidebar
+        function closeSidebar() {
+          sidebar.classList.remove("active");
+          sidebarOverlay.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+
+        sidebarClose.addEventListener("click", closeSidebar);
+        sidebarOverlay.addEventListener("click", closeSidebar);
+
+        // Close sidebar when clicking on links
+        const sidebarLinks = sidebar.querySelectorAll("a");
+        sidebarLinks.forEach((link) => {
+          link.addEventListener("click", closeSidebar);
+        });
+      });
+    </script>
+    <script src="./scripts.js"></script>
+  </body>
+</html>
