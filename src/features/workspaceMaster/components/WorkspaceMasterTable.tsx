@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash, Eye, Activity } from "lucide-react";
+import { Pencil, Trash, Eye } from "lucide-react";
 import type { Property } from "../services/workspaceMaster.service";
 
 interface WorkspaceTableProps {
@@ -102,7 +102,7 @@ function WorkspaceTable({
                 <TableHead className="dark:text-gray-200">
                   Description
                 </TableHead>
-                <TableHead className="dark:text-gray-200">Usage</TableHead>
+
                 <TableHead className="dark:text-gray-200">Status</TableHead>
                 <TableHead className="dark:text-gray-200">Created At</TableHead>
                 <TableHead className="dark:text-gray-200">Actions</TableHead>
@@ -111,7 +111,7 @@ function WorkspaceTable({
             <TableBody className="bg-primary/60">
               {properties && properties.length > 0 ? (
                 properties.map((property, ind) => {
-                  const usagePercentage = calculateUsagePercentage(property);
+                  // const usagePercentage = calculateUsagePercentage(property);
                   return (
                     <TableRow key={property._id} className="py-2">
                       <TableCell className="dark:text-white px-5 py-6">
@@ -125,30 +125,7 @@ function WorkspaceTable({
                           {property.description || "No description"}
                         </p>
                       </TableCell>
-                      <TableCell className="py-6">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Activity
-                              size={14}
-                              className="dark:text-gray-400"
-                            />
-                            <span className="text-sm dark:text-white">
-                              {property.usage_count || 0} /{" "}
-                              {property.usage_limits || 0}
-                            </span>
-                          </div>
-                          {property.usage_limits && (
-                            <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                              <div
-                                className={`h-2 rounded-full ${getUsageColor(
-                                  usagePercentage
-                                )}`}
-                                style={{ width: `${usagePercentage}%` }}
-                              ></div>
-                            </div>
-                          )}
-                        </div>
-                      </TableCell>
+
                       <TableCell className="py-6">
                         {property.status ? (
                           <span
