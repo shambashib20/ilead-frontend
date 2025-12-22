@@ -219,7 +219,7 @@ const formatPrice = (
         {/* Grid */}
         {!isError && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
               {uiAddons.map((pkg) => {
                 const isSubscribing = subscribingId === pkg.id;
                 // const qty = quantities[pkg.id] ?? 1;
@@ -230,7 +230,7 @@ const formatPrice = (
                       pkg.highlight && !pkg.isCurrent
                         ? `${colors.cardHighlight} text-white shadow-2xl transform scale-105 border-0`
                         : `bg-gray-800 border-gray-700 border shadow-md`
-                    }`}
+                    } bg-primary`}
                   >
                     <div className="mb-4 flex gap-2">
                       {pkg.highlight && !pkg.isCurrent && (
@@ -248,10 +248,10 @@ const formatPrice = (
                     </div>
 
                     <h3
-                      className={`text-xl font-bold mb-2 ${
+                      className={`text-xl font-bold mb-2  ${
                         pkg.highlight && !pkg.isCurrent
-                          ? "text-white"
-                          : "text-white"
+                          ? "text-primary-foreground"
+                          : "text-primary-foreground"
                       }`}
                     >
                       {pkg.name}
@@ -260,8 +260,8 @@ const formatPrice = (
                     <p
                       className={`text-sm mb-1 ${
                         pkg.highlight && !pkg.isCurrent
-                          ? "text-blue-100"
-                          : "text-blue-100"
+                          ? "text-primary-foreground"
+                          : "text-primary-foreground"
                       }`}
                     >
                       Validity: {pkg.validityLabel}
@@ -271,8 +271,8 @@ const formatPrice = (
                       <span
                         className={`text-3xl font-bold ${
                           pkg.highlight && !pkg.isCurrent
-                            ? "text-white"
-                            : "text-white"
+                            ? "text-primary-foreground"
+                            : "text-primary-foreground"
                         }`}
                       >
                         {formatPrice(pkg.price, currency)}
