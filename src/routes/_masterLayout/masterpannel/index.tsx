@@ -6,20 +6,78 @@ export const Route = createFileRoute("/_masterLayout/masterpannel/")({
   component: RouteComponent,
 });
 
+
+type StatType = "leads" | "clients" | "customers" | "vendors" | "activeVendors";
+
 function StatCard({
   title,
   value,
+  type,
 }: {
   title: string;
   value?: number | string;
+  type: StatType;
 }) {
+  const animations: Record<StatType, any> = {
+    leads: {
+      initial: { opacity: 0, scale: 0.9 },
+      animate: { opacity: 1, scale: 1 },
+      transition: { duration: 0.4 },
+    },
+
+    clients: {
+      initial: { opacity: 0, y: 30 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+
+    customers: {
+      initial: { opacity: 0, scale: 0.95 },
+      animate: { opacity: 1, scale: 1 },
+      transition: { duration: 0.6 },
+    },
+
+    vendors: {
+      initial: { opacity: 0, x: -20 },
+      animate: { opacity: 1, x: 0 },
+      transition: { duration: 0.5 },
+    },
+
+    activeVendors: {
+      initial: { opacity: 0 },
+      animate: {
+        opacity: 1,
+        boxShadow: [
+          "0 0 0px rgba(34,197,94,0)",
+          "0 0 18px rgba(34,197,94,0.35)",
+          "0 0 0px rgba(34,197,94,0)",
+        ],
+      },
+      transition: {
+        duration: 2.2,
+        repeat: Infinity,
+        repeatType: "loop",
+      },
+    },
+  };
   return (
-    <div className="rounded-xl border bg-primary p-5 shadow-sm">
-      <p className="text-sm text-primary-foreground">{title}</p>
-      <h2 className="mt-2 text-3xl font-bold text-primary-foreground">
+    <motion.div
+      {...animations[type]}
+      whileHover={{ scale: 1.04 }}
+      className="rounded-xl border bg-primary p-5 shadow-sm cursor-pointer "
+    >
+      <p className="text-sm text-primary-foreground ">{title}</p>
+
+      <motion.h2
+        key={value}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="mt-2 text-3xl font-bold text-primary-foreground"
+      >
         {value ?? "—"}
-      </h2>
-    </div>
+      </motion.h2>
+    </motion.div>
   );
 }
 
@@ -47,7 +105,7 @@ function StatusCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       whileHover={{ scale: 1.03 }}
-      className={`rounded-2xl border p-6 shadow-sm ${statusStyles[status]}`}
+      className={`rounded-2xl border p-6 shadow-sm ${statusStyles[status]} cursor-pointer`}
     >
       <p className="text-sm font-medium opacity-80">{title}</p>
 
@@ -66,23 +124,38 @@ function RouteComponent() {
 
   const stats = data?.card_statistics;
   const system = data;
+  const server_message = data?.server;
 
   return (
     <div className="p-6">
       <h1 className="mb-6 text-2xl font-bold">Master Dashboard</h1>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard title="Total Leads" value={stats?.totalLeads} />
-        <StatCard title="Total Clients" value={stats?.totalClients} />
-        <StatCard title="Total Customers" value={stats?.totalCustomers} />
-        <StatCard title="Total Vendors" value={stats?.totalProperties} />
-        <StatCard title="Active Vendors" value={stats?.activeProperties} />
+        <StatCard title="Total Leads" value={stats?.totalLeads} type="leads" />
+        <StatCard
+          title="Total Clients"
+          value={stats?.totalClients}
+          type="clients"
+        />
+        <StatCard
+          title="Total Customers"
+          value={stats?.totalCustomers}
+          type="customers"
+        />
+        <StatCard
+          title="Total Vendors"
+          value={stats?.totalProperties}
+          type="vendors"
+        />
+        <StatCard
+          title="Active Vendors"
+          value={stats?.activeProperties}
+          type="activeVendors"
+        />
       </div>
 
       <div className="mt-10">
-        <h2 className="mb-4 text-xl font-semibold">
-          System & Integration Status
-        </h2>
+        <h1 className="mb-6 text-2xl font-bold">System & Integration Status</h1>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {/* Razorpay Webhook */}
@@ -130,6 +203,14 @@ function RouteComponent() {
             subtitle={system?.dbStatus}
             status="success"
           />
+        </div>
+      </div>
+
+      <div className="mt-10">
+        <h1 className="mb-6 text-2xl font-bold">Server Status</h1>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <p className="bg-primary">{server_message}</p>
         </div>
       </div>
     </div>
