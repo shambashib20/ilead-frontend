@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash, Eye, DollarSign } from "lucide-react";
+import { Pencil, Trash, Eye } from "lucide-react";
 import type { Addon } from "../services/addons.services";
 import { useModalStore } from "@/store/useModalStore";
 import CreateAddon from "./CreateAddon";
@@ -140,10 +140,6 @@ function AddonTable({
                     </TableCell>
                     <TableCell className="py-6">
                       <div className="flex items-center gap-1">
-                        <DollarSign
-                          size={16}
-                          className="text-green-600 dark:text-green-400"
-                        />
                         <span className="font-semibold text-green-600 dark:text-green-400">
                           {formatCurrency(addon.value)}
                         </span>
