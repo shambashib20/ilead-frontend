@@ -75,18 +75,18 @@ function WorkspaceTable({
     }
   };
 
-  const calculateUsagePercentage = (property: Property) => {
-    if (!property.usage_limits || property.usage_limits === 0) return 0;
-    const percentage =
-      ((property.usage_count || 0) / property.usage_limits) * 100;
-    return Math.min(percentage, 100);
-  };
+  // const calculateUsagePercentage = (property: Property) => {
+  //   if (!property.usage_limits || property.usage_limits === 0) return 0;
+  //   const percentage =
+  //     ((property.usage_count || 0) / property.usage_limits) * 100;
+  //   return Math.min(percentage, 100);
+  // };
 
-  const getUsageColor = (percentage: number) => {
-    if (percentage >= 90) return "bg-red-500";
-    if (percentage >= 70) return "bg-yellow-500";
-    return "bg-green-500";
-  };
+  // const getUsageColor = (percentage: number) => {
+  //   if (percentage >= 90) return "bg-red-500";
+  //   if (percentage >= 70) return "bg-yellow-500";
+  //   return "bg-green-500";
+  // };
 
   return (
     <>
