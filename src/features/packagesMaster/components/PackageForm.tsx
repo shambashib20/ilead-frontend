@@ -2,13 +2,14 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { useModalStore } from "@/store/useModalStore";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { useCreatePackage } from "../hooks/useCreatePackage";
 import { X } from "lucide-react";
+import { useUpdatePackage } from "../hooks/useUpdatePackage";
+import { useFeatures } from "../hooks/useFeature";
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -44,7 +45,12 @@ function PackageForm({
 }) {
   const { closeModal, setFormActions } = useModalStore();
   const { mutate: createPackage, isLoading: isCreating } = useCreatePackage();
-
+  const { mutate: updatePackage, isLoading: isUpdating } = useUpdatePackage();
+  const { features } = useFeatures({
+    is_table_view: false,
+    page: 1,
+    limit: 100,
+  });
   const isEditMode = !!packageData;
 
   const form = useForm({
@@ -73,25 +79,23 @@ function PackageForm({
       };
 
       if (!isEditMode) {
-        // Create mode
         createPackage(packagePayload, {
           onSuccess: () => {
             closeModal();
           },
         });
       } else {
-        // Edit mode
-        // updatePackage(
-        //   {
-        //     packageId: packageData._id,
-        //     ...packagePayload,
-        //   },
-        //   {
-        //     onSuccess: () => {
-        //       closeModal();
-        //     },
-        //   }
-        // );
+        updatePackage(
+          {
+            packageId: packageData._id,
+            ...packagePayload,
+          },
+          {
+            onSuccess: () => {
+              closeModal();
+            },
+          }
+        );
       }
     },
   });
@@ -100,14 +104,15 @@ function PackageForm({
     setFormActions?.({
       onSubmit: () => form.handleSubmit(),
       onCancel: () => form.reset(),
-      canSubmit: form.state.canSubmit && !isCreating,
-      isSubmitting: form.state.isSubmitting || isCreating,
+      canSubmit: form.state.canSubmit && !isCreating && !isUpdating,
+      isSubmitting: form.state.isSubmitting || isCreating || isUpdating,
     });
   }, [
     form.state.canSubmit,
     form.state.isSubmitting,
     isCreating,
     setFormActions,
+    isUpdating,
     form,
   ]);
 
@@ -356,38 +361,6 @@ function PackageForm({
           )}
         </form.Field>
       </div>
-
-      {/* Status Field (Only in Edit Mode) */}
-      {isEditMode && (
-        <div>
-          <form.Field
-            name="status"
-            children={(field) => {
-              return (
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <Label htmlFor={field.name} className="text-base">
-                      Status
-                    </Label>
-                    <div className="text-sm text-muted-foreground">
-                      {field.state.value === "ACTIVE"
-                        ? "Package is currently active"
-                        : "Package is currently inactive"}
-                    </div>
-                  </div>
-                  <Switch
-                    id={field.name}
-                    checked={field.state.value === "ACTIVE"}
-                    onCheckedChange={(checked) =>
-                      field.handleChange(checked ? "ACTIVE" : "INACTIVE")
-                    }
-                  />
-                </div>
-              );
-            }}
-          />
-        </div>
-      )}
     </form>
   );
 }

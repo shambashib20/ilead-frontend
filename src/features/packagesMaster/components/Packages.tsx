@@ -2,6 +2,7 @@ import { usePackages } from "../hooks/usePackages";
 import { Button } from "@/components/ui/button";
 import { useModalStore } from "@/store/useModalStore";
 import PackageForm from "./PackageForm";
+import type { PricingPlan } from "../services/packages.service";
 
 function Packages() {
   const { packages, isLoading, isError, error } = usePackages();
@@ -13,6 +14,16 @@ function Packages() {
     openModal({
       type: "form",
       content: <PackageForm />,
+    });
+  }
+
+  function handleEditPackage(item: PricingPlan) {
+    console.log(item);
+
+    setModalTitle("Edit Package");
+    openModal({
+      type: "form",
+      content: <PackageForm packageData={item as any} />,
     });
   }
   if (isLoading) {
@@ -71,6 +82,10 @@ function Packages() {
                   </li>
                 ))}
               </ul>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button onClick={() => handleEditPackage(item)}>Edit</Button>
+              {/* <Button onClick={() => handleDeletePackage(item)}>Delete</Button> */}
             </div>
           </div>
         ))}

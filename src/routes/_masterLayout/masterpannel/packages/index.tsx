@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Features from "@/features/packagesMaster/components/Features";
 import Packages from "@/features/packagesMaster/components/Packages";
+import { featuresQueryOptions } from "@/features/packagesMaster/hooks/useFeature";
 import { packagesQueryOptions } from "@/features/packagesMaster/hooks/usePackages";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -8,6 +9,13 @@ export const Route = createFileRoute("/_masterLayout/masterpannel/packages/")({
   component: RouteComponent,
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(packagesQueryOptions());
+    context.queryClient.ensureQueryData(
+      featuresQueryOptions({
+        is_table_view: false,
+        page: 1,
+        limit: 100,
+      })
+    );
   },
 });
 

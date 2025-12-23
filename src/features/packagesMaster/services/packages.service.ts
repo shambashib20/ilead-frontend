@@ -82,6 +82,25 @@ export interface CreatePackageResponse {
   status: "SUCCESS" | "FAILED" | string;
   data: PricingPlan;
 }
+export interface UpdatePackagePayload {
+  packageId: string;
+  title: string;
+  description: string;
+  validity: string; // ISO date format: "2026-02-12T00:00:00.000Z"
+  validity_in_days: string;
+  price: string;
+  features: string[]; // Array of feature IDs
+  status: PlanStatus;
+  meta?: {
+    package_code?: string;
+    [key: string]: unknown;
+  };
+}
+export interface UpdatePackageResponse {
+  message: string;
+  status: "SUCCESS" | "FAILED" | string;
+  data: PricingPlan;
+}
 
 /* ---------- service ---------- */
 
@@ -99,6 +118,13 @@ class PackageService extends ApiClient {
   async createPackage(payload: CreatePackagePayload) {
     return this.post<CreatePackageResponse>(
       "/package/create-manually",
+      payload
+    );
+  }
+
+  async updatePackage(payload: UpdatePackagePayload) {
+    return this.patch<UpdatePackageResponse>(
+      "/package/update-manually",
       payload
     );
   }
