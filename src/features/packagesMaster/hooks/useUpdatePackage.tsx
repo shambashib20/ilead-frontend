@@ -24,7 +24,7 @@ export const useUpdatePackage = () => {
 
   return {
     mutate,
-    isLoading: isPending,
+    isPending,
     isSuccess,
     error,
     isError,

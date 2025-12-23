@@ -1,15 +1,34 @@
+
 // components/PackageForm.jsx
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useModalStore } from "@/store/useModalStore";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { useCreatePackage } from "../hooks/useCreatePackage";
-import { X } from "lucide-react";
 import { useUpdatePackage } from "../hooks/useUpdatePackage";
 import { useFeatures } from "../hooks/useFeature";
+import Select from "react-select";
+import { useTheme } from "@/contexts/ThemeProvider";
+
+interface Feature {
+  _id: string;
+  title: string;
+  description: string;
+  status: "ACTIVE" | "INACTIVE" | string;
+  meta?: {
+    limit?: number;
+    [key: string]: unknown;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface OptionType {
+  value: string;
+  label: string;
+}
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
   return (
@@ -36,7 +55,7 @@ function PackageForm({
     validity: string;
     validity_in_days: number;
     price: number;
-    features: string[];
+    features: Array<{ _id: string; title: string } | string>;
     status: string;
     meta: {
       package_code: string;
@@ -44,14 +63,40 @@ function PackageForm({
   };
 }) {
   const { closeModal, setFormActions } = useModalStore();
-  const { mutate: createPackage, isLoading: isCreating } = useCreatePackage();
-  const { mutate: updatePackage, isLoading: isUpdating } = useUpdatePackage();
-  const { features } = useFeatures({
+  const { mutate: createPackage, isPending: isCreating } = useCreatePackage();
+  const { mutate: updatePackage, isPending: isUpdating } = useUpdatePackage();
+  const { features, isLoading: isFeaturesLoading } = useFeatures({
     is_table_view: false,
     page: 1,
     limit: 100,
   });
+
+  const { theme } = useTheme();
+
   const isEditMode = !!packageData;
+
+  // Convert features to react-select options
+  const featureOptions: OptionType[] = useMemo(
+    () =>
+      features?.map((feature: Feature) => ({
+        value: feature._id,
+        label: feature.title,
+      })) || [],
+    [features]
+  );
+
+  // Extract feature IDs from packageData for default values
+  const defaultFeatureIds = useMemo(() => {
+    if (!packageData?.features) return [];
+
+    return packageData.features.map((feature) => {
+      // Handle both object and string formats
+      if (typeof feature === "string") {
+        return feature;
+      }
+      return feature._id;
+    });
+  }, [packageData?.features]);
 
   const form = useForm({
     defaultValues: {
@@ -60,7 +105,7 @@ function PackageForm({
       validity: packageData?.validity ?? "",
       validity_in_days: packageData?.validity_in_days ?? 90,
       price: packageData?.price ?? 0,
-      features: packageData?.features ?? [""],
+      features: defaultFeatureIds,
       status: packageData?.status ?? "ACTIVE",
       package_code: packageData?.meta?.package_code ?? "",
     },
@@ -71,7 +116,7 @@ function PackageForm({
         validity: value.validity,
         validity_in_days: String(value.validity_in_days),
         price: String(value.price),
-        features: value.features.filter((id) => id.trim() !== ""),
+        features: value.features, // Just send the array of IDs
         status: value.status,
         meta: {
           package_code: value.package_code,
@@ -111,8 +156,8 @@ function PackageForm({
     form.state.canSubmit,
     form.state.isSubmitting,
     isCreating,
-    setFormActions,
     isUpdating,
+    setFormActions,
     form,
   ]);
 
@@ -319,47 +364,95 @@ function PackageForm({
         </div>
       </div>
 
-      {/* Features Array Field */}
+      {/* Features Multi-Select Field */}
       <div>
-        <form.Field name="features" mode="array">
-          {(field) => (
-            <div className="flex flex-col gap-2">
-              <Label>Features (Feature IDs)</Label>
-              {field.state.value.map((_, index) => (
-                <form.Field key={index} name={`features[${index}]`}>
-                  {(subField) => (
-                    <div className="flex gap-2">
-                      <Input
-                        value={subField.state.value}
-                        onChange={(e) => subField.handleChange(e.target.value)}
-                        placeholder="68f093603276ca61e184270a"
-                        className="flex-1"
-                      />
-                      {field.state.value.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => field.removeValue(index)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </form.Field>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => field.pushValue("")}
-                className="w-full"
-              >
-                + Add Feature
-              </Button>
-            </div>
-          )}
-        </form.Field>
+        <form.Field
+          name="features"
+          validators={{
+            onChange: ({ value }) =>
+              !value || value.length === 0
+                ? "At least one feature is required"
+                : undefined,
+          }}
+          children={(field) => {
+            // Convert selected feature IDs to react-select format
+            const selectedOptions = featureOptions.filter((option) =>
+              field.state.value.includes(option.value)
+            );
+
+            return (
+              <div className="flex flex-col gap-2">
+                <Label htmlFor={field.name}>
+                  Features <span className="text-red-500">*</span>
+                </Label>
+                <Select
+                  isMulti
+                  name={field.name}
+                  options={featureOptions}
+                  value={selectedOptions}
+                  onChange={(selected) => {
+                    // Extract IDs from selected options
+                    const selectedIds = selected
+                      ? selected.map((option) => option.value)
+                      : [];
+                    field.handleChange(selectedIds);
+                  }}
+                  onBlur={field.handleBlur}
+                  isLoading={isFeaturesLoading}
+                  placeholder="Select features..."
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      minHeight: "40px",
+                      borderColor: "#e2e8f0",
+                      backgroundColor: "transparent",
+                    }),
+                    multiValue: (base) => ({
+                      ...base,
+                      backgroundColor: "transparent",
+                    }),
+                    multiValueLabel: (base) => ({
+                      ...base,
+                      color: theme === "dark" ? "#ffffffff" : "#000000ff",
+                      backgroundColor: "transparent",
+                    }),
+                    option: (styles: any, state: any) => ({
+                      ...styles,
+                      fontSize: "14px",
+                      backgroundColor: state.isDisabled
+                        ? undefined
+                        : state.isSelected
+                          ? "#3a3285"
+                          : state.isFocused
+                            ? "#f0f0f0"
+                            : undefined,
+                      color:
+                        state.isFocused || state.isSelected
+                          ? "#3a3285"
+                          : "#333",
+                      cursor: state.isDisabled ? "not-allowed" : "default",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: "#ffffffff",
+                    }),
+                    multiValueRemove: (base) => ({
+                      ...base,
+                      color: "#a33030ff",
+                      ":hover": {
+                        backgroundColor: "#ff0000a4",
+                        color: "#ff0000ff",
+                      },
+                    }),
+                  }}
+                />
+                <FieldInfo field={field} />
+              </div>
+            );
+          }}
+        />
       </div>
     </form>
   );

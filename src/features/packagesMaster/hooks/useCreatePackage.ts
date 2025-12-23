@@ -20,7 +20,7 @@ export const useCreatePackage = () => {
 
   return {
     mutate,
-    isLoading: isPending,
+    isPending,
     error,
     isError,
   };
