@@ -5,7 +5,6 @@ import type React from "react";
 import StatusColumn from "../StatusColumn";
 import type { Lead, Status } from "@/features/leads/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Pagination } from "../../services/Leads.service";
 
 interface LeadsBoardProps {
   leads: Lead[];
