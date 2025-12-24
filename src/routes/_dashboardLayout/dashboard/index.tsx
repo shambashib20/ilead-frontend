@@ -18,7 +18,7 @@ import {
 } from "@/features/leads/hooks/useStatus";
 // import { getData } from "@/utils/localStorage";
 import {
-  TodaysChatAgentsFollowupsQueryOptions,
+  TodaysFollowupsQueryOptions,
   useTodaysChatFollowUps,
 } from "@/features/dashboard/hooks/useTodaysChatFollowUps";
 import UpcomingFollowUpsList from "@/features/dashboard/components/UpcommingFollowUpList/UpcommingFollowUpList";
@@ -31,9 +31,7 @@ export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   loader: (opts) => {
     opts.context.queryClient.ensureQueryData(missedFollowUpsQueryOptions());
     opts.context.queryClient.ensureQueryData(StatusQueryOptions());
-    opts.context.queryClient.ensureQueryData(
-      TodaysChatAgentsFollowupsQueryOptions()
-    );
+    opts.context.queryClient.ensureQueryData(TodaysFollowupsQueryOptions());
   },
 });
 
@@ -148,9 +146,7 @@ function RouteComponent() {
         : {
             title: "Upcoming Follow Ups",
             mode: "simple",
-            component: (
-              <UpcomingFollowUpsList leads={todaysFollowups?.data ?? []} />
-            ),
+            component: <UpcomingFollowUpsList leads={todaysFollowups ?? []} />,
           },
 
       user?.data?.role === "Superadmin"

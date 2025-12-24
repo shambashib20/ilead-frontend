@@ -1,4 +1,4 @@
-// StatusColumn.tsx - Fixed version
+// StatusColumn.tsx - With missed follow-up count
 "use client";
 import { memo, useCallback, useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -31,31 +31,35 @@ export const StatusColumn = memo(
 
     const statusTitle = String(status.title);
 
+    // Create updated leads with missed follow-up information
     const updatedLeads = leads?.map((lead) => {
-      const hasMissed = missedFollowUps.data.some(
+      const missedData = missedFollowUps.data.find(
         (item) => item.leadId === lead._id
       );
+
+      const hasMissed = !!missedData;
+      const missedCount = missedData?.meta?.missed_followups_count?.[0]?.days|| 0;
+
       return {
         ...lead,
         missedFollowup: hasMissed,
-        count: 0,
+        missedCount: missedCount,
       };
     });
 
     const rowVirtualizer = useVirtualizer({
       count: hasMore ? statusLeads.length + 1 : statusLeads.length,
       getScrollElement: () => scrollRef.current,
-      estimateSize: () => 230,
-      overscan: 2, // Reduced overscan to prevent premature loading
+      estimateSize: () => 250,
+      overscan: 2,
     });
 
-    // FIX 1: Only load more when user actually scrolls to the bottom
     const handleScroll = useCallback(() => {
       const container = scrollRef.current;
       if (!container) return;
 
       const { scrollTop, scrollHeight, clientHeight } = container;
-      const scrolledToBottom = scrollHeight - scrollTop - clientHeight < 50; // 50px threshold
+      const scrolledToBottom = scrollHeight - scrollTop - clientHeight < 50;
 
       if (
         scrolledToBottom &&
@@ -69,14 +73,12 @@ export const StatusColumn = memo(
       }
     }, [hasMore, isLoadingMore, onLoadMore]);
 
-    // Reset the ref when loading completes
     useEffect(() => {
       if (!isLoadingMore) {
         loadMoreCalledRef.current = false;
       }
     }, [isLoadingMore]);
 
-    // Attach scroll listener
     useEffect(() => {
       const container = scrollRef.current;
       if (!container) return;
@@ -131,7 +133,7 @@ export const StatusColumn = memo(
                   {isLoaderRow ? (
                     hasMore ? (
                       <div className="flex items-center justify-center py-4">
-                        {/* <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"></div> */}
+                        {/* Loading indicator */}
                       </div>
                     ) : (
                       <div className="flex items-center justify-center py-4">
@@ -141,7 +143,7 @@ export const StatusColumn = memo(
                       </div>
                     )
                   ) : (
-                    <div className="mb-2">
+                    <div className="mb-2 mt-4">
                       <LeadCard
                         lead={
                           updatedLeads?.find((l) => l._id === lead._id) || lead

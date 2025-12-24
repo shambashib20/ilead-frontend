@@ -1,16 +1,15 @@
 import { memo } from "react";
-import { Phone, User } from "lucide-react";
+import { Phone, User, AlertCircle } from "lucide-react";
 import type { Lead } from "@/features/leads/types";
 import { useModalStore } from "@/store/useModalStore";
 import { LeadDetail } from "../LeadModals";
-
 import { useTheme } from "@/contexts/ThemeProvider";
 import { getCardActions } from "@/utils/cardActions";
 import { getData } from "@/utils/localStorage";
 import { cn } from "@/lib/utils";
 
 interface LeadCardProps {
-  lead: Lead;
+  lead: Lead & { missedFollowup?: boolean; missedCount?: number };
 }
 
 export const LeadCard = memo(({ lead }: LeadCardProps) => {
@@ -19,29 +18,46 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt || "");
   const assignedBy = String(lead?.assigned_by?.name || "");
-  const nfd=lead.follow_ups?.[0]?.next_followup_date ? new Date(lead.follow_ups?.[0]?.next_followup_date).toLocaleString().split(",")[0] : "-";
+  const nfd = lead.follow_ups?.[0]?.next_followup_date
+    ? new Date(lead.follow_ups?.[0]?.next_followup_date)
+        .toLocaleString()
+        .split(",")[0]
+    : "-";
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
   const user =
     typeof window !== "undefined" ? (getData("user") ?? undefined) : undefined;
   const actions = getCardActions(user.role);
   const { theme } = useTheme();
 
-
   return (
     <div
       className={cn(
-        "rounded-lg shadow hover:shadow-lg transition-all",
+        "rounded-lg shadow hover:shadow-lg transition-all relative",
         lead.missedFollowup
-          ? "bg-red-600/15 dark:bg-red-800/80 text-white"
+          ? "bg-red-600/15 dark:bg-red-800/80 text-white border-2 border-red-500"
           : "bg-white dark:bg-primary text-white"
       )}
     >
+      {/* Missed Follow-up Badge */}
+      {lead.missedFollowup && lead.missedCount && lead.missedCount > 0 && (
+        <div className="absolute -top-2 -right-2 z-10">
+          <div className="relative">
+            <div className="bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-800">
+              <span className="text-xs font-bold">{lead.missedCount}</span>
+            </div>
+            <AlertCircle
+              className="absolute -bottom-1 -right-1 text-red-600 bg-white rounded-full"
+              size={14}
+            />
+          </div>
+        </div>
+      )}
+
       <div
         className="cursor-pointer"
         onClick={() => {
           setModalTitle?.("Lead Details");
           setData?.({ _id: lead._id, rayId: lead?.meta?.ray_id });
-
           setModalSize?.("lg");
           openModal({
             content: <LeadDetail />,
@@ -50,6 +66,20 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         }}
       >
         <div className="pt-5 px-6">
+          {/* Missed Follow-up Alert Banner (Optional) */}
+          {lead.missedFollowup && (
+            <div className="mb-3 px-3 py-2 bg-red-100 dark:bg-red-900/30 border border-red-400 rounded flex items-center gap-2">
+              <AlertCircle
+                size={16}
+                className="text-red-600 dark:text-red-400"
+              />
+              <span className="text-xs font-medium text-red-800 dark:text-red-200">
+                {lead.missedCount} Missed Follow-up
+                {lead?.missedCount || 0 > 1 ? "s" : ""}
+              </span>
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-2 mb-3">
             {lead.labels?.length > 0 ? (
               lead.labels.map((label) => {
@@ -59,7 +89,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
                     style={{
                       backgroundColor: label.meta?.color_code || "gray",
                     }}
-                    className=" text-xs px-3 py-1 rounded"
+                    className="text-xs px-3 py-1 rounded"
                   >
                     {label.title}
                   </span>
@@ -153,9 +183,6 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             </button>
           )
         )}
-        {/* <button className="ms-auto p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors">
-          <EllipsisVertical size={16} />
-        </button> */}
       </div>
     </div>
   );

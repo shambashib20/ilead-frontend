@@ -51,7 +51,6 @@ import { Route as DashboardLayoutReportSlugImport } from './routes/_dashboardLay
 import { Route as AuthLayoutAdminLoginImport } from './routes/_authLayout/admin/login'
 import { Route as MasterLayoutMasterpannelWorkspaceIndexImport } from './routes/_masterLayout/masterpannel/workspace/index'
 import { Route as MasterLayoutMasterpannelUsersIndexImport } from './routes/_masterLayout/masterpannel/users/index'
-import { Route as MasterLayoutMasterpannelTodaysFollowupsIndexImport } from './routes/_masterLayout/masterpannel/todays-followups/index'
 import { Route as MasterLayoutMasterpannelPackagesIndexImport } from './routes/_masterLayout/masterpannel/packages/index'
 import { Route as MasterLayoutMasterpannelClientIndexImport } from './routes/_masterLayout/masterpannel/client/index'
 import { Route as MasterLayoutMasterpannelCampaignsIndexImport } from './routes/_masterLayout/masterpannel/campaigns/index'
@@ -319,13 +318,6 @@ const MasterLayoutMasterpannelUsersIndexRoute =
   MasterLayoutMasterpannelUsersIndexImport.update({
     id: '/masterpannel/users/',
     path: '/masterpannel/users/',
-    getParentRoute: () => MasterLayoutRoute,
-  } as any)
-
-const MasterLayoutMasterpannelTodaysFollowupsIndexRoute =
-  MasterLayoutMasterpannelTodaysFollowupsIndexImport.update({
-    id: '/masterpannel/todays-followups/',
-    path: '/masterpannel/todays-followups/',
     getParentRoute: () => MasterLayoutRoute,
   } as any)
 
@@ -690,13 +682,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MasterLayoutMasterpannelPackagesIndexImport
       parentRoute: typeof MasterLayoutImport
     }
-    '/_masterLayout/masterpannel/todays-followups/': {
-      id: '/_masterLayout/masterpannel/todays-followups/'
-      path: '/masterpannel/todays-followups'
-      fullPath: '/masterpannel/todays-followups'
-      preLoaderRoute: typeof MasterLayoutMasterpannelTodaysFollowupsIndexImport
-      parentRoute: typeof MasterLayoutImport
-    }
     '/_masterLayout/masterpannel/users/': {
       id: '/_masterLayout/masterpannel/users/'
       path: '/masterpannel/users'
@@ -854,7 +839,6 @@ interface MasterLayoutRouteChildren {
   MasterLayoutMasterpannelCampaignsIndexRoute: typeof MasterLayoutMasterpannelCampaignsIndexRoute
   MasterLayoutMasterpannelClientIndexRoute: typeof MasterLayoutMasterpannelClientIndexRoute
   MasterLayoutMasterpannelPackagesIndexRoute: typeof MasterLayoutMasterpannelPackagesIndexRoute
-  MasterLayoutMasterpannelTodaysFollowupsIndexRoute: typeof MasterLayoutMasterpannelTodaysFollowupsIndexRoute
   MasterLayoutMasterpannelUsersIndexRoute: typeof MasterLayoutMasterpannelUsersIndexRoute
   MasterLayoutMasterpannelWorkspaceIndexRoute: typeof MasterLayoutMasterpannelWorkspaceIndexRoute
 }
@@ -869,8 +853,6 @@ const MasterLayoutRouteChildren: MasterLayoutRouteChildren = {
     MasterLayoutMasterpannelClientIndexRoute,
   MasterLayoutMasterpannelPackagesIndexRoute:
     MasterLayoutMasterpannelPackagesIndexRoute,
-  MasterLayoutMasterpannelTodaysFollowupsIndexRoute:
-    MasterLayoutMasterpannelTodaysFollowupsIndexRoute,
   MasterLayoutMasterpannelUsersIndexRoute:
     MasterLayoutMasterpannelUsersIndexRoute,
   MasterLayoutMasterpannelWorkspaceIndexRoute:
@@ -923,7 +905,6 @@ export interface FileRoutesByFullPath {
   '/masterpannel/campaigns': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
   '/masterpannel/packages': typeof MasterLayoutMasterpannelPackagesIndexRoute
-  '/masterpannel/todays-followups': typeof MasterLayoutMasterpannelTodaysFollowupsIndexRoute
   '/masterpannel/users': typeof MasterLayoutMasterpannelUsersIndexRoute
   '/masterpannel/workspace': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
@@ -970,7 +951,6 @@ export interface FileRoutesByTo {
   '/masterpannel/campaigns': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/masterpannel/client': typeof MasterLayoutMasterpannelClientIndexRoute
   '/masterpannel/packages': typeof MasterLayoutMasterpannelPackagesIndexRoute
-  '/masterpannel/todays-followups': typeof MasterLayoutMasterpannelTodaysFollowupsIndexRoute
   '/masterpannel/users': typeof MasterLayoutMasterpannelUsersIndexRoute
   '/masterpannel/workspace': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/general-templates/lead-template/add-template': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
@@ -1022,7 +1002,6 @@ export interface FileRoutesById {
   '/_masterLayout/masterpannel/campaigns/': typeof MasterLayoutMasterpannelCampaignsIndexRoute
   '/_masterLayout/masterpannel/client/': typeof MasterLayoutMasterpannelClientIndexRoute
   '/_masterLayout/masterpannel/packages/': typeof MasterLayoutMasterpannelPackagesIndexRoute
-  '/_masterLayout/masterpannel/todays-followups/': typeof MasterLayoutMasterpannelTodaysFollowupsIndexRoute
   '/_masterLayout/masterpannel/users/': typeof MasterLayoutMasterpannelUsersIndexRoute
   '/_masterLayout/masterpannel/workspace/': typeof MasterLayoutMasterpannelWorkspaceIndexRoute
   '/_dashboardLayout/general-templates/lead-template/add-template/': typeof DashboardLayoutGeneralTemplatesLeadTemplateAddTemplateIndexRoute
@@ -1072,7 +1051,6 @@ export interface FileRouteTypes {
     | '/masterpannel/campaigns'
     | '/masterpannel/client'
     | '/masterpannel/packages'
-    | '/masterpannel/todays-followups'
     | '/masterpannel/users'
     | '/masterpannel/workspace'
     | '/general-templates/lead-template/add-template'
@@ -1118,7 +1096,6 @@ export interface FileRouteTypes {
     | '/masterpannel/campaigns'
     | '/masterpannel/client'
     | '/masterpannel/packages'
-    | '/masterpannel/todays-followups'
     | '/masterpannel/users'
     | '/masterpannel/workspace'
     | '/general-templates/lead-template/add-template'
@@ -1168,7 +1145,6 @@ export interface FileRouteTypes {
     | '/_masterLayout/masterpannel/campaigns/'
     | '/_masterLayout/masterpannel/client/'
     | '/_masterLayout/masterpannel/packages/'
-    | '/_masterLayout/masterpannel/todays-followups/'
     | '/_masterLayout/masterpannel/users/'
     | '/_masterLayout/masterpannel/workspace/'
     | '/_dashboardLayout/general-templates/lead-template/add-template/'
@@ -1263,7 +1239,6 @@ export const routeTree = rootRoute
         "/_masterLayout/masterpannel/campaigns/",
         "/_masterLayout/masterpannel/client/",
         "/_masterLayout/masterpannel/packages/",
-        "/_masterLayout/masterpannel/todays-followups/",
         "/_masterLayout/masterpannel/users/",
         "/_masterLayout/masterpannel/workspace/"
       ]
@@ -1429,10 +1404,6 @@ export const routeTree = rootRoute
     },
     "/_masterLayout/masterpannel/packages/": {
       "filePath": "_masterLayout/masterpannel/packages/index.tsx",
-      "parent": "/_masterLayout"
-    },
-    "/_masterLayout/masterpannel/todays-followups/": {
-      "filePath": "_masterLayout/masterpannel/todays-followups/index.tsx",
       "parent": "/_masterLayout"
     },
     "/_masterLayout/masterpannel/users/": {

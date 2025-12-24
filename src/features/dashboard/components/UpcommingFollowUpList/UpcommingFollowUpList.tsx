@@ -36,7 +36,7 @@ export default function UpcomingFollowUpsList({ leads }: { leads: Lead[] }) {
       {leads.map((lead) => (
         <li
           key={lead._id}
-          className="border-s border-gray-200 dark:border-gray-200 ms-[20px] ps-6 relative p-3 shadow-sm space-y-1 dark:hover:bg-amber-50/5 cursor-pointer mt-3"
+          className="border-s border-gray-200 dark:border-gray-200 ms-[20px] ps-6  relative p-3 shadow-sm space-y-1 dark:hover:bg-amber-50/5 cursor-pointer mt-3"
           onClick={() => handleModal({ _id: lead._id })}
         >
           {/* Avatar */}

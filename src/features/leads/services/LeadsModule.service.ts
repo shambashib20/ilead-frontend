@@ -5,16 +5,47 @@ export type Lead = {
   name: string;
   company_name: string;
   phone_number: string;
-  email: string;
+  email: string | null;
   address: string;
   comment: string;
   reference: string;
   createdAt: string;
+  status?: {
+    _id: string;
+    title?: string;
+  };
+  labels?: {
+    _id: string;
+    title?: string;
+  }[];
+  assigned_to?: {
+    _id: string;
+    name: string;
+    email: string;
+  };
   follow_ups: {
     next_followup_date: Date;
     comment: string;
     _id: string;
-    meta: { attachment_url: string; audio_attachment_url: string };
+    meta: {
+      attachment_url: string;
+      audio_attachment_url: string;
+      created_by?: string;
+    };
+    createdAt?: string;
+    updatedAt?: string;
+  }[];
+  todays_follow_ups?: {
+    next_followup_date: Date;
+    comment: string;
+    _id: string;
+    meta: {
+      attachment_url: string;
+      audio_attachment_url: string;
+      created_by?: string;
+    };
+    createdAt?: string;
+    updatedAt?: string;
   }[];
 };
 
@@ -68,7 +99,10 @@ interface MissedFollowUps {
     labels: { _id: string; title: string }[];
     next_followup_date: string;
     comment: string;
-    meta: { source: { title: string } };
+    meta: {
+      missed_followups_count: { days: number }[];
+      source: { title: string };
+    };
   }[];
 }
 
@@ -195,6 +229,20 @@ export interface TodaysFollowUpResponse {
   message: string;
   status: string;
   data: Lead[];
+}
+
+export interface TodaysFollowUpSuperAdminResponse {
+  message: string;
+  status: string;
+  data: {
+    total_upcoming_followups: number;
+    leads: Lead[];
+    agentWiseCount: {
+      agent_id: string;
+      agent_name: string;
+      lead_count: number;
+    }[];
+  };
 }
 
 export interface TelecallerAnalyticsPayload {
@@ -356,6 +404,11 @@ export class LeadsModule extends ApiClient {
   }
   async todaysFollowupds() {
     return this.get<TodaysFollowUpResponse>("/todays-followups");
+  }
+  async todaysFollowupdsSuperAdmin() {
+    return this.get<TodaysFollowUpSuperAdminResponse>(
+      "/todays-followups/superadmin"
+    );
   }
 
   async getSourceReports() {
