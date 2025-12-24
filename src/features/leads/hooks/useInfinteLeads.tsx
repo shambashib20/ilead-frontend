@@ -1,8 +1,7 @@
-// useInfiniteLeads.ts
-import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
+// useInfiniteLeads.ts - Improved version
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { leadsService, type FilterPayload } from "../services/Leads.service";
 
-// types.ts (create this or put in your existing types file)
 export interface Lead {
   _id: string;
   name?: string;
@@ -31,7 +30,6 @@ export interface Pagination {
 }
 
 export interface LeadsResponse {
-  pages: any;
   leads: Lead[];
   pagination: Pagination;
   statuses: any[];
@@ -54,18 +52,15 @@ export function useInfiniteLeads(baseFilters: PartialFilters = {}) {
     endDate: baseFilters.endDate ? String(baseFilters.endDate) : undefined,
   });
 
-  // NOTE generics: <TQueryFnData, TError, TQueryData, TQueryKey>
-  // We set both TQueryFnData and TQueryData to LeadsResponse so React Query
-  // knows each page has shape LeadsResponse
   const query = useInfiniteQuery<
     LeadsResponse,
     Error,
-    LeadsResponse,
-    [string, string, number]
+    { pages: LeadsResponse[]; pageParams: number[] },
+    [string, string, number],
+    number
   >({
     queryKey: ["leads:infinite", filtersKey, effectiveLimit],
-    queryFn: async (context) => {
-      const pageParam = (context.pageParam as number | undefined) ?? 1;
+    queryFn: async ({ pageParam = 1 }) => {
       const payload: FilterPayload = {
         labelIds: (baseFilters.labelIds as string[]) ?? [],
         assignedTo: (baseFilters.assignedTo as string[]) ?? [],
@@ -81,11 +76,8 @@ export function useInfiniteLeads(baseFilters: PartialFilters = {}) {
       };
 
       const raw = await leadsService.searchLeads(payload);
-
-      // normalize: prefer raw.data if present, else raw
       const maybeData = raw && (raw as any).data ? (raw as any).data : raw;
 
-      // final robust fallback
       const page: LeadsResponse = {
         leads: Array.isArray((maybeData as any)?.leads)
           ? (maybeData as any).leads
@@ -101,25 +93,23 @@ export function useInfiniteLeads(baseFilters: PartialFilters = {}) {
         statuses: Array.isArray((maybeData as any)?.statuses)
           ? (maybeData as any).statuses
           : [],
-        pages: undefined,
       };
 
       return page;
     },
     getNextPageParam: (lastPage) => {
       const pagination = lastPage.pagination;
-      if (!pagination) return undefined;
-      return pagination.page < pagination.totalPages
-        ? pagination.page + 1
-        : undefined;
+      if (!pagination || !pagination.hasNextPage) return undefined;
+      return pagination.page + 1;
     },
     initialPageParam: 1,
-    staleTime: 5 * 60 * 1000,
-    placeholderData: keepPreviousData,
+    staleTime: 0, // CHANGED: Set to 0 so data refetches immediately on invalidation
+    gcTime: 5 * 60 * 1000, // Cache for 5 minutes (formerly cacheTime)
+    refetchOnMount: true, // Refetch when component mounts
+    refetchOnWindowFocus: false, // Don't refetch on window focus
   });
 
   return {
-    // IMPORTANT: keep full react-query response object shape
     data: query.data,
     fetchNextPage: query.fetchNextPage,
     isFetchingNextPage: query.isFetchingNextPage,

@@ -51,7 +51,7 @@ function Sidebar() {
           <img
             src={theme !== "light" ? Logo_dark : Logo}
             alt=""
-            className="w-34 h-12"
+            className="w-35 h-11"
           />
         )}
         {!effectiveCollapsed && (

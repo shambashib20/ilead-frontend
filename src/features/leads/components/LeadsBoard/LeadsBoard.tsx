@@ -5,6 +5,7 @@ import type React from "react";
 import StatusColumn from "../StatusColumn";
 import type { Lead, Status } from "@/features/leads/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { Pagination } from "../../services/Leads.service";
 
 interface LeadsBoardProps {
   leads: Lead[];
@@ -13,6 +14,7 @@ interface LeadsBoardProps {
   onFetchNextPage?: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage?: boolean;
+  // pagination?: Pagination;
 }
 
 export const LeadsBoard = memo(
@@ -23,6 +25,7 @@ export const LeadsBoard = memo(
     onFetchNextPage,
     hasNextPage = false,
     isFetchingNextPage = false,
+    // pagination,
   }: LeadsBoardProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);

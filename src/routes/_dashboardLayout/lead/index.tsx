@@ -1,3 +1,4 @@
+// route.tsx - Fixed version
 import { createFileRoute } from "@tanstack/react-router";
 import { useLeads } from "@/features/leads/hooks/useLeads";
 import { useLeadFilters } from "@/features/leads/hooks/useLeadFilters";
@@ -20,14 +21,18 @@ function RouteComponent() {
   const [limit, setLimit] = useState(10);
   const baseFilters = useLeadFilters();
   const filters = { ...baseFilters, is_table_view: isTableView, page, limit };
+
+  // For table view - paginated
   const { leads, isLoading, statuses, error, pagination } = useLeads(filters);
+
+  // For board view - infinite scroll
   const {
-    data,
+    data: infiniteData,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-    isLoading: isLoading2,
-    error: error2,
+    isLoading: isInfiniteLoading,
+    error: infiniteError,
   } = useInfiniteLeads({ ...baseFilters, is_table_view: isTableView, limit });
 
   const handlePageChange = (newPage: number) => {
@@ -36,30 +41,25 @@ function RouteComponent() {
 
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
-    setPage(1); // reset to page 1 when limit changes
+    setPage(1);
   };
 
+  // Extract leads from infinite query pages
   const leadsList = useMemo(() => {
-    if (!data?.pages) return [];
-    return data.pages.flatMap((p: any) => {
-      // p may already be { leads, pagination, statuses } (normalized)
-      // or p may be { data: { leads, ... } } depending on service return
-      const page = p.leads ? p : p.data ? p.data : {};
+    if (!infiniteData?.pages) return [];
+    return infiniteData.pages.flatMap((page) => {
       return Array.isArray(page.leads) ? page.leads : [];
     });
-  }, [data]);
+  }, [infiniteData]);
 
-  // 2) pick statuses (from first page with statuses)
+  // Extract statuses from first page
   const statuses2 = useMemo(() => {
-    if (!data?.pages) return [];
-    for (const p of data.pages) {
-      const page = p.leads ? p : p.data ? p.data : {};
-      if (Array.isArray(page.statuses) && page.statuses.length)
-        return page.statuses;
-    }
-    return [];
-  }, [data]);
+    if (!infiniteData?.pages || infiniteData.pages.length === 0) return [];
+    const firstPage = infiniteData.pages[0];
+    return Array.isArray(firstPage.statuses) ? firstPage.statuses : [];
+  }, [infiniteData]);
 
+  // Normalize leads for board view
   const normalizedLeads2 = useMemo(() => {
     return leadsList.map((lead: any) => ({
       ...lead,
@@ -104,9 +104,57 @@ function RouteComponent() {
           }))
         : [],
     }));
-  }, [leadsList, statuses]);
+  }, [leadsList, statuses2]);
 
-  if (isLoading || isLoading2) {
+  // Normalize leads for table view
+  const normalizedLeads = useMemo(() => {
+    if (!leads) return [];
+    return leads.map((lead) => ({
+      ...lead,
+      address: lead.address ?? "",
+      email: lead.email ?? "",
+      company_name: lead.company_name ?? "",
+      meta: lead.meta ?? {},
+      assigned_to: {
+        ...(typeof lead.assigned_to === "object" && lead.assigned_to !== null
+          ? {
+              ...lead.assigned_to,
+              name:
+                typeof lead.assigned_to.name === "string"
+                  ? lead.assigned_to.name
+                  : "",
+            }
+          : {
+              name:
+                typeof lead.assigned_to === "string" ? lead.assigned_to : "",
+            }),
+      },
+      assigned_by: {
+        name:
+          typeof lead.assigned_by === "object" && lead.assigned_by !== null
+            ? typeof lead.assigned_by.name === "string"
+              ? lead.assigned_by.name
+              : ""
+            : typeof lead.assigned_by === "string"
+              ? lead.assigned_by
+              : "",
+      },
+      status: {
+        _id: lead.status?._id ?? "",
+        title: statuses.find((s) => s._id === lead.status?._id)?.title ?? "",
+      },
+      labels: Array.isArray(lead.labels)
+        ? lead.labels.map((label) => ({
+            _id: label._id ?? "",
+            title: label.title ?? "",
+            meta: label.meta ?? { color_code: "" },
+          }))
+        : [],
+    }));
+  }, [leads, statuses]);
+
+  // Loading state
+  if (isTableView ? isLoading : isInfiniteLoading) {
     return (
       <>
         <SkeletonLoader />
@@ -115,20 +163,28 @@ function RouteComponent() {
     );
   }
 
-  if (error || error2) {
+  // Error state
+  if (isTableView ? error : infiniteError) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <h3 className="text-lg font-medium text-red-600">
             Error loading leads
           </h3>
-          <p className="text-sm text-gray-500">{error?.message}</p>
+          <p className="text-sm text-gray-500">
+            {(error || infiniteError)?.message}
+          </p>
         </div>
       </div>
     );
   }
 
-  if (!leads || leads.length === 0) {
+  // Empty state
+  const hasLeads = isTableView
+    ? leads && leads.length > 0
+    : leadsList.length > 0;
+
+  if (!hasLeads) {
     return (
       <div className="flex items-center justify-center h-64">
         <p className="text-gray-500">No leads found</p>
@@ -136,62 +192,18 @@ function RouteComponent() {
     );
   }
 
-  const normalizedLeads = leads.map((lead) => ({
-    ...lead,
-    address: lead.address ?? "",
-    email: lead.email ?? "",
-    company_name: lead.company_name ?? "",
-    meta: lead.meta ?? {},
-    assigned_to: {
-      ...(typeof lead.assigned_to === "object" && lead.assigned_to !== null
-        ? {
-            ...lead.assigned_to,
-            name:
-              typeof lead.assigned_to.name === "string"
-                ? lead.assigned_to.name
-                : "",
-          }
-        : {
-            name: typeof lead.assigned_to === "string" ? lead.assigned_to : "",
-          }),
-    },
-    assigned_by: {
-      name:
-        typeof lead.assigned_by === "object" && lead.assigned_by !== null
-          ? typeof lead.assigned_by.name === "string"
-            ? lead.assigned_by.name
-            : ""
-          : typeof lead.assigned_by === "string"
-            ? lead.assigned_by
-            : "",
-    },
-    status: {
-      _id: lead.status?._id ?? "",
-      title: statuses.find((s) => s._id === lead.status?._id)?.title ?? "",
-    },
-    labels: Array.isArray(lead.labels)
-      ? lead.labels.map((label) => ({
-          _id: label._id ?? "",
-          title: label.title ?? "",
-          meta: label.meta ?? { color_code: "" },
-        }))
-      : [],
-  }));
-
   return isTableView ? (
     <LeadsTable
       leads={normalizedLeads as Lead[]}
       pagination={pagination}
       onPageChange={handlePageChange}
       onLimitChange={handleLimitChange}
-      setIsTableView={function (): void {
-        throw new Error("Function not implemented.");
-      }}
+      setIsTableView={setIsTableView}
     />
   ) : (
     <LeadsBoard
       leads={normalizedLeads2}
-      statuses={statuses}
+      statuses={statuses2}
       setIsTableView={setIsTableView}
       onFetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}

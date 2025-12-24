@@ -1,3 +1,4 @@
+// useLeads.ts - Fixed with proper refetch behavior
 import { useQuery } from "@tanstack/react-query";
 import {
   leadsService,
@@ -21,7 +22,13 @@ export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
   const query = useQuery<LeadsResponse, Error>({
     queryKey: ["leads", { ...filters }],
     queryFn: () => leadsService.searchLeads(filters),
-    staleTime: 5 * 60 * 1000,
+
+    // KEY CHANGES for proper refetch on invalidation:
+    staleTime: 0, // Data is immediately stale, will refetch on invalidation
+    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes (formerly cacheTime)
+    refetchOnMount: "always", // Always refetch when component mounts
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    refetchOnReconnect: true, // Refetch when internet reconnects
   });
 
   return {
@@ -36,6 +43,7 @@ export function useLeads(filters: FilterPayload = DEFAULT_FILTERS) {
       hasPrevPage: false,
     },
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     error: query.error,
     refetch: query.refetch,
   };

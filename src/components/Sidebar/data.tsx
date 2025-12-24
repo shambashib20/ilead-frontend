@@ -53,6 +53,20 @@ export const navItems: NavItem[] = [
     path: "/masterpannel",
     roles: ["Masteradmin"],
   },
+
+  {
+    name: "Dashboard",
+    icon: <House size={20} />,
+    path: "/masterpannel",
+    roles: ["Masteradmin"],
+  },
+
+  {
+    name: "Todays FollowUps",
+    icon: <House size={20} />,
+    path: "/todaysfollowup",
+    roles: ["Telecaller"],
+  },
   {
     name: "Clients",
     icon: <House size={20} />,

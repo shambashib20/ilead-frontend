@@ -19,13 +19,13 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt || "");
   const assignedBy = String(lead?.assigned_by?.name || "");
+  const nfd=lead.follow_ups?.[0]?.next_followup_date ? new Date(lead.follow_ups?.[0]?.next_followup_date).toLocaleString().split(",")[0] : "-";
   const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
   const user =
     typeof window !== "undefined" ? (getData("user") ?? undefined) : undefined;
   const actions = getCardActions(user.role);
   const { theme } = useTheme();
 
-  console.log(user.role);
 
   return (
     <div
@@ -100,6 +100,11 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
           <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">TO:</span>
             <span>{assignedToName}</span>
+          </div>
+
+          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
+            <span className="font-medium">NFD:</span>
+            <span>{nfd}</span>
           </div>
         </div>
       </div>
