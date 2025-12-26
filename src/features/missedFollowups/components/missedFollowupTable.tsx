@@ -150,7 +150,7 @@ function MissedFollowupsTable({ data }: { data: Lead[] }) {
         </div>
 
         <div className="mb-4 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground placeholder:text-foreground w-5 h-5" />
           <input
             type="text"
             value={globalFilter}
@@ -159,7 +159,7 @@ function MissedFollowupsTable({ data }: { data: Lead[] }) {
               setCurrentPage(1);
             }}
             placeholder="Search leads..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600  rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
 
@@ -256,9 +256,7 @@ function MissedFollowupsTable({ data }: { data: Lead[] }) {
                         className={`hover:bg-white/20 text-foreground transition-colors cursor-pointer ${isExpanded ? "bg-white/10" : ""}`}
                       >
                         <td className="px-6 py-4 whitespace-nowrap text-foreground">
-                          <div className="font-medium text-sm">
-                            {lead.name}
-                          </div>
+                          <div className="font-medium text-sm">{lead.name}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-foreground text-sm">
                           {lead.phone_number}
@@ -445,10 +443,14 @@ function MissedFollowupsTable({ data }: { data: Lead[] }) {
                 <select
                   value={pageSize}
                   onChange={(e) => changePageSize(Number(e.target.value))}
-                  className="ml-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="ml-2 px-3 py-2 border border-primary rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   {[10, 20, 30, 50].map((size) => (
-                    <option key={size} value={size}>
+                    <option
+                      key={size}
+                      value={size}
+                      className="text-foreground bg-primary"
+                    >
                       Show {size}
                     </option>
                   ))}

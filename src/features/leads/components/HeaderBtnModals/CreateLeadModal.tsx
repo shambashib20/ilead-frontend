@@ -189,7 +189,7 @@ export default function CreateLeadModal() {
           property_id,
         };
 
-        await createLeadFromPlatform.createLeadFromPlatform(payload);
+        await createLeadFromPlatform.createLeadFromPlatform(payload as any);
 
         // show an auto-closing success toast
         Swal.fire({

@@ -81,9 +81,13 @@ function RouteComponent() {
                   </div>
 
                   {/* Show total count */}
-                  <div className="text-xl text-primary-foreground flex flex-col gap-3 items-end bg-blue-50 dark:bg-primary-foreground/20 p-4 rounded-md">
-                    Upcoming Follow Ups{" "}
-                    <span className="font-semibold text-3xl">
+                  <div
+                    className={`text-xl text-primary-foreground flex  ${expanded ? "flex-col" : "flex-row"}  gap-3 items-center bg-blue-50 ${expanded ? "p-4" : "p-2"} dark:bg-primary-foreground/20 rounded-md`}
+                  >
+                    Upcoming Follow Ups
+                    <span
+                      className={`font-semibold  ${expanded ? "text-3xl" : "text-2xl"}`}
+                    >
                       {totalUpcomingFollowups}
                     </span>
                   </div>

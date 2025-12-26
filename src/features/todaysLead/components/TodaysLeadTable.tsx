@@ -28,9 +28,9 @@ function TodaysLeadTable({ data }: { data: Lead[] }) {
   const { page, setPage, totalPages, paginatedData } = usePagination(data, 10);
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="bg-primary rounded-lg shadow overflow-hidden">
       <table className="w-full text-sm">
-        <thead className="bg-gray-50 text-left">
+        <thead className="bg-primary text-left">
           <tr>
             <th className="p-3">S/N</th>
             <th className="p-3">Customer Name</th>
@@ -48,13 +48,13 @@ function TodaysLeadTable({ data }: { data: Lead[] }) {
             return (
               <>
                 {/* ROW */}
-                <tr key={lead._id} className="border-t hover:bg-gray-50">
+                <tr key={lead._id} className="border-t hover:bg-white/10">
                   <td className="p-3">{(page - 1) * 10 + idx + 1}</td>
 
                   <td className="p-3 font-medium">
                     <button
                       onClick={() => setExpandedRow(isOpen ? null : lead._id)}
-                      className="hover:underline"
+                      className="hover:underline cursor-pointer"
                     >
                       {lead.name}
                     </button>
@@ -77,8 +77,8 @@ function TodaysLeadTable({ data }: { data: Lead[] }) {
 
                 {/* EXPANDED */}
                 {isOpen && (
-                  <tr className="bg-gray-50 border-t">
-                    <td colSpan={6} className="p-4 text-sm">
+                  <tr className="bg-primary border-t">
+                    <td colSpan={6} className="p-4 text-sm text-foreground">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <b>Email:</b> {lead.email ?? "N/A"}
@@ -97,7 +97,7 @@ function TodaysLeadTable({ data }: { data: Lead[] }) {
                             </span>
                           ))}
                         </div>
-                        <div className="col-span-2 text-gray-600">
+                        <div className="col-span-2 text-foreground">
                           <b>Comment:</b> {lead.comment}
                         </div>
                       </div>
