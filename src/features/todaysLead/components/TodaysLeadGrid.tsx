@@ -1,4 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { LeadDetail } from "@/features/leads/components/LeadModals";
+import { useModalStore } from "@/store/useModalStore";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
@@ -23,8 +25,23 @@ function groupLeadsByStatus(leads: any[], statuses: any[]) {
 }
 
 function LeadCard({ lead }: { lead: any }) {
+  const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
+
+  const handleOpenModal = (lead: any) => {
+    setModalTitle?.("Lead Details");
+    setData?.({ _id: lead._id, rayId: lead?.meta?.ray_id });
+    setModalSize?.("lg");
+    openModal({
+      content: <LeadDetail />,
+      type: "action" as const,
+    });
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 space-y-2 hover:shadow-md transition-shadow">
+    <div
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 space-y-2 hover:shadow-md transition-shadow cursor-pointer"
+      onClick={() => handleOpenModal(lead)}
+    >
       {/* Label */}
       <div className="flex justify-between items-center">
         {lead.labels?.[0]?.title ? (
@@ -59,7 +76,7 @@ function LeadCard({ lead }: { lead: any }) {
       {/* Follow-up info */}
       {lead.todays_follow_ups?.[0] && (
         <div className="text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-1.5 rounded">
-         Next Follow-up:{" "}
+          Next Follow-up:{" "}
           {lead.todays_follow_ups[0]?.next_followup_date
             ? new Date(
                 lead.todays_follow_ups[0]?.next_followup_date
@@ -86,7 +103,7 @@ function LeadCard({ lead }: { lead: any }) {
           🔄
         </button>
       </div> */}
-    </div>  
+    </div>
   );
 }
 
@@ -196,6 +213,8 @@ export function LeadGridView({ leads, status }: { leads: any[]; status: any }) {
       behavior: "smooth",
     });
   };
+
+  console.log(leads);
 
   // Edge case 1: No status data available
   if (!status?.data || status.data.length === 0) {
