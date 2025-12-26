@@ -36,6 +36,7 @@ import { Route as DashboardLayoutTelecallerAnalyticsIndexImport } from './routes
 import { Route as DashboardLayoutStatusIndexImport } from './routes/_dashboardLayout/status/index'
 import { Route as DashboardLayoutSourceIndexImport } from './routes/_dashboardLayout/source/index'
 import { Route as DashboardLayoutReportIndexImport } from './routes/_dashboardLayout/report/index'
+import { Route as DashboardLayoutMissedFollowupIndexImport } from './routes/_dashboardLayout/missedFollowup/index'
 import { Route as DashboardLayoutLeadIndexImport } from './routes/_dashboardLayout/lead/index'
 import { Route as DashboardLayoutLabelIndexImport } from './routes/_dashboardLayout/label/index'
 import { Route as DashboardLayoutGeneralTemplatesIndexImport } from './routes/_dashboardLayout/general-templates/index'
@@ -222,6 +223,13 @@ const DashboardLayoutReportIndexRoute = DashboardLayoutReportIndexImport.update(
     getParentRoute: () => DashboardLayoutRoute,
   } as any,
 )
+
+const DashboardLayoutMissedFollowupIndexRoute =
+  DashboardLayoutMissedFollowupIndexImport.update({
+    id: '/missedFollowup/',
+    path: '/missedFollowup/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 
 const DashboardLayoutLeadIndexRoute = DashboardLayoutLeadIndexImport.update({
   id: '/',
@@ -549,6 +557,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutLeadIndexImport
       parentRoute: typeof DashboardLayoutLeadRouteImport
     }
+    '/_dashboardLayout/missedFollowup/': {
+      id: '/_dashboardLayout/missedFollowup/'
+      path: '/missedFollowup'
+      fullPath: '/missedFollowup'
+      preLoaderRoute: typeof DashboardLayoutMissedFollowupIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboardLayout/report/': {
       id: '/_dashboardLayout/report/'
       path: '/report'
@@ -775,6 +790,7 @@ interface DashboardLayoutRouteChildren {
   DashboardLayoutDashboardIndexRoute: typeof DashboardLayoutDashboardIndexRoute
   DashboardLayoutGeneralTemplatesIndexRoute: typeof DashboardLayoutGeneralTemplatesIndexRoute
   DashboardLayoutLabelIndexRoute: typeof DashboardLayoutLabelIndexRoute
+  DashboardLayoutMissedFollowupIndexRoute: typeof DashboardLayoutMissedFollowupIndexRoute
   DashboardLayoutReportIndexRoute: typeof DashboardLayoutReportIndexRoute
   DashboardLayoutSourceIndexRoute: typeof DashboardLayoutSourceIndexRoute
   DashboardLayoutStatusIndexRoute: typeof DashboardLayoutStatusIndexRoute
@@ -802,6 +818,8 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardLayoutGeneralTemplatesIndexRoute:
     DashboardLayoutGeneralTemplatesIndexRoute,
   DashboardLayoutLabelIndexRoute: DashboardLayoutLabelIndexRoute,
+  DashboardLayoutMissedFollowupIndexRoute:
+    DashboardLayoutMissedFollowupIndexRoute,
   DashboardLayoutReportIndexRoute: DashboardLayoutReportIndexRoute,
   DashboardLayoutSourceIndexRoute: DashboardLayoutSourceIndexRoute,
   DashboardLayoutStatusIndexRoute: DashboardLayoutStatusIndexRoute,
@@ -886,6 +904,7 @@ export interface FileRoutesByFullPath {
   '/general-templates': typeof DashboardLayoutGeneralTemplatesIndexRoute
   '/label': typeof DashboardLayoutLabelIndexRoute
   '/lead/': typeof DashboardLayoutLeadIndexRoute
+  '/missedFollowup': typeof DashboardLayoutMissedFollowupIndexRoute
   '/report': typeof DashboardLayoutReportIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
@@ -932,6 +951,7 @@ export interface FileRoutesByTo {
   '/general-templates': typeof DashboardLayoutGeneralTemplatesIndexRoute
   '/label': typeof DashboardLayoutLabelIndexRoute
   '/lead': typeof DashboardLayoutLeadIndexRoute
+  '/missedFollowup': typeof DashboardLayoutMissedFollowupIndexRoute
   '/report': typeof DashboardLayoutReportIndexRoute
   '/source': typeof DashboardLayoutSourceIndexRoute
   '/status': typeof DashboardLayoutStatusIndexRoute
@@ -983,6 +1003,7 @@ export interface FileRoutesById {
   '/_dashboardLayout/general-templates/': typeof DashboardLayoutGeneralTemplatesIndexRoute
   '/_dashboardLayout/label/': typeof DashboardLayoutLabelIndexRoute
   '/_dashboardLayout/lead/': typeof DashboardLayoutLeadIndexRoute
+  '/_dashboardLayout/missedFollowup/': typeof DashboardLayoutMissedFollowupIndexRoute
   '/_dashboardLayout/report/': typeof DashboardLayoutReportIndexRoute
   '/_dashboardLayout/source/': typeof DashboardLayoutSourceIndexRoute
   '/_dashboardLayout/status/': typeof DashboardLayoutStatusIndexRoute
@@ -1032,6 +1053,7 @@ export interface FileRouteTypes {
     | '/general-templates'
     | '/label'
     | '/lead/'
+    | '/missedFollowup'
     | '/report'
     | '/source'
     | '/status'
@@ -1077,6 +1099,7 @@ export interface FileRouteTypes {
     | '/general-templates'
     | '/label'
     | '/lead'
+    | '/missedFollowup'
     | '/report'
     | '/source'
     | '/status'
@@ -1126,6 +1149,7 @@ export interface FileRouteTypes {
     | '/_dashboardLayout/general-templates/'
     | '/_dashboardLayout/label/'
     | '/_dashboardLayout/lead/'
+    | '/_dashboardLayout/missedFollowup/'
     | '/_dashboardLayout/report/'
     | '/_dashboardLayout/source/'
     | '/_dashboardLayout/status/'
@@ -1214,6 +1238,7 @@ export const routeTree = rootRoute
         "/_dashboardLayout/dashboard/",
         "/_dashboardLayout/general-templates/",
         "/_dashboardLayout/label/",
+        "/_dashboardLayout/missedFollowup/",
         "/_dashboardLayout/report/",
         "/_dashboardLayout/source/",
         "/_dashboardLayout/status/",
@@ -1329,6 +1354,10 @@ export const routeTree = rootRoute
     "/_dashboardLayout/lead/": {
       "filePath": "_dashboardLayout/lead/index.tsx",
       "parent": "/_dashboardLayout/lead"
+    },
+    "/_dashboardLayout/missedFollowup/": {
+      "filePath": "_dashboardLayout/missedFollowup/index.tsx",
+      "parent": "/_dashboardLayout"
     },
     "/_dashboardLayout/report/": {
       "filePath": "_dashboardLayout/report/index.tsx",
