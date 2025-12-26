@@ -55,12 +55,6 @@ export const navItems: NavItem[] = [
   },
 
   {
-    name: "Dashboard",
-    icon: <House size={20} />,
-    path: "/masterpannel",
-    roles: ["Masteradmin"],
-  },
-  {
     name: "Follow Ups",
     icon: <Plug size={20} />,
     roles: ["Telecaller", "Superadmin"],

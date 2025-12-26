@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMasterAdminStats } from "@/features/masterAdmin/hooks/useMasterAdminStats";
 import { motion } from "framer-motion";
+import BrandLoader from "@/components/BrandLoader/BrandLoader";
 
 export const Route = createFileRoute("/_masterLayout/masterpannel/")({
   component: RouteComponent,
 });
-
 
 type StatType = "leads" | "clients" | "customers" | "vendors" | "activeVendors";
 
@@ -112,7 +112,12 @@ function StatusCard({
 function RouteComponent() {
   const { data, isLoading, isError } = useMasterAdminStats();
 
-  if (isLoading) return <div>Loading dashboard...</div>;
+  if (isLoading)
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <BrandLoader />
+      </div>
+    );
   if (isError) return <div>Failed to load dashboard</div>;
 
   const stats = data?.card_statistics;
@@ -207,7 +212,9 @@ function RouteComponent() {
         <h1 className="mb-6 text-2xl font-bold">Server Status</h1>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <p className="bg-primary">{server_message}</p>
+          <p className="bg-primary text-sm p-4 rounded-xl leading-6">
+            {server_message}
+          </p>
         </div>
       </div>
     </div>

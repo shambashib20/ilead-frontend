@@ -9,6 +9,12 @@ export function useMasterAdminStats() {
       const res = await dashboardService.masterFetchStats();
       return res.data.data;
     },
+    refetchInterval: 0,
+    refetchIntervalInBackground: true,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    staleTime: 0,
   });
 
   return {
