@@ -66,6 +66,7 @@ import { useAssignLeadToChatAgent } from "../../hooks/useAssignLeadToChatAgent";
 import { useConvertLeadToCustomer } from "../../hooks/useConvertLeadToCustomer";
 import { useUpdateLeadStatus } from "../../hooks/useUpdateLeadStatus";
 import { getCardActions } from "@/utils/cardActions";
+import { queryClient } from "@/utils/client";
 
 const leadsApi = new LeadsModule();
 
@@ -552,6 +553,7 @@ export function LeadFollowUp() {
     followUpDate.setHours(Number(hours), Number(minutes));
 
     setIsSubmitting(true);
+
     try {
       if (isEditMode) {
         await leadsApi.updateFollowup({
@@ -562,6 +564,8 @@ export function LeadFollowUp() {
           attachmentUrl,
           audioAttachmentUrl,
         });
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
+        queryClient.invalidateQueries({ queryKey: ["leads:infinite"] });
       } else {
         await leadsApi.createNewFollowup({
           leadId,
@@ -570,6 +574,8 @@ export function LeadFollowUp() {
           attachmentUrl,
           audioAttachmentUrl,
         });
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
+        queryClient.invalidateQueries({ queryKey: ["leads:infinite"] });
       }
 
       console.warn("payload", {

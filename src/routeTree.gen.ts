@@ -15,7 +15,6 @@ import { Route as MasterLayoutImport } from './routes/_masterLayout'
 import { Route as DashboardLayoutImport } from './routes/_dashboardLayout'
 import { Route as AuthLayoutImport } from './routes/_authLayout'
 import { Route as AppLayoutImport } from './routes/_appLayout'
-import { Route as AppLayoutIndexImport } from './routes/_appLayout/index'
 import { Route as AuthLayoutUserLoginImport } from './routes/_authLayout/user-login'
 import { Route as AuthLayoutResetPasswordImport } from './routes/_authLayout/reset-password'
 import { Route as AuthLayoutRegisterImport } from './routes/_authLayout/register'
@@ -80,12 +79,6 @@ const AuthLayoutRoute = AuthLayoutImport.update({
 const AppLayoutRoute = AppLayoutImport.update({
   id: '/_appLayout',
   getParentRoute: () => rootRoute,
-} as any)
-
-const AppLayoutIndexRoute = AppLayoutIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppLayoutRoute,
 } as any)
 
 const AuthLayoutUserLoginRoute = AuthLayoutUserLoginImport.update({
@@ -459,13 +452,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutUserLoginImport
       parentRoute: typeof AuthLayoutImport
     }
-    '/_appLayout/': {
-      id: '/_appLayout/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AppLayoutIndexImport
-      parentRoute: typeof AppLayoutImport
-    }
     '/_authLayout/admin/login': {
       id: '/_authLayout/admin/login'
       path: '/admin/login'
@@ -724,7 +710,6 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AppLayoutRouteChildren {
-  AppLayoutIndexRoute: typeof AppLayoutIndexRoute
   AppLayoutContactIndexRoute: typeof AppLayoutContactIndexRoute
   AppLayoutOfflineIndexRoute: typeof AppLayoutOfflineIndexRoute
   AppLayoutPublicdetailsIndexRoute: typeof AppLayoutPublicdetailsIndexRoute
@@ -733,7 +718,6 @@ interface AppLayoutRouteChildren {
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
-  AppLayoutIndexRoute: AppLayoutIndexRoute,
   AppLayoutContactIndexRoute: AppLayoutContactIndexRoute,
   AppLayoutOfflineIndexRoute: AppLayoutOfflineIndexRoute,
   AppLayoutPublicdetailsIndexRoute: AppLayoutPublicdetailsIndexRoute,
@@ -890,7 +874,6 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthLayoutRegisterRoute
   '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
-  '/': typeof AppLayoutIndexRoute
   '/admin/login': typeof AuthLayoutAdminLoginRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/contact': typeof AppLayoutContactIndexRoute
@@ -937,7 +920,6 @@ export interface FileRoutesByTo {
   '/register': typeof AuthLayoutRegisterRoute
   '/reset-password': typeof AuthLayoutResetPasswordRoute
   '/user-login': typeof AuthLayoutUserLoginRoute
-  '/': typeof AppLayoutIndexRoute
   '/admin/login': typeof AuthLayoutAdminLoginRoute
   '/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/contact': typeof AppLayoutContactIndexRoute
@@ -989,7 +971,6 @@ export interface FileRoutesById {
   '/_authLayout/register': typeof AuthLayoutRegisterRoute
   '/_authLayout/reset-password': typeof AuthLayoutResetPasswordRoute
   '/_authLayout/user-login': typeof AuthLayoutUserLoginRoute
-  '/_appLayout/': typeof AppLayoutIndexRoute
   '/_authLayout/admin/login': typeof AuthLayoutAdminLoginRoute
   '/_dashboardLayout/report/$slug': typeof DashboardLayoutReportSlugRoute
   '/_appLayout/contact/': typeof AppLayoutContactIndexRoute
@@ -1039,7 +1020,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/user-login'
-    | '/'
     | '/admin/login'
     | '/report/$slug'
     | '/contact'
@@ -1085,7 +1065,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/user-login'
-    | '/'
     | '/admin/login'
     | '/report/$slug'
     | '/contact'
@@ -1135,7 +1114,6 @@ export interface FileRouteTypes {
     | '/_authLayout/register'
     | '/_authLayout/reset-password'
     | '/_authLayout/user-login'
-    | '/_appLayout/'
     | '/_authLayout/admin/login'
     | '/_dashboardLayout/report/$slug'
     | '/_appLayout/contact/'
@@ -1208,7 +1186,6 @@ export const routeTree = rootRoute
     "/_appLayout": {
       "filePath": "_appLayout.tsx",
       "children": [
-        "/_appLayout/",
         "/_appLayout/contact/",
         "/_appLayout/offline/",
         "/_appLayout/publicdetails/",
@@ -1298,10 +1275,6 @@ export const routeTree = rootRoute
     "/_authLayout/user-login": {
       "filePath": "_authLayout/user-login.tsx",
       "parent": "/_authLayout"
-    },
-    "/_appLayout/": {
-      "filePath": "_appLayout/index.tsx",
-      "parent": "/_appLayout"
     },
     "/_authLayout/admin/login": {
       "filePath": "_authLayout/admin/login.tsx",
