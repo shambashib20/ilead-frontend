@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_appLayout/")({
 function RouteComponent() {
   return (
     <iframe
-      src="/index.html"
+      src="/home.html"
       style={{
         width: "100%",
         height: "100vh",
