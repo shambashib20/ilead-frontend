@@ -3,6 +3,8 @@
     { "source": "/", "destination": "/home.html" },
     { "source": "/pricing", "destination": "/pricing.html" },
 
-    { "source": "/contact", "destination": "/contact.html" }
+    { "source": "/contact", "destination": "/contact.html" },
+
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
