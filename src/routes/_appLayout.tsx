@@ -1,8 +1,7 @@
 import Footer from "@/components/Footer";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_appLayout")({
-  beforeLoad: async ({ context }) => {},
   component: RouteComponent,
 });
 

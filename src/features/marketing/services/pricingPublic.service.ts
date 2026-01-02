@@ -13,3 +13,5 @@ class PricingPublicApiClient extends ApiClient {
 
 // Use it
 const publicApi = new PricingPublicApiClient();
+
+export default publicApi;

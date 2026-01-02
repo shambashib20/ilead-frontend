@@ -1,5 +1,4 @@
 import { usePricingPlans } from "@/features/payment/hooks/usePricingPlans";
-import React from "react";
 
 function Pricing() {
   const { pricingPlans } = usePricingPlans();

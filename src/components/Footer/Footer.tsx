@@ -1,18 +1,6 @@
-import logo from "../../assets/logo-dark-sm.png";
 import "@/styles/style.css";
-import { Phone, MapPin, Heart, Mail } from "lucide-react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
-  const quickLinks = [
-    { name: "About", href: "#" },
-    { name: "Terms & Condition", href: "/terms-condition" },
-    { name: "Refund", href: "/refund" },
-    { name: "Public", href: "/publicDetails" },
-    { name: "Contact", href: "#" },
-  ];
-
   return (
     <footer>
       <div className="container">
