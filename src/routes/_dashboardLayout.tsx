@@ -1,4 +1,6 @@
 import Header from "@/components/Header";
+import "../index.css";
+
 import { SidebarMenuItem } from "@/components/Sidebar/data";
 import Sidebar, { filteredNavItems } from "@/components/Sidebar/Sidebar";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -12,6 +14,7 @@ import { useModalStore } from "@/store/useModalStore";
 import FollowUp from "@/features/dashboard/components/FollowUp";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/features/auth/hooks/useUser";
+
 
 export const Route = createFileRoute("/_dashboardLayout")({
   beforeLoad: async ({ context }) => {

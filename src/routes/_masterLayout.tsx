@@ -2,6 +2,8 @@ import Header from "@/components/Header";
 import { SidebarMenuItem } from "@/components/Sidebar/data";
 import Sidebar, { filteredNavItems } from "@/components/Sidebar/Sidebar";
 import { useTheme } from "@/contexts/ThemeProvider";
+import "../index.css";
+
 import { useSidebarStore } from "@/store/useSidebarStore";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import Logo from "../assets/logo.png";

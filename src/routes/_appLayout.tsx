@@ -2,13 +2,7 @@ import Footer from "@/components/Footer";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_appLayout")({
-  beforeLoad: async ({ context }) => {
-    if (!context.isAuthenticated) {
-      throw redirect({
-        to: "/login",
-      });
-    }
-  },
+  beforeLoad: async ({ context }) => {},
   component: RouteComponent,
 });
 
