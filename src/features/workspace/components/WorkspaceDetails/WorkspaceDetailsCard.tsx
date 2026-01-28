@@ -230,14 +230,17 @@ export default function WorkspaceDetailsCard() {
 
   if (!workspace) return null;
 
-  const planValidityDays = activePkg?.package_id?.validity_in_days ?? 0;
+const planValidityDays = activePkg?.package_id?.validity_in_days ?? 0;
 
-  // NEW: compute plan expiry and flags
-  const planExpiryISO = getPlanExpiryISO(activePkg);
-  const planExpired = isExpired(planExpiryISO);
-  const planExpiryLabel = planExpiryISO
-    ? dayjs(planExpiryISO).format("DD MMM YYYY, hh:mm A")
-    : "—";
+// Correct expiry source (SUBSCRIPTION, not PACKAGE)
+const planExpiryISO = activePkg?.end_date ?? null;
+const planExpired = planExpiryISO
+  ? dayjs().isAfter(dayjs(planExpiryISO))
+  : false;
+
+const planExpiryLabel = planExpiryISO
+  ? dayjs(planExpiryISO).format("DD MMM YYYY, hh:mm A")
+  : "—";
 
   console.log(workspace);
 
