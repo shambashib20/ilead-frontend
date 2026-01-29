@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import WorkspaceDetailsCard from "@/features/workspace/components/WorkspaceDetails/WorkspaceDetailsCard";
 import { workspacePropertyQueryOptions } from "@/features/workspace/hooks/useWorkspaceProperty";
 import { useEffect, useRef } from "react";
@@ -10,7 +10,6 @@ export const Route = createFileRoute("/_dashboardLayout/workspace-details/")({
   },
 });
 function RouteComponent() {
-  const router = useRouter();
   const hasTriggeredPayment = useRef(false);
 
   const params = new URLSearchParams(window.location.search);
