@@ -19,7 +19,11 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 }
 
 function AllUsersLoginForm() {
-  const { login, isLoading, data, error } = useAllUsersLogin();
+  const location = window.location;
+  const params = new URLSearchParams(location.search);
+  const planId = params.get("plan");
+
+  const { login, isLoading, data, error } = useAllUsersLogin(planId);
   const form = useForm({
     defaultValues: {
       email: "",

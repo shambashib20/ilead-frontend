@@ -230,17 +230,14 @@ export default function WorkspaceDetailsCard() {
 
   if (!workspace) return null;
 
-const planValidityDays = activePkg?.package_id?.validity_in_days ?? 0;
+  const planValidityDays = activePkg?.package_id?.validity_in_days ?? 0;
 
-// Correct expiry source (SUBSCRIPTION, not PACKAGE)
-const planExpiryISO = activePkg?.end_date ?? null;
-const planExpired = planExpiryISO
-  ? dayjs().isAfter(dayjs(planExpiryISO))
-  : false;
-
-const planExpiryLabel = planExpiryISO
-  ? dayjs(planExpiryISO).format("DD MMM YYYY, hh:mm A")
-  : "—";
+  // NEW: compute plan expiry and flags
+  const planExpiryISO = getPlanExpiryISO(activePkg);
+  const planExpired = isExpired(planExpiryISO);
+  const planExpiryLabel = planExpiryISO
+    ? dayjs(planExpiryISO).format("DD MMM YYYY, hh:mm A")
+    : "—";
 
   console.log(workspace);
 
@@ -294,7 +291,7 @@ const planExpiryLabel = planExpiryISO
                   <div
                     className={clsx(
                       "p-6 rounded-xl border shadow-sm hover:shadow-md transition-shadow duration-200",
-                      expiredCardClasses(planExpired)
+                      expiredCardClasses(planExpired),
                     )}
                   >
                     <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200 mb-4 flex items-center gap-2">
@@ -344,7 +341,7 @@ const planExpiryLabel = planExpiryISO
                         <div
                           className={clsx(
                             "text-sm font-semibold",
-                            planExpired && "text-red-600 dark:text-red-400"
+                            planExpired && "text-red-600 dark:text-red-400",
                           )}
                         >
                           {planExpiryLabel}
@@ -395,7 +392,7 @@ const planExpiryLabel = planExpiryISO
                             const featureExpired = isExpired(featureExpiryISO);
                             const featureExpiryLabel = featureExpiryISO
                               ? dayjs(featureExpiryISO).format(
-                                  "DD MMM YYYY, hh:mm A"
+                                  "DD MMM YYYY, hh:mm A",
                                 )
                               : "—";
 
@@ -404,7 +401,7 @@ const planExpiryLabel = planExpiryISO
                                 key={feature.feature_id}
                                 className={clsx(
                                   "p-4 rounded-lg border transition-colors duration-150",
-                                  expiredCardClasses(featureExpired)
+                                  expiredCardClasses(featureExpired),
                                 )}
                               >
                                 <div className="flex items-center justify-between mb-2">
@@ -436,7 +433,7 @@ const planExpiryLabel = planExpiryISO
                                             ? "bg-gradient-to-r from-green-400 to-emerald-500"
                                             : fPercent < 90
                                               ? "bg-gradient-to-r from-amber-400 to-orange-500"
-                                              : "bg-gradient-to-r from-rose-500 to-red-600"
+                                              : "bg-gradient-to-r from-rose-500 to-red-600",
                                       )}
                                       style={{ width: `${fPercent}%` }}
                                     />
@@ -463,7 +460,7 @@ const planExpiryLabel = planExpiryISO
                                   <div
                                     className={clsx(
                                       featureExpired &&
-                                        "text-red-600 dark:text-red-400 font-semibold"
+                                        "text-red-600 dark:text-red-400 font-semibold",
                                     )}
                                   >
                                     {featureExpiryLabel}
@@ -471,7 +468,7 @@ const planExpiryLabel = planExpiryISO
                                 </div>
                               </div>
                             );
-                          }
+                          },
                         )
                       ) : (
                         <div className="text-sm text-slate-500 dark:text-slate-400">
@@ -533,21 +530,21 @@ const planExpiryLabel = planExpiryISO
                           Boolean(workspace.is_verified),
                           "green",
                           "gray",
-                          "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
                         )}
                         {renderStatusItem(
                           "Workspace Ban Status",
                           Boolean(workspace.is_banned),
                           "red",
                           "gray",
-                          "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
                         )}
                         {renderStatusItem(
                           "Workspace Reported",
                           Boolean(workspace.reported),
                           "yellow",
                           "gray",
-                          "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                          "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z",
                         )}
                       </div>
                     </div>

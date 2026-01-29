@@ -4,8 +4,11 @@ import { useRouter } from "@tanstack/react-router";
 import { queryClient } from "@/utils/client";
 import { authService } from "../services/Auth.service";
 
-export function useAllUsersLogin() {
+export function useAllUsersLogin(planId?: string | null) {
   const router = useRouter();
+
+  console.log(planId);
+
   const mutation = useMutation({
     mutationFn: async ({
       email,
@@ -24,8 +27,12 @@ export function useAllUsersLogin() {
         localStorage.setItem("user", JSON.stringify(data.data.user));
         queryClient.setQueryData(["user"], data);
         setTimeout(() => {
-          router.history.push("/dashboard");
-        }, 2000); // Simulate a delay for the user experience
+          if (planId && planId !== "free") {
+            router.history.push(`/workspace-details?plan=${planId}`);
+          } else {
+            router.history.push("/dashboard");
+          }
+        }, 0); // Simulate a delay for the user experience
         // Redirect to dashboard or another pages
       }
       if (!data.status || data.status !== "SUCCESS") {

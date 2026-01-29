@@ -1,32 +1,50 @@
 import { usePricingPlans } from "@/features/payment/hooks/usePricingPlans";
 
+
 function Pricing() {
   const { pricingPlans } = usePricingPlans();
 
-  // Get only the first 3 plans
   const firstThreePlans = pricingPlans.slice(0, 3);
+
+  const handlePlanClick = (plan: any) => {
+    if (plan.price === 0) {
+      window.location.href = "/register?plan=free";
+    } else {
+      window.location.href = `/register?plan=${plan._id}`;
+    }
+  };
+
+  const getCtaLabel = (plan: any) => {
+    if (plan.price === 0) return "Start Free";
+    return "Buy Now";
+  };
 
   return (
     <section className="pricing">
       <div className="content">
         <h6 className="badge">Pricing</h6>
         <h3>Professional headshots for 8× less than a physical photo shoot</h3>
-        <p data-animate="fade-up">
+        <p>
           The average cost of professional headshots in the United States is
           $232.50*. Our packages start from just $29.
         </p>
       </div>
 
       <div className="pricing-grid">
-        {firstThreePlans.map((plan, index) => (
+        {firstThreePlans.map((plan) => (
           <div
             key={plan._id}
-            className={`plan ${index === 1 ? "featured" : ""}`}
+            className={`plan ${plan.price >= 0 || plan.price <= 500 ? "" : "featured"}`}
           >
             <h4>{plan.title}</h4>
-            <div className="price">${plan.price}</div>
+
+            <div className="price">
+              {plan.price === 0 ? "Free" : `$${plan.price}`}
+            </div>
+
             <h5>Per {plan.validity_in_days} Days</h5>
             <p>{plan.description}</p>
+
             <ul>
               {plan.features.map((feature) => (
                 <li key={feature._id}>
@@ -34,12 +52,12 @@ function Pricing() {
                 </li>
               ))}
             </ul>
-            <button className={`btn ${index === 1 ? "btn-primary" : ""}`}>
-              {index === 0
-                ? "Start Free Trial"
-                : index === 1
-                  ? "Get Started"
-                  : "Book a Demo"}
+
+            <button
+              className={`btn ${plan.price > 0 ? "btn-primary" : ""}`}
+              onClick={() => handlePlanClick(plan)}
+            >
+              {getCtaLabel(plan)}
             </button>
           </div>
         ))}

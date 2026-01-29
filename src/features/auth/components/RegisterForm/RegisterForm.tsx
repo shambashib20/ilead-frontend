@@ -12,57 +12,68 @@ import { Link } from "@tanstack/react-router";
 function RegisterForm() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    roleName: "Superadmin",
-    name: "",
-    email: "",
-    phone_number: "",
-    password: "",
-    orgName: "",
-    orgDescription: "",
-  });
+ const params = new URLSearchParams(window.location.search);
+ const planId = params.get("plan");
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+ console.log(planId);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+ const [form, setForm] = useState({
+   roleName: "Superadmin",
+   name: "",
+   email: "",
+   phone_number: "",
+   password: "",
+   orgName: "",
+   orgDescription: "",
+   selectedPlan: "free", // or "free"
+ });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+ const [showPassword, setShowPassword] = useState(false);
+ const [loading, setLoading] = useState(false);
 
-    try {
-      await workspaceService.register(form);
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+   const { name, value } = e.target;
+   setForm((prev) => ({ ...prev, [name]: value }));
+ };
 
-      Swal.fire({
-        title: "Success",
-        text: "You have registered successfully!",
-        icon: "success",
-        showConfirmButton: false,
-        timer: 1000, // closes automatically after 1 second
-        timerProgressBar: true,
-      });
+ const handleSubmit = async (e: React.FormEvent) => {
+   e.preventDefault();
+   setLoading(true);
 
-      // small delay so navigation happens right after the alert closes
-      setTimeout(() => {
-        navigate({ to: "/user-login" });
-      }, 1000);
-    } catch (error: any) {
-      Swal.fire({
-        title: "Error",
-        text: error?.response?.data?.message || "Registration failed",
-        icon: "error",
-        showConfirmButton: false,
-        timer: 1000,
-        timerProgressBar: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+   try {
+     await workspaceService.register(form);
+
+     Swal.fire({
+       title: "Success",
+       text: "You have registered successfully!",
+       icon: "success",
+       showConfirmButton: false,
+       timer: 1000, // closes automatically after 1 second
+       timerProgressBar: true,
+     });
+
+     // small delay so navigation happens right after the alert closes
+     setTimeout(() => {
+       navigate({
+         to: "/user-login",
+         search: {
+           plan: planId,
+         },
+       });
+     }, 0);
+   } catch (error: any) {
+     Swal.fire({
+       title: "Error",
+       text: error?.response?.data?.message || "Registration failed",
+       icon: "error",
+       showConfirmButton: false,
+       timer: 1000,
+       timerProgressBar: true,
+     });
+   } finally {
+     setLoading(false);
+   }
+ };
 
   return (
     <div className="login_form w-[450px] max-w-full lg:w-full mx-auto">

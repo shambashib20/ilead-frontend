@@ -38,7 +38,7 @@ const HeroSec = () => {
                   </a>
                 </li>
                 <li>
-                  <button className="register" id="openModalBtn">
+                  <a href="/register" className="register" id="openModalBtn">
                     <span>
                       Get Started
                       <svg
@@ -57,7 +57,7 @@ const HeroSec = () => {
                         <path d="m12 5 7 7-7 7" />
                       </svg>
                     </span>
-                  </button>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -122,26 +122,29 @@ const HeroSec = () => {
 
             <ul>
               <li>
-                <button className="btn btn-primary">
-                  <span>
-                    Start Free Trial
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-arrow-right"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                  </span>
-                </button>
+                <a href="/register">
+                  {" "}
+                  <button className="btn btn-primary">
+                    <span>
+                      Start Free Trial
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-arrow-right"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                      </svg>
+                    </span>
+                  </button>
+                </a>
               </li>
             </ul>
 
