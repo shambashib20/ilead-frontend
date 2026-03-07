@@ -21,7 +21,7 @@ function ComSec() {
                 <img
                   src="img/Centralized Lead & Customer Management.png"
                   alt=""
-                  className="w-22 h-12"
+                  className=""
                 />
               </span>
               <div>
@@ -39,7 +39,6 @@ function ComSec() {
                 <img
                   src="img/Smart Automation & Workflow Efficiency.png"
                   alt=""
-                  className="w-22 h-12"
                 />
               </span>
               <div>
@@ -54,11 +53,7 @@ function ComSec() {
 
             <li>
               <span className="icon">
-                <img
-                  src="img/Secure, Cloud-Based Access.png"
-                  alt=""
-                  className="w-22 h-12"
-                />
+                <img src="img/Secure, Cloud-Based Access.png" alt="" />
               </span>
               <div>
                 <h4>Secure, Cloud-Based Access</h4>
@@ -72,11 +67,7 @@ function ComSec() {
 
             <li>
               <span className="icon">
-                <img
-                  src="img/Seamless Integrations & Scalability.png"
-                  alt=""
-                  className="w-22 h-12"
-                />
+                <img src="img/Seamless Integrations & Scalability.png" alt="" />
               </span>
               <div>
                 <h4>Seamless Integrations & Scalability</h4>
@@ -92,7 +83,7 @@ function ComSec() {
 
         <div className="comm-visual">
           <img
-            src="/img/ETC_CRM_Centralized Lead Management.jpg.jpeg"
+            src="/img/ETC_CRM_Centralized Lead Management.png"
             alt="University Dashboard"
             className="main-imzg"
           />
