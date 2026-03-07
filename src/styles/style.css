@@ -5528,3 +5528,121 @@ section.pricing-sec2 {
     right: 12px;
   }
 }
+
+
+.comm-section {
+  padding: 40px 20px 20px;
+  background: #f8fbff;
+
+  .comm-container {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  /* LEFT */
+  .comm-content h2 {
+    font-size: 34px;
+    color: #0f172a;
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+    & h3 {
+             font-weight: 700;
+            font-size: 30px;
+            color: var(--secondary-clr);
+            font-family: var(--font-display-medium);
+  }
+  & p{
+    max-width: 58.125rem;
+    margin-inline: auto;
+    margin-top: 12px;
+  }
+
+
+  .comm-content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .comm-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .comm-list li {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .comm-list .icon {
+    font-size: 26px;
+    color: #2563eb;
+    margin-top: 4px;
+  }
+
+  .comm-list h4 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    color: #1e293b;
+    font-weight: 600;
+  }
+
+  .comm-list p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+  }
+
+  /* RIGHT */
+  .comm-visual {
+    position: relative;
+  }
+
+  .main-img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+  }
+
+  /* FLOATING TAGS */
+  .floating-tag {
+    position: absolute;
+    background: #fff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    color: #1e3a8a;
+  }
+
+  .floating-tag.top {
+    top: 20px;
+    left: -30px;
+  }
+
+  .floating-tag.bottom {
+    bottom: 30px;
+    right: -20px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .comm-container {
+      grid-template-columns: 1fr;
+    }
+
+    .floating-tag {
+      display: none;
+    }
+  }
+}
+
+.zick-box{width:100%;float:left;padding:10px 0; margin-top: 50px;}
+.zick-box h2 {font-size: 28px;color: #3f3d56;margin-bottom: 10px;text-align: left;  font-weight: 600;}
+.zick-box p {font-size: 18px;line-height: 25px;color: #555;margin-bottom: 8px;text-align: left; }
+.zick-box button {width:200px; margin-top:15px;}

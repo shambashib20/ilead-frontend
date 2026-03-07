@@ -2,12 +2,18 @@ import { createFileRoute } from "@tanstack/react-router";
 // import "@/styles/style.css";
 import HeroSec from "@/components/marketing/heroSec";
 import LoseDeals from "@/components/marketing/loseDeals";
-import Features from "@/components/marketing/features";
 import Touch from "@/components/marketing/touch";
-import Integrations from "@/components/marketing/integrations";
 import Techstack from "@/components/marketing/techstack";
 import Pricing from "@/components/marketing/pricing";
 import Faq from "@/components/marketing/faq";
+import Header from "@/components/marketing/header";
+import ServicesSec from "@/components/marketing/servicesSec";
+import ETCCRMSection from "@/components/marketing/ETCCRMSec";
+import AICRMBanner from "@/components/marketing/AICRMBanner";
+import WorkshopGrid from "@/components/marketing/workshopGrid";
+import ComSec from "@/components/marketing/ComSec";
+import ComSec2 from "@/components/marketing/ComSec2";
+import CRMBanner from "@/components/marketing/CrmBanner";
 
 export const Route = createFileRoute("/_appLayout/")({
   component: RouteComponent,
@@ -16,12 +22,20 @@ export const Route = createFileRoute("/_appLayout/")({
 function RouteComponent() {
   return (
     <>
+      <Header />
       <HeroSec />
       <LoseDeals />
+      <ServicesSec />
+      <CRMBanner />
+      <ETCCRMSection />
+      <AICRMBanner />
+      <WorkshopGrid />
+      <ComSec />
       <Touch />
-      <Features />
+      <ComSec2 />
+      {/* <Features /> */}
       <Touch />
-      <Integrations />
+      {/* <Integrations /> */}
       <Pricing />
       <Faq />
       <Techstack />
@@ -29,3 +43,4 @@ function RouteComponent() {
     </>
   );
 }
+

@@ -2,13 +2,35 @@
 function Techstack() {
   return (
     <section className="tech-stack-section">
-      <div className="content">
+      <div
+        className="content"
+        style={{ maxWidth: "1000px", marginInline: "auto" }}
+      >
         <h6 className="badge">Tech Stack</h6>
 
-        <h2 className="section-heading">Tech Stack We Used</h2>
-        <p className="section-subtitle">
-          Our technology ecosystem revolves around robust, scalable solutions
-          that power your success.
+        <h2 className="text-[28px] font-[family-name:var(--font-display-semibold)] text-gray-900 leading-tight">
+          All Your Favourite Tools in One CRM
+        </h2>
+        <h4 className="text-3xl font-[family-name:var(--font-text)] inline-block mt-1">
+          Seamless Integrations That Power Your Growth
+        </h4>
+        <p className="section-subtitle" style={{ marginTop: "30px" }}>
+          ETC CRM brings all your essential business tools together into one
+          unified platform. From email platforms and calling systems to
+          marketing automation, payment gateways and communication apps —
+          everything connects smoothly to streamline your workflow. With
+          powerful third-party integrations, your team can eliminate data silos,
+          automate repetitive tasks and maintain real-time synchronization
+          across platforms.
+        </p>
+
+        <p className="section-subtitle " style={{ marginTop: "20px" }}>
+          This ensures better collaboration, faster response times and a more
+          efficient sales process. ETC CRM helps you work smarter by keeping
+          your tools connected — No more switching between multiple software or
+          managing scattered data. ETC CRM ensures real-time synchronization, so
+          your sales, marketing and support teams always have accurate and
+          updated information at their fingertips.
         </p>
       </div>
 

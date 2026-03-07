@@ -1015,7 +1015,7 @@
     init() {
       document.addEventListener("DOMContentLoaded", () => {
         this.initModules();
-        console.log("All modules initialized successfully");
+        // console.log("All modules initialized successfully");
       });
     }
   }

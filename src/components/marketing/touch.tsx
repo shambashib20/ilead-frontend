@@ -9,18 +9,15 @@ function Touch() {
           <h6 className="badge fade-up">
             <i className="fas fa-link"></i> Connect With Us
           </h6>
-          <h3 className="fade-up">What kind of photos do I need to upload?</h3>
+          <h3 className="fade-up">
+            Manage Leads, Calls and Follow-Ups without the Mess
+          </h3>
           <p className="fade-up">
-            Submit your details and our team will guide you through the photo
-            requirements for your specific needs.
+            Capture leads instantly, manage calls and Follow-ups efficiently
+            without confusion or missed chances. With ETC CRM, organize every
+            lead, streamline follow-ups and convert inquiries into real business
+            growth — all from one powerful, easy-to-use centralized platform.
           </p>
-
-          <div className="photo-hint fade-up">
-            <i className="fas fa-info-circle"></i>
-            <span className="hint-text">
-              View photo requirements & guidelines
-            </span>
-          </div>
         </div>
 
         <div className="form">

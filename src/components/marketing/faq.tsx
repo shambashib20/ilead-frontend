@@ -10,34 +10,80 @@ function Faq() {
 
   const faqItems: AccordionItem[] = [
     {
-      question: "What kind of photos do I need to upload?",
+      question: "What is ETC CRM and how does it help businesses in India?",
       answer:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus aut ullam exercitationem minus vitae. Minima dignissimos, provident tempore assumenda ipsum odit consectetur quis nam est exercitationem officiis libero cum sapiente!",
+        "ETC CRM is a modern, cloud-based CRM software in India designed to simplify lead management, customer communication and sales tracking for growing businesses. Our platform brings all your leads, calls, emails, WhatsApp chats, follow-ups and team activities into one centralized dashboard.Instead of juggling spreadsheets or switching between multiple tools, ETC CRM provides a structured system that helps businesses respond faster, track better and close more deals efficiently.",
     },
     {
-      question: "How do I integrate etcCRM with my existing tools?",
+      question:
+        "Why is ETC CRM considered one of the best CRM software in India?",
       answer:
-        "Our platform offers seamless integration with popular tools like Slack, Google Workspace, Microsoft Office, and many more through our API. Setup is straightforward with our step-by-step integration guide.",
+        "ETC CRM is recognized among the best CRM software in India because it combines simplicity with powerful automation. We focus on solving real business problems — missed follow-ups, scattered customer data, untracked calls and unclear sales pipelines.With smart reminders, real-time reporting, WhatsApp integration and customizable workflows, ETC CRM ensures your team works in an organized and accountable manner while improving overall productivity",
     },
     {
-      question: "Is there a free trial available?",
+      question: "What industries can benefit from ETC CRM?",
       answer:
-        "Yes, we offer a 14-day free trial with full access to all features. No credit card required to start. After the trial, you can choose from our flexible pricing plans that scale with your business needs.",
+        "Our customer relationship management software is designed for multiple industries including real estate, education, healthcare, finance, travel, IT services, retail, and B2B sales organizations. Any business that handles inquiries, manages prospects, or nurtures customer relationships can benefit from our CRM solution in India.Whether you generate leads through websites, ads, calls, or social media, ETC CRM helps you manage them systematically.",
     },
     {
-      question: "What kind of customer support do you provide?",
+      question: "How does ETC CRM capture and manage leads?",
       answer:
-        "We provide 24/7 customer support through multiple channels including live chat, email, and phone. All our customers also get access to comprehensive documentation and video tutorials.",
+        "ETC CRM automatically captures leads from multiple sources such as website forms, emails, phone calls and WhatsApp. All inquiries are stored in one centralized database, ensuring no opportunity is lost. This CRM management software allows you to assign leads to team members, set priorities, track progress and monitor conversion stages in a structured sales pipeline.",
     },
     {
-      question: "Can I customize etcCRM for my specific business needs?",
+      question: "Is ETC CRM cloud-based and secure?",
       answer:
-        "Absolutely! etcCRM is highly customizable. You can create custom fields, workflows, reports, and dashboards tailored to your specific business processes. Our enterprise plans even include custom development options.",
+        "Yes, ETC CRM is a secure, cloud-based CRM software in India. Your data is protected through encrypted systems, secure login access and regular backups. Being cloud-based also means you can access your CRM from anywhere, enabling remote work and seamless collaboration.",
     },
     {
-      question: "How secure is my data with etcCRM?",
+      question: "Can ETC CRM integrate with WhatsApp and other tools?",
       answer:
-        "We take data security seriously. Our platform uses enterprise-grade encryption, regular security audits, and complies with GDPR and other privacy regulations. We also offer advanced security features like two-factor authentication and role-based access control.",
+        "Yes, ETC CRM offers WhatsApp Business API integration along with email and other third-party tool integrations. This allows businesses to communicate directly with customers while automatically logging conversations into the system.Our goal is to make ETC CRM a complete customer relationship management software that connects with your existing workflow.",
+    },
+    {
+      question: "Is ETC CRM suitable for small and medium businesses?",
+      answer:
+        "Absolutely. ETC CRM is built to be scalable. Startups and SMEs can use essential features to manage leads efficiently, while growing enterprises can leverage advanced automation and analytics. Our CRM management software in India adapts as your business expands.",
+    },
+    {
+      question: "Does ETC CRM help reduce manual work?",
+      answer:
+        "Yes. Manual data entry, scattered spreadsheets, and missed updates slow down teams. ETC CRM automates repetitive tasks, centralizes data and organizes workflows. This makes it one of the best CRM software in India for businesses aiming to improve efficiency without increasing operational costs.",
+    },
+    {
+      question: "How customizable is ETC CRM?",
+      answer:
+        "ETC CRM offers customizable sales stages, fields, dashboards and workflows. Every business has a unique process and our CRM solution ensures you can tailor the system to match your operational needs",
+    },
+    {
+      question: "Can multiple team members use ETC CRM?",
+      answer:
+        "Yes. ETC CRM supports multi-user access with role-based permissions. Managers can monitor performance, assign leads and track activities, while team members can manage their tasks efficiently within this structured CRM software.",
+    },
+    {
+      question: "How does ETC CRM help improve customer relationships?",
+      answer:
+        "Our customer relationship management software maintains a complete communication history for every client. This helps your team understand customer needs, respond personally and build long-term trust instead of transactional interactions.",
+    },
+    {
+      question: "Is ETC CRM easy to use?",
+      answer:
+        "Yes. ETC CRM is built with a clean, intuitive interface so that your team can start using it with minimal training. Unlike overly complicated systems, our CRM solution focuses on simplicity and efficiency.",
+    },
+    {
+      question: "How quickly can we implement ETC CRM?",
+      answer:
+        "Implementation is smooth and guided by our support team. Most businesses can get started quickly, making ETC CRM a practical and efficient CRM solution in India for immediate deployment.",
+    },
+    {
+      question: "What business problems does ETC CRM solve?",
+      answer:
+        "ETC CRM eliminates lost leads, missed follow-ups, scattered data, unclear pipelines, and poor coordination. As one of the best CRM software in India, it brings structure, visibility and automation to your sales operations.",
+    },
+    {
+      question:
+        "Why should we choose ETC CRM over other CRM software in India?",
+      answer: `ETC CRM combines affordability, powerful automation, seamless integrations and real-time analytics into one centralized platform. Our focus is not just on managing data but on helping businesses grow systematically. If you are looking for a reliable, scalable, and easy-to-use CRM solution in India, ETC CRM is built to support your long-term success.`,
     },
   ];
 
