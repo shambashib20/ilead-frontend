@@ -2142,7 +2142,7 @@
       @media (max-width: 600px) {
         margin-bottom: 20px;
       }
-      h3 {
+      h4 {
         font-weight: 700;
         font-size: 30px;
         color: var(--secondary-clr);
@@ -2179,7 +2179,7 @@
         }
       }
 
-      .accord h3 {
+      .accord h5 {
         padding: 18px 20px;
         background-color: var(--light-gray);
         margin: 0;
@@ -2197,11 +2197,11 @@
         }
       }
 
-      .accord h3:hover {
+      .accord h5:hover {
         background-color: #e9e9e9;
       }
 
-      .accord h3 span {
+      .accord h5 span {
         transition: transform 0.3s ease;
 
         @media (max-width: 600px) {
@@ -2210,11 +2210,11 @@
         }
       }
 
-      .accord.active h3 span {
+      .accord.active h5 span {
         transform: rotate(180deg);
       }
 
-      .accord.active h3 {
+      .accord.active h5 {
         background-color: var(--primary-color);
         color: var(--secondary-clr);
       }
@@ -2242,12 +2242,12 @@
 
       /* Responsive */
       @media (max-width: 768px) {
-        .accord h3 {
+        .accord h5 {
           font-size: 16px;
           padding: 15px;
         }
 
-        .content h3 {
+        .content h5 {
           font-size: 24px;
         }
       }
@@ -5545,16 +5545,10 @@ section.pricing-sec2 {
 
   /* LEFT */
   .comm-content h2 {
-    font-size: 34px;
-    color: #0f172a;
-    margin-bottom: 30px;
-    font-weight: 700;
+
   }
     & h3 {
-             font-weight: 700;
-            font-size: 30px;
-            color: var(--secondary-clr);
-            font-family: var(--font-display-medium);
+ 
   }
   & p{
     max-width: 58.125rem;
@@ -5643,6 +5637,6 @@ section.pricing-sec2 {
 }
 
 .zick-box{width:100%;float:left;padding:10px 0; margin-top: 50px;}
-.zick-box h2 {font-size: 28px;color: #3f3d56;margin-bottom: 10px;text-align: left;  font-weight: 600;}
+.zick-box h3 {font-size: 28px;color: #3f3d56;margin-bottom: 10px;text-align: left;  font-weight: 600;}
 .zick-box p {font-size: 18px;line-height: 25px;color: #555;margin-bottom: 8px;text-align: left; }
 .zick-box button {width:200px; margin-top:15px;}

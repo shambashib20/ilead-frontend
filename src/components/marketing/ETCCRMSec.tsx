@@ -195,7 +195,7 @@ function ETCCRMSection() {
           >
             {/* LEFT — text + button */}
             <div style={{ flex: "1 1 280px", minWidth: "240px" }}>
-              <h3
+              <h2
                 className="font-[family-name:var(--font-display-semibold)]"
                 style={{
                   fontSize: "28px",
@@ -207,7 +207,7 @@ function ETCCRMSection() {
                 }}
               >
                 Industries Using Our CRM Solutions
-              </h3>
+              </h2>
 
               <p
                 style={{

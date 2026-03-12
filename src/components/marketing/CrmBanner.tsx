@@ -24,8 +24,12 @@ function CRMBanner() {
             flex: "1 1 300px",
           }}
         >
-          <img src="img/customer-service.png" alt="" className="w-15" />
-          <p
+          <img
+            src="img/customer-service.png"
+            alt="contact-to-etc-crm-for-increseing your-sales"
+            className="w-15"
+          />
+          <h4
             style={{
               margin: 0,
               color: "#ffffff",
@@ -37,7 +41,7 @@ function CRMBanner() {
             Increase your Sales and nurture Customer
             <br />
             Relationships with our CRM Software Solution
-          </p>
+          </h4>
         </div>
 
         {/* Right: Button */}

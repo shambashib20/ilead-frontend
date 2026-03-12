@@ -1223,7 +1223,7 @@
     .content {
       position: relative;
 
-      h3 {
+      h2{
         font-weight: 700;
         font-size: 30px;
         color: var(--secondary-clr);
@@ -1304,7 +1304,7 @@
             object-fit: cover;
           }
         }
-        h4 {
+        h3 {
           font-family: var(--font-display-medium);
           display: flex;
           align-items: center;
@@ -1344,7 +1344,7 @@
             div {
               max-width: 320px;
 
-              h5 {
+              h3 {
                 font-size: 1.125rem;
                 font-weight: 600;
               }

@@ -102,11 +102,7 @@ function Faq() {
       <div className="container">
         <div className="content text-center">
           <h6 className="badge">FAQ</h6>
-          <h3>Frequently Asked Questions</h3>
-          <p>
-            No switching tabs, no copy-paste chaos. etcCRM fits into your
-            workflow.
-          </p>
+          <h4>Frequently Asked Questions</h4>
         </div>
 
         <div className="faq-grid">
@@ -115,7 +111,7 @@ function Faq() {
               key={index}
               className={`accord ${activeIndex === index ? "active" : ""}`}
             >
-              <h3 onClick={() => handleAccordionClick(index)}>
+              <h5 onClick={() => handleAccordionClick(index)}>
                 {item.question}
                 <span>
                   <svg
@@ -133,7 +129,7 @@ function Faq() {
                     <path d="m18 15-6-6-6 6" />
                   </svg>
                 </span>
-              </h3>
+              </h5>
               <p>{item.answer}</p>
             </div>
           ))}

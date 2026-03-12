@@ -9,9 +9,9 @@ function Touch() {
           <h6 className="badge fade-up">
             <i className="fas fa-link"></i> Connect With Us
           </h6>
-          <h3 className="fade-up">
+          <h4 className="fade-up text-[28px] font-[family-name:var(--font-display-semibold)]  leading-tight">
             Manage Leads, Calls and Follow-Ups without the Mess
-          </h3>
+          </h4>
           <p className="fade-up">
             Capture leads instantly, manage calls and Follow-ups efficiently
             without confusion or missed chances. With ETC CRM, organize every

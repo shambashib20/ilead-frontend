@@ -25,7 +25,16 @@ function ComSec() {
                 />
               </span>
               <div>
-                <h4>Centralized Lead & Customer Management</h4>
+                <h3
+                  style={{
+                    fontSize: "18px",
+                    marginBottom: "6px",
+                    color: "#1e293b",
+                    fontWeight: "600",
+                  }}
+                >
+                  Centralized Lead & Customer Management
+                </h3>
                 <p>
                   Keep all your contacts, inquiries and communication history
                   organized in one secure system, ensuring no lead is ever lost
@@ -38,11 +47,20 @@ function ComSec() {
               <span className="icon">
                 <img
                   src="img/Smart Automation & Workflow Efficiency.png"
-                  alt=""
+                  alt="centralized-lead-Customer-Management"
                 />
               </span>
               <div>
-                <h4>Smart Automation & Workflow Efficiency</h4>
+                <h3
+                  style={{
+                    fontSize: "18px",
+                    marginBottom: "6px",
+                    color: "#1e293b",
+                    fontWeight: "600",
+                  }}
+                >
+                  115958 Smart Automation & Workflow Efficiency
+                </h3>
                 <p>
                   Automate follow-ups, task assignments, reminders and
                   notifications to reduce manual work and keep your team focused
@@ -53,10 +71,22 @@ function ComSec() {
 
             <li>
               <span className="icon">
-                <img src="img/Secure, Cloud-Based Access.png" alt="" />
+                <img
+                  src="img/Secure, Cloud-Based Access.png"
+                  alt="smart-automation-workflow-efficiency"
+                />
               </span>
               <div>
-                <h4>Secure, Cloud-Based Access</h4>
+                <h3
+                  style={{
+                    fontSize: "18px",
+                    marginBottom: "6px",
+                    color: "#1e293b",
+                    fontWeight: "600",
+                  }}
+                >
+                  Secure, Cloud-Based Access
+                </h3>
                 <p>
                   Access your CRM anytime, anywhere with secure cloud technology
                   that keeps your business data protected while ensuring
@@ -67,10 +97,22 @@ function ComSec() {
 
             <li>
               <span className="icon">
-                <img src="img/Seamless Integrations & Scalability.png" alt="" />
+                <img
+                  src="img/Seamless Integrations & Scalability.png"
+                  alt="secure-cloud-cased-access"
+                />
               </span>
               <div>
-                <h4>Seamless Integrations & Scalability</h4>
+                <h3
+                  style={{
+                    fontSize: "18px",
+                    marginBottom: "6px",
+                    color: "#1e293b",
+                    fontWeight: "600",
+                  }}
+                >
+                  Seamless Integrations & Scalability
+                </h3>
                 <p>
                   Easily connect with third-party tools and scale the system as
                   your business grows — making ETC CRM a flexible solution for
@@ -85,7 +127,7 @@ function ComSec() {
           <img
             src="/img/ETC_CRM_Centralized Lead Management.png"
             alt="University Dashboard"
-            className="main-imzg"
+            className="seamless-integrations-scalability"
           />
 
           {/* <!-- <div className="floating-tag top">📢 Inter-Department Announcements</div>

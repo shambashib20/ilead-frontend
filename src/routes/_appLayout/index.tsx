@@ -14,6 +14,7 @@ import WorkshopGrid from "@/components/marketing/workshopGrid";
 import ComSec from "@/components/marketing/ComSec";
 import ComSec2 from "@/components/marketing/ComSec2";
 import CRMBanner from "@/components/marketing/CrmBanner";
+import MassonarySec from "@/components/marketing/massonarySec";
 
 export const Route = createFileRoute("/_appLayout/")({
   component: RouteComponent,
@@ -31,6 +32,8 @@ function RouteComponent() {
       <AICRMBanner />
       <WorkshopGrid />
       <ComSec />
+      <MassonarySec />
+      <Techstack />
       <Touch />
       <ComSec2 />
       {/* <Features /> */}
@@ -38,7 +41,6 @@ function RouteComponent() {
       {/* <Integrations /> */}
       <Pricing />
       <Faq />
-      <Techstack />
       <Touch />
     </>
   );

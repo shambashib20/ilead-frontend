@@ -1,6 +1,12 @@
 import "@/styles/style.css";
 
 const HeroSec = () => {
+const avatars = [
+  "https://ui-avatars.com/api/?name=Rahul+Das&background=4f46e5&color=fff&rounded=true",
+  "https://ui-avatars.com/api/?name=Priya+Sen&background=0891b2&color=fff&rounded=true",
+  "https://ui-avatars.com/api/?name=Amit+Roy&background=059669&color=fff&rounded=true",
+  "https://ui-avatars.com/api/?name=Sneha+Ghosh&background=d97706&color=fff&rounded=true",
+];
   return (
     <>
       <section className="hero-sec">
@@ -62,48 +68,136 @@ const HeroSec = () => {
               </li>
             </ul>
 
-            <div className="box">
-              <div className="trust">
-                <img src="/img/trusticons.png" alt="" />
-                <h4>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "14px",
+                marginTop: "28px",
+              }}
+            >
+              {/* Trustpilot Stars Row */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                {/* Stars */}
+                <div style={{ display: "flex", gap: "4px" }}>
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        backgroundColor: "#00b67a",
+                        borderRadius: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                      >
+                        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                      </svg>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Trustpilot label */}
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "6px" }}
+                >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
-                    fill="#00c378"
-                    stroke="#00c378"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-star"
+                    fill="#00b67a"
                   >
-                    <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a.122 2.122 0 0 0 1.597-1.16z" />
+                    <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
                   </svg>
-                  Truster
-                </h4>
+                  <span
+                    style={{
+                      color: "#ffffff",
+                      fontSize: "15px",
+                      fontWeight: "600",
+                      letterSpacing: "0.3px",
+                    }}
+                  >
+                    Trustpilot
+                  </span>
+                </div>
               </div>
 
-              <div className="user">
-                <ul>
-                  <li>
-                    <img src="/img/user.png" alt="user_img" />
-                  </li>
-                  <li>
-                    <img src="/img/user.png" alt="user_img" />
-                  </li>
-                  <li>
-                    <img src="/img/user.png" alt="user_img" />
-                  </li>
-                  <li>
-                    <img src="/img/user.png" alt="user_img" />
-                  </li>
-                </ul>
+              {/* Avatars + Text Row */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+              >
+                {/* Stacked avatars */}
+                <div style={{ display: "flex" }}>
+                  {avatars.map((src, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: "34px",
+                        height: "34px",
+                        borderRadius: "50%",
+                        border: "2px solid #0f1f3d",
+                        marginLeft: i === 0 ? "0" : "-10px",
+                        overflow: "hidden",
+                        background: `hsl(${210 + i * 30}, 60%, 45%)`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 4 - i,
+                        position: "relative",
+                      }}
+                    >
+                      <img
+                        src={src}
+                        alt={`user-${i}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
 
-                <h5>
-                  Trusted by <span>14,000+</span> bof SDRs, Sales Ops, Team
-                  Leads & more
-                </h5>
+                {/* Text */}
+                <p
+                  style={{
+                    color: "rgba(255,255,255,0.75)",
+                    fontSize: "14px",
+                    margin: 0,
+                    fontWeight: "400",
+                  }}
+                >
+                  Trusted by{" "}
+                  <span
+                    style={{
+                      color: "#ffffff",
+                      fontWeight: "700",
+                    }}
+                  >
+                    14,000+
+                  </span>{" "}
+                  SDRs, Sales Ops, Team Leads & more
+                </p>
               </div>
             </div>
           </div>

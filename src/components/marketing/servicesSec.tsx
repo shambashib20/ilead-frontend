@@ -8,16 +8,16 @@ function ServicesSec() {
           <h6 className="badge fade-up">
             <i className="fas fa-link"></i> Service We Are Offering
           </h6>
-          <h3 className="text-[28px] font-[family-name:var(--font-display-semibold)] text-gray-900 leading-tight">
+          <h2 className="text-[28px] font-[family-name:var(--font-display-semibold)] text-gray-900 leading-tight">
             We Provided Everything You Need in a Smart CRM Platform
             <br />
-            <span
-              className="text-3xl font-[family-name:var(--font-text)] inline-block mt-1"
-              style={{ marginTop: "2px" }}
-            >
-              Smart Features That Drive Conversions
-            </span>
-          </h3>
+          </h2>
+          <p
+            className="text-3xl font-[family-name:var(--font-text)] inline-block mt-1"
+            style={{ marginTop: "2px" }}
+          >
+            Smart Features That Drive Conversions
+          </p>
         </div>
 
         {/* Service Cards */}
@@ -93,7 +93,10 @@ function ServiceCard({ service }: { service: Service }) {
           className=" flex items-center justify-center flex-shrink-0"
           style={{ marginBottom: "5px" }}
         >
-          <img src={service.icon || ""} alt="" />
+          <img
+            src={service.icon || ""}
+            alt={service.title.split(" ").join("-").toLowerCase()}
+          />
         </div>
         <h3
           className="font-bold text-gray-900 text-lg leading-tight mb-2 "
@@ -101,6 +104,7 @@ function ServiceCard({ service }: { service: Service }) {
         >
           {service.title}
         </h3>
+
         <p
           className="text-gray-500 leading-relaxed "
           style={{ minHeight: "60px", fontSize: "14px" }}
