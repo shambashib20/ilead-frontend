@@ -8,7 +8,7 @@ function ComSec() {
             style={{
               fontSize: "28px",
               fontWeight: 700,
-              color: "rgb(255, 255, 255)",
+
               margin: "0px 0px 16px",
               lineHeight: 1.3,
             }}
