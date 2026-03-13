@@ -1,5 +1,3 @@
-import React from "react";
-
 function MassonarySec() {
   return (
     <section className="massonary-sec " style={{ paddingTop: "60px" }}>
