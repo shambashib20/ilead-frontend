@@ -232,6 +232,7 @@ function ETCCRMSection() {
                   color: "#555",
                   lineHeight: "1.75",
                   margin: "0 0 28px 0",
+                  textAlign: "justify",
                 }}
               >
                 With our cloud-based CRM, teams can manage inquiries, automate

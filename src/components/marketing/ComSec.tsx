@@ -3,7 +3,16 @@ function ComSec() {
     <section className="comm-section">
       <div className="comm-container">
         <div className="comm-content">
-          <h2 className="font-[family-name:var(--font-display-semibold)]">
+          <h2
+            className="font-[family-name:var(--font-display-semibold)]"
+            style={{
+              fontSize: "28px",
+              fontWeight: 700,
+              color: "rgb(255, 255, 255)",
+              margin: "0px 0px 16px",
+              lineHeight: 1.3,
+            }}
+          >
             Why Choose ETC CRM Software?
           </h2>
 
@@ -59,7 +68,7 @@ function ComSec() {
                     fontWeight: "600",
                   }}
                 >
-                  115958 Smart Automation & Workflow Efficiency
+                  Smart Automation & Workflow Efficiency
                 </h3>
                 <p>
                   Automate follow-ups, task assignments, reminders and

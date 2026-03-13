@@ -23,7 +23,7 @@ function AICRMBanner() {
             lineHeight: "1.3",
           }}
         >
-          Let's put AI to work for CRM
+          Power Your Business with Smart CRM Solutions
         </h2>
 
         <p
@@ -34,10 +34,9 @@ function AICRMBanner() {
             margin: "0 0 28px 0",
           }}
         >
-          Our experts can help you get started evaluating a solution to best
-          manage your customer relationships.
+          Let our experts show how ETC CRM can simplify lead management,
           <br />
-          See how a CRM implementation would work in your specific environment.
+          automate workflows and strengthen customer relationships.
         </p>
 
         <button
@@ -60,7 +59,7 @@ function AICRMBanner() {
             (e.currentTarget.style.backgroundColor = "#e53935")
           }
         >
-          Connect With Us
+          Schedule a Demo
         </button>
       </div>
     </section>
