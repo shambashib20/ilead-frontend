@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh -T git@github.com-personal)",
+      "Bash(ssh -T git@github.com)",
+      "Bash(git remote:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(python3:*)",
+      "Bash(node:*)"
+    ]
+  }
+}

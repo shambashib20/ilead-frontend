@@ -173,6 +173,7 @@
   .badge {
     background-image: linear-gradient(to right, #3538e5 0%, #5b91e3 51%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 14px;
     font-family: var(--font-display-medium);
@@ -306,9 +307,6 @@
       width: 95%;
       transform: translate(-50%, 0);
       max-width: 100%;
-    }
-    & * {
-      /* outline: 1px solid limegreen; */
     }
 
     & .container {
@@ -845,6 +843,7 @@
               #6098f6 51%
             );
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
           }
         }
@@ -1386,9 +1385,6 @@
             }
           }
 
-          img {
-            /* margin-bottom: 20px; */
-          }
         }
       }
 
@@ -1819,6 +1815,7 @@
           text-align: center;
           display: -webkit-box;
           -webkit-line-clamp: 4; /* max 3 lines */
+          line-clamp: 4;
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
@@ -2086,6 +2083,7 @@
       text-align: balance;
       display: -webkit-box;
       -webkit-line-clamp: 2; /* max 3 lines */
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -3025,12 +3023,6 @@ section.integrations {
   }
 }
 
-h3 {
-}
-
-p {
-}
-
 .tech-stack-section {
   padding: 4rem 2rem;
   text-align: center;
@@ -3467,6 +3459,7 @@ section.pricing-sec {
           font-family: var(--font-display-medium);
           background-image: linear-gradient(to right, #3b7ded 0%, #6098f6 51%);
           -webkit-background-clip: text;
+          background-clip: text;
           -webkit-text-fill-color: transparent;
         }
       }
@@ -3535,6 +3528,7 @@ section.pricing-sec2 {
     margin-bottom: 16px;
     background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -5688,10 +5682,6 @@ section.pricing-sec2 {
   }
 
   /* LEFT */
-  .comm-content h2 {
-  }
-  & h3 {
-  }
   & p {
     max-width: 58.125rem;
     margin-inline: auto;
@@ -5809,4 +5799,5 @@ section.pricing-sec2 {
 .zick-box button {
   width: 200px;
   margin-top: 15px;
+}
 }

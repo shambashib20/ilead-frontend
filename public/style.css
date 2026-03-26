@@ -173,6 +173,7 @@
   .badge {
     background-image: linear-gradient(to right, #3538e5 0%, #5b91e3 51%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 14px;
     font-family: var(--font-display-medium);
@@ -306,9 +307,6 @@
       width: 95%;
       transform: translate(-50%, 0);
       max-width: 100%;
-    }
-    & * {
-      /* outline: 1px solid limegreen; */
     }
 
     & .container {
@@ -840,6 +838,7 @@
               #6098f6 51%
             );
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
           }
         }
@@ -1223,11 +1222,7 @@
     .content {
       position: relative;
 
-<<<<<<< HEAD
       h2{
-=======
-      h2{
->>>>>>> fb43ad5 (initial commit)
         font-weight: 700;
         font-size: 30px;
         color: var(--secondary-clr);
@@ -1308,11 +1303,7 @@
             object-fit: cover;
           }
         }
-<<<<<<< HEAD
         h3 {
-=======
-        h3 {
->>>>>>> fb43ad5 (initial commit)
           font-family: var(--font-display-medium);
           display: flex;
           align-items: center;
@@ -1352,11 +1343,7 @@
             div {
               max-width: 320px;
 
-<<<<<<< HEAD
               h3 {
-=======
-              h3 {
->>>>>>> fb43ad5 (initial commit)
                 font-size: 1.125rem;
                 font-weight: 600;
               }
@@ -1389,9 +1376,6 @@
             }
           }
 
-          img {
-            /* margin-bottom: 20px; */
-          }
         }
       }
 
@@ -1816,6 +1800,7 @@
           text-align: center;
           display: -webkit-box;
           -webkit-line-clamp: 4; /* max 3 lines */
+          line-clamp: 4;
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
@@ -2081,6 +2066,7 @@
       text-align: balance;
       display: -webkit-box;
       -webkit-line-clamp: 2; /* max 3 lines */
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -2874,11 +2860,6 @@ section.integrations {
   }
 }
 
-h3 {
-}
-
-p {
-}
 
 .tech-stack-section {
   padding: 4rem 2rem;
@@ -3314,6 +3295,7 @@ section.pricing-sec {
           font-family: var(--font-display-medium);
           background-image: linear-gradient(to right, #3b7ded 0%, #6098f6 51%);
           -webkit-background-clip: text;
+          background-clip: text;
           -webkit-text-fill-color: transparent;
         }
       }
@@ -3380,6 +3362,7 @@ section.pricing-sec2 {
     margin-bottom: 16px;
     background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
