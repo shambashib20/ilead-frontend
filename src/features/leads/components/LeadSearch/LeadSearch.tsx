@@ -65,7 +65,7 @@ function LeadSearch() {
     startDate?: Date;
     endDate?: Date;
   }; // Adjust route as needed
-  const { closeModal, pushModal } =
+  const { openModal, setModalTitle, closeModal, setModalSize, pushModal } =
     useModalStore();
 
   // Parse filters from URL search params

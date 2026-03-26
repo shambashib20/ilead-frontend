@@ -7,13 +7,15 @@ function ServicesSec() {
           <h6 className="badge fade-up">
             <i className="fas fa-link"></i> Service We Are Offering
           </h6>
-          <h2 className="text-[20px] md:text-[28px] font-[family-name:var(--font-display-semibold)] text-gray-900 leading-tight">
+          <h2 className="text-[20px]  md:text-[28px]  font-[family-name:var(--font-display-semibold)] text-gray-900 leading-tight">
             We Provided Everything You Need in a Smart CRM Platform
             <br />
           </h2>
           <p
             className="text-[20px]  md:text-3xl font-[family-name:var(--font-text)] inline-block mt-1"
+            style={{ marginTop: "2px" }}
           >
+            Smart Features That Drive Conversions
           </p>
         </div>
 

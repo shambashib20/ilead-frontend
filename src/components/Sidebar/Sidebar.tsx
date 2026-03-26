@@ -21,7 +21,7 @@ export const filteredNavItems = navItems.filter((item) => {
 function Sidebar() {
   const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isHovered, _setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const effectiveCollapsed = isCollapsed && !isHovered;
 
   return (

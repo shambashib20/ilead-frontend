@@ -121,7 +121,6 @@ const HeroSec = () => {
     "https://ui-avatars.com/api/?name=Amit+Roy&background=059669&color=fff&rounded=true",
     "https://ui-avatars.com/api/?name=Sneha+Ghosh&background=d97706&color=fff&rounded=true",
   ];
-
   return (
     <>
       <section className="hero-sec">
