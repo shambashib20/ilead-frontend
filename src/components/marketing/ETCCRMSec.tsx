@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // --- Icons ---
 const RealEstateIcon = () => (
@@ -125,6 +125,13 @@ const IndustryCard: React.FC<IndustryCardProps> = ({ icon, label }) => (
 
 // --- Main Component ---
 function ETCCRMSection() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const industries = [
     { icon: <RealEstateIcon />, label: "Real Estate" },
     { icon: <JobsIcon />, label: "Jobs &\nRecruiters" },
@@ -173,7 +180,12 @@ function ETCCRMSection() {
   ];
 
   return (
-    <section style={{ backgroundColor: "#fff", padding: "32px 16px" }}>
+    <section
+      style={{
+        backgroundColor: "#fff",
+        padding: isMobile ? "5px" : "32px 16px",
+      }}
+    >
       <div className="container">
         {/* Outer beige card */}
         <div
@@ -181,7 +193,7 @@ function ETCCRMSection() {
             backgroundColor: "#f5f0e8",
             border: "1px solid #e3d9c8",
             borderRadius: "16px",
-            padding: "36px 32px",
+            padding: isMobile ? "20px" : "36px 32px",
           }}
         >
           {/* Inner flex layout */}
@@ -195,19 +207,20 @@ function ETCCRMSection() {
           >
             {/* LEFT — text + button */}
             <div style={{ flex: "1 1 280px", minWidth: "240px" }}>
-              <h3
+              <h2
                 className="font-[family-name:var(--font-display-semibold)]"
                 style={{
-                  fontSize: "28px",
+                  fontSize: isMobile ? "24px" : "28px",
                   fontWeight: 700,
                   color: "#1a1a1a",
                   marginBottom: "14px",
                   lineHeight: "1.3",
                   margin: "0 0 14px 0",
+                  textAlign: isMobile ? "center" : "start",
                 }}
               >
                 Industries Using Our CRM Solutions
-              </h3>
+              </h2>
 
               <p
                 style={{
@@ -232,6 +245,7 @@ function ETCCRMSection() {
                   color: "#555",
                   lineHeight: "1.75",
                   margin: "0 0 28px 0",
+                  textAlign: "justify",
                 }}
               >
                 With our cloud-based CRM, teams can manage inquiries, automate
@@ -272,11 +286,13 @@ function ETCCRMSection() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateColumns: isMobile
+                  ? "repeat(2, 1fr)"
+                  : "repeat(3, 1fr)",
                 gap: "12px",
                 flexShrink: 0,
                 width: "100%",
-                maxWidth: "540px",
+                maxWidth: "340px",
               }}
             >
               {industries.map((industry, idx) => (

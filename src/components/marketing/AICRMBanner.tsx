@@ -1,9 +1,19 @@
+import { useEffect, useState } from "react";
+
 function AICRMBanner() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section
       style={{
         background: "linear-gradient(0, #0b172c, #19325c)",
-        padding: "60px 24px",
+        padding: isMobile ? "40px 20px" : "60px 24px",
         textAlign: "center",
       }}
     >
@@ -16,14 +26,14 @@ function AICRMBanner() {
         <h2
           className="font-[family-name:var(--font-display-semibold)]"
           style={{
-            fontSize: "28px",
+            fontSize: isMobile ? "24px" : "28px",
             fontWeight: 700,
             color: "#ffffff",
             margin: "0 0 16px 0",
             lineHeight: "1.3",
           }}
         >
-          Let's put AI to work for CRM
+          Power Your Business with Smart CRM Solutions
         </h2>
 
         <p
@@ -34,10 +44,9 @@ function AICRMBanner() {
             margin: "0 0 28px 0",
           }}
         >
-          Our experts can help you get started evaluating a solution to best
-          manage your customer relationships.
+          Let our experts show how ETC CRM can simplify lead management,
           <br />
-          See how a CRM implementation would work in your specific environment.
+          automate workflows and strengthen customer relationships.
         </p>
 
         <button
@@ -60,7 +69,7 @@ function AICRMBanner() {
             (e.currentTarget.style.backgroundColor = "#e53935")
           }
         >
-          Connect With Us
+          Schedule a Demo
         </button>
       </div>
     </section>

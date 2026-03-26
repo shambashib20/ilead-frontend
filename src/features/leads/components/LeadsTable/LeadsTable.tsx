@@ -53,7 +53,7 @@ export default function LeadsTable({
 }: Props) {
   const { page, limit, totalPages, hasNextPage, hasPrevPage } = pagination;
   const [statuses, setStatuses] = useState<Status[]>([]);
-  const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
+  const { pushModal } = useModalStore();
   const role =
     typeof window !== "undefined"
       ? (localStorage.getItem("role") ?? undefined)
@@ -207,18 +207,18 @@ export default function LeadsTable({
                           className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
                           title={label}
                           onClick={() => {
-                            setModalTitle?.(title);
-                            setModalSize?.("sm");
-                            setData?.({
-                              _id: lead._id,
-                              rayId: lead.meta?.ray_id,
-                              labels: lead.labels,
-                              status: lead.status,
-                            });
-                            openModal({
+                            pushModal({
+                              title,
+                              size: "sm",
                               content: el,
                               type,
                               customActions,
+                              data: {
+                                _id: lead._id,
+                                rayId: lead.meta?.ray_id,
+                                labels: lead.labels,
+                                status: lead.status,
+                              },
                             });
                           }}
                         >
@@ -234,7 +234,7 @@ export default function LeadsTable({
                             )}
                           </div>
                         </button>
-                      )
+                      ),
                     )}
                   </TableCell>
                 </TableRow>
@@ -321,14 +321,30 @@ export default function LeadsTable({
                           </p>
                         </div>
 
-                        {/* Comment */}
-                        <div className="sm:col-span-2  flex gap-2">
-                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                        <div className="sm:col-span-2 flex flex-col gap-2">
+                          <h4 className="font-semibold text-zinc-900 dark:text-zinc-100">
                             Comment
                           </h4>
-                          <p className="text-zinc-700 dark:text-zinc-300">
-                            {lead.comment || "N/A"}
-                          </p>
+                          {parseComment(lead.comment || "").length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {parseComment(lead.comment || "").map(
+                                ({ key, value }) => (
+                                  <div key={key} className="flex flex-col">
+                                    <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                                      {key}
+                                    </span>
+                                    <span className="text-sm text-zinc-700 dark:text-zinc-300">
+                                      {value || "-"}
+                                    </span>
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          ) : (
+                            <p className="text-zinc-700 dark:text-zinc-300">
+                              {lead.comment || "N/A"}
+                            </p>
+                          )}
                         </div>
 
                         {/* Address */}
@@ -350,40 +366,35 @@ export default function LeadsTable({
         </Table>
       </div>
 
-      <div className="flex justify-between items-center gap-4 px-6 py-4  border-t dark:border-zinc-700">
-        {/* Left side: navigation buttons */}
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 px-4 py-4 border-t dark:border-zinc-700">
+        {/* Left: Prev + Page info */}
+        <div className="flex items-center gap-3">
           <Button
             size="sm"
             disabled={!hasPrevPage}
             onClick={() => onPageChange(page - 1)}
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Previous
+            Prev
           </Button>
-
-          <div className="text-sm text-muted-foreground dark:text-zinc-300">
+          <span className="text-sm text-muted-foreground">
             Page <span className="font-semibold">{page}</span> of{" "}
             <span className="font-semibold">{totalPages}</span>
-          </div>
+          </span>
         </div>
 
-        {/* Middle: Showing count */}
-        <div className="text-sm text-muted-foreground dark:text-zinc-300">
-          Showing <span className="font-semibold">{leads.length}</span> items
-          out of <span className="font-semibold">{pagination.total}</span>
+        {/* Middle: Showing count — hide on mobile */}
+        <div className="hidden sm:block text-sm text-muted-foreground">
+          Showing <span className="font-semibold">{leads.length}</span> of{" "}
+          <span className="font-semibold">{pagination.total}</span>
         </div>
 
-        {/* Right: Items per page */}
+        {/* Right: Items per page + Next */}
         <div className="flex items-center gap-2">
-          <label
-            htmlFor="limit"
-            className="text-sm text-muted-foreground dark:text-zinc-300"
-          >
+          <span className="text-sm text-muted-foreground hidden sm:inline">
             Items per page:
-          </label>
+          </span>
           <select
-            id="limit"
             value={limit}
             onChange={(e) => onLimitChange(Number(e.target.value))}
             className="bg-transparent border rounded px-2 py-1 text-sm"
@@ -394,7 +405,6 @@ export default function LeadsTable({
               </option>
             ))}
           </select>
-
           <Button
             size="sm"
             disabled={!hasNextPage}
@@ -407,4 +417,27 @@ export default function LeadsTable({
       </div>
     </div>
   );
+}
+
+// Upar import karo ya same file mein copy karo
+function parseComment(raw: string) {
+  if (!raw) return [];
+  return raw
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [rawKey, ...rest] = line.split("::");
+      return {
+        key: (rawKey ?? "")
+          .trim()
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase()),
+        value: rest.join("::").trim(),
+      };
+    })
+    .filter(({ key }) => {
+      const k = key.toLowerCase();
+      return k !== "label" && k !== "labels";
+    });
 }

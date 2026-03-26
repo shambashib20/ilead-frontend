@@ -121,9 +121,10 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
   );
 }
 export function LeadDelete() {
-  const { setFormActions, closeModal } = useModalStore();
+  const { setFormActions, popModal, stack } = useModalStore();
   const { deleteLead, isDeleting, isSuccess, error } = useDeleteLead();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const current = stack[stack.length - 1];
+  const data = current?.data as LeadModalData | null;
   const rayId = data?.rayId || "";
   const form = useForm({
     defaultValues: {
@@ -144,9 +145,9 @@ export function LeadDelete() {
   // Close modal when deletion is successful
   useEffect(() => {
     if (isSuccess) {
-      closeModal();
+      popModal();
     }
-  }, [isSuccess, closeModal]);
+  }, [isSuccess, popModal]);
 
   // Expose form actions to modal
   useEffect(() => {
@@ -229,8 +230,9 @@ export function LeadDelete() {
 }
 
 export function LeadLabels() {
-  const { closeModal } = useModalStore();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const { popModal, stack } = useModalStore();
+  const current = stack[stack.length - 1];
+  const data = current?.data as LeadModalData | null;
   const leadId = data?._id || "";
   const [search, setSearch] = useState("");
   const { allLables, allLablesLoading } = useAllLabels();
@@ -272,14 +274,14 @@ export function LeadLabels() {
   const handleAssign = async () => {
     try {
       await asyncAssignLabelsMutate({ leadId, labelIds: Array.from(selected) });
-      closeModal();
+      popModal();
     } catch (err) {
       setError("Failed to assign labels. Try again.");
     }
   };
 
   const filteredLabels = allLables.data.filter((label) =>
-    label.title.toLowerCase().includes(search.toLowerCase())
+    label.title.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -353,9 +355,10 @@ export function LeadLabels() {
 export function LeadAssign() {
   const { agents } = useChatAgents();
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const { closeModal, setFormActions, setSubmitLabel } = useModalStore();
+  const { popModal, setFormActions, setSubmitLabel, stack } = useModalStore();
   const { assignToAgentAsync, isPending } = useAssignLeadToChatAgent();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const current = stack[stack.length - 1];
+  const data = current?.data as LeadModalData | null;
   const handleAssign = async () => {
     if (!selectedAgentId) {
       Swal.fire({
@@ -385,7 +388,7 @@ export function LeadAssign() {
       });
 
       setTimeout(() => {
-        closeModal?.();
+        popModal?.();
       }, 1000);
     } catch (err: any) {
       Swal.fire({
@@ -404,7 +407,7 @@ export function LeadAssign() {
     setSubmitLabel?.("Assign");
     setFormActions?.({
       onSubmit: handleAssign,
-      onCancel: () => closeModal?.(),
+      onCancel: () => {},
       canSubmit: !!selectedAgentId,
       isSubmitting: isPending,
     });
@@ -432,8 +435,9 @@ export function LeadAssign() {
 }
 
 export function LeadCreateCustomer() {
-  const { closeModal } = useModalStore();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const { popModal, stack } = useModalStore();
+  const current = stack[stack.length - 1];
+  const data = current?.data as LeadModalData | null;
   const { convertAsync, isPending } = useConvertLeadToCustomer();
   const handleConvert = async () => {
     if (!data?._id) {
@@ -456,7 +460,7 @@ export function LeadCreateCustomer() {
         showConfirmButton: false,
       });
 
-      closeModal();
+      popModal();
     } catch (error: any) {
       console.error("Conversion error:", error);
       await MySwal.fire({
@@ -481,7 +485,7 @@ export function LeadCreateCustomer() {
           </Button>
         </li>
         <li>
-          <Button variant="destructive" onClick={closeModal}>
+          <Button variant="destructive" onClick={popModal}>
             Cancel
           </Button>
         </li>
@@ -491,67 +495,58 @@ export function LeadCreateCustomer() {
 }
 
 export function LeadFollowUp() {
-  const { closeModal, setFormActions, setSubmitLabel, modalTitle } =
-    useModalStore();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const { popModal, setFormActions, setSubmitLabel, stack } = useModalStore();
+
+  const current = stack[stack.length - 1];
+  const data = current?.data as LeadModalData | null;
+  const modalTitle = current?.title;
+
   const leadId = data?._id || "";
-  const initialTime = useMemo(() => {
+  const isEditMode = modalTitle === "Edit Follow Up";
+
+  // datetime-local format: "YYYY-MM-DDTHH:MM"
+  const initialDateTime = useMemo(() => {
     const iso = data?.followUp?.next_followup_date;
-    if (!iso) return "12:00";
+    if (!iso) {
+      // default: aaj ka date + current time
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, "0");
+      return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    }
     const d = new Date(iso);
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mm = String(d.getMinutes()).padStart(2, "0");
-    return `${hh}:${mm}`;
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }, [data?.followUp?.next_followup_date]);
 
+  const [dateTime, setDateTime] = useState(initialDateTime);
   const [comment, setComment] = useState(data?.followUp?.comment || "");
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    data?.followUp?.next_followup_date
-      ? new Date(data.followUp.next_followup_date)
-      : undefined
-  );
-  const [selectedTime, setSelectedTime] = useState(initialTime);
   const [attachmentUrl, setAttachmentUrl] = useState<string | undefined>();
   const [audioAttachmentUrl, setAudioAttachmentUrl] = useState<
     string | undefined
   >();
-  const isEditMode = modalTitle === "Edit Follow Up";
-  const canSubmit = useMemo(
-    () => Boolean(comment && selectedDate && selectedTime),
-    [comment, selectedDate, selectedTime]
-  );
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const canSubmit = useMemo(
+    () => Boolean(comment && dateTime),
+    [comment, dateTime],
+  );
+
   useEffect(() => {
     setComment(data?.followUp?.comment || "");
-  }, [data?.followUp?.comment]);
+    setDateTime(initialDateTime);
+  }, [data?.followUp?.comment, initialDateTime]);
 
-  useEffect(() => {
-    setSelectedDate(
-      data?.followUp?.next_followup_date
-        ? new Date(data.followUp.next_followup_date)
-        : undefined
-    );
-  }, [data?.followUp?.next_followup_date]);
-
-  useEffect(() => {
-    setSelectedTime(initialTime);
-  }, [initialTime]);
-
-  // 4) label should reflect mode
   useEffect(() => {
     setSubmitLabel?.(isEditMode ? "Save Changes" : "Add Follow Up");
   }, [isEditMode, setSubmitLabel]);
 
   const handleSubmit = useCallback(async () => {
-    if (!comment || !selectedDate || !selectedTime) {
+    if (!comment || !dateTime) {
       Swal.fire("Error", "All fields are required", "error");
       return;
     }
 
-    const [hours, minutes] = selectedTime.split(":");
-    const followUpDate = new Date(selectedDate);
-    followUpDate.setHours(Number(hours), Number(minutes));
-
+    const nextFollowUp = new Date(dateTime).toISOString();
     setIsSubmitting(true);
 
     try {
@@ -560,157 +555,122 @@ export function LeadFollowUp() {
           leadId,
           followUpId: data?.followUp?._id || "",
           comment,
-          nextFollowUp: followUpDate.toISOString(),
+          nextFollowUp,
           attachmentUrl,
           audioAttachmentUrl,
         });
-        queryClient.invalidateQueries({ queryKey: ["leads"] });
-        queryClient.invalidateQueries({ queryKey: ["leads:infinite"] });
       } else {
         await leadsApi.createNewFollowup({
           leadId,
           comment,
-          nextFollowUp: followUpDate.toISOString(),
+          nextFollowUp,
           attachmentUrl,
           audioAttachmentUrl,
         });
-        queryClient.invalidateQueries({ queryKey: ["leads"] });
-        queryClient.invalidateQueries({ queryKey: ["leads:infinite"] });
       }
 
-      console.warn("payload", {
-        leadId,
-        comment,
-        nextFollowUp: followUpDate.toISOString(),
-        attachmentUrl,
-        audioAttachmentUrl,
-      });
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      queryClient.invalidateQueries({ queryKey: ["leads:infinite"] });
 
       Swal.fire(
         "Success",
         isEditMode
           ? "Follow-up updated successfully"
           : "Follow-up added successfully",
-        "success"
+        "success",
       );
-      closeModal();
+      popModal();
     } catch (error: any) {
       Swal.fire("Error", error.message || "Failed to add follow-up", "error");
     } finally {
       setIsSubmitting(false);
     }
-    // deps kept tight so ref stays stable unless inputs actually change
   }, [
     isEditMode,
     leadId,
     data?.followUp?._id,
     comment,
-    selectedDate,
-    selectedTime,
+    dateTime,
     attachmentUrl,
     audioAttachmentUrl,
-    closeModal,
+    popModal,
   ]);
 
   useEffect(() => {
     setFormActions?.({
       onSubmit: handleSubmit,
-      onCancel: () => closeModal(),
+      onCancel: () => {},
       canSubmit,
       isSubmitting,
     });
-  }, [handleSubmit, closeModal, canSubmit, isSubmitting, setFormActions]);
-  return (
-    <div className="space-y-4 px-5 pt-2">
-      <div>
-        <label className="text-sm text-foreground block mb-2">
-          Next Follow-Up Date:
-        </label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal bg-primary  border-gray-500 text-foreground hover:bg-zinc-800",
-                !selectedDate && "text-muted-foreground"
-              )}
-              disabled={isSubmitting}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4 text-gray-400" />
-              {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-primary text-foreground border border-gray-600">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+  }, [handleSubmit, canSubmit, isSubmitting, setFormActions]);
 
+  return (
+    <div className="space-y-4 px-5 pt-2 pb-2">
+      {/* DateTime — ek field mein */}
+      <div>
+        <label className="text-sm font-medium text-foreground block mb-2">
+          Next Follow-Up Date & Time: <span className="text-red-500">*</span>
+        </label>
         <Input
-          type="time"
-          value={selectedTime}
-          onChange={(e) => setSelectedTime(e.target.value)}
+          type="datetime-local"
+          value={dateTime}
+          onChange={(e) => setDateTime(e.target.value)}
           disabled={isSubmitting}
-          className="mt-2 w-full"
+          className="w-full"
         />
       </div>
+
+      {/* Comment */}
       <div>
-        <label className="text-sm text-foreground block mb-2">Comment:</label>
+        <label className="text-sm font-medium text-foreground block mb-2">
+          Comment / Message: <span className="text-red-500">*</span>
+        </label>
         <Textarea
           placeholder="Enter your follow-up comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           disabled={isSubmitting}
-          className="w-full"
-          defaultValue={data?.followUp?.comment}
+          className="w-full min-h-[100px]"
         />
       </div>
 
       {isEditMode && (
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-yellow-500 bg-yellow-500/10 px-3 py-2 rounded-md border border-yellow-500/30">
           Note: Editing follow-up will create a new follow-up entry.
         </div>
       )}
 
-      <div className="flex gap-4">
-        <div className="w-1/2">
-          <label className="text-sm text-foreground block mb-2">
-            Upload File:
-          </label>
-          <FileUploader
-            onUploadSuccess={setAttachmentUrl}
-            disabled={isSubmitting}
-          />
-        </div>
-
-        <div className="w-1/2">
-          <label className="text-sm text-foreground block mb-2">
-            Record Audio:
-          </label>
-          <AudioRecorderUploader
-            onUploadSuccess={setAudioAttachmentUrl}
-            disabled={isSubmitting}
-          />
-        </div>
+      {/* Attachments */}
+      <div className="space-y-3">
+        <label className="text-sm font-medium text-foreground block">
+          Attachment:{" "}
+          <span className="text-xs text-muted-foreground">(Optional)</span>
+        </label>
+        <FileUploader
+          onUploadSuccess={setAttachmentUrl}
+          disabled={isSubmitting}
+        />
+        <AudioRecorderUploader
+          onUploadSuccess={setAudioAttachmentUrl}
+          disabled={isSubmitting}
+        />
       </div>
     </div>
   );
 }
 
 export function LeadStatus() {
-  const { closeModal } = useModalStore();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const { popModal, stack } = useModalStore();
+  const current = stack[stack.length - 1];
+  const data = current?.data as LeadModalData | null;
   const leadId = data?._id;
   const [search, setSearch] = useState("");
   const { status, isLoading } = useStatus();
   const [selectedStatusId, setSelectedStatusId] = useState<string | null>(null);
   const { updateStatusAsync, isPending, error } = useUpdateLeadStatus();
   const filteredStatuses = status.data.filter((status) =>
-    status.title.toLowerCase().includes(search.toLowerCase())
+    status.title.toLowerCase().includes(search.toLowerCase()),
   );
 
   useEffect(() => {
@@ -721,7 +681,7 @@ export function LeadStatus() {
     if (!leadId || !selectedStatusId) return;
     try {
       await updateStatusAsync({ leadId, statusId: selectedStatusId });
-      closeModal();
+      popModal();
     } catch (err) {
       // error already logged by hook
     }
@@ -827,9 +787,11 @@ function cleanMeta(raw: string) {
 // render block (replace your comment <p> block with this)
 
 export function LeadDetail() {
-  const { setModalTitle, openModal, setData, setModalSize } = useModalStore();
+  const { pushModal } = useModalStore();
   const { theme } = useTheme();
-  const data = useModalStore((state) => state.data) as LeadModalData | null;
+  const data = useModalStore(
+    (state) => state.stack[state.stack.length - 1]?.data,
+  ) as LeadModalData | null;
   const leadId = data?._id;
   const [lead, setLead] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -894,19 +856,19 @@ export function LeadDetail() {
               className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
               title={label}
               onClick={() => {
-                setModalTitle?.(title);
-                setModalSize?.("sm");
-                setData?.({
-                  _id: lead._id ?? lead?.data?._id,
-                  rayId: lead.meta?.ray_id ?? lead.data?.meta?.ray_id,
-                  labels: lead.labels ?? lead.data.labels,
-                  status: lead.status ?? lead?.data?.status,
-                  FollowUps: lead.follow_ups ?? lead?.data?.follow_ups,
-                });
-                openModal({
+                pushModal({
                   content: el,
                   type,
                   customActions,
+                  title,
+                  size: "sm",
+                  data: {
+                    _id: lead._id ?? lead?.data?._id,
+                    rayId: lead.meta?.ray_id ?? lead.data?.meta?.ray_id,
+                    labels: lead.labels ?? lead.data.labels,
+                    status: lead.status ?? lead?.data?.status,
+                    FollowUps: lead.follow_ups ?? lead?.data?.follow_ups,
+                  },
                 });
               }}
             >
@@ -919,13 +881,13 @@ export function LeadDetail() {
                 )}
               </div>
             </button>
-          )
+          ),
         )}
       </ul>
 
       {/* Tabs */}
       <Tabs defaultValue="details" className="mt-4">
-        <TabsList className="flex flex-wrap gap-2 p-1 w-[700px] mx-auto ">
+        <TabsList className="flex flex-wrap gap-2 p-1 w-full mx-auto">
           <TabsTrigger value="details">
             Details{" "}
             {/* <span className="bg-pink-600 text-white h-5 w-5 rounded-full inline-flex items-center justify-center">
@@ -949,7 +911,7 @@ export function LeadDetail() {
         </TabsList>
 
         <TabsContent value="details">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Column */}
             <div className="shadow-sm dark:border rounded-sm overflow-auto">
               <h3 className="font-semibold text-white mb-2 bg-[#3a3285]  p-4 text-center">
@@ -1103,7 +1065,7 @@ export function LeadDetail() {
                 .sort(
                   (a: any, b: any) =>
                     new Date(b.createdAt).getTime() -
-                    new Date(a.createdAt).getTime()
+                    new Date(a.createdAt).getTime(),
                 )
                 .map((followup: any, index: number) => (
                   <details
@@ -1162,7 +1124,7 @@ export function LeadDetail() {
                           </span>
                           <span className="text-sm text-gray-900 dark:text-white">
                             {new Date(
-                              followup.next_followup_date
+                              followup.next_followup_date,
                             ).toLocaleString()}
                           </span>
                         </div>
@@ -1240,21 +1202,20 @@ export function LeadDetail() {
                         <Button
                           variant={"outline"}
                           onClick={() => {
-                            openModal({
+                            pushModal({
                               type: "form",
-
                               content: <LeadFollowUp />,
-                            });
-                            setModalSize?.("sm");
-                            setModalTitle?.("Edit Follow Up");
-                            setData?.({
-                              _id: lead._id ?? lead?.data?._id,
-                              followUp: {
-                                _id: followup._id || "",
-                                comment: followup.comment || "",
-                                next_followup_date:
-                                  followup.next_followup_date || "",
-                                meta: followup.meta || {},
+                              size: "sm",
+                              title: "Edit Follow Up",
+                              data: {
+                                _id: lead._id ?? lead?.data?._id,
+                                followUp: {
+                                  _id: followup._id || "",
+                                  comment: followup.comment || "",
+                                  next_followup_date:
+                                    followup.next_followup_date || "",
+                                  meta: followup.meta || {},
+                                },
                               },
                             });
                           }}
@@ -1300,7 +1261,7 @@ export function LeadDetail() {
                 .sort(
                   (a: any, b: any) =>
                     new Date(b.createdAt).getTime() -
-                    new Date(a.createdAt).getTime()
+                    new Date(a.createdAt).getTime(),
                 )
                 .map((log: any, index: number) => (
                   <li
@@ -1866,7 +1827,7 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
         <h3 className="text-center font-medium mb-4 text-muted-foreground">
           {format(date, "MMM yyyy")}
         </h3>
-        <div className="grid grid-cols-7 gap-1 mb-2">
+        <div className="grid grid-cols-7 gap-2 mb-2">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
             <div
               key={day}
@@ -1876,13 +1837,13 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-2">
           {days.map((day, index) => (
             <button
               key={index}
               onClick={() => onDateClick(day)}
               className={cn(
-                "w-10 h-10 text-sm rounded-md transition-colors",
+                "w-9 h-9 text-xs rounded-md transition-colors text-center",
                 "hover:bg-[#fff]/40",
                 !isCurrentMonth(day) && "text-muted-foreground opacity-50",
                 isRangeStart(day) &&
@@ -1893,7 +1854,7 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
                 isInRange(day) &&
                   !isRangeStart(day) &&
                   !isRangeEnd(day) &&
-                  "bg-[#3a3285]/20 dark:bg-[#3a3285]/60"
+                  "bg-[#3a3285]/20 dark:bg-[#3a3285]/60",
               )}
             >
               {day.getDate()}
@@ -1907,7 +1868,7 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
   return (
     <div className="flex">
       {/* Left sidebar */}
-      <div className="w-64 border-r bg-muted/30 p-4">
+      <div className="w-48 border-r bg-muted/30 p-3">
         <div className="space-y-1 mb-6">
           {quickOptions.map((option, index) => (
             <button
@@ -1979,10 +1940,10 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
               value={format(currentMonth, "MMMM")}
               onChange={(e) => {
                 const monthIndex = new Date(
-                  `${e.target.value} 1, ${currentMonth.getFullYear()}`
+                  `${e.target.value} 1, ${currentMonth.getFullYear()}`,
                 ).getMonth();
                 setCurrentMonth(
-                  new Date(currentMonth.getFullYear(), monthIndex)
+                  new Date(currentMonth.getFullYear(), monthIndex),
                 );
               }}
               className="bg-primary rounded px-2 py-1 text-sm"
@@ -2001,7 +1962,7 @@ export const DateRangeModal: React.FC<DateRangeModalProps> = ({ setDate }) => {
               value={currentMonth.getFullYear()}
               onChange={(e) => {
                 setCurrentMonth(
-                  new Date(parseInt(e.target.value), currentMonth.getMonth())
+                  new Date(parseInt(e.target.value), currentMonth.getMonth()),
                 );
               }}
               className="bg-primary  rounded px-2 py-1 text-sm"

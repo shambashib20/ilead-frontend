@@ -122,7 +122,7 @@ function StatusCard() {
 
   return (
     <div className="mt-10 space-y-4">
-      <div className="flex items-center justify-between bg-primary px-3 py-3 rounded-sm shadow-lead">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-primary px-3 py-3 rounded-sm shadow-lead">
         <h2 className="text-xl font-semibold dark:text-white">Status List</h2>
         <div className="flex items-center gap-5">
           <Input
@@ -224,11 +224,11 @@ function StatusCard() {
           </Table>
         </div>
       )}
-      <div className="flex justify-between items-center">
-        <div className="text-sm text-muted-foreground dark:text-gray-300">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-primary p-4 rounded-sm">
+        <div className="text-sm text-muted-foreground dark:text-gray-300 text-center sm:text-start">
           Showing {filteredStatuses.length} of {totalItems} total statuses
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-center sm:justify-end">
           <Button
             onClick={() => setPage(Math.max(1, page - 1))}
             disabled={page === 1}

@@ -26,14 +26,12 @@ function Sidebar() {
 
   return (
     <aside
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={`
-        hidden lg:flex flex-col
-        transition-[width] duration-300 ease-in-out
-        ${effectiveCollapsed ? "w-[80px]" : "w-[250px]"}
-        bg-primary text-gray-600 dark:text-gray-300 
-      `}
+    hidden lg:flex flex-col h-screen sticky top-0 
+    transition-[width] duration-300 ease-in-out
+    ${effectiveCollapsed ? "w-[80px]" : "w-[250px]"}
+    bg-primary text-gray-600 dark:text-gray-300 
+  `}
     >
       {/* Logo Section (unchanged) */}
       <div
@@ -65,13 +63,14 @@ function Sidebar() {
       </div>
 
       {/* Nav Section */}
-      <nav className="flex-1  ">
+      <nav className="flex-1 overflow-hidden">
         <ul
-          className="ps-2 pe-2 pt-4 h-[530px] overflow-y-scroll [&::-webkit-scrollbar]:w-1.5 
-          [&::-webkit-scrollbar-track]:rounded-full
-          [&::-webkit-scrollbar-track]:transparent
-          [&::-webkit-scrollbar-thumb]:rounded-full
-          [&::-webkit-scrollbar-thumb]:transparent hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 "
+          className="ps-2 pe-2 pt-4 h-full overflow-y-auto [&::-webkit-scrollbar]:w-1.5 
+    [&::-webkit-scrollbar-track]:rounded-full
+    [&::-webkit-scrollbar-track]:transparent
+    [&::-webkit-scrollbar-thumb]:rounded-full
+    [&::-webkit-scrollbar-thumb]:transparent 
+    hover:[&::-webkit-scrollbar-thumb]:bg-gray-300"
         >
           {filteredNavItems.map((item, idx) => (
             <SidebarMenuItem

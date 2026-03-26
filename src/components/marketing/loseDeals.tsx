@@ -11,7 +11,9 @@ function LoseDeals() {
 
           <div className="content text-center">
             <h6 className="badge">Problem</h6>
-            <h3>Why do most sales teams lose deals?</h3>
+            <h2 className="text-[28px] font-[family-name:var(--font-display-semibold)] text-gray-900 leading-tight">
+              Why do most sales teams lose deals?
+            </h2>
             <p>
               No more lost leads, missed calls, or forgotten follow-ups. A
               simple CRM that keeps you ahead—without the chaos of spreadsheets.
@@ -23,14 +25,14 @@ function LoseDeals() {
               <div className="tag before">Before</div>
               <img
                 src="/img/vs-img1.png"
-                alt=""
+                alt="before-using-etc-crm"
                 style={{ filter: "grayscale(1)" }}
               />
               <div className="before-icons">
-                <img src="./img/before-img1.png" alt="" />
-                <img src="./img/before-img2.png" alt="" />
-                <img src="./img/before-img3.png" alt="" />
-                <img src="./img/before-img4.png" alt="" />
+                <img src="./img/before-img1.png" alt="used-software" />
+                <img src="./img/before-img2.png" alt="used-software" />
+                <img src="./img/before-img3.png" alt="used-software" />
+                <img src="./img/before-img4.png" alt="used-software" />
               </div>
               <ul>
                 <li>
@@ -56,7 +58,9 @@ function LoseDeals() {
                     </svg>
                   </span>
                   <div>
-                    <h5>1. Scattered Leads</h5>
+                    <h3 style={{ fontSize: " 1.125rem", fontWeight: 600 }}>
+                      1. Scattered Leads
+                    </h3>
                     <p>Leads scattered across spreadsheets & WhatsApp chats</p>
                   </div>
                 </li>
@@ -82,7 +86,9 @@ function LoseDeals() {
                     </svg>
                   </span>
                   <div>
-                    <h5>2. Forgot Follow Up’s</h5>
+                    <h3 style={{ fontSize: " 1.125rem", fontWeight: 600 }}>
+                      2. Forgot Follow Up’s
+                    </h3>
                     <p>Salespeople forget follow-ups, deals slip away</p>
                   </div>
                 </li>
@@ -107,7 +113,9 @@ function LoseDeals() {
                     </svg>
                   </span>
                   <div>
-                    <h5>3. Zero Visibility</h5>
+                    <h3 style={{ fontSize: " 1.125rem", fontWeight: 600 }}>
+                      3. Zero Visibility
+                    </h3>
                     <p>Managers have zero visibility into what’s happening</p>
                   </div>
                 </li>
@@ -121,7 +129,7 @@ function LoseDeals() {
               <div className="tag after">After</div>
               <img src="/img/vs-img2.png" alt="" />
               <h4>
-                <img src="/img/logo.png" alt="" />
+                <img src="/img/logo.png" alt="after-using-etc-crm" />
               </h4>
               <ul>
                 <li>
@@ -147,7 +155,9 @@ function LoseDeals() {
                     </svg>
                   </span>
                   <div>
-                    <h5>1. Capture Lead</h5>
+                    <h3 style={{ fontSize: " 1.125rem", fontWeight: 600 }}>
+                      1. Capture Lead
+                    </h3>
                     <p>One inbox to capture every lead from anywhere</p>
                   </div>
                 </li>
@@ -170,7 +180,9 @@ function LoseDeals() {
                     </svg>
                   </span>
                   <div>
-                    <h5>2. Smart Reminders</h5>
+                    <h3 style={{ fontSize: " 1.125rem", fontWeight: 600 }}>
+                      2. Smart Reminders
+                    </h3>
                     <p>Smart reminders & SLA timers keep follow-ups on track</p>
                   </div>
                 </li>
@@ -193,7 +205,9 @@ function LoseDeals() {
                     </svg>
                   </span>
                   <div>
-                    <h5>3. Full Visibility</h5>
+                    <h3 style={{ fontSize: " 1.125rem", fontWeight: 600 }}>
+                      3. Full Visibility
+                    </h3>
                     <p>
                       Clear pipeline with full visibility for the entire team
                     </p>

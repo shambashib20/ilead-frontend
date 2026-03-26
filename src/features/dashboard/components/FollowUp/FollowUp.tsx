@@ -51,7 +51,7 @@ function FollowUp() {
                   {item.next_followup_date
                     ? format(
                         new Date(item.next_followup_date),
-                        "dd-MM-yyyy HH:mm"
+                        "dd-MM-yyyy HH:mm",
                       )
                     : "-"}
                 </TableCell>

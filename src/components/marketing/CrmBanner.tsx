@@ -1,4 +1,14 @@
+import { useEffect, useState } from "react";
+
 function CRMBanner() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section style={{ padding: "20px 24px", backgroundColor: "#ffffff" }}>
       <div
@@ -7,11 +17,11 @@ function CRMBanner() {
           margin: "0 auto",
           background: "linear-gradient(0, #0b172c, #19325c)",
           borderRadius: "12px",
-          padding: "28px 32px",
+          padding: isMobile ? "24px 20px" : "28px 32px",
           display: "flex",
-          alignItems: "center",
+          flexDirection: isMobile ? "column" : "row", // 👈
+          alignItems: isMobile ? "flex-start" : "center",
           justifyContent: "space-between",
-          flexWrap: "wrap",
           gap: "20px",
         }}
       >
@@ -20,24 +30,32 @@ function CRMBanner() {
           style={{
             display: "flex",
             alignItems: "center",
+            flexDirection: isMobile ? "column" : "row",
+            justifyContent: isMobile ? "center" : "start",
             gap: "18px",
-            flex: "1 1 300px",
+            width: isMobile ? "100%" : "auto",
+            flex: isMobile ? "1 1 134px" : "1 1 300px",
           }}
         >
-          <img src="img/customer-service.png" alt="" className="w-15" />
-          <p
+          <img
+            src="img/customer-service.png"
+            alt="contact-to-etc-crm-for-increseing your-sales"
+            className="w-15"
+          />
+          <h4
             style={{
               margin: 0,
               color: "#ffffff",
-              fontSize: "22px",
+              fontSize: isMobile ? "12px" : "22px", // 👈
               fontWeight: 700,
+              textAlign: isMobile ? "center" : "left",
               lineHeight: "1.5",
             }}
           >
             Increase your Sales and nurture Customer
             <br />
             Relationships with our CRM Software Solution
-          </p>
+          </h4>
         </div>
 
         {/* Right: Button */}
@@ -55,11 +73,15 @@ function CRMBanner() {
             whiteSpace: "nowrap",
             display: "flex",
             alignItems: "center",
+            width: isMobile ? "100%" : "auto",
+            textAlign: isMobile ? "center" : "left",
             gap: "6px",
+            justifyContent: isMobile ? "center" : "space-between",
             transition: "background-color 0.2s ease, color 0.2s ease",
+            alignSelf: isMobile ? "flex-start" : "auto", // 👈 mobile pe left align
           }}
         >
-          GET LIVE DEMO NOW &nbsp;›
+          Talk To Our Expert &nbsp;›
         </button>
       </div>
     </section>

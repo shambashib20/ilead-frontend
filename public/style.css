@@ -1223,7 +1223,11 @@
     .content {
       position: relative;
 
+<<<<<<< HEAD
       h3 {
+=======
+      h2{
+>>>>>>> fb43ad5 (initial commit)
         font-weight: 700;
         font-size: 30px;
         color: var(--secondary-clr);
@@ -1304,7 +1308,11 @@
             object-fit: cover;
           }
         }
+<<<<<<< HEAD
         h4 {
+=======
+        h3 {
+>>>>>>> fb43ad5 (initial commit)
           font-family: var(--font-display-medium);
           display: flex;
           align-items: center;
@@ -1344,7 +1352,11 @@
             div {
               max-width: 320px;
 
+<<<<<<< HEAD
               h5 {
+=======
+              h3 {
+>>>>>>> fb43ad5 (initial commit)
                 font-size: 1.125rem;
                 font-weight: 600;
               }

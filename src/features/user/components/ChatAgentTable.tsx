@@ -35,6 +35,7 @@ function ChatAgentTable() {
   const limit = 10;
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const { pushModal } = useModalStore.getState();
 
   const fetchAgents = async () => {
     try {
@@ -57,25 +58,24 @@ function ChatAgentTable() {
   }, [page]);
 
   const openCreateUserModal = () => {
-    const { openModal, setModalTitle, setModalSize } = useModalStore.getState();
-    openModal({
+    pushModal({
       content: <CreateUserModal />,
       type: "form",
+      title: "Create User",
+      size: "md",
     });
-    setModalTitle?.("Create User");
-    setModalSize?.("md");
   };
 
   return (
     <div className=" mt-10">
       {/* Header */}
-      <div className="flex items-center justify-between  bg-white dark:bg-primary shadow-lead  p-4 mb-6 rounded-lg">
-        <div className="flex items-center gap-3 ">
-          <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-primary shadow-lead p-4 mb-6 rounded-lg">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex-shrink-0">
             <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
               Employee's
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -83,7 +83,7 @@ function ChatAgentTable() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between sm:justify-end gap-4">
           <div className="text-right">
             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
               {totalStatuses}
@@ -94,10 +94,11 @@ function ChatAgentTable() {
           </div>
           <Button
             onClick={openCreateUserModal}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0"
           >
             <UserPlus className="h-4 w-4" />
-            Create Employee's
+            <span className="hidden sm:inline">Create Employee's</span>
+            <span className="sm:hidden">Create</span>
           </Button>
         </div>
       </div>

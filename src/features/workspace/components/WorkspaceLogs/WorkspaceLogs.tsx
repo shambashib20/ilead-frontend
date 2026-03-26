@@ -54,22 +54,20 @@ const STATUS_CONFIG = {
 
 export default function WorkspaceLogs() {
   const [logs, setLogs] = useState<any[]>([]);
-  const [propertyName, setPropertyName] = useState<string>(""); // 🆕 Add state for name
+  const [propertyName, setPropertyName] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const { properties } = useWorkspaceProperty();
+
   useEffect(() => {
     const fetchLogs = async () => {
       try {
         const response = await new PropertyModule().getProperty();
         const logsData = response.data.data.logs || [];
         const name = response.data.data.name || "Workspace";
-
-        // Sort logs by createdAt descending
         const sortedLogs = [...logsData].sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
-
         setLogs(sortedLogs);
         setPropertyName(name);
       } catch (error) {
@@ -78,190 +76,169 @@ export default function WorkspaceLogs() {
         setLoading(false);
       }
     };
-
     fetchLogs();
   }, []);
 
-  console.log(properties);
-
   return (
-    <Card className="max-w-full mx-auto border border-border/50 shadow-lg hover:shadow-xl transition-shadow duration-300 mt-5">
-      <CardHeader className="pb-0 border-b border-border/50">
+    <div className="max-w-5xl mx-auto mt-5 px-2 sm:px-4">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6 px-2">
         {loading ? (
-          <div className="flex items-center space-x-3">
-            <Skeleton className="h-5 w-5 rounded-md" />
-            <Skeleton className="h-6 w-48" />
-          </div>
-        ) : (
-          <div className="flex items-center space-x-3">
-            <div className="p-2 rounded-lg bg-primary/5">
-              <img
-                src={properties?.meta?.profile_picture_data?.file_url}
-                alt=""
-                className="h-15 w-15 object-cover object-left"
-              />
+          <>
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-3 w-32" />
             </div>
+          </>
+        ) : (
+          <>
+            <img
+              src={properties?.meta?.profile_picture_data?.file_url}
+              alt=""
+              className="h-12 w-12 rounded-full object-cover object-left flex-shrink-0"
+            />
             <div>
-              <CardTitle className="text-xl font-semibold text-foreground">
+              <h2 className="text-lg sm:text-xl font-semibold text-foreground leading-tight">
                 {propertyName}'s Activity Logs
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mt-1">
+              </h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
                 Track all activities and updates
               </p>
             </div>
-          </div>
+          </>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent className="pt-6">
-        {loading ? (
-          <div className="space-y-5">
-            {[...Array(4)].map((_, i) => (
-              <div className="flex space-x-4" key={i}>
-                <Skeleton className="h-3 w-3 rounded-full mt-2" />
-                <div className="space-y-3 flex-1">
-                  <div className="flex justify-between">
-                    <Skeleton className="h-4 w-32" />
-                    <Skeleton className="h-5 w-16" />
+      {/* Content */}
+      {loading ? (
+        <div className="space-y-4 px-2">
+          {[...Array(4)].map((_, i) => (
+            <div className="flex gap-3" key={i}>
+              <Skeleton className="h-3 w-3 rounded-full mt-2 flex-shrink-0" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-3 w-24" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : logs.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
+          <div className="p-4 rounded-full bg-muted/50">
+            <FileText className="h-8 w-8 text-muted-foreground/60" />
+          </div>
+          <p className="font-medium text-foreground">No logs yet</p>
+          <p className="text-sm text-muted-foreground">
+            Activities will appear here once available
+          </p>
+        </div>
+      ) : (
+        <div className="relative px-2">
+          {/* Timeline line */}
+          <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-border via-border/50 to-transparent" />
+
+          <div className="space-y-3">
+            {logs.map((log, index) => {
+              const statusConfig =
+                STATUS_CONFIG[
+                  log?.status?.toLowerCase() as keyof typeof STATUS_CONFIG
+                ] || STATUS_CONFIG.default;
+              const StatusIcon = statusConfig.icon;
+
+              return (
+                <div key={log._id || index} className="flex gap-4">
+                  {/* Dot */}
+                  <div className="flex-shrink-0 mt-4 z-10">
+                    <div
+                      className={cn(
+                        "h-3.5 w-3.5 rounded-full border-2 border-background",
+                        statusConfig.color.includes("green") && "bg-green-400",
+                        statusConfig.color.includes("red") && "bg-red-400",
+                        statusConfig.color.includes("yellow") &&
+                          "bg-yellow-400",
+                        statusConfig.color.includes("blue") && "bg-blue-400",
+                        statusConfig.color.includes("muted") &&
+                          "bg-muted-foreground/40",
+                      )}
+                    />
                   </div>
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-2/3" />
-                  <div className="flex items-center space-x-2 pt-2">
-                    <Skeleton className="h-3 w-3" />
-                    <Skeleton className="h-3 w-24" />
+
+                  {/* Card */}
+                  <div className="flex-1 pb-3">
+                    <div className="p-3 sm:p-4 rounded-lg border border-border/50 bg-background/50 hover:bg-accent/5 transition-colors">
+                      {/* Title + Badge */}
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <StatusIcon className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                          <h4 className="font-medium text-foreground text-sm sm:text-base leading-snug">
+                            {log.title}
+                          </h4>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-[10px] font-medium px-2 py-0.5 rounded border flex-shrink-0",
+                            statusConfig.color,
+                          )}
+                        >
+                          {log.status}
+                        </Badge>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-3">
+                        {log.description}
+                      </p>
+
+                      {/* Footer */}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground/70 pt-2 border-t border-border/40">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          <span>
+                            {format(new Date(log.createdAt), "MMM d, yyyy")}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          <span>
+                            {format(new Date(log.createdAt), "h:mm a")}
+                          </span>
+                        </div>
+                        {log.user && <span>By {log.user}</span>}
+                      </div>
+                    </div>
                   </div>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Summary footer */}
+      {!loading && logs.length > 0 && (
+        <div className="mt-4 pt-4 border-t border-border/50 flex flex-wrap items-center justify-between gap-2 text-xs px-2">
+          <span className="text-muted-foreground">
+            Showing{" "}
+            <span className="font-medium text-foreground">{logs.length}</span>{" "}
+            log{logs.length !== 1 ? "s" : ""}
+          </span>
+          <div className="flex items-center gap-3">
+            {[
+              { color: "bg-green-400", label: "Success" },
+              { color: "bg-red-400", label: "Error" },
+              { color: "bg-blue-400", label: "Info" },
+            ].map(({ color, label }) => (
+              <div key={label} className="flex items-center gap-1.5">
+                <div className={`h-2 w-2 rounded-full ${color}`} />
+                <span className="text-muted-foreground">{label}</span>
               </div>
             ))}
           </div>
-        ) : logs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-center space-y-4">
-            <div className="p-4 rounded-full bg-muted/50">
-              <FileText className="h-8 w-8 text-muted-foreground/60" />
-            </div>
-            <div>
-              <p className="font-medium text-foreground">No logs yet</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Activities will appear here once available
-              </p>
-            </div>
-          </div>
-        ) : (
-          <ScrollArea className="h-[500px] pr-4">
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-border/50 via-border/30 to-transparent dark:from-border/30 dark:via-border/20" />
-
-              <div className="space-y-6">
-                {logs.map((log, index) => {
-                  const statusConfig =
-                    STATUS_CONFIG[
-                      log?.status?.toLowerCase() as keyof typeof STATUS_CONFIG
-                    ] || STATUS_CONFIG.default;
-                  const StatusIcon = statusConfig.icon;
-
-                  return (
-                    <div key={log._id || index} className="relative">
-                      {/* Timeline dot */}
-                      <div className="absolute left-3 -translate-x-1/2">
-                        <div
-                          className={cn(
-                            "h-3 w-3 rounded-full border-2 border-background",
-                            statusConfig.color.includes("green") &&
-                              "bg-green-400",
-                            statusConfig.color.includes("red") && "bg-red-400",
-                            statusConfig.color.includes("yellow") &&
-                              "bg-yellow-400",
-                            statusConfig.color.includes("blue") &&
-                              "bg-blue-400",
-                            statusConfig.color.includes("muted") &&
-                              "bg-muted-foreground/30"
-                          )}
-                        />
-                      </div>
-
-                      <div className="ml-10">
-                        <div className="p-4 rounded-lg border border-border/50 bg-background/50 hover:bg-accent/5 transition-colors duration-200">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-                            <div className="flex items-center space-x-2">
-                              <StatusIcon className="h-4 w-4" />
-                              <h4 className="font-medium text-foreground text-base">
-                                {log.title}
-                              </h4>
-                            </div>
-                            <Badge
-                              variant="outline"
-                              className={cn(
-                                "text-xs font-medium px-2.5 py-1 rounded-md border",
-                                statusConfig.color
-                              )}
-                            >
-                              {log.status}
-                            </Badge>
-                          </div>
-
-                          <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                            {log.description}
-                          </p>
-
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground pt-3 border-t border-border/50">
-                            <div className="flex items-center space-x-1">
-                              <Calendar className="h-3 w-3" />
-                              <span>
-                                {format(new Date(log.createdAt), "MMM d, yyyy")}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Clock className="h-3 w-3" />
-                              <span>
-                                {format(new Date(log.createdAt), "h:mm a")}
-                              </span>
-                            </div>
-                            {log.user && (
-                              <div className="text-xs text-muted-foreground/80">
-                                By {log.user}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {index !== logs.length - 1 && (
-                          <Separator className="mt-6 opacity-50" />
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </ScrollArea>
-        )}
-
-        {/* Summary footer */}
-        {!loading && logs.length > 0 && (
-          <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between text-sm">
-            <div className="text-muted-foreground">
-              Showing{" "}
-              <span className="font-medium text-foreground">{logs.length}</span>{" "}
-              log{logs.length !== 1 ? "s" : ""}
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 rounded-full bg-green-400" />
-                <span className="text-xs text-muted-foreground">Success</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 rounded-full bg-red-400" />
-                <span className="text-xs text-muted-foreground">Error</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 rounded-full bg-blue-400" />
-                <span className="text-xs text-muted-foreground">Info</span>
-              </div>
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      )}
+    </div>
   );
 }

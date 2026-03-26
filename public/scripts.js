@@ -188,7 +188,7 @@
       this.tick();
       window.addEventListener(
         "resize",
-        utils.debounce(() => this.updateConnectionLines(), 100)
+        utils.debounce(() => this.updateConnectionLines(), 100),
       );
     }
   }
@@ -286,7 +286,7 @@
       clearInterval(this.autoSlideInterval);
       this.autoSlideInterval = setInterval(
         () => this.autoSlide(),
-        CONFIG.slider.autoSlideInterval
+        CONFIG.slider.autoSlideInterval,
       );
     }
 
@@ -310,7 +310,7 @@
           this.slidesPerView = this.getSlideCount();
           this.initDots();
           this.updateSlider();
-        }, 250)
+        }, 250),
       );
     }
   }
@@ -449,7 +449,7 @@
       const rootStyles = getComputedStyle(document.documentElement);
       const defaultDur = utils.parseTime(
         rootStyles.getPropertyValue("--anim-duration"),
-        CONFIG.animation.defaultDuration
+        CONFIG.animation.defaultDuration,
       );
       const defaultEase =
         rootStyles.getPropertyValue("--anim-ease") ||
@@ -464,11 +464,11 @@
             if (entry.isIntersecting) {
               const dur = utils.parseTime(
                 el.getAttribute("data-duration"),
-                defaultDur
+                defaultDur,
               );
               const delaySelf = utils.parseTime(
                 el.getAttribute("data-delay"),
-                0
+                0,
               );
               const delay = delaySelf + this.getStaggerDelay(el);
               const ease = el.getAttribute("data-easing") || defaultEase;
@@ -490,7 +490,7 @@
         {
           threshold: CONFIG.animation.threshold,
           rootMargin: CONFIG.animation.rootMargin,
-        }
+        },
       );
 
       this.els.forEach((el) => this.io.observe(el));
@@ -821,7 +821,7 @@
             const offset = circumference - (progress / 100) * circumference;
             this.progressCircle.style.strokeDashoffset = offset;
           }
-        }, 100)
+        }, 100),
       );
     }
 
@@ -865,7 +865,7 @@
 
       // Get progress circle element
       this.progressCircle = this.scrollTopBtn.querySelector(
-        ".progress-ring__progress"
+        ".progress-ring__progress",
       );
 
       // Setup
@@ -970,15 +970,15 @@
       this.menuToggle.addEventListener("click", () => this.openSidebar());
       this.sidebarClose?.addEventListener("click", () => this.closeSidebar());
       this.overlay?.addEventListener("click", (e) =>
-        this.handleOverlayClick(e)
+        this.handleOverlayClick(e),
       );
       this.mobileGetStarted?.addEventListener("click", () =>
-        this.handleMobileGetStarted()
+        this.handleMobileGetStarted(),
       );
 
       this.sidebar?.querySelectorAll(".mobile-nav a").forEach((link) => {
         link.addEventListener("click", () =>
-          setTimeout(() => this.closeSidebar(), 300)
+          setTimeout(() => this.closeSidebar(), 300),
         );
       });
 
@@ -1015,7 +1015,7 @@
     init() {
       document.addEventListener("DOMContentLoaded", () => {
         this.initModules();
-        // console.log("All modules initialized successfully");
+        console.log("All modules initialized successfully");
       });
     }
   }

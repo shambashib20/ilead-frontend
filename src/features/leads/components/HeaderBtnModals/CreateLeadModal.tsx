@@ -64,8 +64,7 @@ function safeGetPropertyId() {
 }
 
 export default function CreateLeadModal() {
-  const { openModal, closeModal, setModalTitle, setModalSize } =
-    useModalStore();
+  const { pushModal, closeModal } = useModalStore();
   const [form, setForm] = useState<LeadForm>({
     name: "",
     company_name: "",
@@ -117,7 +116,7 @@ export default function CreateLeadModal() {
 
   // ---------- Form helpers ----------
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -143,14 +142,12 @@ export default function CreateLeadModal() {
 
   // ---------- Submit ----------
   async function handleSubmit() {
-    // validate with zod
     const parsed = LeadSchema.safeParse({
       ...form,
       labels: Array.from(selected),
     });
     if (!parsed.success) {
       const first = parsed.error.issues[0];
-
       Swal.fire({
         icon: "warning",
         title: "Invalid input",
@@ -159,13 +156,11 @@ export default function CreateLeadModal() {
         showConfirmButton: false,
         timerProgressBar: true,
       });
-
       return;
     }
 
     const property_id = safeGetPropertyId();
     if (!property_id) {
-      // make this auto-close too so user isn't forced to click
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -177,8 +172,6 @@ export default function CreateLeadModal() {
       return;
     }
 
-    // Note: startTransition does not await the async function inside.
-    // That's fine here — the async work still runs, but React won't treat it as blocking.
     startTransition(async () => {
       try {
         const payload = {
@@ -191,7 +184,6 @@ export default function CreateLeadModal() {
 
         await createLeadFromPlatform.createLeadFromPlatform(payload as any);
 
-        // show an auto-closing success toast
         Swal.fire({
           title: "Success",
           text: "Lead created successfully",
@@ -201,7 +193,6 @@ export default function CreateLeadModal() {
           timerProgressBar: true,
         });
 
-        // wait for the toast to disappear, then reset UI
         setTimeout(() => {
           setForm({
             name: "",
@@ -221,18 +212,15 @@ export default function CreateLeadModal() {
         }, 1000);
       } catch (err: any) {
         const code = err?.status;
-        console.log(err);
-
-        let message = "Something went wrong while creating the label.";
         const isPaywall = code === 400 || code === 403;
-        console.log(isPaywall);
+        const message = "Something went wrong while creating the label.";
 
         if (isPaywall) {
-          setModalTitle?.("Your Plan Has Expires");
-          setModalSize?.("lg");
-
-          openModal({
+          pushModal({
+            // 👈
             type: "action",
+            title: "Your Plan Has Expired",
+            size: "lg",
             content: <PaywallUi />,
             customActions: (
               <>
@@ -245,10 +233,12 @@ export default function CreateLeadModal() {
           });
           return;
         }
-        setModalTitle?.("Something went wrong");
-        setModalSize?.("sm");
-        openModal({
+
+        pushModal({
+          // 👈
           type: "action",
+          title: "Something went wrong",
+          size: "sm",
           content: (
             <div className="p-2">
               <p className="text-sm opacity-80">{message}</p>
@@ -263,13 +253,13 @@ export default function CreateLeadModal() {
   const disabled = isPending || loading;
 
   return (
-    <div className="space-y-6 min-h-[500px] h-[500px] overflow-auto px-6 pt-20 pb-20 [&::-webkit-scrollbar]:w-[4px]  [&::-webkit-scrollbar-track]:rounded-full  [&::-webkit-scrollbar-track]:bg-[#444c6b] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
-      <h2 className="text-lg font-semibold text-foreground absolute top-0 left-0 w-full bg-primary p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+    <div className="space-y-6 min-h-[500px] h-[500px] overflow-auto px-6 pt-2 pb-4 [&::-webkit-scrollbar]:w-[4px]  [&::-webkit-scrollbar-track]:rounded-full  [&::-webkit-scrollbar-track]:bg-[#444c6b] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
+      {/* <h2 className="text-lg font-semibold text-foreground absolute top-0 left-0 w-full bg-primary p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
         Create New Lead
         <button onClick={() => closeModal()}>
           <X />
         </button>
-      </h2>
+      </h2> */}
 
       <div className="grid grid-cols-2 gap-4">
         <div>

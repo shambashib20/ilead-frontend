@@ -3,16 +3,13 @@ import { CardTitle } from "@/components/ui/card";
 import { useMedia } from "@/hooks/useMedia";
 import { useModalStore } from "@/store/useModalStore";
 import {
-  // ArrowDownUp,
   ChartColumnBig,
   CloudUpload,
   Download,
   List,
   Plus,
-  // Settings,
 } from "lucide-react";
 import { ImportLeadForm } from "../LeadModals/LeadModals";
-// import { useExportLeads } from "../../hooks/useExportLeads";
 import axios from "axios";
 import CreateLeadModal from "../HeaderBtnModals/CreateLeadModal";
 
@@ -23,28 +20,22 @@ type LeadOptionsProps = {
 
 function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   const isMobile = useMedia("(max-width: 767px)");
-  const { openModal, setModalTitle, setModalSize, closeModal } =
-    useModalStore();
-  // const { exportLead } = useExportLeads();
-
-  // function get
-  // console.log(exportLead);
+  const { pushModal, closeModal } = useModalStore(); // 👈 sirf yeh
 
   async function handleExport() {
     try {
       const res = await axios.get(
         "https://crm-server-tsnj.onrender.com/api/lead/export-leads",
         {
-          responseType: "blob", // yeh important hai
+          responseType: "blob",
           withCredentials: true,
-        }
+        },
       );
 
-      // Excel file download trigger
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "leads.xlsx"); // naam user ko milega
+      link.setAttribute("download", "leads.xlsx");
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -55,27 +46,28 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   }
 
   function handleCreateModal() {
-    // setModalTitle?.("Create Lead");
-    // setModalSize?.("normal");
-    openModal({
+    pushModal({
       content: <CreateLeadModal />,
       type: "info",
+      title: "Create New Lead",
+      size: "md",
     });
   }
 
   function handleUploadDocModal() {
-    setModalTitle?.("Import Lead");
-    setModalSize?.("normal");
-    openModal({
+    pushModal({
       content: <ImportLeadForm />,
       type: "form",
+      title: "Import Lead",
+      size: "normal",
     });
   }
 
   function handleExportDocModal() {
-    // setModalTitle?.("Export Lead");
-    setModalSize?.("sm");
-    openModal({
+    pushModal({
+      type: "info",
+      size: "sm",
+      title: "Export Lead",
       content: (
         <div className="flex flex-col items-center justify-center w-full gap-3 p-6">
           <h3 className="text-3xl text-foreground font-semibold text-center">
@@ -84,27 +76,20 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
           <p className="text-muted-foreground text-center -mt-2 mb-4">
             Lead will be exported in Excel format
           </p>
-
-          {/* Export Button */}
           <Button onClick={handleExport} className="flex items-center gap-2">
             <Download className="w-5 h-5" /> Export
           </Button>
         </div>
       ),
-      type: "info",
       customActions: (
         <div className="w-full flex justify-center py-4">
-          {/* Excel File Preview */}
           <div className="border rounded-lg shadow-sm bg-background w-[280px]">
-            {/* Header */}
             <div className="flex items-center gap-2 px-3 py-2 border-b">
               <div className="w-5 h-5 bg-green-500 rounded-sm flex items-center justify-center text-white text-xs font-bold">
                 X
               </div>
               <span className="text-sm font-medium">Leads.xlsx</span>
             </div>
-
-            {/* Table-like preview */}
             <div className="p-3">
               <div className="grid grid-cols-3 text-xs font-medium text-foreground/80 border-b pb-1 mb-1">
                 <span>Name</span>
@@ -178,11 +163,6 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
               <CloudUpload size={isMobile ? 14 : 20} />
             </Button>
           </li>
-          {/* <li>
-            <Button size={"icon"}>
-              <Settings size={isMobile ? 14 : 20} />
-            </Button>
-          </li> */}
           {isTableView && (
             <li title="Export Leads">
               <Button size={"icon"} onClick={handleExportDocModal}>
@@ -193,12 +173,6 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
               </Button>
             </li>
           )}
-
-          {/* <li>
-            <Button size={"icon"}>
-              <ArrowDownUp size={isMobile ? 14 : 20} />
-            </Button>
-          </li> */}
         </ul>
       </div>
     </div>

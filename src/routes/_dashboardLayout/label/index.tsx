@@ -73,7 +73,7 @@ function RouteComponent() {
     openModal({
       content: <CreateLabelForm />,
       type: "form",
-    }); 
+    });
   };
 
   const handleEdit = (label: any) => {
@@ -121,8 +121,10 @@ function RouteComponent() {
 
   return (
     <div className=" space-y-4 mt-10">
-      <div className="flex items-center justify-between shadow-lead dark:border-transparent dark:bg-primary px-3 py-3 rounded-sm">
-        <h2 className="text-xl font-semibold dark:text-white">Label List</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-lead dark:border-transparent dark:bg-primary px-3 py-3 rounded-sm">
+        <h2 className="text-xl font-semibold dark:text-white mb-2">
+          Label List
+        </h2>
         <div className="flex items-center gap-5">
           <Input
             placeholder="Search"
@@ -195,7 +197,7 @@ function RouteComponent() {
                         onClick={() =>
                           handleUserAssign(
                             label?._id,
-                            label?.meta?.assigned_agents
+                            label?.meta?.assigned_agents,
                           )
                         }
                       />
@@ -216,7 +218,7 @@ function RouteComponent() {
                                   {item?.agent_id?.name?.charAt(0) ?? "?"}
                                 </span>
                               </li>
-                            )
+                            ),
                           )}
                         </ul>
                       ) : (
@@ -242,12 +244,12 @@ function RouteComponent() {
         </div>
       )}
 
-      <div className="flex justify-between items-center bg-primary p-4 rounded-sm">
-        <div className="text-sm text-muted-foreground dark:text-gray-300">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-primary p-4 rounded-sm">
+        <div className="text-sm text-muted-foreground dark:text-gray-300 text-center sm:text-start">
           {/* show filtered count for current page and totalItems as before */}
           Showing {filteredLabels.length} of {totalItems} total labels
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-center sm:justify-end">
           <Button
             onClick={() => setPage(Math.max(1, page - 1))}
             disabled={page === 1}

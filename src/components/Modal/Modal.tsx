@@ -7,6 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
 import { useModalStore } from "@/store/useModalStore";
 import { Button } from "../ui/button";
 
@@ -17,58 +19,60 @@ const MODAL_SIZE = {
   lg: "w-[1000px]",
   xl: "w-[1200px]",
 };
+
 export function Modal() {
+  const { isOpen, stack, closeModal, popModal } = useModalStore();
+
+  // Top of stack = current modal
+  const current = stack[stack.length - 1];
+
+  if (!current) return null;
+
   const {
-    isOpen,
-    closeModal,
-    modalContent,
-    modalTitle,
-    modalType,
-    formActions,
+    content,
+    title,
+    type = "info",
     customActions,
-    modalSize,
+    formActions,
+    size = "normal",
     submitLabel,
-  } = useModalStore();
+  } = current;
 
   const handleSubmit = () => {
     if (formActions?.onSubmit) {
       formActions.onSubmit();
-      // DON'T close modal here - let the component handle it based on success
     }
   };
 
-  const handleCancel = () => {
-    if (formActions?.onCancel) {
-      formActions.onCancel();
-    }
-    closeModal();
-  };
-
-  // Determine if footer should be shown
-  const showFooter =
-    modalType === "form" || modalType === "action" || customActions;
+ const handleCancel = () => {
+   formActions?.onCancel?.(); // sirf side effects (form reset)
+   popModal(); // 👈 always pop — yahi close karega
+ };
+  const showFooter = type === "form" || type === "action" || customActions;
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
-      <DialogContent
-        className={`${MODAL_SIZE[modalSize ?? "normal"] ?? "w-[400px]"} `}
-      >
-        {modalTitle && (
+      <DialogContent className={`${MODAL_SIZE[size] ?? "w-[700px]"}`}>
+        {title ? (
           <DialogHeader className="bg-[#2a47a7] text-white">
-            <DialogTitle>{modalTitle}</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
+        ) : (
+          <VisuallyHidden>
+            <DialogTitle>Modal</DialogTitle> {/* 👈 hidden but accessible */}
+          </VisuallyHidden>
         )}
 
-        <div className="px-0 py-0">{modalContent}</div>
+        <div className="px-0 py-0">{content}</div>
 
-        {(modalTitle || showFooter) && (
+        {(title || showFooter) && (
           <DialogFooter>
             <div className="flex items-center justify-end gap-2 border-t border-gray-600 w-full py-4 px-5">
-              {/* Custom actions (for specific modals) */}
+              {/* Custom actions */}
               {customActions && customActions}
 
-              {/* Form actions (for form submissions) */}
-              {modalType === "form" && !customActions && (
+              {/* Form actions */}
+              {type === "form" && !customActions && (
                 <>
                   <Button
                     className="text-white bg-blue-600 hover:bg-blue-700"
@@ -84,16 +88,16 @@ export function Modal() {
                   <Button
                     className="bg-gray-500 hover:bg-gray-600"
                     onClick={handleCancel}
-                    disabled={formActions?.isSubmitting} // Disable cancel while processing
+                    disabled={formActions?.isSubmitting}
                   >
                     Cancel
                   </Button>
                 </>
               )}
 
-              {/* Simple action modal (just close button) */}
-              {modalType === "action" && !customActions && (
-                <Button onClick={closeModal}>Close</Button>
+              {/* Action modal */}
+              {type === "action" && !customActions && (
+                <Button onClick={popModal}>Close</Button> // 👈 popModal
               )}
             </div>
           </DialogFooter>

@@ -14,7 +14,7 @@ const headerButtons = [
 
 function HeaderBtnLists() {
   // const { mobileOpen } = useSidebarStore();
-  const { openModal, setModalSize } = useModalStore();
+  const { pushModal } = useModalStore();
 
   return (
     <ul className="hidden sm:flex gap-2 items-center ">
@@ -22,9 +22,10 @@ function HeaderBtnLists() {
         <li
           key={index}
           onClick={() => {
-            setModalSize?.("md");
-            openModal({
+            pushModal({
               type: "info",
+              size: "md",
+              title: "Create New Lead", // 👈 bas yeh add karo
               content: btn.modalEl,
             });
           }}

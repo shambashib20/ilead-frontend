@@ -23,7 +23,8 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         .toLocaleString()
         .split(",")[0]
     : "-";
-  const { openModal, setModalTitle, setData, setModalSize } = useModalStore();
+
+  const { pushModal } = useModalStore(); // 👈 sirf yeh
   const user =
     typeof window !== "undefined" ? (getData("user") ?? undefined) : undefined;
   const actions = getCardActions(user.role);
@@ -35,7 +36,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         "rounded-lg shadow hover:shadow-lg transition-all relative",
         lead.missedFollowup
           ? "bg-red-600/15 dark:bg-red-800/80 text-white border-2 border-red-500"
-          : "bg-white dark:bg-primary text-white"
+          : "bg-white dark:bg-primary text-white",
       )}
     >
       {/* Missed Follow-up Badge */}
@@ -53,20 +54,20 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         </div>
       )}
 
+      {/* Card Click → LeadDetail */}
       <div
         className="cursor-pointer"
         onClick={() => {
-          setModalTitle?.("Lead Details");
-          setData?.({ _id: lead._id, rayId: lead?.meta?.ray_id });
-          setModalSize?.("lg");
-          openModal({
+          pushModal({
             content: <LeadDetail />,
-            type: "action" as const,
+            type: "action",
+            title: "Lead Details",
+            size: "lg",
+            data: { _id: lead._id, rayId: lead?.meta?.ray_id },
           });
         }}
       >
         <div className="pt-5 px-6">
-          {/* Missed Follow-up Alert Banner (Optional) */}
           {lead.missedFollowup && (
             <div className="mb-3 px-3 py-2 bg-red-100 dark:bg-red-900/30 border border-red-400 rounded flex items-center gap-2">
               <AlertCircle
@@ -82,19 +83,15 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
 
           <div className="flex flex-wrap gap-2 mb-3">
             {lead.labels?.length > 0 ? (
-              lead.labels.map((label) => {
-                return (
-                  <span
-                    key={label._id || label.title}
-                    style={{
-                      backgroundColor: label.meta?.color_code || "gray",
-                    }}
-                    className="text-xs px-3 py-1 rounded"
-                  >
-                    {label.title}
-                  </span>
-                );
-              })
+              lead.labels.map((label) => (
+                <span
+                  key={label._id || label.title}
+                  style={{ backgroundColor: label.meta?.color_code || "gray" }}
+                  className="text-xs px-3 py-1 rounded"
+                >
+                  {label.title}
+                </span>
+              ))
             ) : (
               <span className="bg-gray-600 text-white text-xs px-3 py-1 rounded">
                 No Label
@@ -126,12 +123,10 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
           ) : (
             <div></div>
           )}
-
           <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">TO:</span>
             <span>{assignedToName}</span>
           </div>
-
           <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
             <span className="font-medium">NFD:</span>
             <span>{nfd}</span>
@@ -139,6 +134,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
         </div>
       </div>
 
+      {/* Bottom Actions */}
       <div className="mt-3 items-center py-3 px-2 border-t border-gray-300 dark:border-gray-600 flex gap-1.5 relative z-20">
         {actions.map(
           ({
@@ -156,19 +152,18 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
               className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
               title={label}
               onClick={() => {
-                setModalTitle?.(title);
-                setModalSize?.("sm");
-                setData?.({
-                  _id: lead._id,
-                  rayId: lead.meta?.ray_id,
-                  labels: lead.labels,
-                  status: lead.status,
-                });
-
-                openModal({
+                pushModal({
                   content: el,
                   type,
                   customActions,
+                  title,
+                  size: "sm",
+                  data: {
+                    _id: lead._id,
+                    rayId: lead.meta?.ray_id,
+                    labels: lead.labels,
+                    status: lead.status,
+                  },
                 });
               }}
             >
@@ -181,7 +176,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
                 )}
               </div>
             </button>
-          )
+          ),
         )}
       </div>
     </div>

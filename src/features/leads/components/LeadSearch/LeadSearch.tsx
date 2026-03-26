@@ -65,7 +65,7 @@ function LeadSearch() {
     startDate?: Date;
     endDate?: Date;
   }; // Adjust route as needed
-  const { openModal, setModalTitle, closeModal, setModalSize } =
+  const { openModal, setModalTitle, closeModal, setModalSize, pushModal } =
     useModalStore();
 
   // Parse filters from URL search params
@@ -139,7 +139,7 @@ function LeadSearch() {
           ? (filters.labelIds ?? []).map(
               (id) =>
                 labelOptions.find((opt) => opt.value === id) ||
-                defaultLabelOption
+                defaultLabelOption,
             )
           : [defaultLabelOption],
       assignedBy:
@@ -147,7 +147,7 @@ function LeadSearch() {
           ? (filters.assignedBy ?? []).map(
               (id) =>
                 agentsOptions.find((opt) => opt.value === id) ||
-                defaultAgentsOption
+                defaultAgentsOption,
             )
           : [defaultAgentsOption],
       assignTo:
@@ -155,7 +155,7 @@ function LeadSearch() {
           ? (filters.assignedTo ?? []).map(
               (id) =>
                 AssigneesOptions.find((opt) => opt.value === id) ||
-                defaultAssigneesOption
+                defaultAssigneesOption,
             )
           : [defaultAssigneesOption],
       source:
@@ -163,7 +163,7 @@ function LeadSearch() {
           ? (filters.sourceNames ?? []).map(
               (id) =>
                 sourceOptions.find((opt) => opt.value === id) ||
-                defaultSourcesOption
+                defaultSourcesOption,
             )
           : [defaultSourcesOption],
       searchByDate: filters.sortBy
@@ -247,9 +247,10 @@ function LeadSearch() {
   };
 
   const handleCalendarAction = () => {
-    setModalSize?.("lg");
-    setModalTitle?.("Date Ranges");
-    openModal({
+    pushModal({
+      title: "Date Ranges",
+      size: "xl", // 👈 lg se xl kar do — zyada space milega
+      type: "info",
       content: (
         <DateRangeModal
           setDate={({ startDate, endDate }) => {
@@ -261,15 +262,14 @@ function LeadSearch() {
           }}
         />
       ),
-      type: "info",
       customActions: (
-        <div className="flex justify-end space-x-3 ">
+        <div className="flex justify-end space-x-3">
           <Button onClick={closeModal}>Save</Button>
         </div>
       ),
     });
-    console.log("Calendar action triggered");
   };
+
   // const isBrowser = typeof window !== "undefined";
   const colourStyles = {
     control: (styles: any) => ({
@@ -286,7 +286,7 @@ function LeadSearch() {
     // }),
     menuList: (styles: any) => ({
       ...styles,
-      maxHeight: "100px", // change height as you like
+      maxHeight: "300px", // change height as you like
       overflowY: "auto",
     }),
     option: (styles: any, state: any) => ({
@@ -345,7 +345,12 @@ function LeadSearch() {
                   options={agentsOptions}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                  styles={colourStyles}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
+                  styles={{
+                    ...colourStyles,
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
                   placeholder="Select creators..."
                 />
               </div>
@@ -368,7 +373,12 @@ function LeadSearch() {
                   options={AssigneesOptions}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                  styles={colourStyles}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
+                  styles={{
+                    ...colourStyles,
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
                   placeholder="Select assignees..."
                 />
               </div>
@@ -391,7 +401,12 @@ function LeadSearch() {
                   options={labelOptions || []}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                  styles={colourStyles}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
+                  styles={{
+                    ...colourStyles,
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
                   placeholder="Select labels..."
                 />
               </div>
@@ -414,7 +429,12 @@ function LeadSearch() {
                   options={sourceOptions || []}
                   className="basic-multi-select"
                   classNamePrefix="select"
-                  styles={colourStyles}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
+                  styles={{
+                    ...colourStyles,
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
                   placeholder="Select sources..."
                 />
               </div>
@@ -437,7 +457,12 @@ function LeadSearch() {
                   options={followUpOptions}
                   className="basic-multi-select "
                   classNamePrefix="select"
-                  styles={colourStyles}
+                  menuPortalTarget={document.body}
+                  menuPosition="fixed"
+                  styles={{
+                    ...colourStyles,
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  }}
                   placeholder="Select date range..."
                 />
               </div>

@@ -13,88 +13,126 @@ type FormActions = {
 type ModalType = "info" | "action" | "form";
 type ModalSize = "sm" | "md" | "lg" | "xl" | "normal";
 
-type ModalStore<TData = unknown> = {
-  isOpen: boolean;
-  modalContent: ReactNode | null;
-  modalTitle?: ReactNode;
-  modalSize: ModalSize;
-  modalType: ModalType;
-  data: TData | null;
-  formActions?: FormActions;
+// Ek modal ka pura state
+type ModalParams = {
+  content: ReactNode;
+  type?: ModalType;
   customActions?: ReactNode;
+  title?: ReactNode;
+  size?: ModalSize;
+  formActions?: FormActions;
   submitLabel?: string;
-
-  openModal: (params: {
-    content: ReactNode;
-    type?: ModalType;
-    customActions?: ReactNode;
-  }) => void;
-  openInfo?: (content: ReactNode) => void;
-  openAction?: (content: ReactNode, actions?: ReactNode) => void;
-  openForm?: (content: ReactNode) => void;
-
-  setModalSize: (size: ModalSize) => void;
-  setModalTitle: (title: ReactNode | undefined) => void;
-  setData: (data: TData | null) => void;
-  setFormActions: (actions: FormActions | undefined) => void;
-  setSubmitLabel: (label: string | undefined) => void;
-  closeModal: () => void;
+  data?: unknown;
 };
 
-export const useModalStore = create<ModalStore>((set) => ({
+type ModalStore = {
+  stack: ModalParams[];
+  isOpen: boolean;
+
+  // Current modal helpers (top of stack)
+  openModal: (params: ModalParams) => void; // pushModal alias
+  pushModal: (params: ModalParams) => void; // naya modal upar
+  popModal: () => void; // current close, previous wapas
+  closeModal: () => void; // sab band
+
+  // Backward compatible setters (current/top modal ko update karte hain)
+  setModalSize: (size: ModalSize) => void;
+  setModalTitle: (title: ReactNode | undefined) => void;
+  setFormActions: (actions: FormActions | undefined) => void;
+  setSubmitLabel: (label: string | undefined) => void;
+  setData: (data: unknown) => void;
+
+  // Shortcuts
+  openInfo: (content: ReactNode) => void;
+  openAction: (content: ReactNode, actions?: ReactNode) => void;
+  openForm: (content: ReactNode) => void;
+};
+
+export const useModalStore = create<ModalStore>((set, get) => ({
+  stack: [],
   isOpen: false,
-  modalContent: null,
-  modalType: "info",
-  data: null,
-  formActions: undefined,
-  customActions: undefined,
-  modalSize: "normal",
-  submitLabel: undefined,
 
-  setData: (data) => set({ data }),
-  setModalSize: (size) => set({ modalSize: size }),
-  setModalTitle: (modalTitle) => set({ modalTitle }),
-  setFormActions: (formActions) => set({ formActions }),
-  setSubmitLabel: (submitLabel) => set({ submitLabel }),
+  pushModal: (params) =>
+    set((state) => ({
+      stack: [...state.stack, params],
+      isOpen: true,
+    })),
 
-  openModal: ({ content, type = "info", customActions }) =>
-    set({
-      isOpen: true,
-      modalContent: content,
-      modalType: type,
-      customActions,
-    }),
-  openInfo: (content) =>
-    set({
-      isOpen: true,
-      modalContent: content,
-      modalType: "info",
-      customActions: undefined,
-    }),
-  openAction: (content, actions) =>
-    set({
-      isOpen: true,
-      modalContent: content,
-      modalType: "action",
-      customActions: actions,
-    }),
-  openForm: (content) =>
-    set({
-      isOpen: true,
-      modalContent: content,
-      modalType: "form",
-      customActions: undefined,
+  openModal: (params) => get().pushModal(params), // alias
+
+  popModal: () =>
+    set((state) => {
+      const newStack = state.stack.slice(0, -1);
+      return {
+        stack: newStack,
+        isOpen: newStack.length > 0,
+      };
     }),
 
   closeModal: () =>
     set({
+      stack: [],
       isOpen: false,
-      modalContent: null,
-      modalType: "info",
-      formActions: undefined,
-      customActions: undefined,
-      modalTitle: undefined,
-      submitLabel: undefined,
-      data: null,
     }),
+
+  // Top of stack ko update karne ke liye
+  setModalSize: (size) =>
+    set((state) => {
+      if (state.stack.length === 0) return state;
+      const newStack = [...state.stack];
+      newStack[newStack.length - 1] = {
+        ...newStack[newStack.length - 1],
+        size,
+      };
+      return { stack: newStack };
+    }),
+
+  setModalTitle: (title) =>
+    set((state) => {
+      if (state.stack.length === 0) return state;
+      const newStack = [...state.stack];
+      newStack[newStack.length - 1] = {
+        ...newStack[newStack.length - 1],
+        title,
+      };
+      return { stack: newStack };
+    }),
+
+  setFormActions: (formActions) =>
+    set((state) => {
+      if (state.stack.length === 0) return state;
+      const newStack = [...state.stack];
+      newStack[newStack.length - 1] = {
+        ...newStack[newStack.length - 1],
+        formActions,
+      };
+      return { stack: newStack };
+    }),
+
+  setSubmitLabel: (submitLabel) =>
+    set((state) => {
+      if (state.stack.length === 0) return state;
+      const newStack = [...state.stack];
+      newStack[newStack.length - 1] = {
+        ...newStack[newStack.length - 1],
+        submitLabel,
+      };
+      return { stack: newStack };
+    }),
+
+  setData: (data) =>
+    set((state) => {
+      if (state.stack.length === 0) return state;
+      const newStack = [...state.stack];
+      newStack[newStack.length - 1] = {
+        ...newStack[newStack.length - 1],
+        data,
+      };
+      return { stack: newStack };
+    }),
+
+  openInfo: (content) => get().pushModal({ content, type: "info" }),
+  openAction: (content, actions) =>
+    get().pushModal({ content, type: "action", customActions: actions }),
+  openForm: (content) => get().pushModal({ content, type: "form" }),
 }));
