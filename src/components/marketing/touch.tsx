@@ -9,6 +9,7 @@ function Touch() {
           <h6 className="badge fade-up">
             <i className="fas fa-link"></i> Connect With Us
           </h6>
+          <h4 className="fade-up text-[28px] font-[family-name:var(--font-display-semibold)]  leading-tight">
           <h4
             className="fade-up text-[20px] md:text-[28px] font-[family-name:var(--font-display-semibold)]  leading-tight max-w-[300px] md:max-w-full w-full md:w-full "
             style={{ marginInline: "auto" }}
