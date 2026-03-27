@@ -27,16 +27,16 @@ function isEnterOrSpace(e: KeyboardEvent) {
 export function LeadTab({ data }: { data: LeadTabType }) {
   const firstValue = data?.content?.[0]?.label ?? "tab0";
 
-  const { setModalTitle, setData, setModalSize, openModal } = useModalStore();
+  const { pushModal } = useModalStore();
 
   function handleModal({ _id, rayId }: { _id: string; rayId?: string }) {
     if (!_id) return;
-    setModalTitle?.("Lead Details");
-    setData?.({ _id, rayId: rayId ?? "" });
-    setModalSize?.("lg");
-    openModal({
+    pushModal({
+      title: "Lead Details",
+      size: "lg",
+      type: "action",
       content: <LeadDetail />,
-      type: "action" as const,
+      data: { _id, rayId: rayId ?? "" },
     });
   }
 
