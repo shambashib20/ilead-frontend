@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import ImportFacebookLeadsSection from "../ImportFacebookLeadSection";
 import { Card, CardContent } from "@/components/ui/card";
 import ExternalWebsiteIntegration from "../ExternalWebsiteIntegration";
+import ApiKeyGeneration from "../ApiKeyGeneration";
 
 function FacebookIntegration() {
   const [selectedLabel, setSelectedLabel] = useState("");
@@ -167,6 +168,10 @@ function FacebookIntegration() {
 
       <div>
         <ImportFacebookLeadsSection />
+      </div>
+
+      <div>
+        <ApiKeyGeneration />
       </div>
 
       <div>
