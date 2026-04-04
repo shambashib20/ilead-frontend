@@ -4,6 +4,12 @@ import axios from "axios";
 const API_BASE = (import.meta.env.VITE_API_URL as string).replace(/\/+$/, "");
 const API_KEY = import.meta.env.VITE_LEAD_SUBMISSION_API_KEY as string;
 
+console.warn("LeadSubmissionService API_BASE:", API_BASE);
+console.warn("api key", API_KEY)
+
+const labelTitle = import.meta.env.VITE_LEAD_SUBMISSION_LABEL_TITLE;
+
+console.log("LeadSubmissionService label title:", labelTitle);
 export interface MarketingLeadPayload {
   name: string;
   phone_number: string;
@@ -32,7 +38,7 @@ class LeadSubmissionService extends ApiClient {
     const res = await axios.post<MarketingLeadResponse>(
       `${API_BASE}/api/lead/create/via-label`,
       {
-        label_title: "ETC Landing Page Lead",
+        label_title: labelTitle,
         company_name: "",
         reference: "Direct Website Lead",
         ...payload,
