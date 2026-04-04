@@ -4,12 +4,14 @@ import axios from "axios";
 const API_BASE = (import.meta.env.VITE_API_URL as string).replace(/\/+$/, "");
 const API_KEY = import.meta.env.VITE_LEAD_SUBMISSION_API_KEY as string;
 
-console.warn("LeadSubmissionService API_BASE:", API_BASE);
-console.warn("api key", API_KEY)
 
-const labelTitle = import.meta.env.VITE_LEAD_SUBMISSION_LABEL_TITLE;
 
-console.log("LeadSubmissionService label title:", labelTitle);
+// Strip any accidental surrounding quotes that Vercel (or other CI env UIs)
+// may add when a value is saved as "ETC CRM Landing Page Lead" instead of
+// ETC CRM Landing Page Lead — keeps the raw string clean regardless of env.
+const labelTitle = (
+  import.meta.env.VITE_LEAD_SUBMISSION_LABEL_TITLE as string ?? ""
+).trim().replace(/^"+|"+$/g, "");
 export interface MarketingLeadPayload {
   name: string;
   phone_number: string;
