@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaFacebookF } from "react-icons/fa";
 import { labelService } from "@/features/leads/services/Lable.service";
 import { redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import type { Label } from "@/features/leads/types";
 import { facebookIntegrationService } from "../../services/FacebookIntegration.service";
 import Swal from "sweetalert2";
@@ -19,9 +13,28 @@ import ExternalWebsiteIntegration from "../ExternalWebsiteIntegration";
 import ApiKeyGeneration from "../ApiKeyGeneration";
 
 function FacebookIntegration() {
-  const [selectedLabel, setSelectedLabel] = useState("");
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleLabel = (id: string) => {
+    setSelectedLabels((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -49,8 +62,8 @@ function FacebookIntegration() {
   };
 
   const handleSave = async () => {
-    if (!selectedLabel) {
-      Swal.fire("Warning", "Please select a label first", "warning");
+    if (selectedLabels.length === 0) {
+      Swal.fire("Warning", "Please select at least one label", "warning");
       return;
     }
 
@@ -69,7 +82,7 @@ function FacebookIntegration() {
       });
 
       const response =
-        await facebookIntegrationService.connectWithFacebookPage(selectedLabel);
+        await facebookIntegrationService.connectWithFacebookPage(selectedLabels);
 
       const msg = response?.message || "Facebook page connected successfully!";
 
@@ -140,19 +153,58 @@ function FacebookIntegration() {
               <FaFacebookF className="mr-2" /> Connect To Facebook
             </Button>
 
-            <div className="flex flex-col w-full md:w-[320px]">
-              <Select value={selectedLabel} onValueChange={setSelectedLabel}>
-                <SelectTrigger className="w-full bg-primary text-white border border-[#444c6b]">
-                  <SelectValue placeholder="Select label" />
-                </SelectTrigger>
-                <SelectContent>
+            <div className="relative w-full md:w-[320px]" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen((o) => !o)}
+                className="w-full min-h-[40px] flex flex-wrap gap-1 items-center px-3 py-1.5 rounded-md border border-[#444c6b] bg-primary text-white text-sm text-left"
+              >
+                {selectedLabels.length === 0 ? (
+                  <span className="text-white/60">Select labels</span>
+                ) : (
+                  selectedLabels.map((id) => {
+                    const lbl = labels.find((l) => l._id === id);
+                    return (
+                      <Badge
+                        key={id}
+                        variant="secondary"
+                        className="flex items-center gap-1 text-xs"
+                      >
+                        {lbl?.title}
+                        <span
+                          role="button"
+                          className="ml-1 hover:text-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleLabel(id);
+                          }}
+                        >
+                          ×
+                        </span>
+                      </Badge>
+                    );
+                  })
+                )}
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute z-50 mt-1 w-full max-h-60 overflow-y-auto rounded-md border border-[#444c6b] bg-popover text-popover-foreground shadow-md">
                   {labels.map((label) => (
-                    <SelectItem key={label._id} value={label._id}>
+                    <label
+                      key={label._id}
+                      className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-accent text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedLabels.includes(label._id)}
+                        onChange={() => toggleLabel(label._id)}
+                        className="accent-primary"
+                      />
                       {label.title}
-                    </SelectItem>
+                    </label>
                   ))}
-                </SelectContent>
-              </Select>
+                </div>
+              )}
             </div>
 
             <Button

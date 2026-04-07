@@ -19,12 +19,10 @@ class FacebookIntegrationService extends ApiClient {
     window.location.href = loginUrl; // Redirects to Facebook login
   }
 
-  async connectWithFacebookPage(labelId: string): Promise<any> {
-    const response = await this.get("/connect", {
-      params: { labelId },
+  async connectWithFacebookPage(labelIds: string[]): Promise<any> {
+    const qs = labelIds.map((id) => `labelId=${encodeURIComponent(id)}`).join("&");
+    const response = await this.get(`/connect?${qs}`, {
       timeout: 5 * 60 * 1000,
-
-      // 👈 query string mein bhej diya
     });
     return response.data;
   }
