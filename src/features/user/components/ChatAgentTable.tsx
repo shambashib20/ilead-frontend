@@ -16,7 +16,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useModalStore } from "@/store/useModalStore";
 import CreateUserModal from "./CreateUserModal";
+import DeactivateUserModal from "./DeactivateUserModal";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
+import Swal from "sweetalert2";
 import {
   ChevronLeft,
   ChevronRight,
@@ -36,6 +38,8 @@ function ChatAgentTable() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const { pushModal } = useModalStore.getState();
+
+  const [toggling, setToggling] = useState<string | null>(null);
 
   const fetchAgents = async () => {
     try {
@@ -64,6 +68,57 @@ function ChatAgentTable() {
       title: "Create User",
       size: "md",
     });
+  };
+
+  const isActive = (agent: Agent) => agent.meta?.is_active !== false;
+
+  const handleDeactivateSuccess = (agentId: string) => {
+    setChatAgents((prev) =>
+      prev.map((a) =>
+        a._id === agentId ? { ...a, meta: { ...a.meta, is_active: false } } : a
+      )
+    );
+  };
+
+  const handleToggle = (agent: Agent) => {
+    if (isActive(agent)) {
+      pushModal({
+        title: `Deactivate ${agent.name}`,
+        type: "form",
+        size: "sm",
+        submitLabel: "Deactivate",
+        content: (
+          <DeactivateUserModal
+            agent={agent}
+            onSuccess={handleDeactivateSuccess}
+          />
+        ),
+      });
+    } else {
+      Swal.fire({
+        title: "Activate user?",
+        text: `Re-activate ${agent.name}?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Activate",
+      }).then(async (result) => {
+        if (!result.isConfirmed) return;
+        try {
+          setToggling(agent._id);
+          await chatAgentService.toggleActiveStatus(agent._id, true);
+          setChatAgents((prev) =>
+            prev.map((a) =>
+              a._id === agent._id ? { ...a, meta: { ...a.meta, is_active: true } } : a
+            )
+          );
+          Swal.fire({ icon: "success", title: "User activated", timer: 1200, showConfirmButton: false });
+        } catch (err: any) {
+          Swal.fire("Error", err?.message || "Failed to activate user", "error");
+        } finally {
+          setToggling(null);
+        }
+      });
+    }
   };
 
   return (
@@ -134,6 +189,12 @@ function ChatAgentTable() {
                     Created At
                   </div>
                 </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  Status
+                </TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-300 py-4">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -187,11 +248,38 @@ function ChatAgentTable() {
                         </div>
                       </div>
                     </TableCell>
+                    <TableCell className="py-4">
+                      {isActive(agent) ? (
+                        <Badge className="bg-green-100 text-green-800 border border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800">
+                          Active
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-red-100 text-red-800 border border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-800">
+                          Inactive
+                        </Badge>
+                      )}
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <button
+                        onClick={() => handleToggle(agent)}
+                        disabled={toggling === agent._id}
+                        className={`relative inline-flex h-7 w-14 flex-shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                          isActive(agent) ? "bg-green-500" : "bg-gray-400 dark:bg-gray-600"
+                        }`}
+                        title={isActive(agent) ? "Click to deactivate" : "Click to activate"}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition-transform duration-200 ${
+                            isActive(agent) ? "translate-x-7" : "translate-x-1"
+                          }`}
+                        />
+                      </button>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="py-12 text-center">
+                  <TableCell colSpan={6} className="py-12 text-center">
                     <div className="flex flex-col items-center justify-center gap-3">
                       <Users className="h-12 w-12 text-gray-300 dark:text-gray-600" />
                       <div>

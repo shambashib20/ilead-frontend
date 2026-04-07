@@ -17,6 +17,9 @@ export interface Agent {
   email: string;
   phone_number: string;
   createdAt: string;
+  meta?: {
+    is_active?: boolean;
+  };
 }
 
 export interface Pagination {
@@ -47,6 +50,17 @@ class ChatAgentService extends ApiClient {
   async fetchPaginatedChatAgents(page = 1, limit = 10) {
     const query = `chat-agents/paginated?page=${page}&limit=${limit}`;
     return this.get<PaginatedChatAgentsResponse>(query);
+  }
+
+  async toggleActiveStatus(
+    userId: string,
+    isActive: boolean,
+    reassignTo?: string
+  ) {
+    return this.patch<{ message: string; already_in_state?: boolean }>(
+      "toggle-active",
+      { userId, is_active: isActive, ...(reassignTo ? { reassign_to: reassignTo } : {}) }
+    );
   }
 }
 
