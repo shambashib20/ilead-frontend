@@ -19,6 +19,35 @@ export interface GenerateApiKeyResponse {
   };
 }
 
+export interface ApiKey {
+  title: string;
+  description: string;
+  value: string;
+  created_at: string;
+  expiry_at: string;
+  purpose: string;
+  status: string;
+  label_id: string;
+  usage_limit: number;
+  usage_count: number;
+  label: {
+    _id: string;
+    title: string;
+    description: string;
+    meta: {
+      is_active: boolean;
+      color_code: string;
+      [key: string]: unknown;
+    };
+  };
+}
+
+export interface ApiKeysResponse {
+  message: string;
+  status: string;
+  data: ApiKey[];
+}
+
 class PropertyApiKeyService extends ApiClient {
   constructor() {
     super("property");
@@ -31,6 +60,11 @@ class PropertyApiKeyService extends ApiClient {
       "/generate/api-key",
       payload
     );
+    return response.data;
+  }
+
+  async fetchApiKeys(): Promise<ApiKeysResponse> {
+    const response = await this.get<ApiKeysResponse>("/api-keys");
     return response.data;
   }
 }

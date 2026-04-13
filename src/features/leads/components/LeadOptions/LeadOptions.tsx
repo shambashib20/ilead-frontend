@@ -8,10 +8,13 @@ import {
   Download,
   List,
   Plus,
+  RefreshCw,
 } from "lucide-react";
 import { ImportLeadForm } from "../LeadModals/LeadModals";
 import axios from "axios";
 import CreateLeadModal from "../HeaderBtnModals/CreateLeadModal";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useState } from "react";
 
 type LeadOptionsProps = {
   isTableView: boolean;
@@ -21,6 +24,16 @@ type LeadOptionsProps = {
 function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   const isMobile = useMedia("(max-width: 767px)");
   const { pushModal, closeModal } = useModalStore(); // 👈 sirf yeh
+  const navigate = useNavigate();
+  const router = useRouter();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  async function handleRefresh() {
+    setIsRefreshing(true);
+    navigate({ to: ".", search: {}, replace: true });
+    await router.invalidate();
+    setIsRefreshing(false);
+  }
 
   async function handleExport() {
     try {
@@ -153,6 +166,11 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
       </div>
       <div>
         <ul className="flex items-center gap-3">
+          <li title="Refresh">
+            <Button size={"icon"} onClick={handleRefresh} disabled={isRefreshing}>
+              <RefreshCw size={isMobile ? 14 : 20} className={isRefreshing ? "animate-spin" : ""} />
+            </Button>
+          </li>
           <li title="Add Lead">
             <Button size={"icon"} onClick={handleCreateModal}>
               <Plus size={isMobile ? 14 : 20} />

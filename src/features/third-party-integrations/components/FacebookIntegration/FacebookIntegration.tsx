@@ -11,6 +11,7 @@ import ImportFacebookLeadsSection from "../ImportFacebookLeadSection";
 import { Card, CardContent } from "@/components/ui/card";
 import ExternalWebsiteIntegration from "../ExternalWebsiteIntegration";
 import ApiKeyGeneration from "../ApiKeyGeneration";
+import ApiKeysList from "../ApiKeysList/ApiKeysList";
 
 function FacebookIntegration() {
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
@@ -224,6 +225,10 @@ function FacebookIntegration() {
 
       <div>
         <ApiKeyGeneration />
+      </div>
+
+      <div>
+        <ApiKeysList />
       </div>
 
       <div>

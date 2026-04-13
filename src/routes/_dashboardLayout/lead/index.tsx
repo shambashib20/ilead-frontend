@@ -23,7 +23,7 @@ function RouteComponent() {
   const filters = { ...baseFilters, is_table_view: isTableView, page, limit };
 
   // For table view - paginated
-  const { leads, isLoading, statuses, error, pagination } = useLeads(filters);
+  const { leads, isLoading, isFetching, statuses, error, pagination } = useLeads(filters);
 
   // For board view - infinite scroll
   const {
@@ -31,6 +31,7 @@ function RouteComponent() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
+    isFetching: isInfiniteFetching,
     isLoading: isInfiniteLoading,
     error: infiniteError,
   } = useInfiniteLeads({ ...baseFilters, is_table_view: isTableView, limit });
@@ -153,8 +154,11 @@ function RouteComponent() {
     }));
   }, [leads, statuses]);
 
-  // Loading state
-  if (isTableView ? isLoading : isInfiniteLoading) {
+  // Loading state — show skeleton on initial load OR during refresh refetch
+  const isTableLoading = isLoading || isFetching;
+  const isBoardLoading = isInfiniteLoading || (isInfiniteFetching && !isFetchingNextPage);
+
+  if (isTableView ? isTableLoading : isBoardLoading) {
     return (
       <>
         <SkeletonLoader />
