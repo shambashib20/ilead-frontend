@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import WapMonkeyIntegration from "@/features/whatsappp-settings/components/WapMonkeyIntegration";
+import WapMonkeyDevicesTable from "@/features/whatsappp-settings/components/WapMonkeyDevicesTable/WapMonkeyDevicesTable";
 import { automationsQueryOptions } from "@/features/automations/hooks/useAutomation";
 
 export const Route = createFileRoute("/_dashboardLayout/whatsapp-settings/")({
@@ -14,11 +15,8 @@ function RouteComponent() {
     <div>
       <div className="mt-5 space-y-6">
         <WapMonkeyIntegration />
+        <WapMonkeyDevicesTable />
       </div>
-
-      {/* <div className="mt-5 space-y-6">
-        <h1>Hello</h1>
-      </div> */}
     </div>
   );
 }
