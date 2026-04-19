@@ -22,6 +22,12 @@ import {
   campaignQueryOptions,
   useCampaigns,
 } from "@/features/templates/hooks/useCampaigns";
+import { useModalStore } from "@/store/useModalStore";
+import {
+  openTemplatePreviewModal,
+  openEditTemplateModal,
+  openDeleteTemplateModal,
+} from "@/features/templates/components/TemplateModals/TemplateModals";
 
 // Define the route
 export const Route = createFileRoute(
@@ -42,6 +48,8 @@ function RouteComponent() {
 
   // fetch campaigns
   const { campaigns, isLoading, pagination } = useCampaigns(page, limit);
+
+  const openModal = useModalStore((s) => s.openModal);
 
   // handlers
   const handlePrev = () => {
@@ -138,15 +146,31 @@ console.log(campaigns)
 
                       <Td className="pr-6">
                         <div className="flex items-center justify-end gap-3">
-                          <IconPill color="text-amber-500" title="Edit">
+                          <IconPill
+                            color="text-amber-500"
+                            title="Edit"
+                            onClick={() => openEditTemplateModal(r, openModal)}
+                          >
                             <Pencil className="h-4 w-4" />
                           </IconPill>
 
-                          <IconPill color="text-rose-600" title="Delete">
+                          <IconPill
+                            color="text-rose-600"
+                            title="Delete"
+                            onClick={() =>
+                              openDeleteTemplateModal(r._id, openModal)
+                            }
+                          >
                             <Trash2 className="h-4 w-4" />
                           </IconPill>
 
-                          <IconPill color="text-emerald-600" title="Preview">
+                          <IconPill
+                            color="text-emerald-600"
+                            title="Preview"
+                            onClick={() =>
+                              openTemplatePreviewModal(r._id, openModal)
+                            }
+                          >
                             <Eye className="h-4 w-4" />
                           </IconPill>
 
@@ -279,10 +303,12 @@ function IconPill({
   children,
   color,
   title,
-}: React.PropsWithChildren<{ color: string; title?: string }>) {
+  onClick,
+}: React.PropsWithChildren<{ color: string; title?: string; onClick?: () => void }>) {
   return (
     <span
       title={title}
+      onClick={onClick}
       className={`cursor-pointer hover:opacity-80 transition-colors duration-150 ${color}`}
     >
       {children}

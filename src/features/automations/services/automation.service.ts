@@ -57,6 +57,20 @@ export interface CreateAutomationPayload {
   meta: AutomationMeta;
 }
 
+export interface UpdateAutomationPayload {
+  type?: string;
+  lead_type?: string;
+  invoice_type?: string;
+  rules?: AutomationRule[];
+  meta?: Partial<AutomationMeta>;
+}
+
+export interface DeleteAutomationResponse {
+  message: string;
+  statusCode: number;
+  data: { deleted: boolean; automationId: string };
+}
+
 /* ------------------ Service ------------------ */
 
 export class AutomationService extends ApiClient {
@@ -76,6 +90,19 @@ export class AutomationService extends ApiClient {
 
   async createAutomation(payload: CreateAutomationPayload) {
     const res = await this.post<AutomationResponse>("/create", payload);
+    return res.data;
+  }
+
+  async updateAutomation(id: string, payload: UpdateAutomationPayload) {
+    const res = await this.patch<{ message: string; status: string; data: Automation }>(
+      `/update/${id}`,
+      payload
+    );
+    return res.data;
+  }
+
+  async deleteAutomation(id: string) {
+    const res = await this.delete<DeleteAutomationResponse>(`/delete/${id}`);
     return res.data;
   }
 }

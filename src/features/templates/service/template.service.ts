@@ -70,6 +70,21 @@ export interface CreateCampaignResponse {
     campaign: Campaign;
   };
 }
+export interface UpdateTemplatePayload {
+  type?: string;
+  title?: string;
+  message?: string;
+  subject?: string;
+  email_message?: string;
+  sms_template_id?: string;
+}
+
+export interface DeleteTemplateResponse {
+  message: string;
+  statusCode: number;
+  data: { deleted: boolean; templateId: string };
+}
+
 /* -----------------------------
  *  Service Class
  * ----------------------------- */
@@ -109,20 +124,30 @@ export class TemplateService extends ApiClient {
    */
   async createCampaign(payload: CreateCampaignPayload): Promise<Campaign> {
     try {
-      // NOTE: endpoint name uses the same text you provided.
-      // If your real endpoint is different (e.g. "/create" or "/create-campaigns"),
-      // change it here.
       const response = await this.post<CreateCampaignResponse>(
         "/create",
         payload
       );
-
-      // If backend returns other shape, adapt this line
       return response.data.data.campaign;
     } catch (err) {
       console.error("❌ Failed to create campaign:", err);
       throw err;
     }
+  }
+
+  async getTemplateById(id: string): Promise<Campaign> {
+    const res = await this.get<{ data: Campaign }>(`/template/${id}`);
+    return res.data.data;
+  }
+
+  async updateTemplate(id: string, payload: UpdateTemplatePayload): Promise<Campaign> {
+    const res = await this.patch<{ data: Campaign }>(`/template/${id}`, payload);
+    return res.data.data;
+  }
+
+  async deleteTemplate(id: string): Promise<DeleteTemplateResponse> {
+    const res = await this.delete<DeleteTemplateResponse>(`/template/${id}`);
+    return res.data;
   }
 }
 

@@ -23,10 +23,10 @@ function RouteComponent() {
                 title="Lead Template"
                 href="/general-templates/lead-template"
               />
-              <LinkRow title="Meeting Template" href="#" active />
+              {/* <LinkRow title="Meeting Template" href="#" active />
               <LinkRow title="Invoice Template" href="#" />
               <LinkRow title="Reminder Template" href="#" />
-              <LinkRow title="Greeting Template" href="#" />
+              <LinkRow title="Greeting Template" href="#" /> */}
             </CardContent>
           </div>
 

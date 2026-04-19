@@ -1,4 +1,4 @@
-import { useMemo, useState, type JSX, useEffect } from "react";
+import { useMemo, useState, type JSX, useEffect, Suspense } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -11,11 +11,13 @@ import { Edit, Trash2, Copy } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAutomations } from "../../hooks/useAutomation";
+import { useModalStore } from "@/store/useModalStore";
+import { EditAutomationModal } from "../EditAutomationModal";
+import { openDeleteAutomationModal } from "../DeleteAutomationModal";
+import type { Automation } from "../../services/automation.service";
 
-/**
- * Table row type
- */
 type Row = {
+  _id: string;
   id: number;
   automationType: string;
   status: string;
@@ -32,13 +34,15 @@ export default function WhatsappAutomationResult(): JSX.Element {
   const limit = 10;
   const { automations, pagination, isLoading } = useAutomations(page, limit);
 
-  // Map API data → table rows
+  const openModal = useModalStore((s) => s.openModal);
+
   const apiRows: Row[] = useMemo(
     () =>
       automations.map((a, index) => {
         const firstRule = a.rules?.[0];
 
         return {
+          _id: a._id,
           id:
             ((pagination?.currentPage ?? 1) - 1) *
               (pagination?.limit ?? limit) +
@@ -113,7 +117,27 @@ export default function WhatsappAutomationResult(): JSX.Element {
         cell: ({ row }) => {
           const r = row.original;
 
-          const onEdit = () => console.log("edit", r.id);
+          const onEdit = () => {
+            const automation = automations.find((a: Automation) => a._id === r._id);
+            if (!automation) return;
+            openModal({
+              type: "form",
+              title: "Edit Automation",
+              size: "md",
+              submitLabel: "Update",
+              content: (
+                <Suspense
+                  fallback={
+                    <div className="p-4 text-sm text-muted-foreground">
+                      Loading...
+                    </div>
+                  }
+                >
+                  <EditAutomationModal automation={automation} />
+                </Suspense>
+              ),
+            });
+          };
 
           const onClone = () => {
             const nextId =
@@ -126,11 +150,7 @@ export default function WhatsappAutomationResult(): JSX.Element {
             setData((d) => [cloned, ...d]);
           };
 
-          const onDelete = () => {
-            if (!confirm("Are you sure you want to delete this automation?"))
-              return;
-            setData((d) => d.filter((x) => x.id !== r.id));
-          };
+          const onDelete = () => openDeleteAutomationModal(r._id, openModal);
 
           return (
             <div className="flex items-center">
@@ -163,7 +183,7 @@ export default function WhatsappAutomationResult(): JSX.Element {
         },
       },
     ],
-    [data]
+    [data, automations, openModal]
   );
 
   const table = useReactTable({
@@ -181,72 +201,75 @@ export default function WhatsappAutomationResult(): JSX.Element {
   }
 
   return (
-    <Card className="bg-primary shadow rounded-md p-0 overflow-hidden">
-      <div className="overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
-        <table className="min-w-full divide-y">
-          <thead className="bg-primary">
-            {table.getHeaderGroups().map((hg) => (
-              <tr key={hg.id}>
-                {hg.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="text-left px-3 py-3 text-[12px] text-foreground font-medium"
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header as any,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
+    <>
+      <Card className="bg-primary shadow rounded-md p-0 overflow-hidden">
+        <div className="overflow-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-[#173b78] hover:[&::-webkit-scrollbar-thumb]:bg-[#2554a5]">
+          <table className="min-w-full divide-y">
+            <thead className="bg-primary">
+              {table.getHeaderGroups().map((hg) => (
+                <tr key={hg.id}>
+                  {hg.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className="text-left px-3 py-3 text-[12px] text-foreground font-medium"
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header as any,
+                            header.getContext()
+                          )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
 
-          <tbody className="bg-primary divide-y">
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-3 py-4 text-[12px] text-gray-700 dark:text-gray-200 align-top"
-                  >
-                    {flexRender(
-                      cell.column.columnDef.cell as any,
-                      cell.getContext()
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-
-            {table.getRowModel().rows.length === 0 && (
-              <tr>
-                <td
-                  colSpan={columns.length}
-                  className="px-6 py-8 text-center text-gray-500"
+            <tbody className="bg-primary divide-y">
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  No records to display
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-3 py-4 text-[12px] text-gray-700 dark:text-gray-200 align-top"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell as any,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
 
-      <div className="p-4 border-t dark:border-gray-700 flex items-center justify-between">
-        <div className="text-sm text-gray-500">
-          {pagination
-            ? `${(pagination.currentPage - 1) * pagination.limit + 1} - ${
-                (pagination.currentPage - 1) * pagination.limit + data.length
-              } of ${pagination.totalItems}`
-            : `1 - ${data.length} of ${data.length}`}
+              {table.getRowModel().rows.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={columns.length}
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
+                    No records to display
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
-      </div>
-    </Card>
+
+        <div className="p-4 border-t dark:border-gray-700 flex items-center justify-between">
+          <div className="text-sm text-gray-500">
+            {pagination
+              ? `${(pagination.currentPage - 1) * pagination.limit + 1} - ${
+                  (pagination.currentPage - 1) * pagination.limit + data.length
+                } of ${pagination.totalItems}`
+              : `1 - ${data.length} of ${data.length}`}
+          </div>
+        </div>
+      </Card>
+
+    </>
   );
 }

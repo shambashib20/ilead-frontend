@@ -85,14 +85,15 @@ function WhatsappAutomationFilter() {
           Whatsapp Automation Rules
         </h2>
         <Button
-          variant={"outline"}
+          className="bg-[#3a3285] hover:bg-[#2d2a6e] text-white"
           onClick={() =>
             navigate({
               to: "/whatsapp-automation-rules/insert-update",
             })
           }
         >
-          <Plus />
+          <Plus size={16} />
+          Add Automation
         </Button>
       </div>
 
