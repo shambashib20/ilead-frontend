@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { useModalStore } from "@/store/useModalStore";
 import CreateUserModal from "./CreateUserModal";
 import DeactivateUserModal from "./DeactivateUserModal";
+import EditUserModal from "./EditUserModal";
 import SkeletonTableLoader from "@/components/SkeletonTableLoader";
 import Swal from "sweetalert2";
 import {
@@ -27,6 +28,7 @@ import {
   Phone,
   Calendar,
   UserPlus,
+  Pencil,
 } from "lucide-react";
 
 function ChatAgentTable() {
@@ -78,6 +80,22 @@ function ChatAgentTable() {
         a._id === agentId ? { ...a, meta: { ...a.meta, is_active: false } } : a
       )
     );
+  };
+
+  const handleEditSuccess = (updated: Agent) => {
+    setChatAgents((prev) =>
+      prev.map((a) => (a._id === updated._id ? { ...a, ...updated } : a))
+    );
+  };
+
+  const handleEdit = (agent: Agent) => {
+    pushModal({
+      content: <EditUserModal agent={agent} onSuccess={handleEditSuccess} />,
+      type: "form",
+      title: "Edit Employee",
+      size: "md",
+      submitLabel: "Save Changes",
+    });
   };
 
   const handleToggle = (agent: Agent) => {
@@ -260,20 +278,29 @@ function ChatAgentTable() {
                       )}
                     </TableCell>
                     <TableCell className="py-4">
-                      <button
-                        onClick={() => handleToggle(agent)}
-                        disabled={toggling === agent._id}
-                        className={`relative inline-flex h-7 w-14 flex-shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                          isActive(agent) ? "bg-green-500" : "bg-gray-400 dark:bg-gray-600"
-                        }`}
-                        title={isActive(agent) ? "Click to deactivate" : "Click to activate"}
-                      >
-                        <span
-                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition-transform duration-200 ${
-                            isActive(agent) ? "translate-x-7" : "translate-x-1"
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => handleEdit(agent)}
+                          className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                          title="Edit employee"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => handleToggle(agent)}
+                          disabled={toggling === agent._id}
+                          className={`relative inline-flex h-7 w-14 flex-shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+                            isActive(agent) ? "bg-green-500" : "bg-gray-400 dark:bg-gray-600"
                           }`}
-                        />
-                      </button>
+                          title={isActive(agent) ? "Click to deactivate" : "Click to activate"}
+                        >
+                          <span
+                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition-transform duration-200 ${
+                              isActive(agent) ? "translate-x-7" : "translate-x-1"
+                            }`}
+                          />
+                        </button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))

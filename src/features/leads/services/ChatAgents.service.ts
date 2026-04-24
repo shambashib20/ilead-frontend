@@ -22,6 +22,12 @@ export interface Agent {
   };
 }
 
+interface UpdateChatAgentResponse {
+  message: string;
+  statusCode: number;
+  data: Agent;
+}
+
 export interface Pagination {
   total: number;
   limit: number;
@@ -50,6 +56,13 @@ class ChatAgentService extends ApiClient {
   async fetchPaginatedChatAgents(page = 1, limit = 10) {
     const query = `chat-agents/paginated?page=${page}&limit=${limit}`;
     return this.get<PaginatedChatAgentsResponse>(query);
+  }
+
+  async updateChatAgent(
+    id: string,
+    data: { name?: string; email?: string; phone_number?: string }
+  ) {
+    return this.patch<UpdateChatAgentResponse>(`chat-agents/${id}`, data);
   }
 
   async toggleActiveStatus(
