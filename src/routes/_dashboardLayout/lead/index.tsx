@@ -53,11 +53,18 @@ function RouteComponent() {
     });
   }, [infiniteData]);
 
-  // Extract statuses from first page
+  // Extract statuses from first page — always put "New" column first
   const statuses2 = useMemo(() => {
     if (!infiniteData?.pages || infiniteData.pages.length === 0) return [];
     const firstPage = infiniteData.pages[0];
-    return Array.isArray(firstPage.statuses) ? firstPage.statuses : [];
+    const raw: any[] = Array.isArray(firstPage.statuses)
+      ? firstPage.statuses
+      : [];
+    return [...raw].sort((a, b) => {
+      if (a.title === "New") return -1;
+      if (b.title === "New") return 1;
+      return 0;
+    });
   }, [infiniteData]);
 
   // Normalize leads for board view

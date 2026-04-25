@@ -50,8 +50,9 @@ export const StatusColumn = memo(
     const rowVirtualizer = useVirtualizer({
       count: hasMore ? statusLeads.length + 1 : statusLeads.length,
       getScrollElement: () => scrollRef.current,
-      estimateSize: () => 250,
-      overscan: 2,
+      estimateSize: () => 220,
+      overscan: 3,
+      measureElement: (el) => el?.getBoundingClientRect().height ?? 220,
     });
 
     const handleScroll = useCallback(() => {
@@ -119,16 +120,17 @@ export const StatusColumn = memo(
 
               return (
                 <div
-                  key={virtualRow.index}
+                  key={virtualRow.key}
+                  data-index={virtualRow.index}
+                  ref={rowVirtualizer.measureElement}
                   style={{
                     position: "absolute",
                     top: 0,
                     left: 0,
                     width: "100%",
-                    height: `${virtualRow.size}px`,
                     transform: `translateY(${virtualRow.start}px)`,
                   }}
-                  className="flex flex-col justify-start pb-3"
+                  className="pb-3"
                 >
                   {isLoaderRow ? (
                     hasMore ? (
@@ -143,13 +145,11 @@ export const StatusColumn = memo(
                       </div>
                     )
                   ) : (
-                    <div className="mb-2 mt-4">
-                      <LeadCard
-                        lead={
-                          updatedLeads?.find((l) => l._id === lead._id) || lead
-                        }
-                      />
-                    </div>
+                    <LeadCard
+                      lead={
+                        updatedLeads?.find((l) => l._id === lead._id) || lead
+                      }
+                    />
                   )}
                 </div>
               );

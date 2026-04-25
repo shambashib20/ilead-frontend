@@ -21,16 +21,18 @@ export const filteredNavItems = navItems.filter((item) => {
 function Sidebar() {
   const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isHovered, _setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const effectiveCollapsed = isCollapsed && !isHovered;
 
   return (
     <aside
+      onMouseEnter={() => isCollapsed && setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={`
-    hidden lg:flex flex-col h-screen sticky top-0 
+    hidden lg:flex flex-col h-screen sticky top-0
     transition-[width] duration-300 ease-in-out
     ${effectiveCollapsed ? "w-[80px]" : "w-[250px]"}
-    bg-primary text-gray-600 dark:text-gray-300 
+    bg-primary text-gray-600 dark:text-gray-300
   `}
     >
       {/* Logo Section (unchanged) */}

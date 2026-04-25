@@ -58,6 +58,13 @@ interface CreateUserResponse {
   data?: UserDto;
 }
 
+export interface UpdateProfilePayload {
+  name?: string;
+  email?: string;
+  phone_number?: string;
+  bio?: string;
+}
+
 export interface ProfileImagePayload {
   fileUrl: string;
 }
@@ -82,6 +89,10 @@ export class UserModule extends ApiClient {
   ): Promise<CreateUserResponse> {
     const res = await this.post<CreateUserResponse>("/create-user", payload);
     return res.data;
+  }
+
+  async updateProfile(payload: UpdateProfilePayload) {
+    return this.patch<UserResponse>("/profile", payload);
   }
 
   async profileImgUpdate(
