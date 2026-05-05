@@ -93,6 +93,7 @@ function LeadSearch() {
 
   const labelOptions = [
     defaultLabelOption,
+    { value: "no_label", label: "No Label" }, // 👈 yeh add kar
     ...(allLables?.data?.map((lbl) => ({
       value: lbl._id,
       label: lbl.title,
@@ -129,6 +130,27 @@ function LeadSearch() {
     { value: "this_week", label: "By Created Date" },
     { value: "next_week", label: "Next Week" },
   ];
+  const handleSelectChange = (
+    value: readonly OptionType[],
+    field: any,
+    defaultOption: OptionType,
+  ) => {
+    const values = Array.isArray(value) ? [...value] : [];
+
+    // Agar "All" option abhi select hua (last item mein hai)
+    const lastSelected = values[values.length - 1];
+    const allOptionSelected = lastSelected?.value === defaultOption.value;
+
+    if (allOptionSelected) {
+      // "All" select hua — baaki sab hato, sirf "All" rakho
+      field.handleChange([defaultOption]);
+      return;
+    }
+
+    // Real item select hua — "All" option hato
+    const filtered = values.filter((v) => v.value !== defaultOption.value);
+    field.handleChange(filtered.length > 0 ? filtered : [defaultOption]);
+  };
 
   // Convert current filters to form values
   const getFormValuesFromFilters = (filters: FilterPayload): FormData => {
@@ -138,9 +160,9 @@ function LeadSearch() {
           ? (filters.labelIds ?? []).map(
               (id) =>
                 labelOptions.find((opt) => opt.value === id) ||
-                defaultLabelOption,
+                defaultLabelOption, // 👈 yeh sahi hai
             )
-          : [defaultLabelOption],
+          : [defaultLabelOption], // 👈 yeh bhi
       assignedBy:
         (filters.assignedBy ?? []).length > 0
           ? (filters.assignedBy ?? []).map(
@@ -154,9 +176,9 @@ function LeadSearch() {
           ? (filters.assignedTo ?? []).map(
               (id) =>
                 AssigneesOptions.find((opt) => opt.value === id) ||
-                defaultAssigneesOption,
+                defaultAssigneesOption, // 👈 yeh
             )
-          : [defaultAssigneesOption],
+          : [defaultAssigneesOption], // 👈 yeh
       source:
         (filters.sourceNames ?? []).length > 0
           ? (filters.sourceNames ?? []).map(
@@ -221,10 +243,10 @@ function LeadSearch() {
   });
 
   const emptyForm: FormData = {
-    labels: [defaultLabelOption],
-    assignedBy: [defaultAgentsOption],
-    assignTo: [defaultAssigneesOption],
-    source: [defaultSourcesOption],
+    labels: [defaultLabelOption], // "All Labels"
+    assignedBy: [defaultAgentsOption], // "All Agents"
+    assignTo: [defaultAssigneesOption], // "All Assignees"
+    source: [defaultSourcesOption], // "All Sources"
     searchByDate: [],
     searchQuery: "",
     startDate: "",
@@ -364,12 +386,17 @@ function LeadSearch() {
             name="assignedBy"
             children={(field) => (
               <div className="space-y-3 mb-5">
-                <Label htmlFor="assignedBy">Created By</Label>
+                <Label
+                  htmlFor="assignedBy "
+                  className="text-sm font-medium text-foreground"
+                >
+                  Created By
+                </Label>
                 <Select
                   id="assignedBy"
                   value={field.state.value}
                   onChange={(value) =>
-                    field.handleChange(Array.isArray(value) ? [...value] : [])
+                    handleSelectChange(value, field, defaultAgentsOption)
                   }
                   isMulti
                   name="assignedBy"
@@ -392,12 +419,17 @@ function LeadSearch() {
             name="assignTo"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="assignTo">Assign To</Label>
+                <Label
+                  htmlFor="assignTo"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Assign To
+                </Label>
                 <Select
                   id="assignTo"
                   value={field.state.value}
                   onChange={(value) =>
-                    field.handleChange(Array.isArray(value) ? [...value] : [])
+                    handleSelectChange(value, field, defaultAgentsOption)
                   }
                   isMulti
                   name="assignTo"
@@ -420,12 +452,17 @@ function LeadSearch() {
             name="labels"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="labels">Labels</Label>
+                <Label
+                  htmlFor="labels"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Labels
+                </Label>
                 <Select
                   id="labels"
                   value={field.state.value}
                   onChange={(value) =>
-                    field.handleChange(Array.isArray(value) ? [...value] : [])
+                    handleSelectChange(value, field, defaultAgentsOption)
                   }
                   isMulti
                   name="labels"
@@ -448,12 +485,17 @@ function LeadSearch() {
             name="source"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="source">Source</Label>
+                <Label
+                  htmlFor="source"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Source
+                </Label>
                 <Select
                   id="source"
                   value={field.state.value}
                   onChange={(value) =>
-                    field.handleChange(Array.isArray(value) ? [...value] : [])
+                    handleSelectChange(value, field, defaultAgentsOption)
                   }
                   isMulti
                   name="source"
@@ -476,7 +518,12 @@ function LeadSearch() {
             name="searchByDate"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="searchByDate">Search By Date</Label>
+                <Label
+                  htmlFor="searchByDate"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Search By Date
+                </Label>
                 <Select
                   id="searchByDate"
                   value={field.state.value}
@@ -504,7 +551,12 @@ function LeadSearch() {
             name="searchQuery"
             children={(field) => (
               <div className="space-y-2">
-                <Label htmlFor="searchQuery">Search Query</Label>
+                <Label
+                  htmlFor="searchQuery"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Search Query
+                </Label>
                 <div className="flex items-center gap-2">
                   <Input
                     id="searchQuery"

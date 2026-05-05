@@ -13,7 +13,6 @@ import {
 import { ImportLeadForm } from "../LeadModals/LeadModals";
 import axios from "axios";
 import CreateLeadModal from "../HeaderBtnModals/CreateLeadModal";
-
 import { useState } from "react";
 import { queryClient } from "@/utils/client";
 
@@ -25,6 +24,7 @@ type LeadOptionsProps = {
 function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   const isMobile = useMedia("(max-width: 767px)");
   const { pushModal, closeModal } = useModalStore(); // 👈 sirf yeh
+
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   async function handleRefresh() {
