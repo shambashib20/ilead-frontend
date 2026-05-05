@@ -31,6 +31,7 @@ export type NavItem = {
   path?: string;
   roles?: Role[];
   subItems?: NavItem[];
+  group?: string; // 👈 yeh add
 };
 
 interface SidebarMenuItemProps {
@@ -41,123 +42,94 @@ interface SidebarMenuItemProps {
 }
 
 export const navItems: NavItem[] = [
+  // ─── MAIN ───────────────────────────────────────────
   {
     name: "Dashboard",
     icon: <House size={20} />,
     path: "/dashboard",
     roles: ["Admin", "Superadmin", "User", "Telecaller"],
+    group: "MAIN",
   },
   {
     name: "Dashboard",
     icon: <House size={20} />,
     path: "/masterpannel",
     roles: ["Masteradmin"],
+    group: "MAIN",
   },
-
-  {
-    name: "Follow Ups",
-    icon: <Plug size={20} />,
-    roles: ["Telecaller", "Superadmin"],
-    subItems: [
-      { name: "Missed Follow Ups", path: "/missedfollowup" },
-      { name: "Todays Follow Ups", path: "/todaysfollowup" },
-    ],
-  },
-
-  // {
-  //   name: "Todays FollowUps",
-  //   icon: <House size={20} />,
-  //   path: "/todaysfollowup",
-  //   roles: ["Telecaller"],
-  // },
   {
     name: "Clients",
     icon: <House size={20} />,
     path: "/masterpannel/client",
     roles: ["Masteradmin"],
+    group: "MAIN",
   },
   {
     name: "Users",
     icon: <House size={20} />,
     path: "/masterpannel/users",
     roles: ["Masteradmin"],
+    group: "MAIN",
   },
-
-  {
-    name: "Packages",
-    icon: <House size={20} />,
-    path: "/masterpannel/packages",
-    roles: ["Masteradmin"],
-  },
-  {
-    name: "Workspace",
-    icon: <House size={20} />,
-    path: "/masterpannel/workspace",
-    roles: ["Masteradmin"],
-  },
-  {
-    name: "Campaigns",
-    icon: <House size={20} />,
-    path: "/masterpannel/campaigns",
-    roles: ["Masteradmin"],
-  },
-  {
-    name: "Addons",
-    icon: <House size={20} />,
-    path: "/masterpannel/addons",
-    roles: ["Masteradmin"],
-  },
-
   {
     name: "Lead",
     icon: <Filter size={20} />,
     path: "/lead",
     roles: ["Admin", "Superadmin", "User", "Telecaller"],
+    group: "MAIN",
   },
+  {
+    name: "Follow Ups",
+    icon: <Plug size={20} />,
+    roles: ["Telecaller", "Superadmin"],
+    group: "MAIN",
+    subItems: [
+      { name: "Missed Follow Ups", path: "/missedfollowup" },
+      { name: "Todays Follow Ups", path: "/todaysfollowup" },
+    ],
+  },
+  {
+    name: "Analytics",
+    icon: <UserCircle size={20} />,
+    path: "/telecaller-analytics",
+    roles: ["Telecaller"],
+    group: "MAIN",
+  },
+
+  // ─── TOOLS & SETTINGS ───────────────────────────────
   {
     name: "Workspace Logs",
     icon: <MessageSquare size={20} />,
     path: "/workspace-logs",
     roles: ["Admin", "Superadmin"],
+    group: "TOOLS & SETTINGS",
   },
   {
     name: "User Module",
     icon: <Users size={20} />,
     roles: ["Admin", "Superadmin"],
-    subItems: [
-      { name: "User List", path: "/users" },
-      // { name: "Roles & Permissions", path: "/roles" },
-      // { name: "Activity Log", path: "/user-activity" },
-    ],
+    group: "TOOLS & SETTINGS",
+    subItems: [{ name: "User List", path: "/users" }],
   },
   {
     name: "Customers",
     icon: <UserCircle size={20} />,
     path: "/customer",
     roles: ["Admin", "Superadmin"],
-  },
-
-  {
-    name: "Analytics",
-    icon: <UserCircle size={20} />,
-    path: "/telecaller-analytics",
-    roles: ["Telecaller"],
+    group: "TOOLS & SETTINGS",
   },
   {
     name: "Integrations",
     icon: <Plug size={20} />,
     roles: ["Admin", "Superadmin"],
-    subItems: [
-      { name: "API Connections", path: "/third-party-integration" },
-      // { name: "Webhooks", path: "/integrations/webhooks" },
-      // { name: "Marketplace", path: "/integrations/marketplace" },
-    ],
+    group: "TOOLS & SETTINGS",
+    subItems: [{ name: "API Connections", path: "/third-party-integration" }],
   },
-
   {
     name: "General Settings",
     icon: <Settings size={20} />,
     roles: ["Admin", "Superadmin"],
+    group: "TOOLS & SETTINGS",
     subItems: [
       {
         name: "Attributes",
@@ -195,11 +167,7 @@ export const navItems: NavItem[] = [
           },
         ],
       },
-      {
-        name: "Leads Trash",
-        icon: <Trash2 size={18} />,
-        path: "/lead-trash",
-      },
+      { name: "Leads Trash", icon: <Trash2 size={18} />, path: "/lead-trash" },
       {
         name: "Automation Rules",
         icon: <Funnel size={18} />,
@@ -244,17 +212,49 @@ export const navItems: NavItem[] = [
       },
     ],
   },
+
+  // ─── TEAM OPERATIONS ────────────────────────────────
   {
     name: "Reports",
     icon: <ChartArea size={20} />,
     roles: ["Admin", "Superadmin"],
     path: "/report",
+    group: "TEAM OPERATIONS",
   },
   {
     name: "Packages",
     icon: <Package />,
     roles: ["Admin", "Superadmin"],
     path: "/add-package",
+    group: "TEAM OPERATIONS",
+  },
+  {
+    name: "Workspace",
+    icon: <House size={20} />,
+    path: "/masterpannel/workspace",
+    roles: ["Masteradmin"],
+    group: "TEAM OPERATIONS",
+  },
+  {
+    name: "Campaigns",
+    icon: <House size={20} />,
+    path: "/masterpannel/campaigns",
+    roles: ["Masteradmin"],
+    group: "TEAM OPERATIONS",
+  },
+  {
+    name: "Packages",
+    icon: <House size={20} />,
+    path: "/masterpannel/packages",
+    roles: ["Masteradmin"],
+    group: "TEAM OPERATIONS",
+  },
+  {
+    name: "Addons",
+    icon: <House size={20} />,
+    path: "/masterpannel/addons",
+    roles: ["Masteradmin"],
+    group: "TEAM OPERATIONS",
   },
 ];
 
@@ -284,7 +284,7 @@ function isAnyDescendantActive(
   );
 }
 
-export const SidebarMenuItem = ({
+export const  SidebarMenuItem = ({
   item,
   isCollapsed,
   depth = 0,
@@ -328,7 +328,7 @@ export const SidebarMenuItem = ({
   );
 
   const groupBase = cn(
-    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative w-full justify-between px-3",
+    "flex items-center gap-3 text-sm h-11 rounded-lg transition-all duration-200 ease-in-out group relative w-full justify-between px-3 cursor-pointer",
     "hover:bg-sidebar-hover hover:translate-x-1",
     // if group is open due to active child, show a subtle state, not the gradient
     isOpen && subTreeActive

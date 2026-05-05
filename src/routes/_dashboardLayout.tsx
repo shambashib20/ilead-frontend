@@ -84,7 +84,7 @@ function RouteComponent() {
 
   return (
     <div className="dashboard_layout">
-      <div className="bg-primary">
+      <div className="bg-primary mt-4">
         <Sidebar />
         <div
           className={`
@@ -93,7 +93,7 @@ function RouteComponent() {
     ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
     bg-white text-gray-900 dark:bg-primary dark:text-gray-100
     w-64 shadow-lg
-    flex flex-col  // 👈 add karo
+    flex flex-col 
   `}
         >
           <div className="p-4 flex flex-col h-full">

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,14 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Plus,
-  ArrowLeft,
-  Pencil,
-  Trash2,
-  Eye,
-  Paperclip,
-} from "lucide-react";
+import { Plus, ArrowLeft, Pencil, Trash2, Eye, Paperclip } from "lucide-react";
 import {
   campaignQueryOptions,
   useCampaigns,
@@ -31,7 +24,7 @@ import {
 
 // Define the route
 export const Route = createFileRoute(
-  "/_dashboardLayout/general-templates/lead-template/"
+  "/_dashboardLayout/general-templates/lead-template/",
 )({
   component: RouteComponent,
   loader: (opts) => {
@@ -64,7 +57,7 @@ function RouteComponent() {
     setLimit(Number(value));
     setPage(1);
   };
-console.log(campaigns)
+  console.log(campaigns);
   return (
     <section className="mt-7">
       {/* Title + controls */}
@@ -134,7 +127,11 @@ console.log(campaigns)
 
                       <Td>
                         <span className="font-medium text-foreground hover:underline cursor-pointer">
-                          {r.title}
+                          <Link
+                            to={"/general-templates/lead-template/add-template"}
+                          >
+                            {r.title}
+                          </Link>
                         </span>
                       </Td>
 
@@ -224,7 +221,7 @@ console.log(campaigns)
                 {pagination
                   ? `${(page - 1) * limit + 1} - ${Math.min(
                       page * limit,
-                      pagination.totalItems
+                      pagination.totalItems,
                     )} of ${pagination.totalItems}`
                   : "—"}
               </div>
@@ -234,7 +231,10 @@ console.log(campaigns)
                   ⏮
                 </PageBtn>
 
-                <PageBtn onClick={handlePrev} disabled={!pagination?.hasPrevPage}>
+                <PageBtn
+                  onClick={handlePrev}
+                  disabled={!pagination?.hasPrevPage}
+                >
                   ◀
                 </PageBtn>
 
@@ -250,14 +250,15 @@ console.log(campaigns)
                   of {pagination?.totalPages || 1}
                 </div>
 
-                <PageBtn onClick={handleNext} disabled={!pagination?.hasNextPage}>
+                <PageBtn
+                  onClick={handleNext}
+                  disabled={!pagination?.hasNextPage}
+                >
                   ▶
                 </PageBtn>
 
                 <PageBtn
-                  onClick={() =>
-                    pagination && setPage(pagination.totalPages)
-                  }
+                  onClick={() => pagination && setPage(pagination.totalPages)}
                   disabled={page === pagination?.totalPages}
                 >
                   ⏭
@@ -304,7 +305,11 @@ function IconPill({
   color,
   title,
   onClick,
-}: React.PropsWithChildren<{ color: string; title?: string; onClick?: () => void }>) {
+}: React.PropsWithChildren<{
+  color: string;
+  title?: string;
+  onClick?: () => void;
+}>) {
   return (
     <span
       title={title}

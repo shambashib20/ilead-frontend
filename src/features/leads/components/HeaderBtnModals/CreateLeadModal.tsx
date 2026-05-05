@@ -21,6 +21,7 @@ import { z } from "zod";
 import { useModalStore } from "@/store/useModalStore";
 import Swal from "sweetalert2";
 import PaywallUi from "@/components/PaywallUi";
+import { sourceService, type Source } from "../../services/Source.service";
 
 // ---------- Validation ----------
 const LeadSchema = z.object({
@@ -42,6 +43,7 @@ const LeadSchema = z.object({
   reference: z.string().trim().optional().default(""),
   status: z.string().min(1, "Pick a status"),
   assigned_to: z.string().optional().default(""),
+  source: z.string().optional().default(""),
   labels: z.array(z.string()).optional().default([]),
 });
 
@@ -75,12 +77,14 @@ export default function CreateLeadModal() {
     labels: [],
     status: "",
     assigned_to: "",
+    source: "",
   });
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [labels, setLabels] = useState<Label[]>([]);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [chatAgents, setChatAgents] = useState<Agents[]>([]);
+  const [sources, setSources] = useState<Source[]>([]);
 
   const [isPending, startTransition] = useTransition();
   const [loading, setLoading] = useState(false); // for initial dropdown loads
@@ -92,15 +96,18 @@ export default function CreateLeadModal() {
     async function fetchOptions() {
       setLoading(true);
       try {
-        const [labelsRes, statusesRes, agentsRes] = await Promise.all([
-          labelService.labels(),
-          statusService.status(),
-          chatAgentService.chatAgents(),
-        ]);
+        const [labelsRes, statusesRes, agentsRes, sourcesRes] =
+          await Promise.all([
+            labelService.labels(),
+            statusService.status(),
+            chatAgentService.chatAgents(),
+            sourceService.sources(),
+          ]);
 
         setLabels(labelsRes?.data?.data ?? []);
         setStatuses(statusesRes?.data?.data ?? []);
         setChatAgents(agentsRes?.data?.data ?? []);
+        setSources(sourcesRes?.data?.data?.sources ?? []);
       } catch (err) {
         console.error("Error fetching dropdown data", err);
         toast.error("Failed to fetch labels/statuses/agents");
@@ -202,6 +209,7 @@ export default function CreateLeadModal() {
             comment: "",
             reference: "",
             labels: [],
+            source: "",
             status: "",
             assigned_to: "",
           });
@@ -260,7 +268,74 @@ export default function CreateLeadModal() {
         </button>
       </h2> */}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label className="text-[12px] text-foreground block mb-2">
+            Status
+          </label>
+          <Select
+            value={form.status}
+            onValueChange={(val) => handleSelectChange("status", val)}
+            disabled={disabled}
+          >
+            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
+              <SelectValue placeholder="Select status" />
+            </SelectTrigger>
+            <SelectContent>
+              {statuses.map((status) => (
+                <SelectItem key={status._id} value={status._id}>
+                  {status.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label
+            className="text-[12px] text-foreground block mb-2"
+            htmlFor="reference"
+          >
+            Source
+          </label>
+          <Select
+            value={form.source}
+            onValueChange={(val) => handleSelectChange("source", val)}
+            disabled={disabled}
+          >
+            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
+              <SelectValue placeholder="Select source" />
+            </SelectTrigger>
+            <SelectContent>
+              {sources.map((source) => (
+                <SelectItem key={source._id} value={source._id}>
+                  {source.title}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="text-[12px] text-foreground block mb-2">User</label>
+          <Select
+            value={form.assigned_to}
+            onValueChange={(val) => handleSelectChange("assigned_to", val)}
+            disabled={disabled}
+          >
+            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
+              <SelectValue placeholder="Select agent" />
+            </SelectTrigger>
+            <SelectContent>
+              {chatAgents.map((agent) => (
+                <SelectItem key={agent._id} value={agent._id}>
+                  {agent.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <div>
           <label
             className="text-[12px] mb-2 text-foreground block"
@@ -284,7 +359,7 @@ export default function CreateLeadModal() {
             className="text-[12px] text-foreground block mb-2"
             htmlFor="company_name"
           >
-            Company Name
+            Company Name (optional)
           </label>
           <Input
             id="company_name"
@@ -314,86 +389,44 @@ export default function CreateLeadModal() {
           />
         </div>
 
-        <div>
-          <label
-            className="text-[12px] text-foreground block mb-2"
-            htmlFor="email"
-          >
-            Email
-          </label>
-          <Input
-            id="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Email"
-            disabled={disabled}
-            inputMode="email"
-          />
+        <div className="col-span-3 grid grid-cols-2 gap-4">
+          <div>
+            <label
+              className="text-[12px] text-foreground block mb-2"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <Input
+              id="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Email"
+              disabled={disabled}
+              inputMode="email"
+            />
+          </div>
+
+          <div className="">
+            <label
+              className="text-[12px] text-foreground block mb-2"
+              htmlFor="reference"
+            >
+              Reference (Optional)
+            </label>
+            <Input
+              id="reference"
+              name="reference"
+              value={form.reference}
+              onChange={handleChange}
+              placeholder="Reference"
+              disabled={disabled}
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="text-[12px] text-foreground block mb-2">
-            Status
-          </label>
-          <Select
-            value={form.status}
-            onValueChange={(val) => handleSelectChange("status", val)}
-            disabled={disabled}
-          >
-            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              {statuses.map((status) => (
-                <SelectItem key={status._id} value={status._id}>
-                  {status.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <label className="text-[12px] text-foreground block mb-2">
-            Assign Lead To
-          </label>
-          <Select
-            value={form.assigned_to}
-            onValueChange={(val) => handleSelectChange("assigned_to", val)}
-            disabled={disabled}
-          >
-            <SelectTrigger className="w-full bg-primary text-foreground border border-gray-200 rounded dark:border-gray-700">
-              <SelectValue placeholder="Select agent" />
-            </SelectTrigger>
-            <SelectContent>
-              {chatAgents.map((agent) => (
-                <SelectItem key={agent._id} value={agent._id}>
-                  {agent.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <label
-            className="text-[12px] text-foreground block mb-2"
-            htmlFor="reference"
-          >
-            Reference
-          </label>
-          <Input
-            id="reference"
-            name="reference"
-            value={form.reference}
-            onChange={handleChange}
-            placeholder="Reference"
-            disabled={disabled}
-          />
-        </div>
-
-        <div className="col-span-2">
+        <div className="col-span-3">
           <label className="text-[12px] text-foreground block mb-2">
             Labels
           </label>
@@ -432,7 +465,7 @@ export default function CreateLeadModal() {
           </div>
         </div>
 
-        <div className="col-span-2">
+        <div className="col-span-3">
           <label
             className="text-[12px] text-foreground block mb-2"
             htmlFor="address"
@@ -449,7 +482,7 @@ export default function CreateLeadModal() {
           />
         </div>
 
-        <div className="col-span-2">
+        <div className="col-span-3">
           <label
             className="text-[12px] text-foreground block mb-2"
             htmlFor="comment"

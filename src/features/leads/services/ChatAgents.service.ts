@@ -16,6 +16,7 @@ export interface Agent {
   name: string;
   email: string;
   phone_number: string;
+  password: string;
   createdAt: string;
   meta?: {
     is_active?: boolean;
@@ -60,7 +61,12 @@ class ChatAgentService extends ApiClient {
 
   async updateChatAgent(
     id: string,
-    data: { name?: string; email?: string; phone_number?: string }
+    data: {
+      name?: string;
+      email?: string;
+      phone_number?: string;
+      password?: string;
+    }
   ) {
     return this.patch<UpdateChatAgentResponse>(`chat-agents/${id}`, data);
   }

@@ -72,7 +72,7 @@ export const BASE_CARD_ACTIONS: CardAction[] = [
   {
     icon: UserPlus,
     color: "hotpink",
-    dark: "skyblue",
+    dark: "darkblue",
     label: "Convert Lead to Customer",
     title: null,
     el: <LeadCreateCustomer />,
@@ -82,7 +82,7 @@ export const BASE_CARD_ACTIONS: CardAction[] = [
   {
     icon: RefreshCw,
     color: "orange",
-    dark: "orange",
+    dark: "orangered",
     label: "Change Lead Status",
     title: "Change Lead Status",
     el: <LeadStatus />,
@@ -91,8 +91,8 @@ export const BASE_CARD_ACTIONS: CardAction[] = [
   },
   {
     icon: Send,
-    color: "black",
-    dark: "white",
+    color: "white",
+    dark: "black",
     label: "Lead Follow Up",
     title: "Add Lead Follow Up",
     el: <LeadFollowUp />,

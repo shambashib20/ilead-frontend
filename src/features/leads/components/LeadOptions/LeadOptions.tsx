@@ -15,6 +15,7 @@ import axios from "axios";
 import CreateLeadModal from "../HeaderBtnModals/CreateLeadModal";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
+import { queryClient } from "@/utils/client";
 
 type LeadOptionsProps = {
   isTableView: boolean;
@@ -30,8 +31,7 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
 
   async function handleRefresh() {
     setIsRefreshing(true);
-    navigate({ to: ".", search: {}, replace: true });
-    await router.invalidate();
+    await queryClient.invalidateQueries({ queryKey: ["leads:infinite"] });
     setIsRefreshing(false);
   }
 
@@ -167,8 +167,15 @@ function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
       <div>
         <ul className="flex items-center gap-3">
           <li title="Refresh">
-            <Button size={"icon"} onClick={handleRefresh} disabled={isRefreshing}>
-              <RefreshCw size={isMobile ? 14 : 20} className={isRefreshing ? "animate-spin" : ""} />
+            <Button
+              size={"icon"}
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+            >
+              <RefreshCw
+                size={isMobile ? 14 : 20}
+                className={isRefreshing ? "animate-spin" : ""}
+              />
             </Button>
           </li>
           <li title="Add Lead">

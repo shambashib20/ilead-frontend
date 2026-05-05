@@ -3,7 +3,7 @@ import LeadTab from "@/features/dashboard/components/LeadTab";
 import type { LeadTabType } from "@/features/dashboard/components/LeadTab/LeadTab";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useEffect, useMemo, useState } from "react";
-
+import { Filter, Send, CalendarCheck, ListTodo } from "lucide-react";
 import { createFileRoute } from "@tanstack/react-router";
 import type { Lead } from "@/features/leads/types";
 import LeadStatusChart from "@/features/dashboard/components/LeadStatusChart/LeadStatusChart";
@@ -25,6 +25,7 @@ import UpcomingFollowUpsList from "@/features/dashboard/components/UpcommingFoll
 import { useOverdueFollowUps } from "@/features/dashboard/hooks/useOverdueFollowUps";
 import { useUser } from "@/features/auth/hooks/useUser";
 import { useTodaysLead } from "@/features/dashboard/hooks/useTodaysLead";
+import StatsCard from "@/features/dashboard/components/StatsCard";
 
 export const Route = createFileRoute("/_dashboardLayout/dashboard/")({
   component: RouteComponent,
@@ -56,7 +57,7 @@ function RouteComponent() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedAgent, setSelectedAgent] = useState(
-    () => user.data?._id ?? ""
+    () => user.data?._id ?? "",
   );
   const [agent, setagent] = useState(() => user?.data.name ?? "");
   const [agent2, setagent2] = useState(() => user?.data.name ?? "");
@@ -65,7 +66,7 @@ function RouteComponent() {
   const [sourceStartDate, sourceSetStartDate] = useState("");
   const [sourceEndDate, sourceSetEndDate] = useState("");
   const [sourceSelectedAgent, sourceSetSelectedAgent] = useState(
-    () => user?.data._id ?? ""
+    () => user?.data._id ?? "",
   );
 
   const { todaysFollowups } = useTodaysChatFollowUps();
@@ -177,7 +178,7 @@ function RouteComponent() {
             ),
           },
     ],
-    [leadData, user?.data?.role]
+    [leadData, user?.data?.role],
   );
 
   const legendItems = useMemo(() => {
@@ -200,8 +201,45 @@ function RouteComponent() {
   return (
     <section className="dashboard-sec">
       {/* {error && <div className="text-sm text-red-500 mb-3 px-2">{error}</div>} */}
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 mt-5">
+        <StatsCard
+          title="Today's Leads"
+          count={leadData?.leads_in_new?.length ?? 0}
+          completedCount={0}
+          completedLabel="Completed Lead"
+          completedPercent={0}
+          icon={Filter}
+          iconColor="text-yellow-500"
+        />
+        <StatsCard
+          title="Today's Followups"
+          count={todaysFollowups?.length ?? 0}
+          completedCount={0}
+          completedLabel="Completed Followup"
+          completedPercent={100}
+          icon={Send}
+          iconColor="text-pink-400"
+        />
+        <StatsCard
+          title="Today's Tasks"
+          count={0}
+          completedLabel="Completed Task"
+          completedPercent={100}
+          icon={CalendarCheck}
+          iconColor="text-orange-400"
+        />
+        <StatsCard
+          title="Today's Todos"
+          count={0}
+          completedLabel="Completed Todo"
+          completedPercent={100}
+          icon={ListTodo}
+          iconColor="text-blue-400"
+        />
+      </div>
       <div className="stats  ">
-        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
           {cardsData.map((card) => (
             <LeadCard key={card.title} title={card.title}>
               {card.mode === "tab" && card.tabData ? (

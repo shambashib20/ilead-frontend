@@ -11,6 +11,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { useModalStore } from "@/store/useModalStore";
 import { Button } from "../ui/button";
+import { X } from "lucide-react";
 
 const MODAL_SIZE = {
   sm: "w-[400px]",
@@ -44,15 +45,21 @@ export function Modal() {
     }
   };
 
- const handleCancel = () => {
-   formActions?.onCancel?.(); // sirf side effects (form reset)
-   popModal(); // 👈 always pop — yahi close karega
- };
+  const handleCancel = () => {
+    formActions?.onCancel?.(); // sirf side effects (form reset)
+    popModal(); // 👈 always pop — yahi close karega
+  };
   const showFooter = type === "form" || type === "action" || customActions;
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent className={`${MODAL_SIZE[size] ?? "w-[700px]"}`}>
+        <button
+          onClick={closeModal}
+          className="absolute -top-2 -right-2 z-50 p-1.5 rounded-md text-black hover:text-white bg-white hover:bg-white/20 active:scale-95 transition-all duration-150 cursor-pointer"
+        >
+          <X size={18} />
+        </button>
         {title ? (
           <DialogHeader className="bg-[#2a47a7] text-white">
             <DialogTitle>{title}</DialogTitle>

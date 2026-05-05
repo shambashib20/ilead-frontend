@@ -303,7 +303,7 @@ export class LeadsModule extends ApiClient {
   async deleteLeads(payload: DeleteLeadPayload) {
     const response = await this.patch<DeleteLeadsResponse>(
       "/delete-lead",
-      payload
+      payload,
     );
     return response.data;
   }
@@ -320,40 +320,40 @@ export class LeadsModule extends ApiClient {
   async updateLeadStatus(payload: ChangeLeadStatusPayload) {
     const response = await this.patch<ChangeLeadStatusResponse>(
       "/update-status",
-      payload
+      payload,
     );
     return response.data;
   }
 
   async assignLeadTo(
-    payload: AssignLeadToPayload
+    payload: AssignLeadToPayload,
   ): Promise<AssignLeadToResponse> {
     const response = await this.patch<AssignLeadToResponse>(
       "/update-chat-agent",
-      payload
+      payload,
     );
     return response.data;
   }
 
   async createNewFollowup(
-    payload: CreateNewFollowupPayload
+    payload: CreateNewFollowupPayload,
   ): Promise<FolllowUpResponse> {
     const response = await this.post<FolllowUpResponse>("/follow-up", payload);
     return response.data;
   }
 
   async updateFollowup(
-    payload: UpdateFollowupPayload
+    payload: UpdateFollowupPayload,
   ): Promise<FolllowUpResponse> {
     const response = await this.patch<FolllowUpResponse>(
       "/update/follow-up",
-      payload
+      payload,
     );
     return response.data;
   }
 
   async createLeadFromPlatform(
-    payload: Omit<Lead, "_id" | "createdAt" | "follow_ups">
+    payload: Omit<Lead, "_id" | "createdAt" | "follow_ups">,
   ): Promise<any> {
     const response = await this.post<any>("/create", payload);
     return response.data;
@@ -407,7 +407,7 @@ export class LeadsModule extends ApiClient {
   }
   async todaysFollowupdsSuperAdmin() {
     return this.get<TodaysFollowUpSuperAdminResponse>(
-      "/todays-followups/superadmin"
+      "/todays-followups/superadmin",
     );
   }
 
@@ -425,7 +425,7 @@ export class LeadsModule extends ApiClient {
   async getTelecallerAnayltics(payload: TelecallerAnalyticsPayload) {
     return this.post<TelecallerAnalyticsResponse>(
       "/telecaller-statistics",
-      payload
+      payload,
     );
   }
 }

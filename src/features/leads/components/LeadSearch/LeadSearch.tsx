@@ -65,8 +65,7 @@ function LeadSearch() {
     startDate?: Date;
     endDate?: Date;
   }; // Adjust route as needed
-  const { closeModal, pushModal } =
-    useModalStore();
+  const { closeModal, pushModal } = useModalStore();
 
   // Parse filters from URL search params
   const getFiltersFromSearch = (): FilterPayload => ({
@@ -276,44 +275,76 @@ function LeadSearch() {
       ...styles,
       backgroundColor: theme === "dark" ? "#283046" : "white",
       borderColor: theme === "dark" ? "#555" : "#e6e6e6",
+      cursor: "pointer",
     }),
-    // menu: (styles: any) => ({
-    //   ...styles,
-    //   // ensures the portal'ed menu uses fixed positioning
-    //   position: "fixed",
-    //   zIndex: 9999,
-    //   boxShadow: styles.boxShadow,
-    // }),
+    menu: (styles: any) => ({
+      ...styles,
+      backgroundColor: theme === "dark" ? "#283046" : "white",
+      cursor: "pointer",
+    }),
     menuList: (styles: any) => ({
       ...styles,
-      maxHeight: "300px", // change height as you like
+      maxHeight: "300px",
       overflowY: "auto",
+      backgroundColor: theme === "dark" ? "#283046" : "white",
+      cursor: "pointer",
     }),
     option: (styles: any, state: any) => ({
       ...styles,
       fontSize: "14px",
+
       backgroundColor: state.isDisabled
         ? undefined
         : state.isSelected
           ? "#3a3285"
           : state.isFocused
-            ? "#f0f0f0"
-            : undefined,
-      color: state.isFocused || state.isSelected ? "#3a3285" : "#333",
+            ? theme === "dark"
+              ? "#3a3285"
+              : "#f0f0f0"
+            : theme === "dark"
+              ? "#283046"
+              : "white",
+      color: state.isSelected
+        ? "white"
+        : state.isFocused
+          ? theme === "dark"
+            ? "white"
+            : "#3a3285"
+          : theme === "dark"
+            ? "#e6e4ff"
+            : "#333",
       cursor: state.isDisabled ? "not-allowed" : "default",
+    }),
+    singleValue: (styles: any) => ({
+      ...styles,
+      color: theme === "dark" ? "#e6e4ff" : "#333",
+      cursor: "pointer",
+    }),
+    input: (styles: any) => ({
+      ...styles,
+      color: theme === "dark" ? "#e6e4ff" : "#333",
+      cursor: "pointer",
+    }),
+    placeholder: (styles: any) => ({
+      ...styles,
+      color: theme === "dark" ? "#9090a0" : "#999",
+      cursor: "pointer",
     }),
     multiValue: (styles: any) => ({
       ...styles,
       backgroundColor: theme === "dark" ? "rgba(58,50,133,.12)" : "#e6e6e6",
+      cursor: "pointer",
     }),
     multiValueLabel: (styles: any) => ({
       ...styles,
       color: theme === "dark" ? "#e6e4ff" : "#333",
       fontSize: "12px",
+      cursor: "pointer",
     }),
     multiValueRemove: (styles: any) => ({
       ...styles,
       color: theme === "dark" ? "#e6e4ff" : "#333",
+      cursor: "pointer",
     }),
   };
 

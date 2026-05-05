@@ -1,5 +1,12 @@
 import { memo } from "react";
-import { Phone, User, AlertCircle } from "lucide-react";
+import {
+  Phone,
+  User,
+  AlertCircle,
+  UserCheck,
+  Calendar,
+  Navigation,
+} from "lucide-react";
 import type { Lead } from "@/features/leads/types";
 import { useModalStore } from "@/store/useModalStore";
 import { LeadDetail } from "../LeadModals";
@@ -17,7 +24,7 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
   const leadName = String(lead.name);
   const phoneNumber = String(lead.phone_number);
   const createdAt = String(lead.createdAt || "");
-  const assignedBy = String(lead?.assigned_by?.name || "");
+  let assignedBy = String(lead?.assigned_by?.name || "");
   const nfd = lead.follow_ups?.[0]?.next_followup_date
     ? new Date(lead.follow_ups?.[0]?.next_followup_date)
         .toLocaleString()
@@ -81,6 +88,16 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             </div>
           )}
 
+          <div className="text-gray-800 dark:text-white text-sm font-semibold flex items-center gap-2 mb-1">
+            <User color="blue" size={16} />
+            <span className="text-sm">{leadName}</span>
+          </div>
+
+          <div className="text-gray-800 dark:text-white text-xs font-medium flex items-center gap-2 mb-3">
+            <Phone color="green" size={16} />
+            <span className="text-[13px] font-semibold">{phoneNumber}</span>
+          </div>
+
           <div className="flex flex-wrap gap-2 mb-3">
             {lead.labels?.length > 0 ? (
               lead.labels.map((label) => (
@@ -99,37 +116,44 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
             )}
           </div>
 
-          <div className="text-gray-800 dark:text-white text-xs font-medium flex items-center gap-2 mb-2">
-            <User color="blue" size={18} />
-            <span>{leadName}</span>
-          </div>
-
-          <div className="text-gray-800 dark:text-white text-xs font-medium flex items-center gap-2 mb-4">
-            <Phone color="green" size={18} />
-            <span>{phoneNumber}</span>
-          </div>
+          <div className="pt-3 border-b border-gray-200 dark:border-gray-600"></div>
         </div>
-
-        <div className="space-y-1 px-6">
-          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
+        <div className="space-y-1.5 px-6 pb-3 pt-4">
+          <div className="text-gray-600 dark:text-gray-300 text-xs flex items-center gap-1.5">
+            <Calendar
+              size={12}
+              className="text-gray-500 dark:text-gray-400 shrink-0"
+            />
             <span className="font-medium">CD:</span>
             <span>{new Date(createdAt).toLocaleString()}</span>
           </div>
-          {assignedBy !== "" ? (
-            <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
+          {assignedBy !== "" && (
+            <div className="text-gray-600 dark:text-gray-300 text-xs flex items-center gap-1.5">
+              <User
+                size={12}
+                className="text-gray-500 dark:text-gray-400 shrink-0"
+              />
               <span className="font-medium">BY:</span>
               <span>{assignedBy}</span>
             </div>
-          ) : (
-            <div></div>
           )}
-          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
+          <div className="text-gray-600 dark:text-gray-300 text-xs flex items-center gap-1.5">
+            <Navigation
+              size={12}
+              className="text-gray-500 dark:text-gray-400 shrink-0"
+            />
             <span className="font-medium">TO:</span>
             <span>{assignedToName}</span>
           </div>
-          <div className="text-gray-800 dark:text-white text-xs flex items-center gap-1">
+          <div className="text-gray-600 dark:text-gray-300 text-xs flex items-center gap-1.5">
+            <UserCheck
+              size={12}
+              className="text-gray-500 dark:text-gray-400 shrink-0"
+            />
             <span className="font-medium">NFD:</span>
-            <span>{nfd}</span>
+            <span className={nfd !== "-" ? "text-blue-500 font-semibold" : ""}>
+              {nfd}
+            </span>
           </div>
         </div>
       </div>
@@ -184,3 +208,4 @@ export const LeadCard = memo(({ lead }: LeadCardProps) => {
 });
 
 LeadCard.displayName = "LeadCard";
+

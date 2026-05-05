@@ -837,7 +837,7 @@ export function LeadDetail() {
           ({
             icon: Icon,
             color,
-            dark,
+            dark = "#fff",
             label,
             el,
             type,
@@ -866,7 +866,7 @@ export function LeadDetail() {
               }}
             >
               <div className="relative">
-                <Icon size={24} color={theme !== "dark" ? color : dark} />
+                <Icon size={24} color={theme === "dark" ? "#fff" : "#000"} />
                 {label === "Lead Follow Up" && (
                   <span className="absolute -top-1 -right-1 bg-gray-300 dark:bg-gray-800 text-black dark:text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
                     {lead.follow_ups?.length ?? 0}
@@ -907,7 +907,7 @@ export function LeadDetail() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Column */}
             <div className="shadow-sm dark:border rounded-sm overflow-auto">
-              <h3 className="font-semibold text-white mb-2 bg-[#3a3285]  p-4 text-center">
+              <h3 className="font-semibold text-white mb-2 bg-[#2a47a7]  p-4 text-center">
                 Lead Information
               </h3>
               <div className="p-4">
@@ -956,7 +956,7 @@ export function LeadDetail() {
 
             {/* Right Column */}
             <div className="shadow-sm dark:border rounded-sm overflow-auto">
-              <h3 className="font-semibold text-white mb-2 bg-[#3a3285]  p-4 text-center">
+              <h3 className="font-semibold text-white mb-2 bg-[#2a47a7]  p-4 text-center">
                 General Information
               </h3>
               <div className="p-4">
@@ -1249,7 +1249,11 @@ export function LeadDetail() {
 
         <TabsContent value="history" className="mt-4">
           {lead.data.logs && lead.data.logs.length > 0 ? (
-            <ul className="space-y-4">
+            <ul className="space-y-0 relative">
+              {/* Vertical line */}
+              {/* Vertical line */}
+              <div className="absolute left-[5px] top-2 bottom-2 w-[2px] bg-gray-200 dark:bg-gray-700" />
+
               {[...lead.data.logs]
                 .sort(
                   (a: any, b: any) =>
@@ -1259,20 +1263,35 @@ export function LeadDetail() {
                 .map((log: any, index: number) => (
                   <li
                     key={log._id || index}
-                    className="border border-gray-700 rounded p-4 bg-background text-foreground"
+                    className="flex gap-4 py-4 relative"
                   >
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-semibold text-base">{log.title}</h4>
-                      <span className="text-xs text-foreground">
-                        {new Date(log.createdAt).toLocaleString()}
-                      </span>
+                    {/* Blinking green dot - line ke upar */}
+                    <div className="mt-1.5 shrink-0 relative flex h-3 w-3 z-10">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
                     </div>
-                    <p className="text-sm text-foreground">{log.description}</p>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start gap-2">
+                        <h4 className="font-semibold text-sm text-gray-800 dark:text-foreground">
+                          {log.title}
+                        </h4>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0">
+                          {new Date(log.createdAt).toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                        {log.description}
+                      </p>
+                    </div>
                   </li>
                 ))}
             </ul>
           ) : (
-            <p className="text-white text-center">No history available.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-center py-6">
+              No history available.
+            </p>
           )}
         </TabsContent>
 

@@ -21,6 +21,7 @@ function EditUserModal({ agent, onSuccess }: Props) {
     name: agent.name || "",
     email: agent.email || "",
     phone_number: agent.phone_number || "",
+    password: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,7 +30,7 @@ function EditUserModal({ agent, onSuccess }: Props) {
     formData.email !== (agent.email || "") ||
     formData.phone_number !== (agent.phone_number || "");
 
-  const canSubmit = isDirty && !isSubmitting;
+  const canSubmit = (isDirty || formData.password.length > 0) && !isSubmitting;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -40,14 +41,28 @@ function EditUserModal({ agent, onSuccess }: Props) {
     if (!canSubmit) return;
     setIsSubmitting(true);
     try {
-      const payload: { name?: string; email?: string; phone_number?: string } =
-        {};
+      const payload: {
+        name?: string;
+        email?: string;
+        phone_number?: string;
+        password?: string;
+      } = {};
+      // normal field changes
       if (formData.name !== (agent.name || "")) payload.name = formData.name;
       if (formData.email !== (agent.email || ""))
         payload.email = formData.email;
       if (formData.phone_number !== (agent.phone_number || ""))
         payload.phone_number = formData.phone_number;
 
+      // password logic
+      if (formData.password.trim().length > 0) {
+        payload.password = formData.password;
+
+        // 👇 FORCE include at least one required field
+        if (!payload.name && !payload.email && !payload.phone_number) {
+          payload.name = agent.name; // safe fallback
+        }
+      }
       const res = await chatAgentService.updateChatAgent(agent._id, payload);
       onSuccess(res.data.data);
       Swal.fire({
@@ -96,6 +111,18 @@ function EditUserModal({ agent, onSuccess }: Props) {
         <Input
           id="phone_number"
           value={formData.phone_number}
+          onChange={handleChange}
+        />
+      </div>
+      <div>
+        <Label htmlFor="password" className="mb-2">
+          Password
+        </Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="Leave blank to keep unchanged"
+          value={formData.password}
           onChange={handleChange}
         />
       </div>

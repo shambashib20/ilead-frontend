@@ -77,14 +77,14 @@ function ChatAgentTable() {
   const handleDeactivateSuccess = (agentId: string) => {
     setChatAgents((prev) =>
       prev.map((a) =>
-        a._id === agentId ? { ...a, meta: { ...a.meta, is_active: false } } : a
-      )
+        a._id === agentId ? { ...a, meta: { ...a.meta, is_active: false } } : a,
+      ),
     );
   };
 
   const handleEditSuccess = (updated: Agent) => {
     setChatAgents((prev) =>
-      prev.map((a) => (a._id === updated._id ? { ...a, ...updated } : a))
+      prev.map((a) => (a._id === updated._id ? { ...a, ...updated } : a)),
     );
   };
 
@@ -126,12 +126,23 @@ function ChatAgentTable() {
           await chatAgentService.toggleActiveStatus(agent._id, true);
           setChatAgents((prev) =>
             prev.map((a) =>
-              a._id === agent._id ? { ...a, meta: { ...a.meta, is_active: true } } : a
-            )
+              a._id === agent._id
+                ? { ...a, meta: { ...a.meta, is_active: true } }
+                : a,
+            ),
           );
-          Swal.fire({ icon: "success", title: "User activated", timer: 1200, showConfirmButton: false });
+          Swal.fire({
+            icon: "success",
+            title: "User activated",
+            timer: 1200,
+            showConfirmButton: false,
+          });
         } catch (err: any) {
-          Swal.fire("Error", err?.message || "Failed to activate user", "error");
+          Swal.fire(
+            "Error",
+            err?.message || "Failed to activate user",
+            "error",
+          );
         } finally {
           setToggling(null);
         }
@@ -162,7 +173,7 @@ function ChatAgentTable() {
               {totalStatuses}
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              Total Agents
+              Total Telecallers
             </div>
           </div>
           <Button
@@ -281,7 +292,7 @@ function ChatAgentTable() {
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => handleEdit(agent)}
-                          className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                          className="p-1.5 rounded-md text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer"
                           title="Edit employee"
                         >
                           <Pencil className="h-4 w-4" />
@@ -289,14 +300,22 @@ function ChatAgentTable() {
                         <button
                           onClick={() => handleToggle(agent)}
                           disabled={toggling === agent._id}
-                          className={`relative inline-flex h-7 w-14 flex-shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-                            isActive(agent) ? "bg-green-500" : "bg-gray-400 dark:bg-gray-600"
+                          className={`relative inline-flex h-7 w-14 flex-shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer ${
+                            isActive(agent)
+                              ? "bg-green-500"
+                              : "bg-gray-400 dark:bg-gray-600"
                           }`}
-                          title={isActive(agent) ? "Click to deactivate" : "Click to activate"}
+                          title={
+                            isActive(agent)
+                              ? "Click to deactivate"
+                              : "Click to activate"
+                          }
                         >
                           <span
                             className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition-transform duration-200 ${
-                              isActive(agent) ? "translate-x-7" : "translate-x-1"
+                              isActive(agent)
+                                ? "translate-x-7"
+                                : "translate-x-1"
                             }`}
                           />
                         </button>
