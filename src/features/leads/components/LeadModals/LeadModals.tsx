@@ -834,16 +834,7 @@ export function LeadDetail() {
       {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
         {actions.map(
-          ({
-            icon: Icon,
-            color,
-            dark = "#fff",
-            label,
-            el,
-            type,
-            customActions,
-            title,
-          }) => (
+          ({ icon: Icon, label, el, type, customActions, title }) => (
             <button
               key={label}
               className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"

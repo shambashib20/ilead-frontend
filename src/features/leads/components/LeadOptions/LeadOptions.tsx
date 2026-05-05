@@ -25,8 +25,6 @@ type LeadOptionsProps = {
 function LeadOptions({ isTableView, setIsTableView }: LeadOptionsProps) {
   const isMobile = useMedia("(max-width: 767px)");
   const { pushModal, closeModal } = useModalStore(); // 👈 sirf yeh
-  const navigate = useNavigate();
-  const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   async function handleRefresh() {
