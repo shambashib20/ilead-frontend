@@ -18,9 +18,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ReactSelect, { type StylesConfig, type MultiValue } from "react-select"; // 👈 alag naam se import
+import ReactSelect, { type StylesConfig, type MultiValue } from "react-select";
 import { toast } from "sonner";
-import { createLeadFromPlatform } from "../../services/LeadsModule.service";
+import {
+  createLeadFromPlatform,
+  editLeadService,
+} from "../../services/LeadsModule.service";
 import { labelService } from "../../services/Lable.service";
 import { statusService } from "../../services/Status.service";
 import {
@@ -38,6 +41,24 @@ import { useTheme } from "@/contexts/ThemeProvider";
 type LabelOption = { value: string; label: string };
 type Status = { _id: string; title: string };
 type Label = { _id: string; title: string };
+
+export type CreateLeadModalProps = {
+  leadId?: string;
+  initialData?: {
+    name?: string;
+    company_name?: string;
+    phone_number?: string;
+    email?: string;
+    address?: string;
+    comment?: string;
+    reference?: string;
+    status?: string;
+    assigned_to?: string;
+    source?: string;
+    labels?: LabelOption[];
+    createdAt?: Date;
+  };
+};
 
 // ---------- Validation ----------
 const LeadSchema = z.object({
@@ -66,8 +87,6 @@ const LeadSchema = z.object({
 
 export type LeadForm = z.infer<typeof LeadSchema>;
 
-// ---------- Label Select Styles ----------
-
 function safeGetPropertyId() {
   try {
     const raw = localStorage.getItem("user");
@@ -78,24 +97,33 @@ function safeGetPropertyId() {
   }
 }
 
-export default function CreateLeadModal() {
+export default function CreateLeadModal({
+  leadId,
+  initialData,
+}: CreateLeadModalProps) {
+  const isEditMode = !!leadId;
   const { pushModal, closeModal } = useModalStore();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedLabels, setSelectedLabels] = useState<LabelOption[]>([]);
   const { theme } = useTheme();
 
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    initialData?.createdAt ? new Date(initialData.createdAt) : undefined,
+  );
+  const [selectedLabels, setSelectedLabels] = useState<LabelOption[]>(
+    initialData?.labels ?? [],
+  );
+
   const [form, setForm] = useState<LeadForm>({
-    name: "",
-    company_name: "",
-    phone_number: "",
-    email: "",
-    address: "",
-    comment: "",
-    reference: "",
+    name: initialData?.name ?? "",
+    company_name: initialData?.company_name ?? "",
+    phone_number: initialData?.phone_number ?? "",
+    email: initialData?.email ?? "",
+    address: initialData?.address ?? "",
+    comment: initialData?.comment ?? "",
+    reference: initialData?.reference ?? "",
     labels: [],
-    status: "",
-    assigned_to: "",
-    source: "",
+    status: initialData?.status ?? "",
+    assigned_to: initialData?.assigned_to ?? "",
+    source: initialData?.source ?? "",
     createdAt: "",
   });
 
@@ -113,9 +141,7 @@ export default function CreateLeadModal() {
         backgroundColor: "transparent",
         borderColor: theme === "dark" ? "#4a5568" : "#e2e8f0",
         boxShadow: "none",
-        "&:hover": {
-          borderColor: theme === "dark" ? "#6b7280" : "#cbd5e0",
-        },
+        "&:hover": { borderColor: theme === "dark" ? "#6b7280" : "#cbd5e0" },
       }),
       menu: (s) => ({
         ...s,
@@ -161,15 +187,9 @@ export default function CreateLeadModal() {
         ...s,
         color: theme === "dark" ? "#e6e4ff" : "#3a3285",
         borderRadius: "0 4px 4px 0",
-        "&:hover": {
-          backgroundColor: "#3a3285",
-          color: "white",
-        },
+        "&:hover": { backgroundColor: "#3a3285", color: "white" },
       }),
-      input: (s) => ({
-        ...s,
-        color: theme === "dark" ? "#e6e4ff" : "#333",
-      }),
+      input: (s) => ({ ...s, color: theme === "dark" ? "#e6e4ff" : "#333" }),
       placeholder: (s) => ({
         ...s,
         color: theme === "dark" ? "#6b7280" : "#9ca3af",
@@ -261,25 +281,45 @@ export default function CreateLeadModal() {
 
     startTransition(async () => {
       try {
-        const payload = {
-          ...parsed.data,
-          labels: labelIds,
-          email: (parsed.data.email ?? "").trim(),
-          assigned_by: "",
-          property_id,
-          createdAt: selectedDate ? selectedDate.toISOString() : undefined,
-        };
+        if (isEditMode) {
+          // ✅ Edit mode
+          await editLeadService.editLead({
+            leadId,
+            ...parsed.data,
+            labels: labelIds,
+            email: (parsed.data.email ?? "").trim(),
+            createdAt: selectedDate ? selectedDate.toISOString() : undefined,
+          });
 
-        await createLeadFromPlatform.createLeadFromPlatform(payload as any);
+          Swal.fire({
+            title: "Updated!",
+            text: "Lead updated successfully",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+          });
+        } else {
+          // ✅ Create mode
+          const payload = {
+            ...parsed.data,
+            labels: labelIds,
+            email: (parsed.data.email ?? "").trim(),
+            assigned_by: "",
+            property_id,
+            createdAt: selectedDate ? selectedDate.toISOString() : undefined,
+          };
+          await createLeadFromPlatform.createLeadFromPlatform(payload as any);
 
-        Swal.fire({
-          title: "Success",
-          text: "Lead created successfully",
-          icon: "success",
-          showConfirmButton: false,
-          timer: 1000,
-          timerProgressBar: true,
-        });
+          Swal.fire({
+            title: "Success",
+            text: "Lead created successfully",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1000,
+            timerProgressBar: true,
+          });
+        }
 
         setTimeout(() => {
           setForm({
@@ -329,7 +369,9 @@ export default function CreateLeadModal() {
           content: (
             <div className="p-2">
               <p className="text-sm opacity-80">
-                Something went wrong while creating the lead.
+                {isEditMode
+                  ? "Something went wrong while updating the lead."
+                  : "Something went wrong while creating the lead."}
               </p>
             </div>
           ),
@@ -481,7 +523,7 @@ export default function CreateLeadModal() {
           </Popover>
         </div>
 
-        {/* Full Name + Email */}
+        {/* Full Name + Email + Reference */}
         <div className="col-span-3 grid grid-cols-2 gap-4">
           <div>
             <label
@@ -534,7 +576,7 @@ export default function CreateLeadModal() {
           </div>
         </div>
 
-        {/* Labels - React Select */}
+        {/* Labels */}
         <div className="col-span-3">
           <label className="text-[12px] text-foreground block mb-2">
             Labels
@@ -597,7 +639,13 @@ export default function CreateLeadModal() {
           className="w-full"
           disabled={disabled}
         >
-          {isPending ? "Creating..." : "Create Lead"}
+          {isPending
+            ? isEditMode
+              ? "Updating..."
+              : "Creating..."
+            : isEditMode
+              ? "Update Lead"
+              : "Create Lead"}
         </Button>
       </div>
     </div>

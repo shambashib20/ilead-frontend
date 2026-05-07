@@ -280,6 +280,22 @@ export interface TelecallerAnalyticsResponse {
   };
 }
 
+export interface EditLeadPayload {
+  leadId: string;
+  name?: string;
+  company_name?: string;
+  phone_number?: string;
+  email?: string;
+  address?: string;
+  comment?: string;
+  reference?: string;
+  status?: string;
+  assigned_to?: string;
+  source?: string;
+  labels?: string[];
+  createdAt?: string;
+}
+
 export class LeadsModule extends ApiClient {
   constructor() {
     super("lead");
@@ -428,6 +444,10 @@ export class LeadsModule extends ApiClient {
       payload,
     );
   }
+  async editLead(payload: EditLeadPayload): Promise<any> {
+    const response = await this.patch<any>("/edit", payload);
+    return response.data;
+  }
 }
 export const leadsServoceModule = new LeadsModule();
 export const statsService = new LeadsModule();
@@ -437,3 +457,4 @@ export const leadDetailsService = new LeadsModule();
 export const assignLeadTo = new LeadsModule();
 export const createNewFollowupService = new LeadsModule();
 export const createLeadFromPlatform = new LeadsModule();
+export const editLeadService = new LeadsModule(); // 👈 yeh add kar

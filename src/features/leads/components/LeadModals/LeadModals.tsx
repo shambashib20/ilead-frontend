@@ -22,6 +22,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Edit,
+  Pencil,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -60,6 +61,7 @@ import { useConvertLeadToCustomer } from "../../hooks/useConvertLeadToCustomer";
 import { useUpdateLeadStatus } from "../../hooks/useUpdateLeadStatus";
 import { getCardActions } from "@/utils/cardActions";
 import { queryClient } from "@/utils/client";
+import CreateLeadModal from "../HeaderBtnModals/CreateLeadModal";
 
 const leadsApi = new LeadsModule();
 
@@ -833,6 +835,44 @@ export function LeadDetail() {
     <div className="min-h-[400px] max-h-[450px] overflow-y-auto px-3 ">
       {/* Top Action Icons (static for now) */}
       <ul className="flex items-center justify-center gap-6">
+        <button
+          className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors cursor-pointer"
+          title="Edit Lead"
+          onClick={() => {
+            pushModal({
+              content: (
+                <CreateLeadModal
+                  leadId={lead?.data?._id}
+                  initialData={{
+                    name: lead?.data?.name,
+                    company_name: lead?.data?.company_name,
+                    phone_number: lead?.data?.phone_number,
+                    email: lead?.data?.email ?? "",
+                    address: lead?.data?.address,
+                    comment: lead?.data?.comment,
+                    reference: lead?.data?.reference,
+                    status: (lead?.data?.status as any)?._id,
+                    assigned_to: (lead?.data?.assigned_to as any)?._id,
+                    source: (lead?.data?.meta?.source as any)?._id,
+                    labels: lead?.data?.labels?.map((l: any) => ({
+                      value: l._id,
+                      label: l.title,
+                    })),
+                    createdAt: lead?.data?.createdAt
+                      ? new Date(lead.data.createdAt)
+                      : undefined,
+                  }}
+                />
+              ),
+              type: "info",
+              title: "Edit Lead",
+              size: "md",
+            });
+          }}
+        >
+          <Pencil size={24} color={theme === "dark" ? "#fff" : "#000"} />
+        </button>
+
         {actions.map(
           ({ icon: Icon, label, el, type, customActions, title }) => (
             <button
